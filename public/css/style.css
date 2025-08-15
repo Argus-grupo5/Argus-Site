@@ -1,4 +1,133 @@
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cairo:slnt,wght@-11..11,200..1000&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Cairo", sans-serif;
+}
+
+.desktopHeader {
+  position: fixed;
+  color: white;
+  width: 100%;
+  height: 10.55vh;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.desktopHeader .logo {
+  width: 5.42%;
+  margin-left: 1.9vw;
+  transition: .4s;
+}
+
+.desktopHeader .logo img{
+  width: 100%;
+}
+
+.desktopHeader .title {
+  text-decoration: none;
+  color: #fff;
+  transition: .4s;
+}
+
+.desktopHeader .title h1 {
+  font-size: 2.54vw;
+  margin-left: 1.46vw;
+  color: #fff;
+}
+
+.desktopHeader .links {
+  margin-left: 4.07vw;
+  width: 23.68vw;
+  height: 4.17vh;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.desktopHeader .links .link,
+.desktopHeader .login .link {
+  text-decoration: none;
+  color: #fff;
+
+  font-size: 1.56vw;
+  transition: .4s;
+}
+
+.desktopHeader .links .link:hover,
+.desktopHeader .login .link:hover,
+.desktopHeader .title:hover,
+.desktopHeader .logo:hover {
+  color: #fff;
+}
+
+.desktopHeader .login {
+  margin-left: auto;
+  margin-right: 1.96vw;
+  width: 18.80vw;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.desktopHeader .login .buttons {
+  text-decoration: none;
+  color: #fff;
+  font-size: 1.56vw;
+  padding-inline: 1.8vw;
+  background: #FF6D4D;
+  border-radius: 40vw;
+  transition: .4s;
+
+}
+
+.desktopHeader .logo:hover {
+  scale: 1.1;
+  transition: .4s;
+}
+
+.desktopHeader .login .buttons:hover {
+  scale: 1.1;
+  transition: .4s;
+  box-shadow: -3px 2px 5px 5px #000;
+}
+
+/* animação do hover */
+.desktopHeader .links .link,
+.desktopHeader .login .link,
+.desktopHeader .title h1 {
+  position: relative;
+}
+
+.desktopHeader .links .link::after,
+.desktopHeader .login .link::after,
+.desktopHeader .title h1::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: .22vw;
+  bottom: 0;
+  left: 0;
+  background-color: #fff;
+  transition: transform 0.4s ease-out;
+  transform-origin: bottom center;
+}
+
+
+.desktopHeader .links .link:hover::after,
+.desktopHeader .login .link:hover::after,
+.desktopHeader .title h1:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom center;
+}
 
 body {
   margin: 0;
@@ -11,4 +140,3 @@ body {
     width: 100%;
     height: 100vh;
 }
-
