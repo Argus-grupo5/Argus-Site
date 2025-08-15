@@ -1,0 +1,14 @@
+body{
+  background-color: black;
+}
+
+
+.bannerDesktop{
+  background-image: url(../../assets/home/desktop/background.svg);
+  width: 100vw;
+  height: 100vh;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: absolute;
+  z-index: -1;
+}
