@@ -1,14 +1,70 @@
-body{
-  background-color: black;
+body {
+  background-color: #000;
 }
 
 
-.bannerDesktop{
+.bannerDesktop {
   background-image: url(../../assets/home/desktop/background.svg);
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   background-repeat: no-repeat;
   background-size: cover;
   position: absolute;
   z-index: -1;
+}
+
+.containerDesktop {
+  width: 100%;
+  height: fit-content;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.heroPage {
+  margin-top: 10.55vh;
+  height: 89.54vh;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+}
+
+.heroPage h1 {
+  width: 51vw;
+  line-height: 1.1;
+  text-align: center;
+  font-size: 2.34vw;
+}
+
+.heroPage p {
+  margin-top: 1.57vh;
+  font-size: 1.17vw;
+}
+
+.heroPage a {
+  margin-top: 2.5vh;
+  text-decoration: none;
+  padding-inline: 1.8vw;
+  font-size: 1.61vw;
+  color: #000;
+  background: #FF6D4D;
+  border-radius: 40vw;
+  transition: .4s;
+}
+
+.heroPage a:hover {
+  scale: 1.1;
+  transition: .4s;
+  box-shadow: -3px 2px 5px 5px #000;
+}
+
+.heroPage img {
+  margin-top: 2vh;
+  width: 36.66vw;
+  height: 41.18vh;
 }

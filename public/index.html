@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,10 +8,13 @@
   <link rel="stylesheet" href="./css/home/home.css">
   <title>ARGUS | Home</title>
 </head>
+
 <body>
   <header class="desktopHeader">
     <a href="./index.html" class="logo"><img src="./assets/icon/logoBranca.svg" alt=""></a>
-    <a href="./index.html" class="title"><h1>ARGUS</h1></a>
+    <a href="./index.html" class="title">
+      <h1>ARGUS</h1>
+    </a>
     <nav class="links">
       <a class="link" href="./pages/suporte.html">Suporte</a>
       <a class="link" href="./pages/empresa.html">Empresa</a>
@@ -22,5 +26,73 @@
     </nav>
   </header>
   <div class="bannerDesktop"></div>
+
+  <div class="containerDesktop">
+    <div class="heroPage">
+      <h1>SISTEMA PROFISSIONAL DE MONITORAMENTO DE SERVIDORES CLOUD GAMING</h1>
+      <p>Lorem IpsumLorem IpsumLorem Ipsum Lorem Ipsum</p>
+      <a href="./pages/empresa.html">SAIBA MAIS</a>
+      <img src="./assets/home/desktop/pc.svg" alt="Foto de um computador com dashboard aparecendo">
+    </div>
+    <div class="explication">
+      <div class="card">
+        <img src="./assets/home/desktop/python.svg" alt="Icone da linguagem python">
+        <p>Uma aplicação em Python coleta em tempo real as informações essenciais dos recursos do seu servidor.</p>
+      </div>
+      <div class="card">
+        <img src="./assets/home/desktop/database.svg" alt="Icone de um servidor de banco de dados">
+        <p>Os dados são guardados em nossos servidores e então processados.</p>
+      </div>
+      <div class="card">
+        <img src="./assets/home/desktop/dash.svg" alt="Icone de uma dashboard">
+        <p>Depois de processados, os dados são apresentados atráves de uma Dashboard intuitiva que você pode acompanhar
+          a qualquer momento em nosso site.</p>
+      </div>
+    </div>
+    <div class="vantagens">
+      <h1>COM A ARGUS, <span>VOCÊ</span> SEMPRE TÁ NA <span>VANTAGEM</span></h1>
+      <div class="card">
+        <img src="./assets/home/desktop/cursor.svg" alt="Cursor de solução">
+        <h2>Praticidade</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed laoreet convallis nulla laoreet placerat.</p>
+      </div>
+      <div class="card">
+        <img src="./assets/home/desktop/eye.svg" alt="Icone de um olho">
+        <h2>Monitoramento eficiente</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed laoreet convallis nulla laoreet placerat.</p>
+      </div>
+      <div class="card">
+        <img src="./assets/home/desktop/shield.svg" alt="Icone de um escudo">
+        <h2>Segurança</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed laoreet convallis nulla laoreet placerat.</p>
+      </div>
+      <a href="./pages/contato.html">VAMOS FECHAR NEGÓCIO</a>
+    </div>
+    <div class="footer">
+      <div class="links">
+        <a href="./pages/suporte.html">Suporte</a>
+        <a href="">EULA</a>
+        <a href="./pages/empresa.html">Sobre Nós</a>
+        <a href="./pages/contato.html">Contato</a>
+      </div>
+      <p>© 2025 Argus Corporation. Ltd. All rights reserved.</p>
+    </div>
+  </div>
+
 </body>
+
 </html>
+
+<!-- Script para mudar a cor do scroll -->
+<script>
+  const header = document.querySelector('.desktopHeader');
+
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 90) { // ponto onde a navbar muda de cor
+      header.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+    }
+  });
+
+</script>
