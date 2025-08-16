@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <section>
+        <p>
+            Nome <br>
+            <input type="text" id="ipt_nome">
+        </p>
+        <p>
+            email <br>
+            <input type="text" id="ipt_email">
+        </p>
+        <p>
+            senha <br>
+            <input type="password" id="ipt_senha">
+        </p>
+        <p>
+            confirmação de senha <br>
+            <input type="password" id="ipt_CSenha">
+        </p>
+
+        <button onclick="cadastrar()">></button>
+    </section>
+</body>
+</html>
+<script>
+    function cadastrar(){
+        var nomeVar = ipt_nome.value;
+        var emailVar = ipt_email.value;
+        var senhaVar = ipt_senha.value;
+        var confirmacao_senhaVar = ipt_CSenha.value;
+
+        //Fazer verificação de campos em branco e senhas diferentes
+
+
+         // Enviando o valor da nova input
+        fetch("/usuarios/cadastrar", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            // crie um atributo que recebe o valor recuperado aqui
+            // Agora vá para o arquivo routes/usuario.js
+            nomeServer: nomeVar,
+            emailServer: emailVar,
+            senhaServer: senhaVar,
+            
+        }),
+        })
+        .then(function (resposta) {
+            console.log("resposta: ", resposta);
+
+            if (resposta.ok) {
+                alert("Cadastro realizado com sucesso!");
+                window.location = "login.html";
+            
+            } else {
+            throw "Houve um erro ao tentar realizar o cadastro!";
+            }
+        })
+        .catch(function (resposta) {
+            console.log(`#ERRO: ${resposta}`);
+            
+        });
+
+        return false;
+    }
+</script>
