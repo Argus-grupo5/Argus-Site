@@ -3,29 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Cadastro</title>
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
     <section>
         <p>
-            Nome <br>
-            <input type="text" id="ipt_nome">
+            <input type="text" id="ipt_nome" placeholder="Nome">
         </p>
         <p>
-            email <br>
-            <input type="text" id="ipt_email">
+            <input type="text" id="ipt_email" placeholder="Email">
         </p>
         <p>
-            senha <br>
-            <input type="password" id="ipt_senha">
+            <input type="password" id="ipt_senha" placeholder="Senha">
         </p>
         <p>
-            confirmação de senha <br>
-            <input type="password" id="ipt_CSenha">
+            <input type="password" id="ipt_CSenha" placeholder="Confirmação de Senha">
         </p>
 
         <button onclick="cadastrar()">></button>
     </section>
+
+    <div class="footer">
+      <div class="links">
+        <a href="./pages/suporte.html">Suporte</a>
+        <a href="">EULA</a>
+        <a href="./pages/empresa.html">Sobre Nós</a>
+        <a href="./pages/contato.html">Contato</a>
+      </div>
+      <p>© 2025 Argus Corporation. Ltd. All rights reserved.</p>
+    </div>
 </body>
 </html>
 <script>
