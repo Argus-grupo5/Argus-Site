@@ -3,8 +3,9 @@ use Banco_Teste;
 
 create table usuarios(
 id int primary key auto_increment,
-nome varchar(70),
-email varchar(70),
+nome varchar(256),
+-- Maximo de caracteres que um email pode ter pelo google
+email varchar(256),
 senha char(8)
 );
 
