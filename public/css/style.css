@@ -57,15 +57,7 @@
 .desktopHeader .login .link {
   text-decoration: none;
   color: #fff;
-
   font-size: 1.56vw;
-}
-
-.desktopHeader .links .link:hover,
-.desktopHeader .login .link:hover,
-.desktopHeader .title:hover,
-.desktopHeader .logo:hover {
-  color: #fff;
 }
 
 .desktopHeader .login {
@@ -105,6 +97,7 @@
 .desktopHeader .login .link,
 .desktopHeader .title h1 {
   position: relative;
+  color: #fff;
 }
 
 .desktopHeader .links .link::after,

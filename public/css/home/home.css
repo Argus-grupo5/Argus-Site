@@ -6,7 +6,7 @@ body {
 .bannerDesktop {
   background-image: url(../../assets/home/desktop/background.svg);
   width: 100%;
-  height: 100vh;
+  height: 110vh;
   background-repeat: no-repeat;
   background-size: cover;
   position: absolute;
@@ -23,7 +23,9 @@ body {
   justify-content: center;
 }
 
-.heroPage {
+/* Hero */
+
+.containerDesktop .heroPage {
   margin-top: 10.55vh;
   height: 89.54vh;
 
@@ -34,19 +36,20 @@ body {
 
 }
 
-.heroPage h1 {
+.containerDesktop .heroPage h1 {
   width: 51vw;
+  font-weight: 400;
   line-height: 1.1;
   text-align: center;
   font-size: 2.34vw;
 }
 
-.heroPage p {
+.containerDesktop .heroPage p {
   margin-top: 1.57vh;
   font-size: 1.17vw;
 }
 
-.heroPage a {
+.containerDesktop .heroPage a {
   margin-top: 2.5vh;
   text-decoration: none;
   padding-inline: 1.8vw;
@@ -57,14 +60,200 @@ body {
   transition: .4s;
 }
 
-.heroPage a:hover {
+.containerDesktop .heroPage a:hover {
   scale: 1.1;
   transition: .4s;
   box-shadow: -3px 2px 5px 5px #000;
 }
 
-.heroPage img {
+.containerDesktop .heroPage img {
   margin-top: 2vh;
   width: 36.66vw;
   height: 41.18vh;
+}
+
+/* Explication */
+.containerDesktop .explication .background {
+  background-image: url(../../assets/home/desktop/backgroundAplication.svg);
+  width: 100%;
+  height: 70vh;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: absolute;
+  z-index: -1;
+}
+
+.containerDesktop .explication {
+  width: 100%;
+  height: 70vh;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.containerDesktop .explication .card {
+  width: 30vw;
+  height: 43vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+.containerDesktop .explication .card img {
+  width: 9.52vw;
+  height: 16.93vh;
+  margin-bottom: 3vh;
+}
+
+.containerDesktop .explication .card p {
+  width: 25vw;
+  font-size: 1.8vw;
+  text-align: center;
+  line-height: 1.1;
+  color: #000;
+}
+
+/* Vantagens */
+
+.containerDesktop .vantagens {
+  margin-top: 9.11vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.containerDesktop .vantagens h1 {
+  font-weight: 400;
+  font-size: 3vw;
+  color: #fff;
+}
+
+.containerDesktop .vantagens h1 span {
+  color: #FF6D4D;
+  font-weight: 600;
+}
+
+
+
+.containerDesktop .vantagens .cards {
+  margin-top: 7vh;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 80vw;
+}
+
+.containerDesktop .vantagens .cards .card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 40vh;
+  width: 22vw;
+  background-color: #FFA794;
+  border-radius: 1vw;
+}
+
+.containerDesktop .vantagens .cards .card img {
+  position: absolute;
+  top: -8vh;
+  left: 1vw;
+  width: 6.51vw;
+  height: 11.58vh;
+}
+
+.containerDesktop .vantagens .cards .card h2 {
+  line-height: 1.1;
+  text-align: center;
+  font-size: 2vw;
+  font-weight: 400;
+  color: #000;
+}
+
+
+.containerDesktop .vantagens .cards .card p {
+  margin-top: 1.7vh;
+  line-height: 1.1;
+  text-align: center;
+  font-size: 1.5vw;
+  font-weight: 300;
+  color: #000;
+}
+
+.containerDesktop .vantagens a {
+  width: 18vw;
+  line-height: 1.3;
+  text-align: center;
+  margin-top: 5vh;
+  text-decoration: none;
+  padding-inline: 1.8vw;
+  padding-block: 1.2vh;
+  font-size: 1.61vw;
+  font-weight: 600;
+  color: #000;
+  background: #FF6D4D;
+  border-radius: 40vw;
+  transition: .4s;
+}
+
+.containerDesktop .vantagens a:hover {
+  scale: 1.1;
+  transition: .4s;
+  box-shadow: -3px 2px 5px 5px #000;
+}
+
+/* Footer */
+.containerDesktop .footer {
+  margin-top: 15vh;
+  width: 100%;
+  height: 15vh;
+  background-color: #FF6D4D;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.containerDesktop .footer .links {
+  width: 25vw;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.containerDesktop .footer p {
+  font-size: 1.3vw;
+  font-weight: 400;
+}
+
+
+.containerDesktop .footer .links a {
+  font-size: 1.5vw;
+  font-weight: 400;
+  text-decoration: none;
+  position: relative;
+}
+
+/* Animações do footer */
+.containerDesktop .footer .links a::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: .22vw;
+  bottom: 0;
+  left: 0;
+  background-color: #fff;
+  transition: transform 0.4s ease-out;
+  transform-origin: bottom center;
+}
+
+.containerDesktop .footer .links a:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom center;
 }
