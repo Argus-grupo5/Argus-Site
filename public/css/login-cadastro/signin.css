@@ -28,7 +28,7 @@ body {
     margin-top: 20vh;
     width: 27%;
     height: 70vh;
-    background-color: rgb(43, 41, 41);
+    background-color: black;
     border-radius: 6px;
     display: flex;
     flex-direction: column;
@@ -62,22 +62,7 @@ body {
     color: #ff2f00;
 
 }
-/* .containerDesktop .heroPage a {
-    margin-top: 2.5vh;
-    text-decoration: none;
-    padding-inline: 1.8vw;
-    font-size: 1.61vw;
-    color: #000;
-    background: #FF6D4D;
-    border-radius: 40vw;
-    transition: .4s;
-}
 
-.containerDesktop .heroPage a:hover {
-    scale: 1.1;
-    transition: .4s;
-    box-shadow: -3px 2px 5px 5px #000;
-} */
 
 .containerDesktop .heroPage img {
     margin-top: 2vh;
@@ -85,7 +70,19 @@ body {
     height: 41.18vh;
 }
 
-
+.containerDesktop .heroPage .btnImage {
+    margin-top: 2vh;
+    width: 8%;
+    height: 6%;
+    opacity: 80%;
+}
+.containerDesktop .heroPage .btnImage:hover {
+    cursor: pointer;
+    margin-top: 2vh;
+    width: 8%;
+    height: 6%;
+    opacity: 100%;
+}
 /* inputs */
 .containerDesktop .heroPage input{
     background: none;
@@ -93,13 +90,16 @@ body {
     width: 80%;
     height: 7%;
     font-size: 100%;
-
+    border-radius: 20px;
+    border-color: #fff;
 }
 
 .containerDesktop .heroPage input::placeholder {
     color: white;
-    opacity: 1; /* Garante que fique totalmente branco */
+    opacity: 1;
 }
+
+
 
 
 /* Footer */
