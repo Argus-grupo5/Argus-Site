@@ -5,125 +5,178 @@
   padding: 0;
   box-sizing: border-box;
   font-family: "Cairo", sans-serif;
-  color: #fff;
+  color: white;
 }
 
-.desktopHeader {
-  position: fixed;
-  color: #fff;
+body {
+    background-color: #1a1a1a;
+    overflow-x: hidden;
+}
+
+.desktopNav{
   width: 100%;
-  height: 10.55vh;
+  min-height: 80px;
+  padding: 10px 20px;
 
   display: flex;
+  flex-wrap: wrap;
   flex-direction: row;
   align-items: center;
-  transition: .4s;
+  justify-content: center;
+  gap: 10px;
 }
 
-.desktopHeader .logo {
-  width: 5.42%;
-  margin-left: 1.9vw;
-  transition: .4s;
+.desktopNav img{
+    max-width: 100%;
+    height: auto;
 }
 
-.desktopHeader .logo img{
-  width: 100%;
+.desktopNav .logo{
+    width: 50px;
+    min-width: 40px;
 }
 
-.desktopHeader .title {
-  text-decoration: none;
-  color: #fff;
-  transition: .4s;
+/* Alerts */
+.desktopNav .alerts {
+    display: flex;
+    margin-left: 10px;
 }
 
-.desktopHeader .title h1 {
-  font-size: 2.54vw;
-  margin-left: 1.46vw;
-  color: #fff;
+.desktopNav .alerts .bell{
+    min-width: 40px;
+    background-color: #362f2f;
+    border-radius: 5px 0px 0px 5px;
+    padding: 5px 8px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.desktopHeader .links {
-  margin-left: 4.07vw;
-  width: 23.68vw;
-  height: 4.17vh;
-
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
+.desktopNav .alerts .bell img {
+    width: 20px;
 }
 
-.desktopHeader .links .link,
-.desktopHeader .login .link {
-  text-decoration: none;
-  color: #fff;
-  font-size: 1.56vw;
+.desktopNav .alerts .risk,
+.desktopNav .alerts .atention {
+    min-width: 30px;
+    padding: 5px 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: clamp(12px, 1.5vw, 16px);
 }
 
-.desktopHeader .login {
-  margin-left: auto;
-  margin-right: 1.96vw;
-  width: 18.80vw;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.desktopNav .alerts .risk{
+    background-color: #ff3131;
 }
 
-.desktopHeader .login .buttons {
-  text-decoration: none;
-  color: #fff;
-  font-size: 1.56vw;
-  padding-inline: 1.8vw;
-  background: #FF6D4D;
-  border-radius: 40vw;
-  transition: .4s;
-
+.desktopNav .alerts .atention{
+    background-color: #ffba31;
+    border-radius: 0px 5px 5px 0px;
 }
 
-.desktopHeader .logo:hover {
-  scale: 1.1;
-  transition: .4s;
+/* Server */
+.desktopNav .server {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: 10px;
 }
 
-.desktopHeader .login .buttons:hover {
-  scale: 1.1;
-  transition: .4s;
-  box-shadow: -3px 2px 5px 5px #000;
+.desktopNav .server img{
+    width: 20px;
+    margin-right: 5px;
 }
 
-/* animação do hover */
-.desktopHeader .links .link,
-.desktopHeader .login .link,
-.desktopHeader .title h1 {
-  position: relative;
-  color: #fff;
+.desktopNav .server .serverSelect{
+    display: flex;
+    align-items: center;
+    background-color: #362f2f;
+    border-radius: 5px 0px 0px 5px;
+    padding: 5px 8px;
+    min-width: 120px;
 }
 
-.desktopHeader .links .link::after,
-.desktopHeader .login .link::after,
-.desktopHeader .title h1::after {
-  content: '';
-  position: absolute;
-  width: 100%;
-  transform: scaleX(0);
-  height: .22vw;
-  bottom: 0;
-  left: 0;
-  background-color: #fff;
-  transition: transform 0.4s ease-out;
-  transform-origin: bottom center;
+.desktopNav .server .serverSelect select{
+    background-color: #362f2f;
+    border: none;
+    width: 100%;
+    font-size: clamp(12px, 1.5vw, 14px);
+    cursor: pointer;
 }
 
-
-.desktopHeader .links .link:hover::after,
-.desktopHeader .login .link:hover::after,
-.desktopHeader .title h1:hover::after {
-  transform: scaleX(1);
-  transform-origin: bottom center;
+.desktopNav .server .serverSpecs{
+    background-color: #4b4343;
+    border-radius: 0px 5px 5px 0px;
+    padding: 5px 8px;
+    width: 100%;
+    max-width: 400px;
+    font-size: clamp(10px, 1.3vw, 12px);
+    display: flex;
+    align-items: center;
+    word-break: break-word;
 }
 
-/* Mudar a cor do scroll conforme ele rola*/
-.desktopHeader.scrolled {
-  background-color: #000000cc;
+/* KPIs */
+.KPIs {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
+}
+
+.kpi-container {
+    position: relative;
+    width: 100%;
+    max-width: 300px;
+    min-width: 200px;
+    aspect-ratio: 1/1;
+    margin: 0 auto;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+    .desktopNav {
+        flex-direction: column;
+        height: auto;
+        padding: 10px;
+    }
+    
+    .desktopNav .logo {
+        margin-bottom: 10px;
+    }
+    
+    .desktopNav .alerts,
+    .desktopNav .server {
+        margin: 5px 0;
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .desktopNav .server .serverSpecs {
+        max-width: 100%;
+    }
+    
+    .kpi-container {
+        max-width: 250px;
+    }
+}
+
+@media (max-width: 480px) {
+    .desktopNav .server {
+        flex-direction: column;
+    }
+    
+    .desktopNav .server .serverSelect,
+    .desktopNav .server .serverSpecs {
+        border-radius: 5px;
+        margin: 2px 0;
+        width: 100%;
+    }
+    
+    .kpi-container {
+        max-width: 200px;
+    }
 }
