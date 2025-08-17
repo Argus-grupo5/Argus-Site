@@ -56,3 +56,56 @@
 </body>
 
 </html>
+
+<script>
+    function login() {
+        var emailVar = ipt_email.value;
+        var senhaVar = ipt_senha.value;
+
+        fetch("/usuarios/autenticar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                // crie um atributo que recebe o valor recuperado aqui
+                // Agora vá para o arquivo routes/usuario.js
+                emailServer: emailVar,
+                senhaServer: senhaVar,
+
+            }),
+        })
+            .then(function (resposta) {
+                console.log("resposta: ", resposta);
+
+                if (resposta.ok) {
+                    alert("Login realizado com sucesso!");
+                    window.location = "login.html";
+
+                } else {
+                    throw "Houve um erro ao tentar realizar o login!";
+                }
+            })
+            .catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`);
+
+            });
+
+        return false;
+    }
+
+</script>
+
+<!-- Script para mudar a cor do scroll -->
+<script>
+    const header = document.querySelector('.desktopHeader');
+
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 90) { // ponto onde a navbar muda de cor
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    });
+
+</script>
