@@ -65,10 +65,18 @@
         var senhaVar = ipt_senha.value;
 
         if (emailVar == "" || senhaVar == "") {
-            mensagem_erro.style.display = "block"
+            mensagem_erro.style.display = "block";
             mensagem_erro.innerHTML = "Preencha todos os campos.";
             return;
         }
+
+        if (!emailVar.includes('@')) {
+            mensagem_erro.style.display = "block";
+            mensagem_erro.innerHTML = "Certifique-se de utilizar um endereço de email válido.";
+            return;
+        }
+
+        mensagem_erro.style.display = "none";
 
         fetch("/usuarios/autenticar", {
             method: "POST",
