@@ -1,26 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/login-cadastro/signin.css">
 </head>
-<body>
-    <section>
-        <p>
-            Nome <br>
-            <input type="text" id="ipt_nome">
-        </p>
-        <p>
-            email <br>
-            <input type="text" id="ipt_email">
-        </p>
-        <p>
-            senha <br>
-            <input type="password" id="ipt_senha">
-        </p>
 
-        <button onclick="login()">></button>
-    </section>
+<body>
+    <header class="desktopHeader">
+        <a href="../index.html" class="logo"><img src="../assets/icon/logoBranca.svg" alt=""></a>
+        <a href="../index.html" class="title">
+            <h1>ARGUS</h1>
+        </a>
+        <nav class="links">
+            <a class="link" href="../pages/suporte.html">Suporte</a>
+            <a class="link" href="../pages/empresa.html">Empresa</a>
+            <a class="link" href="../pages/contato.html">Contato</a>
+        </nav>
+        <nav class="login">
+            <a class="link" href="../pages/login.html">Entrar</a>
+            <a class="buttons" href="../pages/signin.html">Cadastre-se</a>
+        </nav>
+    </header>
+    <div class="bannerDesktop"></div>
+
+    <div class="containerDesktop">
+        <div class="heroPage">
+            <h1>Entrar na Argus</h1>
+            <p>Email</p>
+            <input type="text" id="ipt_email" placeholder="Digite seu email">
+            <p>Senha</p>
+            <input type="password" id="ipt_senha" placeholder="********">
+            <!-- <div></div>Para mensagem de erro -->
+            <img class="btnImage" onclick="cadastrar()" src="../assets/login-signin/Vector.png"
+                alt="Botão para login">
+            <p>Não tem uma conta? <a href="signin.html">Cadastre-se na Argus.</a></p>
+
+        </div>
+
+
+
+        <div class="footer">
+            <div class="links">
+                <a href="./pages/suporte.html">Suporte</a>
+                <a href="">EULA</a>
+                <a href="./pages/empresa.html">Sobre Nós</a>
+                <a href="./pages/contato.html">Contato</a>
+            </div>
+            <p>© 2025 Argus Corporation. Ltd. All rights reserved.</p>
+        </div>
+    </div>
 </body>
+
 </html>
