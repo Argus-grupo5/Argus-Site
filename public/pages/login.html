@@ -34,9 +34,9 @@
             <input type="text" id="ipt_email" placeholder="Digite seu email">
             <p>Senha</p>
             <input type="password" id="ipt_senha" placeholder="********">
-            <!-- <div></div>Para mensagem de erro -->
-            <img class="btnImage" onclick="cadastrar()" src="../assets/login-signin/Vector.png"
+            <img class="btnImage" onclick="login()" src="../assets/login-signin/Vector.png"
                 alt="Botão para login">
+            <div id="mensagem_erro"></div>
             <p>Não tem uma conta? <a href="signin.html">Cadastre-se na Argus.</a></p>
 
         </div>
@@ -58,9 +58,17 @@
 </html>
 
 <script>
+    mensagem_erro.style.display = "none"
+
     function login() {
         var emailVar = ipt_email.value;
         var senhaVar = ipt_senha.value;
+
+        if (emailVar == "" || senhaVar == "") {
+            mensagem_erro.style.display = "block"
+            mensagem_erro.innerHTML = "Preencha todos os campos.";
+            return;
+        }
 
         fetch("/usuarios/autenticar", {
             method: "POST",

@@ -99,7 +99,13 @@ body {
     opacity: 1;
 }
 
-
+/* Div para mensagem de erro */
+#mensagem_erro {
+    background-color: #FF6D4D;
+    padding: 10px;
+    border-radius: 10px;
+    margin-top: 10px;
+}
 
 
 /* Footer */
