@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/dashboard/dashboard.css">
+    <title>ARGUS | Dashboard</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header class="desktopNav">
+        <img class="logo" src="../assets/icon/logoBranca.svg" alt="">
+        <div class="alerts">
+            <div class="bell">
+                <img src="../assets/dashboard/desktop/bell.svg" alt="">
+            </div>
+            <div class="risk">
+                0
+            </div>
+            <div class="atention">
+                0
+            </div>
+        </div>
+        <div class="server">
+            <div class="serverSelect">   
+                <img src="../assets/dashboard/desktop/server.svg" alt="">
+                <select name="servers" id="servers">
+                <option value="server1" title="CPU 3.0 GHz (8 cores), 64 GB RAM, RTX 3080 Ti, NVMe 2 TB, 10 GbE">Servidor 1</option>
+                <option value="server2" title="CPU 3.2 GHz (12 cores), 128 GB RAM, RTX 4090, NVMe 4 TB, 25 GbE">Servidor 2</option>
+                <option value="server3" title="CPU 3.8 GHz (32 cores), 512 GB RAM, NVIDIA A100 80 GB, NVMe 16 TB, 100 GbE">Servidor 3</option>
+                </select>
+            </div>
+            <div class="serverSpecs">
+                
+            </div>
+        </div>
+    </header>
+
+    <div class="KPIs">
+        <div>
+           <canvas id="cpuGauge"></canvas>
+        </div>
+    </div>
+</body>
+</html>
+<script>
+
+  const select = document.getElementById("servers");
+  const serverSpecs = document.querySelector(".serverSpecs");
+
+  serverSpecs.textContent = select.options[select.selectedIndex].title;
+
+
+  select.addEventListener("change", 
+    function () {
+        const selectedOption = select.options[select.selectedIndex];
+        serverSpecs.textContent = selectedOption.title;
+    }
+  );
+
+
+  
+</script>
+<script>
+    const cpuUsage = 50; // %
+    const totalCores = 6;
+    const usedCores = (cpuUsage/100) * totalCores;
+    const temperature = 32; // °C
+
+const ctx = document.getElementById('cpuGauge').getContext('2d');
+
+const cpuChart = new Chart(ctx, {
+  type: 'doughnut',
+  data: {
+    datasets: [{
+      data: [cpuUsage, 200 - cpuUsage],
+      backgroundColor: [
+        cpuUsage < 60 ? "green" : cpuUsage < 85 ? "#ffde59" : "#ff3131",
+        "#333"
+      ],
+      borderWidth: 0,
+      cutout: "80%" 
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    rotation: -90,
+    circumference: 360,
+    plugins: {
+      tooltip: { enabled: false },
+      legend: { display: false },
+      title: {
+        display: true,
+        text: "CPU em Uso",
+        color: "#fff",
+        font: { size: 16,
+            family: "Cairo, Arial, sans-serif", // <- aqui você escolhe a fonte
+            weight: "bold"
+        }
+      }
+    }
+  },
+  plugins: [{
+    id: 'text',
+    beforeDraw: (chart) => {
+      const {ctx, chartArea: {width, height}} = chart;
+      ctx.save();
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+
+      const centerX = width / 2;
+      const centerY = height / 2;
+
+      // Escala dinâmica da fonte baseada na largura do canvas
+      const baseFontSize = width / 10; // ajuste pra ficar proporcional
+
+      // CPU %
+      ctx.fillStyle = "#fff";
+      ctx.font = `bold ${baseFontSize}px Cairo`;
+      ctx.fillText(cpuUsage + "%", centerX, centerY - height*0.015);
+
+      // Cores usadas
+      ctx.font = `${baseFontSize / 1.5}px Cairo`;
+      ctx.fillText(usedCores.toFixed(2) + " de " + totalCores + " Cores", centerX, centerY + height*0.15);
+
+      // Temperatura
+      let tempColor;
+      if (temperature < 50) tempColor = "#32CD32";
+      else if (temperature < 70) tempColor = "#FFD700";
+      else tempColor = "#FF4500";
+
+      ctx.fillStyle = tempColor;
+      ctx.font = `bold ${baseFontSize / 1.3}px Cairo`;
+      ctx.fillText(temperature + "°C", centerX, centerY + height*0.35);
+
+      ctx.restore();
+    }
+  }]
+});
+
+// Ajuste CSS do canvas
+document.querySelector('#cpuGauge').style.width = '100%';
+document.querySelector('#cpuGauge').style.height = 'auto';
+
+</script>
