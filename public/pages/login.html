@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/login-cadastro/signin.css">
+</head>
+
+<body>
+    <header class="desktopHeader">
+        <a href="../index.html" class="logo"><img src="../assets/icon/logoBranca.svg" alt=""></a>
+        <a href="../index.html" class="title">
+            <h1>ARGUS</h1>
+        </a>
+        <nav class="links">
+            <a class="link" href="../pages/suporte.html">Suporte</a>
+            <a class="link" href="../pages/empresa.html">Empresa</a>
+            <a class="link" href="../pages/contato.html">Contato</a>
+        </nav>
+        <nav class="login">
+            <a class="link" href="../pages/login.html">Entrar</a>
+            <a class="buttons" href="../pages/signin.html">Cadastre-se</a>
+        </nav>
+    </header>
+    <div class="bannerDesktop"></div>
+
+    <div class="containerDesktop">
+        <div class="heroPage">
+            <h1>Entrar na Argus</h1>
+            <p>Email</p>
+            <input type="text" id="ipt_email" placeholder="Digite seu email">
+            <p>Senha</p>
+            <input type="password" id="ipt_senha" placeholder="********">
+            <img class="btnImage" onclick="login()" src="../assets/login-signin/Vector.png" alt="Botão para login">
+            <div id="mensagem_erro"></div>
+            <p>Não tem uma conta? <a href="signin.html">Cadastre-se na Argus.</a></p>
+
+        </div>
+
+
+
+        <div class="footer">
+            <div class="links">
+                <a href="./pages/suporte.html">Suporte</a>
+                <a href="">EULA</a>
+                <a href="./pages/empresa.html">Sobre Nós</a>
+                <a href="./pages/contato.html">Contato</a>
+            </div>
+            <p>© 2025 Argus Corporation. Ltd. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+
+</html>
+
+<script>
+    mensagem_erro.style.display = "none"
+
+    function login() {
+        var emailVar = ipt_email.value;
+        var senhaVar = ipt_senha.value;
+
+        if (emailVar == "" || senhaVar == "") {
+            mensagem_erro.style.display = "block";
+            mensagem_erro.innerHTML = "Preencha todos os campos.";
+            return;
+        }
+
+        if (!emailVar.includes('@')) {
+            mensagem_erro.style.display = "block";
+            mensagem_erro.innerHTML = "Certifique-se de utilizar um endereço de email válido.";
+            return;
+        }
+
+        mensagem_erro.style.display = "none";
+
+        console.log("FORM LOGIN: ", emailVar);
+        console.log("FORM SENHA: ", senhaVar);
+
+        fetch("/usuarios/autenticar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                emailServer: emailVar,
+                senhaServer: senhaVar
+            })
+        }).then(function (resposta) {
+            console.log("ESTOU NO THEN DO entrar()!")
+
+            if (resposta.ok) {
+                console.log(resposta);
+
+                resposta.json().then(json => {
+                    console.log(json);
+                    console.log(JSON.stringify(json));
+                    sessionStorage.EMAIL_USUARIO = json.email;
+                    sessionStorage.NOME_USUARIO = json.nome;
+                    sessionStorage.ID_USUARIO = json.id;
+
+                    setTimeout(function () {
+                        window.location.href = '../index.html';
+                    }, 1000); // apenas para exibir o loading
+
+                });
+
+            } else {
+
+                console.log("Houve um erro ao tentar realizar o login!");
+
+                resposta.text().then(texto => {
+                    console.error(texto);
+                    finalizarAguardar(texto);
+                });
+            }
+
+        }).catch(function (erro) {
+            console.log(erro);
+        })
+
+        return false;
+    }
+
+</script>
+
+<!-- Script para mudar a cor do scroll -->
+<script>
+    const header = document.querySelector('.desktopHeader');
+
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 90) { // ponto onde a navbar muda de cor
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    });
+
+</script>
