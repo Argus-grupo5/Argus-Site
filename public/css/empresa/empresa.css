@@ -185,8 +185,7 @@ justify-content: center;
     width: 100%;
     height: 90%;
     margin-top: 5%;
-    border-top: 3px dashed #FF6D4D; 
-    border-bottom: 3px dashed #FF6D4D; 
+    border-block: .5vw dashed #FF6D4D;  
     padding: 20px;
     justify-content: center;
     align-items: center;
@@ -317,6 +316,7 @@ justify-content: center;
 .footer p {
   font-size: 1.3vw;
   font-weight: 400;
+  color: #fff;
 }
 
 
