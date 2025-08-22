@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/dashboard/servers.css">
+    <link rel="stylesheet" href="../css/style.css">
     <title>ARGUS | Servidores</title>
 </head>
 <body>
@@ -72,5 +73,125 @@
             </div>
         </div>
     </header>
+
+    <div class="search">
+        <select name="" id="id_filter" onchange="sortear(this.value)">
+            <option value="Level">Nível de Risco</option>
+            <option value="Alert">Alerta</option>
+            <option value="Atention">Atenção</option>
+            <option value="Good">Bom Estado</option>
+        </select>
+        <input type="search" placeholder="Pesquisar por um servidor">
+    </div>
+
+        <div class="container">
+            <div class="serverInfo">
+                <div class="serverIcon tooltipInfo">
+                    <img style="width: 2vw;" src="../assets/dashboard/desktop/tip.svg" alt="Informação sobre os dados">
+                        <span class="tooltiptextInfo">
+                            Dados são atualizados a cada 60s
+                        </span>
+                </div>
+                <div class="serverName">
+                    Servidor
+                </div>
+                <div class="serverStatus">
+                    Nível de Risco
+                </div>
+                <div class="serverComponents">
+                    Recursos em Risco
+                </div>
+                <div class="serverLocation">
+                    Localização
+                </div>
+            </div>
+            <div class="server-list" id="id_server_list">
+            </div>   
+        </div>
+    </div>
 </body>
 </html>
+
+<script>
+    let nivel_de_risco;
+    let status;
+    
+    // Definir nível de risco
+    function calculate_risk(id_server){
+        for (let i = 0; i <= 5; i++){
+            nivel_de_risco = server[id_server].nivel;
+            if (nivel_de_risco == 1){
+                status = "ok"
+            }
+            else if (nivel_de_risco > 1 && nivel_de_risco <= 3){
+                status = "atention";
+            } else if (nivel_de_risco >= 4){
+                status = "danger";
+            } else {
+                status = "Inválido";
+            }
+        }
+    }
+
+    function gerar_server(id_server){
+
+        calculate_risk(id_server);
+        id_server_list.innerHTML = "";
+        id_server_list.innerHTML += `            
+        <div class="server-object">
+            <div class="serverIcon tooltipInfo">
+                <img class="server-icon-status" src="../assets/dashboard/desktop/${status}.svg" alt="Informação sobre os dados">
+            </div>
+            <div class="serverName">
+                ${server[id_server].name}
+            </div>
+            <div class="serverStatus">
+                <progress value="${server[id_server].nivel}" max="5"></progress>
+            </div>
+            <div class="serverComponents">
+                ${server[id_server].recursos}
+            </div>
+            <div class="serverLocation">
+                ${server[id_server].localizacao}
+            </div>
+        </div>`;
+    }
+
+    function sortear(filtro){
+
+            server.sort((a, b) => b.nivel-a.nivel);
+        
+
+        for (let i = 0; i < server.length; i++){
+        gerar_server(i);
+    }
+    }
+
+    server =[{
+        "name": "Servidor Bolado Pra Dedeu",
+        "nivel": "4",
+        "recursos": "[CPU,RAM]",
+        "localizacao": "São Paulo - SP"
+    },
+    {
+        "name": "Servidor SPTech",
+        "nivel": "3",
+        "recursos": "[CPU,GPU]",
+        "localizacao": "São Paulo - SP"
+    },{
+        "name": "Servidor BandTec",
+        "nivel": "5",
+        "recursos": "[CPU,GPU e RAM]",
+        "localizacao": "São Paulo - SP"
+    },{
+        "name": "Servidor de Fulano",
+        "nivel": "1",
+        "recursos": "[Nenhum]",
+        "localizacao": "São Paulo - SP"
+    }]
+
+          
+    for (let i = 0; i < server.length; i++){
+        gerar_server(i);
+    }
+</script>

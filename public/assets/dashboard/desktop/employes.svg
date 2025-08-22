@@ -1,8 +1,6 @@
 <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M35.7754 21.7935C38.5654 21.4015 40.7134 19.0095 40.7194 16.1115C40.7194 13.2555 38.6374 10.8875 35.9074 10.4395" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M39.457 28.501C42.159 28.905 44.045 29.851 44.045 31.801C44.045 33.143 43.157 34.015 41.721 34.563" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M23.7735 29.3281C17.3455 29.3281 11.8555 30.3021 11.8555 34.1921C11.8555 38.0801 17.3115 39.0821 23.7735 39.0821C30.2015 39.0821 35.6895 38.1181 35.6895 34.2261C35.6895 30.3341 30.2355 29.3281 23.7735 29.3281Z" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M23.7738 23.776C27.9918 23.776 31.4118 20.358 31.4118 16.138C31.4118 11.92 27.9918 8.5 23.7738 8.5C19.5558 8.5 16.1358 11.92 16.1358 16.138C16.1198 20.342 19.5138 23.762 23.7178 23.776H23.7738Z" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M11.7697 21.7935C8.97768 21.4015 6.83168 19.0095 6.82568 16.1115C6.82568 13.2555 8.90768 10.8875 11.6377 10.4395" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M8.088 28.501C5.386 28.905 3.5 29.851 3.5 31.801C3.5 33.143 4.388 34.015 5.824 34.563" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M34 42V38C34 35.8783 33.1571 33.8434 31.6569 32.3431C30.1566 30.8429 28.1217 30 26 30H10C7.87827 30 5.84344 30.8429 4.34315 32.3431C2.84285 33.8434 2 35.8783 2 38V42" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M18 22C22.4183 22 26 18.4183 26 14C26 9.58172 22.4183 6 18 6C13.5817 6 10 9.58172 10 14C10 18.4183 13.5817 22 18 22Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M46 42V38C45.9987 36.2275 45.4087 34.5055 44.3227 33.1046C43.2368 31.7037 41.7163 30.7031 40 30.26" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M32 6.25999C33.7208 6.7006 35.2461 7.7014 36.3353 9.10462C37.4245 10.5078 38.0157 12.2337 38.0157 14.01C38.0157 15.7863 37.4245 17.5122 36.3353 18.9154C35.2461 20.3186 33.7208 21.3194 32 21.76" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

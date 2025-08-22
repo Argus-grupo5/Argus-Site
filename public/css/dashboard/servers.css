@@ -28,6 +28,10 @@ body {
     transition: .4s;
 }
 
+.desktopNav:hover {
+    z-index: 999;
+}
+
 .desktopNav img{
     width: 70%;
     height: auto;
@@ -37,7 +41,7 @@ body {
 }
 
 .desktopNav .navButtons img:hover{
-    width: 100%;
+    width: 90%;
     background-color: #ffa794; 
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
@@ -53,7 +57,7 @@ body {
     flex-direction: column;
     align-items: center;
     gap: 2vw;
-    margin-top: 5vw;
+    margin-top: 1vw;
 }
 
 .desktopNav .navButtons .navButton {
@@ -63,7 +67,7 @@ body {
 
 .selected { 
     padding: 0.5vw;
-    background: linear-gradient(180deg, #FF0000 0%, #FF670A 80%);
+    background-color: #FF0000;
     border-radius: 8px;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
@@ -87,7 +91,7 @@ body {
     padding: 0px 1vw;
     border-radius: 5px;
 
-    background-color: #000000;
+    background-color: #FF670A;
 
     color: #ffffff;
     text-align: center;
@@ -100,9 +104,6 @@ body {
   font-size: 1vw;
   transition: .4s ease;
 }
-
-
-
 
 .headerTop{
   padding-left: 5vw;
@@ -199,11 +200,11 @@ body {
     visibility: hidden;
 
     position: absolute;
-    top: +3.5vw;
+    top: +3vw;
     z-index: 1;
     
 
-    width: fit-content;
+    width: 0px;
     padding: 0px 1vw;
     border-radius: 5px;
 
@@ -216,9 +217,9 @@ body {
 
 .tooltipInfo:hover .tooltiptextInfo {
   visibility: visible;
-  width: fit-content;
-  font-size: 0.8vw;
-  transition: .4s ease;
+  min-width: 15vw;
+  font-size: 0.9vw;
+  transition: .3s ease;
 }
 
 
@@ -233,4 +234,129 @@ body {
 #userRole{
     font-size: 0.7vw;
     color: #a0a0a0;
+}
+.search{
+    display: flex;
+    padding-left: 5vw;
+    padding-right: 1vw;
+    gap: 1vw;
+    margin-top: 5vw;
+}
+
+.search select {
+    background-color: #313030;
+    width: 20%;
+    height: auto;
+    border: none;
+    border-radius: 5px;
+    padding: 0.5vw;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    font-size: 1vw;
+}
+
+.search input {
+    width: 100%;
+    background-color: #313030;
+    border: none;
+    border-radius: 5px;
+    padding-left: 1vw;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    font-size: 1vw;
+}
+
+.search input:hover {
+    background-color: #4B4343;
+    transition: .3s ease;
+}
+
+.container {
+    padding-left: 5vw;
+    padding-right: 1vw;   
+}
+
+.container .serverInfo {
+    display: flex;
+    border-radius: 10px;
+    padding: 5px;
+    padding-left: 2vw;
+    margin-top: 1vw;
+    align-items: center;
+    text-align: center;
+    font-size: 1vw;
+}
+
+.serverIcon {
+    display: flex;
+    justify-content: center;
+    width: 5%;
+    
+}
+
+
+.serverName {
+    width: 15%;
+}
+
+.serverStatus {
+    width: 20%;
+}
+
+.serverComponents {
+    width: 30%;
+}
+
+.serverLocation {
+    width: 20%;
+}
+
+
+.server-list {
+    max-height: 31vw;
+    overflow: auto;
+}
+
+.container .serverInfo {
+    display: flex;
+    border-radius: 10px;
+    padding: 5px;
+    padding-left: 2vw;
+    margin-top: 1vw;
+    align-items: center;
+    text-align: center;
+    font-size: 1vw;
+}
+
+.server-object {
+    display: flex;
+    background-color: #313030;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    margin-bottom: 0.5vw;
+    border-radius: 10px;
+    padding: 5px;
+    padding-left: 2vw;
+    align-items: center;
+    text-align: center;
+    font-size: 1vw;
+}
+
+.server-object:hover {
+    background-color: #4B4343;
+    transition: ease .3s;
+}
+
+.server-object progress {
+    border: none;
+    border-radius: 5px;
+    width: 10vw;
+    height: 0.3vw;
+    background-color: #000000;
+    
+}
+
+.server-icon-status {
+    width: 1.5vw;
+}
+
+progress::-moz-progress-bar {
+  background-color:#FF670A;
 }
