@@ -47,8 +47,7 @@
                 <div class="server">
                     <img src="../assets/dashboard/desktop/server.svg" alt="">
                 </div>
-                <div class="serversMonitoring">
-                    6
+                <div class="serversMonitoring" id="id_servidores_monitorados">
                 </div>
                 <span class="tooltiptextInfo">
                     Servidores em monitoramento
@@ -58,14 +57,12 @@
                 <div class="bell">
                     <img src="../assets/dashboard/desktop/bell.svg" alt="">
                 </div>
-                <div class="risk tooltipInfo">
-                    2
+                <div class="risk tooltipInfo" id="id_servidores_em_estado_critico">
                     <span class="tooltiptextInfo">
                         Servidores em atenção
                     </span>
                 </div>
-                <div class="atention tooltipInfo">
-                    3
+                <div class="atention tooltipInfo" id="id_servidores_em_estado_de_alerta">
                     <span class="tooltiptextInfo">
                         Servidores em alerta
                     </span>
@@ -75,121 +72,161 @@
     </header>
 
     <div class="search">
-        <select name="" id="id_filter" onchange="sortear(this.value)">
-            <option value="Level">Nível de Risco</option>
-            <option value="Alert">Alerta</option>
-            <option value="Atention">Atenção</option>
-            <option value="Good">Bom Estado</option>
+        <select id="id_filter" onchange="filtragem_Servidores()">
+            <option value="Nivel_d" selected>Nível (Decrescente)</option>
+            <option value="Nivel_c">Nível (Crescente)</option>
+            <option value="Critico_d">Crítico (Decrescente)</option>
+            <option value="Critico_c">Crítico (Crescente)</option>
+            <option value="Alerta_d">Alerta (Decrescente)</option>
+            <option value="Alerta_c">Alerta (Crescente)</option>
+            <option value="Bom">Bom Estado</option>
         </select>
-        <input type="search" placeholder="Pesquisar por um servidor">
+        <input type="search" id="id_pesquisa" placeholder="Pesquisar por um servidor" oninput="filtragem_Servidores()">
     </div>
 
-        <div class="container">
-            <div class="serverInfo">
-                <div class="serverIcon tooltipInfo">
-                    <img style="width: 2vw;" src="../assets/dashboard/desktop/tip.svg" alt="Informação sobre os dados">
-                        <span class="tooltiptextInfo">
-                            Dados são atualizados a cada 60s
-                        </span>
-                </div>
-                <div class="serverName">
-                    Servidor
-                </div>
-                <div class="serverStatus">
-                    Nível de Risco
-                </div>
-                <div class="serverComponents">
-                    Recursos em Risco
-                </div>
-                <div class="serverLocation">
-                    Localização
-                </div>
+    <div class="container">
+        <div class="serverInfo">
+            <div class="serverIcon tooltipInfo">
+                <img style="width: 2vw;" src="../assets/dashboard/desktop/tip.svg" alt="Informação sobre os dados">
+                <span class="tooltiptextInfo">
+                    Dados são atualizados a cada 60s
+                </span>
             </div>
-            <div class="server-list" id="id_server_list">
-            </div>   
+            <div class="serverName">
+                Servidor
+            </div>
+            <div class="serverStatus">
+                Nível de Risco
+            </div>
+            <div class="serverComponents">
+                Recursos em Risco
+            </div>
+            <div class="serverLocation">
+                Localização
+            </div>
         </div>
+        <div class="server-list" id="id_server_list">
+        </div>   
     </div>
 </body>
 </html>
 
 <script>
-    let nivel_de_risco;
-    let status;
-    
-    // Definir nível de risco
-    function calculate_risk(id_server){
-        for (let i = 0; i <= 5; i++){
-            nivel_de_risco = server[id_server].nivel;
-            if (nivel_de_risco == 1){
-                status = "ok"
-            }
-            else if (nivel_de_risco > 1 && nivel_de_risco <= 3){
-                status = "atention";
-            } else if (nivel_de_risco >= 4){
-                status = "danger";
-            } else {
-                status = "Inválido";
-            }
-        }
-    }
-
-    function gerar_server(id_server){
-
-        calculate_risk(id_server);
-        id_server_list.innerHTML = "";
-        id_server_list.innerHTML += `            
-        <div class="server-object">
-            <div class="serverIcon tooltipInfo">
-                <img class="server-icon-status" src="../assets/dashboard/desktop/${status}.svg" alt="Informação sobre os dados">
-            </div>
-            <div class="serverName">
-                ${server[id_server].name}
-            </div>
-            <div class="serverStatus">
-                <progress value="${server[id_server].nivel}" max="5"></progress>
-            </div>
-            <div class="serverComponents">
-                ${server[id_server].recursos}
-            </div>
-            <div class="serverLocation">
-                ${server[id_server].localizacao}
-            </div>
-        </div>`;
-    }
-
-    function sortear(filtro){
-
-            server.sort((a, b) => b.nivel-a.nivel);
-        
-
-        for (let i = 0; i < server.length; i++){
-        gerar_server(i);
-    }
-    }
-
     server =[{
-        "name": "Servidor Bolado Pra Dedeu",
+        "name": "Servidor Geforce Now",
         "nivel": "4",
-        "recursos": "[CPU,RAM]",
+        "recursos": "[CPU, RAM]",
         "localizacao": "São Paulo - SP"
     },
     {
         "name": "Servidor SPTech",
         "nivel": "3",
-        "recursos": "[CPU,GPU]",
+        "recursos": "[CPU, GPU]",
         "localizacao": "São Paulo - SP"
     },{
         "name": "Servidor BandTec",
         "nivel": "5",
-        "recursos": "[CPU,GPU e RAM]",
+        "recursos": "[CPU, GPU, Armazenamento]",
         "localizacao": "São Paulo - SP"
     },{
-        "name": "Servidor de Fulano",
+        "name": "Servidor Xbox",
         "nivel": "1",
         "recursos": "[Nenhum]",
-        "localizacao": "São Paulo - SP"
+        "localizacao": "Rio de Janeiro - RJ"
+    },
+    {
+        "name": "Servidor Stadia",
+        "nivel": "2",
+        "recursos": "[CPU, RAM]",
+        "localizacao": "Belo Horizonte - MG"
     }]
 
+    id_servidores_monitorados.innerHTML = server.length;
+    let qtd_servidores_critico = 0;
+    let qtd_servidores_alerta = 0;
+    
+    for (let i = 0; i < server.length; i++) {
+        if (server[i]   .nivel == 2 || server[i].nivel == 3){
+            qtd_servidores_alerta++;
+        } else if  (server[i].nivel > 3){ 
+            qtd_servidores_critico++;
+        }
+    }  
+
+    id_servidores_em_estado_critico.innerHTML = qtd_servidores_critico;
+    id_servidores_em_estado_de_alerta.innerHTML = qtd_servidores_alerta;
+
+
+    let nivel_de_risco;
+    let status;
+
+    function calculate_risk(id_server) {
+        let nivel = Number(server[id_server].nivel);
+        if (nivel == 1) {
+            status = "ok";
+        } else if (nivel > 1 && nivel <= 3) {
+            status = "atention";
+        } else if (nivel >= 4) {
+            status = "danger";
+        } else {
+            status = "Inválido";
+        }
+        return status;
+    }
+    function gerar_server(id_server) {
+        let status = calculate_risk(id_server);
+        id_server_list.innerHTML += `            
+            <div class="server-object">
+                <div class="serverIcon tooltipInfo">
+                    <img class="server-icon-status" src="../assets/dashboard/desktop/${status}.svg" alt="Status do servidor">
+                </div>
+                <div class="serverName">
+                    ${server[id_server].name}
+                </div>
+                <div class="serverStatus">
+                    <progress value="${server[id_server].nivel}" max="5"></progress>
+                </div>
+                <div class="serverComponents">
+                    ${server[id_server].recursos}
+                </div>
+                <div class="serverLocation">
+                    ${server[id_server].localizacao}
+                </div>
+            </div>`;
+    }
+    function filtragem_Servidores() {
+        let filtro = document.getElementById("id_filter").value;
+        let pesquisa = document.getElementById("id_pesquisa").value.toLowerCase();
+
+        id_server_list.innerHTML = "";
+
+        if (filtro == "Nivel_c" || filtro == "Critico_c" || filtro == "Alerta_c") {
+            server.sort((a, b) => a.nivel - b.nivel);
+        } else if (filtro == "Nivel_d" || filtro == "Critico_d" || filtro == "Alerta_d") {
+            server.sort((a, b) => b.nivel - a.nivel);
+        }
+
+        for (let i = 0; i < server.length; i++) {
+            let status = calculate_risk(i);
+
+            let passouFiltroEstado =
+                (filtro == "Critico_c" && status == "danger" || filtro == "Critico_d" && status == "danger") ||
+                (filtro == "Alerta_c" && status == "atention" || filtro == "Alerta_d" && status == "atention") ||
+                (filtro == "Bom" && status == "ok") ||
+                (filtro == "Nivel_c" || filtro == "Nivel_d");
+
+            let passouFiltroPesquisa =
+                server[i].name.toLowerCase().includes(pesquisa) ||
+                server[i].localizacao.toLowerCase().includes(pesquisa) ||
+                server[i].recursos.toLowerCase().includes(pesquisa);
+
+            if (passouFiltroEstado && passouFiltroPesquisa) {
+                gerar_server(i);
+            }
+        }
+    }
+
+    
           
     for (let i = 0; i < server.length; i++){
         gerar_server(i);
