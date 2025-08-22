@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/login-cadastro/signin.css">
+</head>
+
+<body>
+    <header class="desktopHeader">
+        <a href="../index.html" class="logo"><img src="../assets/icon/logoBranca.svg" alt=""></a>
+        <a href="../index.html" class="title">
+            <h1>ARGUS</h1>
+        </a>
+        <nav class="links">
+            <a class="link" href="../pages/suporte.html">Suporte</a>
+            <a class="link" href="../pages/empresa.html">Empresa</a>
+            <a class="link" href="../pages/contato.html">Contato</a>
+        </nav>
+        <nav class="login">
+            <a class="link" href="../pages/login.html">Entrar</a>
+            <a class="buttons" href="../pages/signin.html">Cadastre-se</a>
+        </nav>
+    </header>
+    <div class="bannerDesktop"></div>
+
+    <div class="containerDesktop">
+        <div class="heroPage">
+            <h1>Cadastrar-se na Argus</h1>
+            <p>Nome de usuário</p>
+            <input type="text" id="ipt_nome" placeholder="Digite seu nome">
+            <p>Email</p>
+            <input type="text" id="ipt_email" placeholder="Digite seu email">
+            <p>Senha</p>
+            <input type="password" id="ipt_senha" placeholder="********">
+            <p>Confirmar senha</p>
+            <input type="password" id="ipt_CSenha" placeholder="********">
+            <!-- <div></div>Para mensagem de erro -->
+            <img class="btnImage" onclick="cadastrar()" src="../assets/login-signin/Vector.png"
+                alt="Botão para cadastro">
+            <p>Já tem uma conta? <a href="login.html">Entre na Argus.</a></p>
+
+        </div>
+
+
+
+        <div class="footer">
+            <div class="links">
+                <a href="./pages/suporte.html">Suporte</a>
+                <a href="">EULA</a>
+                <a href="./pages/empresa.html">Sobre Nós</a>
+                <a href="./pages/contato.html">Contato</a>
+            </div>
+            <p>© 2025 Argus Corporation. Ltd. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+
+</html>
+<script>
+    function cadastrar() {
+        var nomeVar = ipt_nome.value;
+        var emailVar = ipt_email.value;
+        var senhaVar = ipt_senha.value;
+        var confirmacao_senhaVar = ipt_CSenha.value;
+
+        //Fazer verificação de campos em branco e senhas diferentes
+
+
+        // Enviando o valor da nova input
+        fetch("/usuarios/cadastrar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                // crie um atributo que recebe o valor recuperado aqui
+                // Agora vá para o arquivo routes/usuario.js
+                nomeServer: nomeVar,
+                emailServer: emailVar,
+                senhaServer: senhaVar,
+
+            }),
+        })
+            .then(function (resposta) {
+                console.log("resposta: ", resposta);
+
+                if (resposta.ok) {
+                    alert("Cadastro realizado com sucesso!");
+                    window.location = "login.html";
+
+                } else {
+                    throw "Houve um erro ao tentar realizar o cadastro!";
+                }
+            })
+            .catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`);
+
+            });
+
+        return false;
+    }
+</script>
+
+<!-- Script para mudar a cor do scroll -->
+<script>
+    const header = document.querySelector('.desktopHeader');
+
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 90) { // ponto onde a navbar muda de cor
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    });
+
+</script>
