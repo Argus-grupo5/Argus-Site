@@ -58,11 +58,13 @@
                     <img src="../assets/dashboard/desktop/bell.svg" alt="">
                 </div>
                 <div class="risk tooltipInfo" id="id_servidores_em_estado_critico">
+                    <p id="qtd_critico"></p>
                     <span class="tooltiptextInfo">
                         Servidores em atenção
                     </span>
                 </div>
                 <div class="atention tooltipInfo" id="id_servidores_em_estado_de_alerta">
+                    <p id="qtd_alerta"></p>
                     <span class="tooltiptextInfo">
                         Servidores em alerta
                     </span>
@@ -153,8 +155,8 @@
         }
     }  
 
-    id_servidores_em_estado_critico.innerHTML = qtd_servidores_critico;
-    id_servidores_em_estado_de_alerta.innerHTML = qtd_servidores_alerta;
+    qtd_critico.innerHTML = qtd_servidores_critico;
+    qtd_alerta.innerHTML = qtd_servidores_alerta;
 
 
     let nivel_de_risco;
@@ -228,7 +230,5 @@
 
     
           
-    for (let i = 0; i < server.length; i++){
-        gerar_server(i);
-    }
+    filtragem_Servidores();
 </script>
