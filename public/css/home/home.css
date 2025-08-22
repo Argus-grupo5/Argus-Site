@@ -74,7 +74,10 @@ body {
 
 /* Explication */
 .containerDesktop .explication .background {
-  background-image: url(../../assets/home/desktop/backgroundAplication.svg);
+  background-color: #FF6D4D;
+  border-color: #000  ;
+  border-style: dashed none;
+  border-width: .5vw;
   width: 100%;
   height: 70vh;
   background-repeat: no-repeat;
