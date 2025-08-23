@@ -31,25 +31,41 @@
         <div class="heroPage">
             <h1>Cadastrar-se na Argus</h1>
             <div class="inputs">
-                <p>Nome de usuário</p>
-                <input type="text" id="ipt_nome" placeholder="Digite seu nome">
-                <p>Email</p>
-                <input type="text" id="ipt_email" placeholder="Digite seu email">
-                <p>Senha</p>
-                <input type="password" id="ipt_senha" placeholder="********">
-                <p>Confirmar senha</p>
-                <input type="password" id="ipt_CSenha" placeholder="********">
-                <p>Confirmar senha</p>
-                <input type="password" id="ipt_CSenha" placeholder="********">
-                <p>Confirmar senha</p>
-                <input type="password" id="ipt_CSenha" placeholder="********">
-                <p>Confirmar senha</p>
-                <input type="password" id="ipt_CSenha" placeholder="********">
-                <p>Confirmar senha</p>
-                <input type="password" id="ipt_CSenha" placeholder="********">
+                <section class="input">
+                    <p>Nome de usuário</p>
+                    <input type="text" id="ipt_nome" placeholder="Digite seu nome">
+                </section>
+                <section class="input">
+                    <p>Email</p>
+                    <input type="text" id="ipt_email" placeholder="Digite seu email">
+                </section>
+                <section class="input">
+                    <p>Senha</p>
+                    <input type="password" id="ipt_senha" placeholder="********">
+                </section>
+                <section class="input">
+                    <p>Confirmar senha</p>
+                    <input type="password" id="ipt_CSenha" placeholder="********">
+                </section>
+                <section class="input">
+                    <p>Confirmar senha</p>
+                    <input type="password" id="ipt_CSenha" placeholder="********">
+                </section>
+                <section class="input">
+                    <p>Confirmar senha</p>
+                    <input type="password" id="ipt_CSenha" placeholder="********">
+                </section>
+                <section class="input">
+                    <p>Confirmar senha</p>
+                    <input type="password" id="ipt_CSenha" placeholder="********">
+                </section>
+                <section class="input">
+                    <p>Confirmar senha</p>
+                    <input type="password" id="ipt_CSenha" placeholder="********">
+                </section>
             </div>
             <!-- <div></div>Para mensagem de erro -->
-            <img class="btnImage" onclick="cadastrar()" src="../assets/login-signin/continue_button.svg"
+            <img class="btnImage" onclick="cadastrar()" src="../assets/login-signin/Buttom.svg"
                 alt="Botão para cadastro">
             <p>Já tem uma conta? <a href="login.html">Entre na Argus.</a></p>
 
@@ -78,7 +94,26 @@
         var confirmacao_senhaVar = ipt_CSenha.value;
 
         //Fazer verificação de campos em branco e senhas diferentes
-
+        if (nomeVar == "") {
+            alert("Nome em branco")
+            // Fazer um aviso em div na tela
+            return
+        }
+        else if (emailVar == "") {
+            alert("E-mail em branco")
+            // Fazer um aviso em div na tela
+            return
+        }
+        else if (senhaVar == "") {
+            alert("Senha em branco")
+            // Fazer um aviso em div na tela
+            return
+        }
+        else if (confirmacao_senhaVar != senhaVar) {
+            alert("As senhas não conhecidem")
+            // Fazer um aviso em div na tela
+            return
+        }
 
         // Enviando o valor da nova input
         fetch("/usuarios/cadastrar", {
