@@ -9,11 +9,11 @@
 }
 
 ::-webkit-scrollbar {
-  width: 5px;
+  width: .1vw;
 }
 
 ::-webkit-scrollbar-thumb {
-  border-radius: 10px;
+  border-radius: .2vw;
   background: linear-gradient(180deg, #FF6D4D 0%, #ff0f46 100%);
 }
 
