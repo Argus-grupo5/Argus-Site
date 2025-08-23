@@ -8,6 +8,15 @@
   color: #fff;
 }
 
+::-webkit-scrollbar {
+  width: .1vw;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: .2vw;
+  background: linear-gradient(180deg, #FF6D4D 0%, #ff0f46 100%);
+}
+
 .desktopHeader {
   position: fixed;
   color: #fff;

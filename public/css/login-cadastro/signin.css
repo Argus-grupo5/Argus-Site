@@ -26,28 +26,28 @@ body {
 
 .containerDesktop .heroPage {
     margin-top: 20vh;
-    width: 40%;
-    min-height: 70vh;
+    min-width: 30%;
+    width: fit-content;
     height: fit-content;
-    background-color: rgba(0, 0, 0, 0.627);
-    border-radius: 6px;
+    height: 70vh;
+    background-color: black;
+    border-radius: .15vw;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: start;
-    position: relative; 
-    z-index: 2; 
-    margin-bottom: 5vw;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
 
 }
 
 .containerDesktop .heroPage h1 {
-    font-weight: 100;
+    font-weight: 400;
     line-height: 1.1;
     text-align: center;
     font-size: 2.34vw;
-    margin-bottom: 4vw;
-    margin-top: 5vw;
+    width: 24vw;
+    margin-bottom: 5vh;
 }
 
 .containerDesktop .heroPage p {
@@ -55,13 +55,14 @@ body {
     font-size: 1.17vw;
 }
 
-.containerDesktop .heroPage a{
+.containerDesktop .heroPage a {
     text-decoration: none;
     background: none;
     color: #FF6D4D;
 
 }
-.containerDesktop .heroPage a:hover{
+
+.containerDesktop .heroPage a:hover {
     background: none;
     color: #ff2f00;
 
@@ -69,53 +70,111 @@ body {
 
 
 .containerDesktop .heroPage img {
-    margin-top: 2vh;
     width: 36.66vw;
     height: 41.18vh;
 }
 
+.containerDesktop .heroPage .btnImagem {
+    margin-top: 2vh;
+    width: 5vw;
+    height: 7vh;
+    background: none;
+    border: none;
+    transition: .2s;
+}
+
 .containerDesktop .heroPage .btnImage {
-    margin-top: 2vh;
-    width: 8%;
-    height: 6%;
-    opacity: 80%;
+    width: 100%;
+    height: 100%;
+    background: none;
+    border: none;
 }
-.containerDesktop .heroPage .btnImage:hover {
+
+.containerDesktop .heroPage .btnImage img{
+    width: 100%;
+    height: 100%;
+}
+
+.containerDesktop .heroPage .btnImage:hover{
     cursor: pointer;
-    margin-top: 2vh;
-    width: 8%;
-    height: 6%;
-    opacity: 100%;
 }
+
+.containerDesktop .heroPage .btnImagem:hover {
+    cursor: pointer;
+    transition: .2s;
+    scale: 1.2;
+}
+
 /* inputs */
-input {
+
+::-webkit-scrollbar {
+    width: .1vw;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 40vw;
+    background: linear-gradient(180deg, #FF6D4D 0%, #ff0f46 100%);
+}
+
+.containerDesktop .heroPage .inputs {
+    overflow-y: auto;
+    height: 30vh;
+    width: 100%;
+    margin-bottom: 5vh;
+}
+
+.containerDesktop .heroPage .inputs .input {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-inline: 3vw;
+}
+
+.containerDesktop .heroPage .inputs .input p {
+    padding-left: 0.5vw;
+    margin-top: 1.57vh;
+    font-size: 1vw;
+    text-align: start;
+}
+
+.containerDesktop .heroPage .inputs .input input {
+    background: none;
     font-size: 1vw;
     padding-left: 0.8vw;
-}
-
-.containerDesktop .heroPage input{
-    background: none;
     color: #fff;
-    width: 80%;
-    height: 7%;
-    border-radius: 20px;
-    border-color: #fff;
+    width: 100%;
+    height: 5vh;
+    border-radius: 15vw;
+    border: .1vw solid #fff;
 }
 
 
-.containerDesktop .heroPage input::placeholder {
+.containerDesktop .heroPage .inputs .input input::placeholder {
     color: rgb(110, 110, 110);
     opacity: 1;
 }
 
 /* Div para mensagem de erro */
-#mensagem_erro {
+/* #mensagem_erro {
     background-color: #FF6D4D;
     padding: 10px;
     border-radius: 10px;
     margin-top: 10px;
 }
+ */
 
+/* Vetor de fundo */
+.vetor {
+    background-image: url(../../assets/login-signin/vetor.svg);
+    margin-top: 55vh;
+    width: 100%;
+    height: 30vh;
+    background-repeat: no-repeat;
+    background-size: cover;
+    z-index: -1;
+    position: absolute;
+
+}
 
 /* Footer */
 .containerDesktop .footer {
@@ -124,7 +183,7 @@ input {
     height: 25vh;
     background-color: black;
     position: relative;
-    z-index: 1; 
+    z-index: 1;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
@@ -168,17 +227,4 @@ input {
 .containerDesktop .footer .links a:hover::after {
     transform: scaleX(1);
     transform-origin: bottom center;
-}
-
-.inputs {
-    display: flex;
-    gap: 1vw;
-    align-items: center;
-    width: 80%;
-    margin-top: 0.5vw;
-}
-
-.inputs p{
-    max-width: 30%;
-    width: 30%;
 }
