@@ -74,27 +74,35 @@ body {
     height: 41.18vh;
 }
 
-.containerDesktop .heroPage .btnImage {
+.containerDesktop .heroPage .btnImagem {
     margin-top: 2vh;
-    width: 8%;
-    height: 6%;
+    width: 5vw;
+    height: 7vh;
     background: none;
     border: none;
     transition: .2s;
 }
 
+.containerDesktop .heroPage .btnImage {
+    width: 100%;
+    height: 100%;
+    background: none;
+    border: none;
+}
+
 .containerDesktop .heroPage .btnImage img{
     width: 100%;
     height: 100%;
-
 }
 
-.containerDesktop .heroPage .btnImage:hover {
+.containerDesktop .heroPage .btnImage:hover{
+    cursor: pointer;
+}
+
+.containerDesktop .heroPage .btnImagem:hover {
     cursor: pointer;
     transition: .2s;
-    scale: 1.1;
-    width: 8%;
-    height: 6%;
+    scale: 1.2;
 }
 
 /* inputs */
