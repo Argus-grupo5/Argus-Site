@@ -84,18 +84,23 @@ body {
     opacity: 100%;
 }
 /* inputs */
+input {
+    font-size: 1vw;
+    padding-left: 0.8vw;
+}
+
 .containerDesktop .heroPage input{
     background: none;
     color: #fff;
     width: 80%;
     height: 7%;
-    font-size: 100%;
     border-radius: 20px;
     border-color: #fff;
 }
 
+
 .containerDesktop .heroPage input::placeholder {
-    color: white;
+    color: rgb(110, 110, 110);
     opacity: 1;
 }
 
