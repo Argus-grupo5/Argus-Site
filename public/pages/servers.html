@@ -8,6 +8,9 @@
     <title>ARGUS | Servidores</title>
 </head>
 <body>
+    <div id="id_sair">
+    </div>
+
     <header class="desktopNav">
         <div class="navButtons">
             <div class="navButton tooltipNav" id="navServers">
@@ -26,7 +29,7 @@
                 <img src="../assets/dashboard/desktop/settings.svg" alt="Configurações">
                 <span class="tooltiptextNav">Configurações</span>
             </div>
-            <div class="navButton tooltipNav" id="navServers">
+            <div class="navButton tooltipNav" id="navServers" onclick="sair()">
                 <img src="../assets/dashboard/desktop/logout.svg" alt="Sair">
                 <span class="tooltiptextNav">Sair</span>
             </div>
@@ -231,4 +234,23 @@
     
           
     filtragem_Servidores();
+
+    function sair(){
+        id_sair.innerHTML = `
+        
+            <div class="popup_sair">
+                <h1>Deseja sair?</h1>
+                <button onclick="sair_s()">Sim</button>
+                <button onclick="sair_n()">Não</button>
+            </div>
+        `;
+    }
+
+    function sair_s(){
+        window.location.href = "./login.html";
+    }
+
+    function sair_n(){
+        id_sair.innerHTML = ``;
+    }
 </script>

@@ -26,24 +26,28 @@ body {
 
 .containerDesktop .heroPage {
     margin-top: 20vh;
-    width: 27%;
-    height: 70vh;
-    background-color: black;
+    width: 40%;
+    min-height: 70vh;
+    height: fit-content;
+    background-color: rgba(0, 0, 0, 0.627);
     border-radius: 6px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: start;
     position: relative; 
     z-index: 2; 
+    margin-bottom: 5vw;
 
 }
 
 .containerDesktop .heroPage h1 {
-    font-weight: 400;
+    font-weight: 100;
     line-height: 1.1;
     text-align: center;
     font-size: 2.34vw;
+    margin-bottom: 4vw;
+    margin-top: 5vw;
 }
 
 .containerDesktop .heroPage p {
@@ -164,4 +168,17 @@ input {
 .containerDesktop .footer .links a:hover::after {
     transform: scaleX(1);
     transform-origin: bottom center;
+}
+
+.inputs {
+    display: flex;
+    gap: 1vw;
+    align-items: center;
+    width: 80%;
+    margin-top: 0.5vw;
+}
+
+.inputs p{
+    max-width: 30%;
+    width: 30%;
 }
