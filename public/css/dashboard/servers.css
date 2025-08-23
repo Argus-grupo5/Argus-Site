@@ -360,3 +360,40 @@ body {
 progress::-moz-progress-bar {
   background-color:#FF670A;
 }
+
+.popup_sair {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    z-index: 1000;
+    width: 100%;
+    height: 100%;
+    background-color: #000000e1;
+    text-align: center;
+}
+
+.popup_sair h1{
+    font-size: 2vw;
+    font-weight: 100;
+}
+
+.popup_sair button {
+    background-color: #FF670A;
+    color: black;
+    width: 10vw;
+    border: none;
+    border-radius: 20px;
+    font-size: 1.2vw;
+    transition: .4s ease-in-out;
+    margin-top: 1vw;
+}
+
+.popup_sair button:hover {
+    background-color: #313030;
+    color: white;
+    width: 12vw;
+    font-size: 1.4vw;
+
+}
