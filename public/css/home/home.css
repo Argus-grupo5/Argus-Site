@@ -260,8 +260,3 @@ body {
   transform: scaleX(1);
   transform-origin: bottom center;
 }
-
-.inputs {
-  overflow-y: auto;
-  overflow-x: hidden;
-}
