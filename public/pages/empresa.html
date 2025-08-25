@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/empresa/empresa.css">
+    <title>ARGUS | Empresa</title>
+</head>
+<style>
+
+</style>
+
+<body>
+    <header class="desktopHeader">
+        <a href="../index.html" class="logo"><img src="../assets/icon/logoPreta.svg"  id="logo" alt=""></a>
+        <a href="../index.html" class="title">
+            <h1>ARGUS</h1>
+        </a>
+        <nav class="links">
+            <a class="link" href="../pages/suporte.html">Suporte</a>
+            <a class="link" href="../pages/empresa.html">Empresa</a>
+            <a class="link" href="../pages/contato.html">Contato</a>
+        </nav>
+        <nav class="login">
+            <a class="link in" href="../pages/login.html">Entrar</a>
+            <a class="buttons" href="../pages/signin.html">Cadastre-se</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="quemSomos" id="quemSomos">
+            <img src="../assets/empresa/desktop/imagemCorporativa.svg" alt="">
+
+            <div class="texto">
+                <h2>QUEM SOMOS</h2>
+                <P>Somos uma empresa dedicada ao monitoramento de servidores cloud gaming, oferecendo soluções que
+                    garantem segurança, desempenho e confiabilidade. Nosso objetivo é trazer inovação e eficiência,
+                    ajudando a otimizar recursos e proporcionar experiências de jogo mais estáveis.
+
+                <p>Unimos tecnologia, resiliência e sustentabilidade para construir um futuro mais conectado e
+                    responsável no mundo digital.</P>
+                </p>
+            </div>
+        </div>
+        <div class="quemSomos-second">
+            <div class="cards">
+                <div class="card first">
+                    <img src="../assets/empresa/desktop/iconMissao.svg" alt="">
+                    <h2>Missão</h2>
+                    <p>Trazer inovações para o
+                        ramo do monitoramento
+                        de servidores cloud
+                        gaming</p>
+
+
+                </div>
+                <div class="card second">
+                    <img src="../assets/empresa/desktop/iconVisao.svg" alt="">
+                    <h2>Visão</h2>
+                    <p>Ser reconhecido como uma
+                        das pioneiras no ramo de
+                        monitoramento de
+                        servidores cloud gaming</p>
+
+                </div>
+                <div class="card third">
+                    <img src="../assets/empresa/desktop/iconValores.svg" alt="">
+                    <h2>Valores</h2>
+                    <p>União</p>
+                    <p> Resiliência</p>
+                    <p> Sustentabilidade</p>
+                </div>
+
+
+            </div>
+            <div class="equipe">
+                <h2>NOSSA EQUIPE</h2>
+                <div class="linhas linha-first">
+                    <div class="integrante"><img src="../assets/empresa/desktop/fotos/ally.svg" alt="">
+                        <h3>Ally Awada</h3>
+                    </div>
+                    <div class="integrante"><img src="../assets/empresa/desktop/fotos/gustavo.svg" alt="">
+                        <h3>Gustavo Anthony</h3>
+                    </div>
+                    <div class="integrante"><img src="../assets/empresa/desktop/fotos/leo.svg" alt="">
+                        <h3>Leonardo Borges</h3>
+                    </div>
+
+                </div>
+                <div class="linhas linha-second">
+                    <div class="integrante"><img src="../assets/empresa/desktop/fotos/maria.png" alt="">
+                        <h3>Maria Eduarda</h3>
+                    </div>
+                    <div class="integrante"><img src="../assets/empresa/desktop/fotos/pedro.svg" alt="">
+                        <h3>Pedro Claudino</h3>
+                    </div>
+                </div>
+                <div class="linhas linha-third"></div>
+
+            </div>
+        </div>
+        <div class="footer">
+            <div class="links">
+                <a href="../pages/suporte.html">Suporte</a>
+                <a href="">EULA</a>
+                <a href="../pages/empresa.html#quemSomos">Sobre Nós</a>
+                <a href="../pages/contato.html">Contato</a>
+            </div>
+            <p>© 2025 Argus Corporation. Ltd. All rights reserved.</p>
+        </div>
+
+    </div>
+
+</body>
+
+</html>
+
+<!-- Script para mudar a cor do scroll -->
+<script>
+    const header = document.querySelector('.desktopHeader');
+    const img = document.getElementById('logo');
+
+
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 90) { // ponto onde a navbar muda de cor
+            header.classList.add('scrolled');
+            logo.src= '../assets/icon/logoBranca.svg'
+        } else {
+            header.classList.remove('scrolled');
+            logo.src= '../assets/icon/logoPreta.svg'
+
+        }
+    });
+
+</script>
