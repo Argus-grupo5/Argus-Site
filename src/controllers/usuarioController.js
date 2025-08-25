@@ -89,6 +89,7 @@ function cadastrarEndereco(req, res) {
 
 function cadastrarEmpresa(req, res) {
     var nome = req.body.nomeServer;
+    var telefone = req.body.telefoneServer;
     var email = req.body.emailServer;
     var senha = req.body.senhaServer;
     var razao = req.body.razaoServer;
@@ -97,6 +98,8 @@ function cadastrarEmpresa(req, res) {
 
     if (nome == undefined) {
         res.status(400).send("Seu nome está undefined!");
+    } else if (telefone == undefined) {
+        res.status(400).send("Seu telefone está undefined!");
     } else if (email == undefined) {
         res.status(400).send("Seu email está undefined!");
     } else if (senha == undefined) {
@@ -109,7 +112,7 @@ function cadastrarEmpresa(req, res) {
         res.status(400).send("O id está undefined!");
     }
 
-    usuarioModel.cadastrarEmpresa(nome, email, senha, cnpj, razao, id)
+    usuarioModel.cadastrarEmpresa(nome, telefone, email, senha, cnpj, razao, id)
         .then(
             function (resultado) {
                 res.json(resultado);
