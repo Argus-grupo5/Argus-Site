@@ -29,20 +29,47 @@
 
     <div class="containerDesktop">
         <div class="heroPage">
-            <h1>Cadastrar-se na Argus</h1>
-            <p>Nome de usuário</p>
-            <input type="text" id="ipt_nome" placeholder="Digite seu nome">
-            <p>Email</p>
-            <input type="text" id="ipt_email" placeholder="Digite seu email">
-            <p>Senha</p>
-            <input type="password" id="ipt_senha" placeholder="********">
-            <p>Confirmar senha</p>
-            <input type="password" id="ipt_CSenha" placeholder="********">
+            <h1>Cadastre sua empresa na Argus</h1>
+            <div id="inputs" class="inputs">
+                <section class="input">
+                    <p>CEP</p>
+                    <input type="number" id="ipt_cep" onblur="buscarCep()" placeholder="00000000000">
+                </section>
+                <section class="input">
+                    <p>Rua</p>
+                    <input type="text" id="ipt_rua" placeholder="Rua">
+                </section>
+                <section class="input">
+                    <p>Bairro</p>
+                    <input type="text" id="ipt_bairro" placeholder="Bairro">
+                </section>
+                <section class="input">
+                    <p>Cidade</p>
+                    <input type="text" id="ipt_cidade" placeholder="Cidade">
+                </section>
+                <section class="input">
+                    <p>Estado</p>
+                    <input type="text" id="ipt_estado" placeholder="Estado">
+                </section>
+                <section class="input">
+                    <p>numero</p>
+                    <input type="number" id="ipt_numero" placeholder="1234">
+                </section>
+                <section class="input">
+                    <p>Complemento</p>
+                    <input type="text" id="ipt_complemento" placeholder="3° andar">
+                </section>
+            </div>
+
             <!-- <div></div>Para mensagem de erro -->
-            <img class="btnImage" onclick="cadastrar()" src="../assets/login-signin/Vector.png"
-                alt="Botão para cadastro">
+            <section class="btnImagem" id="botaoAlteravel">
+                <button class="btnImage" onclick="cadastrarEndereco()">
+                    <img src="../assets/login-signin/Buttom.svg" alt="Botão para cadastro">
+                </button>
+            </section>
             <p>Já tem uma conta? <a href="login.html">Entre na Argus.</a></p>
 
+            <div class="vetor"></div>
         </div>
 
 
@@ -61,60 +88,192 @@
 
 </html>
 <script>
-    function cadastrar() {
+    function cadastrarEndereco() {
+        let cepVar = ipt_cep.value;
+        let ruaVar = ipt_rua.value;
+        let bairroVar = ipt_bairro.value;
+        let cidadeVar = ipt_cidade.value;
+        let estadoVar = ipt_estado.value;
+        let numeroVar = ipt_numero.value;
+        let complementoVar = ipt_complemento.value;
+
+        if (cepVar == "") {
+            alert("O cep está em branco")
+            // Fazer um aviso em div na tela
+            return
+        }
+        else if (ruaVar == "") {
+            alert("A rua está em branco")
+            // Fazer um aviso em div na tela
+            return
+        }
+        else if (bairroVar == "") {
+            alert("O bairro está em branco")
+            // Fazer um aviso em div na tela
+            return
+        }
+        else if (cidadeVar == "") {
+            alert("A cidade está em branco")
+            // Fazer um aviso em div na tela
+            return
+        }
+        else if (estadoVar == "") {
+            alert("O estado está em branco")
+            // Fazer um aviso em div na tela
+            return
+        }
+        else if (numeroVar == "") {
+            alert("O numero está em branco")
+            // Fazer um aviso em div na tela
+            return
+        }
+        else if (complementoVar == "") {
+            complementoVar == "Sem complemento"
+
+        }
+
+        inputs.innerHTML = `            
+            <section class="input">
+                <p>Nome Fantasia</p>
+                <input type="text" id="ipt_nome" placeholder="Nome">
+            </section>
+            <section class="input">
+                <p>Razão social</p>
+                <input type="text" id="ipt_razao" placeholder="Razão social">
+            </section>
+            <section class="input">
+                <p>CNPJ</p>
+                <input type="number" id="ipt_cnpj" placeholder="00000000000000">
+            </section>
+            <section class="input">
+                <p>Email</p>
+                <input type="text" id="ipt_email" placeholder="E-mail">
+            </section>
+            <section class="input">
+                <p>Senha</p>
+                <input type="password" id="ipt_senha" placeholder="********">
+            </section>
+            <section class="input">
+                <p>Confirmar senha</p>
+                <input type="password" id="ipt_CSenha" placeholder="********">
+            </section>
+            `
+
+        botaoAlteravel.innerHTML = `
+            <button class="btnImage" onclick="cadastrar('${cepVar}', '${ruaVar}', '${bairroVar}', '${cidadeVar}', '${estadoVar}', '${numeroVar}', '${complementoVar}')">
+                <img src="../assets/login-signin/Buttom.svg" alt="Botão para cadastro">
+            </button>
+        `
+    }
+
+    function cadastrar(cepVar, ruaVar, bairroVar, cidadeVar, estadoVar, numeroVar, complementoVar) {
         var nomeVar = ipt_nome.value;
         var emailVar = ipt_email.value;
         var senhaVar = ipt_senha.value;
         var confirmacao_senhaVar = ipt_CSenha.value;
+        var razaoVar = ipt_razao.value;
+        var cnpjVar = ipt_cnpj.value;
 
-        //Fazer verificação de campos em branco e senhas diferentes
+        if (nomeVar == "") {
+            alert("Nome em branco")
+            return
+        } else if (razaoVar == "") {
+            alert("razao em branco")
+            return
+        } else if (cnpjVar == "") {
+            alert("cnpj em branco")
+            return
+        } else if (cnpjVar.length != 14) {
+            alert("O cnpj tem que ter 14 numeros")
+            return
+        } else if (emailVar == "") {
+            alert("E-mail em branco")
+            return
+        } else if (senhaVar == "") {
+            alert("Senha em branco")
+            return
+        } else if (confirmacao_senhaVar != senhaVar) {
+            alert("As senhas não conhecidem")
+            return
+        }
 
-
-        // Enviando o valor da nova input
-        fetch("/usuarios/cadastrar", {
+        fetch("/usuarios/cadastrarEndereco", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                // crie um atributo que recebe o valor recuperado aqui
-                // Agora vá para o arquivo routes/usuario.js
-                nomeServer: nomeVar,
-                emailServer: emailVar,
-                senhaServer: senhaVar,
-
+                cepServer: cepVar,
+                ruaServer: ruaVar,
+                bairroServer: bairroVar,
+                cidadeServer: cidadeVar,
+                estadoServer: estadoVar,
+                numeroServer: numeroVar,
+                complementoServer: complementoVar
             }),
         })
             .then(function (resposta) {
-                console.log("resposta: ", resposta);
-
                 if (resposta.ok) {
-                    alert("Cadastro realizado com sucesso!");
-                    window.location = "login.html";
+                    return resposta.json();
+                } else {
+                    throw "Houve um erro ao tentar realizar o cadastro!";
+                }
+            })
+            .then(function (data) {
+                let idVar = Number(data.insertId);
 
+                return fetch("/usuarios/cadastrarEmpresa", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        nomeServer: nomeVar,
+                        emailServer: emailVar,
+                        senhaServer: senhaVar,
+                        cnpjServer: cnpjVar,
+                        razaoServer: razaoVar,
+                        idServer: idVar
+                    }),
+                });
+            })
+            .then(function (resposta) {
+                if (resposta.ok) {
+                    alert("Tudo deu certo")
+                    setTimeout(() => {
+                        window.location = "./login.html";
+                    }, "2000");
                 } else {
                     throw "Houve um erro ao tentar realizar o cadastro!";
                 }
             })
             .catch(function (resposta) {
                 console.log(`#ERRO: ${resposta}`);
-
             });
 
         return false;
     }
-</script>
 
-<!-- Script para mudar a cor do scroll -->
-<script>
-    const header = document.querySelector('.desktopHeader');
+    async function buscarCep() {
+        cep = ipt_cep.value;
+        const url = `https://viacep.com.br/ws/${cep}/json/`;
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
 
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 90) { // ponto onde a navbar muda de cor
-            header.classList.add('scrolled');
-        } else {
-            header.classList.remove('scrolled');
+            if (data.erro) {
+                alert('CEP não encontrado!');
+                return;
+            }
+
+            ipt_rua.value = data.logradouro;
+            ipt_bairro.value = data.bairro;
+            ipt_cidade.value = data.localidade;
+            ipt_estado.value = data.uf;
+
+        } catch (error) {
+            console.error('Erro ao buscar CEP:', error);
+            alert('Ocorreu um erro ao buscar o CEP.');
         }
-    });
-
+    }
 </script>

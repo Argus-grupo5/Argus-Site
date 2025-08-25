@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>ARGUS | Login</title>
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/login-cadastro/signin.css">
 </head>
@@ -30,14 +30,24 @@
     <div class="containerDesktop">
         <div class="heroPage">
             <h1>Entrar na Argus</h1>
-            <p>Email</p>
-            <input type="text" id="ipt_email" placeholder="Digite seu email">
-            <p>Senha</p>
-            <input type="password" id="ipt_senha" placeholder="********">
-            <img class="btnImage" onclick="login()" src="../assets/login-signin/Vector.png" alt="Botão para login">
+            <div class="inputs">
+                <section class="input">
+                    <p>Email</p>
+                    <input type="text" id="ipt_email" placeholder="Digite seu email">
+                </section>
+                <section class="input">
+                    <p>Senha</p>
+                    <input type="password" id="ipt_senha" placeholder="********">
+                </section>
+            </div>
+            <section class="btnImagem" id="botaoAlteravel">
+                <button class="btnImage" onclick="cadastrar()">
+                    <img src="../assets/login-signin/Buttom.svg" alt="Botão para cadastro">
+                </button>
+            </section>
             <div id="mensagem_erro"></div>
             <p>Não tem uma conta? <a href="signin.html">Cadastre-se na Argus.</a></p>
-
+            <div class="vetor"></div>
         </div>
 
 
@@ -67,6 +77,8 @@
             mensagem_erro.style.display = "block";
             mensagem_erro.innerHTML = "Preencha todos os campos.";
             return;
+        } else {
+            window.location.href = "./servers.html";
         }
 
         if (!emailVar.includes('@')) {
