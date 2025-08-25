@@ -19,11 +19,33 @@ function autenticar(req, res) {
                     if (resultadoAutenticar.length == 1) {
                         console.log(resultadoAutenticar);
                         res.json({
-                            id: resultadoAutenticar[0].id,
-                            email: resultadoAutenticar[0].email,
-                            nome: resultadoAutenticar[0].nome,
-                            senha: resultadoAutenticar[0].senha
+                            user_id: resultadoAutenticar[0].user_id,
+                            user_name: resultadoAutenticar[0].user_name,
+                            user_sobrenome: resultadoAutenticar[0].user_sobrenome,
+                            user_email: resultadoAutenticar[0].user_email,
+                            user_telefone: resultadoAutenticar[0].user_telefone,
+                            user_foto: resultadoAutenticar[0].user_foto,
+                            user_data: resultadoAutenticar[0].user_data,
 
+                            empresa_id: resultadoAutenticar[0].empresa_id,
+                            empresa_nome_fantasia: resultadoAutenticar[0].empresa_nome_fantasia,
+                            empresa_razao_social: resultadoAutenticar[0].empresa_razao_social,
+                            empresa_cnpj: resultadoAutenticar[0].empresa_cnpj,
+                            empresa_email: resultadoAutenticar[0].empresa_email,
+                            empresa_telefone: resultadoAutenticar[0].empresa_telefone,
+                            empresa_data: resultadoAutenticar[0].empresa_data,
+
+                            endereco_rua: resultadoAutenticar[0].endereco_rua,
+                            endereco_numero: resultadoAutenticar[0].endereco_numero,
+                            endereco_bairro: resultadoAutenticar[0].endereco_bairro,
+                            endereco_cidade: resultadoAutenticar[0].endereco_cidade,
+                            endereco_estado: resultadoAutenticar[0].endereco_estado,
+                            endereco_cep: resultadoAutenticar[0].endereco_cep,
+                            endereco_complemento: resultadoAutenticar[0].endereco_complemento,
+
+                            cargo_id: resultadoAutenticar[0].cargo_id,
+                            cargo_cargo: resultadoAutenticar[0].cargo_cargo,
+                            cargo_funcao: resultadoAutenticar[0].cargo_funcao
                         });
                     } else if (resultadoAutenticar.length == 0) {
                         res.status(403).send("Email e/ou senha inválido(s)");
@@ -127,7 +149,7 @@ function cadastrarEmpresa(req, res) {
                 res.status(500).json(erro.sqlMessage);
             }
         );
-    }
+}
 
 module.exports = {
     autenticar,
