@@ -41,7 +41,7 @@
                 </section>
             </div>
             <section class="btnImagem" id="botaoAlteravel">
-                <button class="btnImage" onclick="cadastrar()">
+                <button class="btnImage" onclick="login()">
                     <img src="../assets/login-signin/Buttom.svg" alt="Botão para cadastro">
                 </button>
             </section>
@@ -77,8 +77,6 @@
             mensagem_erro.style.display = "block";
             mensagem_erro.innerHTML = "Preencha todos os campos.";
             return;
-        } else {
-            window.location.href = "./servers.html";
         }
 
         if (!emailVar.includes('@')) {
