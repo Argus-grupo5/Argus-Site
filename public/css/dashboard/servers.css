@@ -227,11 +227,11 @@ body {
     padding-left: 0.5vw;
 }
 
-#userName{
+#userNome{
     font-size: 1vw;
 }
 
-#userRole{
+#userCargo{
     font-size: 0.7vw;
     color: #a0a0a0;
 }
