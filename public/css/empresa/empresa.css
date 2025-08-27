@@ -1,0 +1,373 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:slnt,wght@-11..11,200..1000&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Cairo", sans-serif;
+}
+
+body {
+  background-color: #FF6D4D;
+}
+
+.desktopHeader {
+  position: fixed;
+  color: #fff;
+  width: 100%;
+  height: 10.55vh;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  transition: .4s;
+}
+
+.desktopHeader .logo {
+  width: 5.42%;
+  margin-left: 1.9vw;
+  transition: .4s;
+}
+
+.desktopHeader .logo img{
+  width: 100%;
+}
+
+.desktopHeader .title {
+  text-decoration: none;
+  color: #fff;
+  transition: .4s;
+}
+
+.desktopHeader .title h1 {
+  font-size: 2.54vw;
+  margin-left: 1.46vw;
+  color: #fff;
+}
+
+.desktopHeader .links {
+  margin-left: 4.07vw;
+  width: 23.68vw;
+  height: 4.17vh;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.desktopHeader .links .link,
+.desktopHeader .login .link {
+  text-decoration: none;
+  color: #fff;
+  font-size: 1.56vw;
+}
+
+.desktopHeader .login {
+  margin-left: auto;
+  margin-right: 1.96vw;
+  width: 18.80vw;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.desktopHeader .login .buttons {
+  text-decoration: none;
+  color: #fff;
+  font-size: 1.56vw;
+  padding-inline: 1.8vw;
+  
+  text-align: center;
+  background: #000;
+  border-radius: 40vw;
+  transition: .4s;
+
+}
+
+.desktopHeader .logo:hover {
+  scale: 1.1;
+  transition: .4s;
+}
+
+.desktopHeader .login .buttons:hover {
+  scale: 1.1;
+  transition: .4s;
+  box-shadow: -3px 2px 2px 2px #00000032;
+}
+
+/* animação do hover */
+.desktopHeader .links .link,
+.desktopHeader .login .link,
+.desktopHeader .title h1 {
+  position: relative;
+  color: #000;
+}
+.in{
+    color: #fff !important;
+}
+
+.desktopHeader .links .link::after,
+.desktopHeader .login .link::after,
+.desktopHeader .title h1::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: .22vw;
+  bottom: 0;
+  left: 0;
+  background-color: #000;
+  transition: transform 0.4s ease-out;
+  transform-origin: bottom center;
+}
+
+
+.desktopHeader .links .link:hover::after,
+.desktopHeader .login .link:hover::after,
+.desktopHeader .title h1:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom center;
+}
+
+/* QUEM SOMOS */
+.container{
+width: 100%;
+height: 100%;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+}
+
+.quemSomos {
+  margin-top: 20vh;
+  width: 100%;
+  height: 50%;
+  margin-left: 4vw;
+  display: flex;
+  justify-content: space-between;
+  gap: 3vw;
+  max-width: 1200px;  
+  flex-wrap: wrap; 
+  
+}
+
+.quemSomos img{
+  width: 45%; 
+  max-width: 500px;
+  border-radius: 8px; 
+  /* box-shadow: rgba(0, 0, 0, 0.15) 2.95px 2.95px 3.6px; */
+}
+
+.quemSomos .texto{
+  flex: 1;
+  min-width: 280px;
+  color: #000;
+}
+.quemSomos .texto h2 {
+  align-self: baseline;
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #000;
+}
+.quemSomos .texto p {
+  font-size: 1.2rem;
+  line-height: 1.8rem;
+  text-align: justify;
+  max-width: 500px; 
+}
+
+.quemSomos-second{
+    display: flex;
+    background-color: #000;
+    width: 100%;
+    height: 90%;
+    margin-top: 5%;
+    border-block: .5vw dashed #FF6D4D;  
+    padding: 20px;
+    justify-content: center;
+    align-items: center;
+   text-align: center;
+   flex-direction: column;
+}
+
+
+.cards{
+    display: flex;
+    justify-content: space-around;
+    width: 90%;
+    margin-top: 10vh;
+
+}
+
+.card{
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    width: 20vw;
+    height: 62vh;
+    margin-top: 2vh;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0.4rem;
+    padding: 5px;
+    text-align: center;
+
+
+}
+
+.first img{
+    width: 12vw;
+    height: 12vh;
+    
+
+}
+
+.second img{
+    width: 12vw;
+    height: 10.5vh;
+    margin-top: 3vh;
+  
+}
+.third img{
+    width: 12vw;
+    height: 10vh;
+  
+}
+
+.card h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 0.8rem;
+  border-bottom: 2px solid #000; 
+  padding-bottom: 0.1rem; 
+}
+
+.card p{
+    font-size: 1.2rem;
+    padding-right: 5px;
+    padding-left: 5px;
+}
+
+.equipe{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 50%;
+    margin-top: 10vh;
+}
+
+.equipe h2{
+    color: #fff;
+    font-size: 2.5rem;
+}
+
+.linha-first{
+    display: flex;
+    width: 75%;
+    justify-content: space-around;
+    
+
+}
+.linha-second{
+    display: flex;
+    width: 50%;
+    justify-content: space-around;
+    
+
+}
+
+.integrante img{
+    width: 14vw;
+    height: 32vh;
+}
+.integrante{
+    display: flex;
+    flex-direction: column;
+
+}
+.integrante h3{
+    color: #fff;
+}
+
+/* Footer */
+.footer {
+  margin-top: 5vh;
+  width: 100%;
+  height: 15vh;
+  background-color: #FF6D4D;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.footer .links {
+  width: 25vw;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.footer p {
+  font-size: 1.3vw;
+  font-weight: 400;
+  color: #fff;
+}
+
+
+.footer .links a {
+  font-size: 1.5vw;
+  font-weight: 400;
+  text-decoration: none;
+  position: relative;
+  color: #fff;
+}
+
+/* Animações do footer */
+.footer .links a::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: .22vw;
+  bottom: 0;
+  left: 0;
+  background-color: #fff;
+  transition: transform 0.4s ease-out;
+  transform-origin: bottom center;
+}
+
+.footer .links a:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom center;
+}
+
+/* Mudar a cor do scroll conforme ele rola*/
+.desktopHeader.scrolled {
+  background-color: #090909cc;
+ 
+}
+.desktopHeader.scrolled h1{
+    color: #fff;
+
+}
+.desktopHeader.scrolled .link {
+    color: #fff;
+}
+.desktopHeader.scrolled .link::after {
+    background-color: #fff;
+}
+.desktopHeader.scrolled .title h1::after {
+    background-color: #fff;
+}
+
+.desktopHeader.scrolled .buttons {
+background-color: #FF6D4D;
+}
+
+
