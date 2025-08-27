@@ -25,7 +25,6 @@ function cadastrarEndereco(cep, rua, bairro, cidade, estado, numero, complemento
 // Coloque os mesmos parâmetros aqui. Vá para a var instrucaoSql
 function cadastrarEmpresa(nome, telefone, email, senha, cnpj, razao, fkEndereco) {
     console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function cadastrar():", nome, telefone, email, senha, cnpj, razao, fkEndereco);
-
     // Insira exatamente a query do banco aqui, lembrando da nomenclatura exata nos valores
     //  e na ordem de inserção dos dados.
     var instrucaoSql = `

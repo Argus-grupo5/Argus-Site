@@ -92,6 +92,7 @@ function cadastrarEndereco(req, res) {
     } else {
 
         usuarioModel.cadastrarEndereco(cep, rua, bairro, cidade, estado, numero, complemento)
+
             .then(
                 function (resultado) {
                     res.json(resultado);
