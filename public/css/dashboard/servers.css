@@ -217,7 +217,7 @@ body {
 
 .tooltipInfo:hover .tooltiptextInfo {
   visibility: visible;
-  min-width: 5vw;
+  min-width: 15vw;
   font-size: 0.9vw;
   transition: .3s ease;
 }
