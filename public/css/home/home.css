@@ -90,9 +90,14 @@ body {
   width: 100%;
   height: 70vh;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+.containerDesktop .explication .cards {
+  display: flex;
+
 }
 
 .containerDesktop .explication .card {
@@ -116,6 +121,10 @@ body {
   text-align: center;
   line-height: 1.1;
   color: #000;
+}
+
+.containerDesktop .explication .diagrama_negocio img{
+  width: 90vw;
 }
 
 /* Vantagens */
@@ -222,6 +231,7 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  z-index: 99999;
 }
 
 .containerDesktop .footer .links {
@@ -262,3 +272,4 @@ body {
   transform: scaleX(1);
   transform-origin: bottom center;
 }
+

@@ -41,8 +41,8 @@
         <div class="user">
             <img src="../assets/dashboard/desktop/user.svg" alt="">
             <div class="userInfo">
-                <div id="userName">João Analisterson</div>
-                <div id="userRole">ADM</div>
+                <div id="userNome"></div>
+                <div id="userCargo">ADM</div>
             </div>
         </div>
         <div class="geralInfo">
@@ -254,4 +254,7 @@
     function sair_n(){
         id_sair.innerHTML = ``;
     }
+
+    userNome.innerHTML = sessionStorage.USER_NAME;
+    userCargo.innerHTML = sessionStorage.CARGO_CARGO;
 </script>

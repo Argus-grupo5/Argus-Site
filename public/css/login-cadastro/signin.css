@@ -175,12 +175,11 @@ body {
     background-image: url(../../assets/login-signin/vetor.svg);
     margin-top: 55vh;
     width: 100%;
-    height: 30vh;
+    height: 18vh;
     background-repeat: no-repeat;
     background-size: cover;
     z-index: -1;
     position: absolute;
-
 }
 
 /* Footer */
@@ -234,4 +233,10 @@ body {
 .containerDesktop .footer .links a:hover::after {
     transform: scaleX(1);
     transform-origin: bottom center;
+}
+
+.erroInput {
+    border: 2px solid #ff4d4d !important;
+    background-color: #ffeaea;
+    transition: 0.3s;
 }

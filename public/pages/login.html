@@ -54,10 +54,10 @@
 
         <div class="footer">
             <div class="links">
-                <a href="./pages/suporte.html">Suporte</a>
+                <a href="./suporte.html">Suporte</a>
                 <a href="">EULA</a>
-                <a href="./pages/empresa.html">Sobre Nós</a>
-                <a href="./pages/contato.html">Contato</a>
+                <a href="./empresa.html">Sobre Nós</a>
+                <a href="./contato.html">Contato</a>
             </div>
             <p>© 2025 Argus Corporation. Ltd. All rights reserved.</p>
         </div>
@@ -67,117 +67,115 @@
 </html>
 
 <script>
-    mensagem_erro.style.display = "none"
+mensagem_erro.style.display = "none";
 
-    function text_erro(textErro) {
-        mensagem_erro.style.display = "block";
-        mensagem_erro.innerHTML = `${textErro}`;
+function mostrarErro(msg) {
+    mensagem_erro.style.display = "block";
+    mensagem_erro.innerHTML = msg;
+    setTimeout(() => {
+        mensagem_erro.style.display = "none";
+    }, 2500);
+}
+
+// Borda vermela
+function marcarErro(input, msg) {
+    input.classList.add("erroInput"); 
+    mostrarErro(msg);
+    setTimeout(() => {
+        input.classList.remove("erroInput");
+    }, 2500);
+}
+
+function login() {
+    var emailVar = ipt_email.value.trim();
+    var senhaVar = ipt_senha.value;
+
+    if (emailVar === "" || senhaVar === "") {
+        marcarErro(
+            emailVar === "" ? ipt_email : ipt_senha,
+            "Preencha todos os campos."
+        );
         return;
     }
 
-    function login() {
-        var emailVar = ipt_email.value;
-        var senhaVar = ipt_senha.value;
-
-        if (emailVar == "" || senhaVar == "") {
-            text_erro("Preencha todos os campos.")
-            setTimeout(() => {
-                text_erro("")
-            }, 2000);
-            return;
-        }
-
-        if (!emailVar.includes('@')) {
-            text_erro("Certifique-se de utilizar um endereço de email válido.")
-            setTimeout(() => {
-                text_erro("")
-            }, 2000);
-            return;
-        }
-
-        mensagem_erro.style.display = "none";
-
-        console.log("FORM LOGIN: ", emailVar);
-        console.log("FORM SENHA: ", senhaVar);
-
-        fetch("/usuarios/autenticar", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                emailServer: emailVar,
-                senhaServer: senhaVar
-            })
-        }).then(function (resposta) {
-            console.log("ESTOU NO THEN DO entrar()!")
-
-            if (resposta.ok) {
-                console.log(resposta);
-
-                resposta.json().then(json => {
-                    console.log(json);
-                    console.log(JSON.stringify(json));
-                    sessionStorage.USER_ID = json.user_id;
-                    sessionStorage.USER_NAME = json.user_name;
-                    sessionStorage.USER_SOBRENOME = json.user_sobrenome;
-                    sessionStorage.USER_EMAIL = json.user_email;
-                    sessionStorage.USER_TELEFONE = json.user_telefone;
-                    sessionStorage.USER_FOTO = json.user_foto;
-                    sessionStorage.USER_DATA = json.user_data;
-                    sessionStorage.EMPRESA_ID = json.empresa_id;
-                    sessionStorage.EMPRESA_NOME_FANTASIA = json.empresa_nome_fantasia;
-                    sessionStorage.EMPRESA_RAZAO_SOCIAL = json.empresa_razao_social;
-                    sessionStorage.EMPRESA_CNPJ = json.empresa_cnpj;
-                    sessionStorage.EMPRESA_EMAIL = json.empresa_email;
-                    sessionStorage.EMPRESA_TELEFONE = json.empresa_telefone;
-                    sessionStorage.EMPRESA_DATA = json.empresa_data;
-                    sessionStorage.ENDERECO_RUA = json.endereco_rua;
-                    sessionStorage.ENDERECO_NUMERO = json.endereco_numero;
-                    sessionStorage.ENDERECO_BAIRRO = json.endereco_bairro;
-                    sessionStorage.ENDERECO_CIDADE = json.endereco_cidade;
-                    sessionStorage.ENDERECO_ESTADO = json.endereco_estado;
-                    sessionStorage.ENDERECO_CEP = json.endereco_cep;
-                    sessionStorage.ENDERECO_COMPLEMENTO = json.endereco_complemento;
-                    sessionStorage.CARGO_ID = json.cargo_id;
-                    sessionStorage.CARGO_CARGO = json.cargo_cargo;
-                    sessionStorage.CARGO_FUNCAO = json.cargo_funcao;
-
-                    setTimeout(function () {
-                        window.location.href = './servers.html';
-                    }, 1000); // apenas para exibir o loading
-
-                });
-
-            } else {
-
-                console.log("Houve um erro ao tentar realizar o login!");
-
-                resposta.text().then(texto => {
-                    console.error(texto);
-                    finalizarAguardar(texto);
-                });
-            }
-
-        }).catch(function (erro) {
-            console.log(erro);
-        })
-
-        return false;
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVar)) {
+        marcarErro(ipt_email, "Certifique-se de utilizar um endereço de email válido.");
+        return;
     }
 
-</script>
+    mensagem_erro.style.display = "none";
 
-<!-- Script para mudar a cor do scroll -->
-<script>
-    const header = document.querySelector('.desktopHeader');
+    console.log("FORM LOGIN: ", emailVar);
+    console.log("FORM SENHA: ", senhaVar);
 
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 90) { // ponto onde a navbar muda de cor
-            header.classList.add('scrolled');
+    fetch("/usuarios/autenticar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            emailServer: emailVar,
+            senhaServer: senhaVar
+        })
+    })
+    .then(function (resposta) {
+        console.log("ESTOU NO THEN DO login()!");
+
+        if (resposta.ok) {
+            resposta.json().then(json => {
+                console.log(json);
+                sessionStorage.USER_ID = json.user_id;
+                sessionStorage.USER_NAME = json.user_name;
+                sessionStorage.USER_SOBRENOME = json.user_sobrenome;
+                sessionStorage.USER_EMAIL = json.user_email;
+                sessionStorage.USER_TELEFONE = json.user_telefone;
+                sessionStorage.USER_FOTO = json.user_foto;
+                sessionStorage.USER_DATA = json.user_data;
+                sessionStorage.EMPRESA_ID = json.empresa_id;
+                sessionStorage.EMPRESA_NOME_FANTASIA = json.empresa_nome_fantasia;
+                sessionStorage.EMPRESA_RAZAO_SOCIAL = json.empresa_razao_social;
+                sessionStorage.EMPRESA_CNPJ = json.empresa_cnpj;
+                sessionStorage.EMPRESA_EMAIL = json.empresa_email;
+                sessionStorage.EMPRESA_TELEFONE = json.empresa_telefone;
+                sessionStorage.EMPRESA_DATA = json.empresa_data;
+                sessionStorage.ENDERECO_RUA = json.endereco_rua;
+                sessionStorage.ENDERECO_NUMERO = json.endereco_numero;
+                sessionStorage.ENDERECO_BAIRRO = json.endereco_bairro;
+                sessionStorage.ENDERECO_CIDADE = json.endereco_cidade;
+                sessionStorage.ENDERECO_ESTADO = json.endereco_estado;
+                sessionStorage.ENDERECO_CEP = json.endereco_cep;
+                sessionStorage.ENDERECO_COMPLEMENTO = json.endereco_complemento;
+                sessionStorage.CARGO_ID = json.cargo_id;
+                sessionStorage.CARGO_CARGO = json.cargo_cargo;
+                sessionStorage.CARGO_FUNCAO = json.cargo_funcao;
+
+                setTimeout(function () {
+                    window.location.href = './servers.html';
+                }, 1000);
+            });
+
         } else {
-            header.classList.remove('scrolled');
+            console.log("Houve um erro ao tentar realizar o login!");
+            resposta.text().then(texto => {
+                console.error(texto);
+                mostrarErro("Usuário ou senha inválidos!");
+            });
         }
+    })
+    .catch(function (erro) {
+        console.log(erro);
+        mostrarErro("Erro inesperado. Tente novamente.");
     });
 
+    return false;
+}
+</script>
+
+<script>
+const header = document.querySelector('.desktopHeader');
+window.addEventListener('scroll', () => {
+    if (window.scrollY > 90) {
+        header.classList.add('scrolled');
+    } else {
+        header.classList.remove('scrolled');
+    }
+});
 </script>

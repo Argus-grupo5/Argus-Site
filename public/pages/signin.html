@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scnp=1.0">
     <title>Cadastro</title>
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/login-cadastro/signin.css">
@@ -33,7 +33,7 @@
             <div id="inputs" class="inputs">
                 <section class="input">
                     <p>CEP</p>
-                    <input type="number" id="ipt_cep" onblur="buscarCep()" placeholder="00000000">
+                    <input type="text" id="ipt_cep" onblur="buscarCep()" placeholder="00000000">
                 </section>
                 <section class="input">
                     <p>Rua</p>
@@ -76,10 +76,10 @@
 
         <div class="footer">
             <div class="links">
-                <a href="./pages/suporte.html">Suporte</a>
+                <a href="./suporte.html">Suporte</a>
                 <a href="">EULA</a>
-                <a href="./pages/empresa.html">Sobre Nós</a>
-                <a href="./pages/contato.html">Contato</a>
+                <a href="./empresa.html">Sobre Nós</a>
+                <a href="./contato.html">Contato</a>
             </div>
             <p>© 2025 Argus Corporation. Ltd. All rights reserved.</p>
         </div>
@@ -88,230 +88,222 @@
 
 </html>
 <script>
-    function text_erro(textErro) {
-        mensagem_erro.style.display = "block";
-        mensagem_erro.innerHTML = `${textErro}`;
+function mostrarErro(msg) {
+    mensagem_erro.style.display = "block";
+    mensagem_erro.innerHTML = msg;
+    setTimeout(() => {
+        mensagem_erro.style.display = "none";
+    }, 5000);
+}
+
+function marcarErro(input, msg) {
+    input.classList.add("erroInput");
+    mostrarErro(msg);
+
+    input.scrollIntoView({ behavior: "smooth", block: "center" });
+
+    setTimeout(() => {
+        input.classList.remove("erroInput");
+    }, 2500);
+}
+
+
+function cadastrarEndereco() {
+    let cepVar = ipt_cep.value.replace(/\D/g, "");
+    let ruaVar = ipt_rua.value.trim();
+    let bairroVar = ipt_bairro.value.trim();
+    let cidadeVar = ipt_cidade.value.trim();
+    let estadoVar = ipt_estado.value.trim();
+    let numeroVar = ipt_numero.value.trim();
+    let complementoVar = ipt_complemento.value.trim();
+
+    if (cepVar === "" || cepVar.length !== 8) {
+        marcarErro(ipt_cep, "Digite um CEP válido (8 números)");
+        return;
+    }
+    if (ruaVar === "") {
+        marcarErro(ipt_rua, "A rua está em branco");
+        return;
+    }
+    if (bairroVar === "") {
+        marcarErro(ipt_bairro, "O bairro está em branco");
+        return;
+    }
+    if (cidadeVar === "") {
+        marcarErro(ipt_cidade, "A cidade está em branco");
+        return;
+    }
+    if (estadoVar === "") {
+        marcarErro(ipt_estado, "O estado está em branco");
+        return;
+    }
+    if (numeroVar === "" || Number(numeroVar) <= 0) {
+        marcarErro(ipt_numero, "Digite um número válido");
+        return;
+    }
+    if (complementoVar === "") {
+        complementoVar = "Sem complemento";
+    }
+
+    inputs.innerHTML = `            
+        <section class="input">
+            <p>Nome Fantasia</p>
+            <input type="text" id="ipt_nome" placeholder="Nome">
+        </section>
+        <section class="input">
+            <p>Razão social</p>
+            <input type="text" id="ipt_razao" placeholder="Razão social">
+        </section>
+        <section class="input">
+            <p>CNPJ</p>
+            <input type="text" id="ipt_cnpj" placeholder="00.000.000/0000-00">
+        </section> 
+        <section class="input">
+            <p>Telefone</p>
+            <input type="text" id="ipt_telefone" placeholder="(11) 98888-7777">
+        </section>
+        <section class="input">
+            <p>Email Mestre</p>
+            <input type="text" id="ipt_email" placeholder="E-mail">
+            <h3>(!)E-mail para o controle total da gestão dos usuários</h3>
+        </section>
+        <section class="input">
+            <p>Senha</p>
+            <input type="password" id="ipt_senha" placeholder="********">
+        </section>
+        <section class="input">
+            <p>Confirmar senha</p>
+            <input type="password" id="ipt_CSenha" placeholder="********">
+        </section>
+    `;
+
+    const caixa = document.getElementById("inputs");
+    caixa.scrollTop = 0;
+    botaoAlteravel.innerHTML = `
+        <button class="btnImage" onclick="cadastrar('${cepVar}', '${ruaVar}', '${bairroVar}', '${cidadeVar}', '${estadoVar}', '${numeroVar}', '${complementoVar}')">
+            <img src="../assets/login-signin/Buttom.svg" alt="Botão para cadastro">
+        </button>
+    `;
+}
+
+function cadastrar(cepVar, ruaVar, bairroVar, cidadeVar, estadoVar, numeroVar, complementoVar) {
+    var nomeVar = ipt_nome.value.trim();
+    var telefoneVar = ipt_telefone.value.replace(/\D/g, "");
+    var emailVar = ipt_email.value.trim();
+    var senhaVar = ipt_senha.value;
+    var confirmacao_senhaVar = ipt_CSenha.value;
+    var razaoVar = ipt_razao.value.trim();
+    var cnpjVar = ipt_cnpj.value.replace(/\D/g, "");
+
+    if (nomeVar.length < 3) {
+        marcarErro(ipt_nome, "Nome Fantasia muito curto");
+        return;
+    }
+    if (razaoVar.length < 3) {
+        marcarErro(ipt_razao, "Razão Social inválida");
+        return;
+    }
+    if (!/^\d{14}$/.test(cnpjVar)) {
+        marcarErro(ipt_cnpj, "CNPJ deve ter exatamente 14 números");
+        return;
+    }
+    if (!/^\d{10,11}$/.test(telefoneVar)) {
+        marcarErro(ipt_telefone, "Telefone deve ter 10 ou 11 números (com DDD)");
+        return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVar)) {
+        marcarErro(ipt_email, "Digite um e-mail válido");
+        return;
+    }
+    if (senhaVar.length < 8 || !/[A-Za-z]/.test(senhaVar) || !/\d/.test(senhaVar)) {
+        marcarErro(ipt_senha, "A senha deve ter pelo menos 8 caracteres, incluindo letras e números");
+        return;
+    }
+    if (confirmacao_senhaVar !== senhaVar) {
+        marcarErro(ipt_CSenha, "As senhas não coincidem");
         return;
     }
 
-    function cadastrarEndereco() {
-        let cepVar = ipt_cep.value;
-        let ruaVar = ipt_rua.value;
-        let bairroVar = ipt_bairro.value;
-        let cidadeVar = ipt_cidade.value;
-        let estadoVar = ipt_estado.value;
-        let numeroVar = ipt_numero.value;
-        let complementoVar = ipt_complemento.value;
-
-        if (cepVar == "") {
-            text_erro("O cep está em branco")
-            setTimeout(() => {
-                text_erro("")
-            }, 2000);
-            return
-        }
-        else if (ruaVar == "") {
-            text_erro("A rua está em branco")
-            setTimeout(() => {
-                text_erro("")
-                mensagem_erro.style.display = "none";
-            }, 2000);
-            return
-        }
-        else if (bairroVar == "") {
-            text_erro("O bairro está em branco")
-            setTimeout(() => {
-                text_erro("")
-                mensagem_erro.style.display = "none";
-            }, 2000);
-            return
-        }
-        else if (cidadeVar == "") {
-            text_erro("A cidade está em branco")
-            setTimeout(() => {
-                text_erro("")
-                mensagem_erro.style.display = "none";
-            }, 2000);
-            return
-        }
-        else if (estadoVar == "") {
-            text_erro("O estado está em branco")
-            setTimeout(() => {
-                text_erro("")
-                mensagem_erro.style.display = "none";
-            }, 2000);
-            return
-        }
-        else if (numeroVar == "") {
-            text_erro("O numero está em branco")
-            setTimeout(() => {
-                text_erro("")
-                mensagem_erro.style.display = "none";
-            }, 2000);
-            return
-        }
-        else if (complementoVar == "") {
-            complementoVar == "Sem complemento"
-
-        }
-
-        inputs.innerHTML = `            
-            <section class="input">
-                <p>Nome Fantasia</p>
-                <input type="text" id="ipt_nome" placeholder="Nome">
-            </section>
-            <section class="input">
-                <p>Razão social</p>
-                <input type="text" id="ipt_razao" placeholder="Razão social">
-            </section>
-            <section class="input">
-                <p>CNPJ</p>
-                <input type="number" id="ipt_cnpj" placeholder="00000000000000">
-            </section> 
-            <section class="input">
-                <p>Telefone</p>
-                <input type="text" id="ipt_telefone" placeholder="79988426203">
-            </section>
-            <section class="input">
-                <p>Email Mestre</p>
-                <input type="text" id="ipt_email" placeholder="E-mail">
-                <h3>(!)E-mail para o controle total da gestão dos usuários</h3>
-            </section>
-            <section class="input">
-                <p>Senha</p>
-                <input type="password" id="ipt_senha" placeholder="********">
-            </section>
-            <section class="input">
-                <p>Confirmar senha</p>
-                <input type="password" id="ipt_CSenha" placeholder="********">
-            </section>
-            `
-
-        const caixa = document.getElementById("inputs")
-        caixa.scrollTop = 0;
-        botaoAlteravel.innerHTML = `
-            <button class="btnImage" onclick="cadastrar('${cepVar}', '${ruaVar}', '${bairroVar}', '${cidadeVar}', '${estadoVar}', '${numeroVar}', '${complementoVar}')">
-                <img src="../assets/login-signin/Buttom.svg" alt="Botão para cadastro">
-            </button>
-        `
-    }
-
-    function cadastrar(cepVar, ruaVar, bairroVar, cidadeVar, estadoVar, numeroVar, complementoVar) {
-        var nomeVar = ipt_nome.value;
-        var telefoneVar = ipt_telefone.value;
-        var emailVar = ipt_email.value;
-        var senhaVar = ipt_senha.value;
-        var confirmacao_senhaVar = ipt_CSenha.value;
-        var razaoVar = ipt_razao.value;
-        var cnpjVar = ipt_cnpj.value;
-
-        if (nomeVar == "") {
-            alert("Nome em branco")
-            return
-        } else if (razaoVar == "") {
-            alert("razao em branco")
-            return
-        } else if (cnpjVar == "") {
-            alert("cnpj em branco")
-            return
-        } else if (cnpjVar.length != 14) {
-            alert("O cnpj tem que ter 14 numeros")
-            return
-        } else if (telefoneVar == "") {
-            alert("Telefone em branco")
-            return
-        } else if (emailVar == "") {
-            alert("E-mail em branco")
-            return
-        } else if (senhaVar == "") {
-            alert("Senha em branco")
-            return
-        } else if (confirmacao_senhaVar != senhaVar) {
-            alert("As senhas não conhecidem")
-            return
-        }
-
-        fetch("/usuarios/cadastrarEndereco", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                cepServer: cepVar,
-                ruaServer: ruaVar,
-                bairroServer: bairroVar,
-                cidadeServer: cidadeVar,
-                estadoServer: estadoVar,
-                numeroServer: numeroVar,
-                complementoServer: complementoVar
-            }),
+    // Enviar endereço
+    fetch("/usuarios/cadastrarEndereco", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            cepServer: cepVar,
+            ruaServer: ruaVar,
+            bairroServer: bairroVar,
+            cidadeServer: cidadeVar,
+            estadoServer: estadoVar,
+            numeroServer: numeroVar,
+            complementoServer: complementoVar
+        }),
+    })
+        .then(resposta => {
+            if (resposta.ok) return resposta.json();
+            throw "Houve um erro ao tentar realizar o cadastro!";
         })
-            .then(function (resposta) {
-                if (resposta.ok) {
-                    return resposta.json();
-                } else {
-                    throw "Houve um erro ao tentar realizar o cadastro!";
-                }
-            })
-            .then(function (data) {
-                let idVar = Number(data.insertId);
+        .then(data => {
+            let idVar = Number(data.insertId);
 
-                return fetch("/usuarios/cadastrarEmpresa", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        nomeServer: nomeVar,
-                        telefoneServer: telefoneVar,
-                        emailServer: emailVar,
-                        senhaServer: senhaVar,
-                        cnpjServer: cnpjVar,
-                        razaoServer: razaoVar,
-                        idServer: idVar
-                    }),
-                });
-            })
-            .then(function (resposta) {
-                if (resposta.ok) {
-                    alert("Tudo deu certo")
-                    setTimeout(() => {
-                        window.location = "./login.html";
-                    }, "2000");
-                } else {
-                    throw "Houve um erro ao tentar realizar o cadastro!";
-                }
-            })
-            .catch(function (resposta) {
-                console.log(`#ERRO: ${resposta}`);
+            return fetch("/usuarios/cadastrarEmpresa", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    nomeServer: nomeVar,
+                    telefoneServer: telefoneVar,
+                    emailServer: emailVar,
+                    senhaServer: senhaVar,
+                    cnpjServer: cnpjVar,
+                    razaoServer: razaoVar,
+                    idServer: idVar
+                }),
             });
-
-        return false;
-    }
-
-    async function buscarCep() {
-        cep = ipt_cep.value;
-        const url = `https://viacep.com.br/ws/${cep}/json/`;
-        try {
-            const response = await fetch(url);
-            const data = await response.json();
-
-            if (data.erro) {
-                alert('CEP não encontrado!');
-                return;
+        })
+        .then(resposta => {
+            if (resposta.ok) {
+                mostrarErro("Cadastro realizado com sucesso!");
+                setTimeout(() => {
+                    window.location = "./login.html";
+                }, 2000);
+            } else {
+                throw "Houve um erro ao tentar realizar o cadastro!";
             }
-            ipt_rua.value = data.logradouro;
-            ipt_bairro.value = data.bairro;
-            ipt_cidade.value = data.localidade;
-            ipt_estado.value = data.uf;
+        })
+        .catch(erro => console.error(`#ERRO: ${erro}`));
 
-            const caixa = document.getElementById("inputs")
-            caixa.scrollTop = 500000;
+    return false;
+}
 
+async function buscarCep() {
+    let cep = ipt_cep.value.replace(/\D/g, "");
+    ipt_cep.value = cep;
 
-        } catch (error) {
-            console.error('Erro ao buscar CEP:', error);
-            alert('Ocorreu um erro ao buscar o CEP.');
-        }
+    if (cep.length !== 8) {
+        marcarErro(ipt_cep, "CEP inválido. Digite 8 números.");
+        return;
     }
+
+    const url = `https://viacep.com.br/ws/${cep}/json/`;
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.erro) {
+            marcarErro(ipt_cep, "CEP não encontrado!");
+            return;
+        }
+
+        ipt_rua.value = data.logradouro || "";
+        ipt_bairro.value = data.bairro || "";
+        ipt_cidade.value = data.localidade || "";
+        ipt_estado.value = data.uf || "";
+
+        ipt_numero.focus();
+    } catch (error) {
+        console.error("Erro ao buscar CEP:", error);
+        marcarErro(ipt_cep, "Ocorreu um erro ao buscar o CEP.");
+    }
+}
+
+
 </script>
