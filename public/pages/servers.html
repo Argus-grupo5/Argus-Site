@@ -13,6 +13,13 @@
 
     <header class="desktopNav">
         <div class="navButtons">
+            <div class="navButton tooltipNav" id="navUser">
+                <img src="../assets/dashboard/desktop/user.svg" alt="">
+                <span class="tooltiptextNav">
+                <div id="userNome"></div>
+                <div id="userCargo">ADM</div>
+                </span>
+            </div>
             <div class="navButton tooltipNav" id="navServers">
                 <img class="selected" src="../assets/dashboard/desktop/box.svg" alt="Servidores">
                 <span class="tooltiptextNav">Servidores</span>
@@ -25,10 +32,6 @@
                 <img src="../assets/dashboard/desktop/logs.svg" alt="Logs">
                 <span class="tooltiptextNav">Logs</span>
             </div>
-            <div class="navButton tooltipNav" id="navServers">
-                <img src="../assets/dashboard/desktop/settings.svg" alt="Configurações">
-                <span class="tooltiptextNav">Configurações</span>
-            </div>
             <div class="navButton tooltipNav" id="navServers" onclick="sair()">
                 <img src="../assets/dashboard/desktop/logout.svg" alt="Sair">
                 <span class="tooltiptextNav">Sair</span>
@@ -38,13 +41,6 @@
     </header>
 
     <header class="headerTop">
-        <div class="user">
-            <img src="../assets/dashboard/desktop/user.svg" alt="">
-            <div class="userInfo">
-                <div id="userNome"></div>
-                <div id="userCargo">ADM</div>
-            </div>
-        </div>
         <div class="geralInfo">
             <div class="info tooltipInfo">
                 <div class="server">

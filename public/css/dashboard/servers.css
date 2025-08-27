@@ -100,7 +100,7 @@ body {
 
 .tooltipNav:hover .tooltiptextNav {
   visibility: visible;
-  width: fit-content;
+  width: 12vw;
   font-size: 1vw;
   transition: .4s ease;
 }
@@ -217,7 +217,7 @@ body {
 
 .tooltipInfo:hover .tooltiptextInfo {
   visibility: visible;
-  min-width: 15vw;
+  min-width: 5vw;
   font-size: 0.9vw;
   transition: .3s ease;
 }
@@ -233,7 +233,7 @@ body {
 
 #userCargo{
     font-size: 0.7vw;
-    color: #a0a0a0;
+    color: #201010;
 }
 .search{
     display: flex;
