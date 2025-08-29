@@ -67,7 +67,7 @@ body {
 
 .selected { 
     padding: 0.5vw;
-    background-color: #FF0000;
+    background: linear-gradient(to bottom, #FF0000, #FF670A);
     border-radius: 8px;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
