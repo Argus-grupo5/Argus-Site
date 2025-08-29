@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,32 +8,43 @@
     <link rel="stylesheet" href="../css/style.css">
     <title>ARGUS | Servidores</title>
 </head>
+
 <body>
     <div id="id_sair">
     </div>
 
     <header class="desktopNav">
         <div class="navButtons">
-            <div class="navButton tooltipNav" id="navServers">
-                <img class="selected" src="../assets/dashboard/desktop/box.svg" alt="Servidores">
-                <span class="tooltiptextNav">Servidores</span>
-            </div>
-            <div class="navButton tooltipNav" id="navServers">
-                <img src="../assets/dashboard/desktop/employes.svg" alt="Funcionários">
-                <span class="tooltiptextNav">Funcionários</span>
-            </div>
-            <div class="navButton tooltipNav" id="navServers">
-                <img src="../assets/dashboard/desktop/logs.svg" alt="Logs">
-                <span class="tooltiptextNav">Logs</span>
-            </div>
-            <div class="navButton tooltipNav" id="navServers">
-                <img src="../assets/dashboard/desktop/headphone.svg" alt="Suporte">
-                <span class="tooltiptextNav">Suporte</span>
-            </div>
+            <a href="servers.html">
+                <div class="navButton tooltipNav" id="navServers">
+                    <img class="selected" src="../assets/dashboard/desktop/box.svg" alt="Servidores">
+                    <span class="tooltiptextNav">Servidores</span>
+                </div>
+            </a>
+            <a href="colaboradores.html">
+                <div class="navButton tooltipNav" id="navServers">
+                    <img src="../assets/dashboard/desktop/employes.svg" alt="Funcionários">
+                    <span class="tooltiptextNav">Funcionários</span>
+                </div>
+            </a>
+            <a href="logs.html">
+                <div class="navButton tooltipNav" id="navServers">
+                    <img src="../assets/dashboard/desktop/logs.svg" alt="Logs">
+                    <span class="tooltiptextNav">Logs</span>
+                </div>
+            </a>
+            <a href="suporte.html">
+                <div class="navButton tooltipNav" id="navServers">
+                    <img src="../assets/dashboard/desktop/headphone.svg" alt="Suporte">
+                    <span class="tooltiptextNav">Suporte</span>
+                </div>
+            </a>
+
             <div class="navButton tooltipNav" id="navServers" onclick="sair()">
                 <img src="../assets/dashboard/desktop/logout.svg" alt="Sair">
                 <span class="tooltiptextNav">Sair</span>
             </div>
+
         </div>
         <img class="logo" src="../assets/icon/logoBlack.svg" alt="">
     </header>
@@ -111,13 +123,14 @@
             </div>
         </div>
         <div class="server-list" id="id_server_list">
-        </div>   
+        </div>
     </div>
 </body>
+
 </html>
 
 <script>
-    server =[{
+    server = [{
         "name": "Servidor Geforce Now",
         "nivel": "4",
         "recursos": "[CPU, RAM]",
@@ -128,12 +141,12 @@
         "nivel": "3",
         "recursos": "[CPU, GPU]",
         "localizacao": "São Paulo - SP"
-    },{
+    }, {
         "name": "Servidor BandTec",
         "nivel": "5",
         "recursos": "[CPU, GPU, Armazenamento]",
         "localizacao": "São Paulo - SP"
-    },{
+    }, {
         "name": "Servidor Xbox",
         "nivel": "1",
         "recursos": "[Nenhum]",
@@ -149,14 +162,14 @@
     id_servidores_monitorados.innerHTML = server.length;
     let qtd_servidores_critico = 0;
     let qtd_servidores_alerta = 0;
-    
+
     for (let i = 0; i < server.length; i++) {
-        if (server[i]   .nivel == 2 || server[i].nivel == 3){
+        if (server[i].nivel == 2 || server[i].nivel == 3) {
             qtd_servidores_alerta++;
-        } else if  (server[i].nivel > 3){ 
+        } else if (server[i].nivel > 3) {
             qtd_servidores_critico++;
         }
-    }  
+    }
 
     qtd_critico.innerHTML = qtd_servidores_critico;
     qtd_alerta.innerHTML = qtd_servidores_alerta;
@@ -231,11 +244,11 @@
         }
     }
 
-    
-        
+
+
     filtragem_Servidores();
 
-    function sair(){
+    function sair() {
         id_sair.innerHTML = `
         
             <div class="popup_sair">
@@ -246,12 +259,12 @@
         `;
     }
 
-    function sair_s(){
+    function sair_s() {
         window.location.href = "./login.html";
         sessionStorage.clear;
     }
 
-    function sair_n(){
+    function sair_n() {
         id_sair.innerHTML = ``;
     }
 
