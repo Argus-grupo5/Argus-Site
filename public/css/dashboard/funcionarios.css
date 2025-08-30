@@ -39,6 +39,11 @@
     
 }
 
+.funcFoto img{
+    width: 6vw;
+    height: 6vh;
+}
+
 .funcName,
 .funcEmail,
 .funcStatus,

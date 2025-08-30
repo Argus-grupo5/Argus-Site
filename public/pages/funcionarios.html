@@ -157,48 +157,40 @@
             "telefone": "(11) 95874-3270"
         },
         ]
-        // Renderizar funcionário
-        function renderFuncionario(func) {
-            return `
-        <div class="funcionario-item">
-                <div class="funcFoto">
-                    <img src="../assets/dashboard/desktop/user.svg" alt="Foto">
-                    </div>
-                    <div class="funcName">${func.nome}</div>
-                    <div class="funcEmail">${func.email}</div>
-                    <div class="funcCargo">${func.cargo}</div>
-                    <div class="dtCadastro">${func.dtCadastro}</div>
-                    <div class="functel">${func.telefone}</div>
-                    <div class="funcStatus">
-                        <img src="../assets/dashboard/desktop/eye.svg" alt="Status">
-                        </div>
-                        </div>
-                        `;
-        }
 
-        // função p exibir todos os funcionários
-        function listarFuncionarios(lista) {
-            const container = document.getElementById("id_func_list");
-            container.innerHTML = "";
-            lista.forEach(func => {
-                container.innerHTML += renderFuncionario(func);
-            });
-        }
+        const container = document.getElementById("id_func_list");
 
         // filtra por cargo e pesquisa
         function filtrar() {
-            const filtro = document.getElementById("id_filter").value;
+            const filtro = document.getElementById("id_filter").value.toLowerCase();
             const pesquisa = document.getElementById("id_pesquisa").value.toLowerCase();
+            container.innerHTML = "";
 
-            const filtrados = funcionario.filter(f =>
-                (filtro === "" || f.cargo.includes(filtro)) &&
-                (f.nome.toLowerCase().includes(pesquisa) || f.email.toLowerCase().includes(pesquisa))
-            );
+            for (let i = 0; i < funcionario.length; i++) {
+                const cargoIgual = filtro === "" || funcionario[i].cargo.toLowerCase() === filtro;
+                const pesquisaIgual =
+                    funcionario[i].nome.toLowerCase().includes(pesquisa) ||
+                    funcionario[i].email.toLowerCase().includes(pesquisa);
 
-            listarFuncionarios(filtrados);
+                if (cargoIgual && pesquisaIgual) {
+                    container.innerHTML += `
+                <div class="funcionario-item">
+                    <div class="funcFoto">
+                        <img src="../assets/dashboard/desktop/user.svg" alt="Foto">
+                    </div>
+                    <div class="funcName">${funcionario[i].nome}</div>
+                    <div class="funcEmail">${funcionario[i].email}</div>
+                    <div class="funcCargo">${funcionario[i].cargo}</div>
+                    <div class="dtCadastro">${funcionario[i].dtCadastro}</div>
+                    <div class="functel">${funcionario[i].telefone}</div>
+                    <div class="funcStatus">
+                        <img src="../assets/dashboard/desktop/eye.svg" alt="Status">
+                    </div>
+                </div>`;
+                }
+            }
         }
-
-         listarFuncionarios(funcionario);
+        window.onload = () => filtrar(funcionario);
     </script>
 </body>
 
