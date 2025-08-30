@@ -168,13 +168,13 @@ justify-content: center;
 }
 .quemSomos .texto h2 {
   align-self: baseline;
-  font-size: 2.5rem;
+  font-size: 2.5vw;
   font-weight: 800;
   color: #000;
 }
 .quemSomos .texto p {
-  font-size: 1.2rem;
-  line-height: 1.8rem;
+  font-size: 1.5vw;
+  line-height: 1.8;
   text-align: justify;
   max-width: 500px; 
 }
@@ -214,6 +214,7 @@ justify-content: center;
     border-radius: 0.4rem;
     padding: 5px;
     text-align: center;
+    
 
 
 }
@@ -238,7 +239,7 @@ justify-content: center;
 }
 
 .card h2 {
-  font-size: 1.5rem;
+  font-size: 2vw;
   font-weight: 700;
   text-align: center;
   margin-bottom: 0.8rem;
@@ -247,9 +248,11 @@ justify-content: center;
 }
 
 .card p{
-    font-size: 1.2rem;
+
     padding-right: 5px;
     padding-left: 5px;
+    font-size: 1.5vw;
+    line-height: 1.1;
 }
 
 .equipe{
@@ -263,7 +266,7 @@ justify-content: center;
 
 .equipe h2{
     color: #fff;
-    font-size: 2.5rem;
+    font-size: 2.5vw;
 }
 
 .linha-first{
@@ -283,7 +286,7 @@ justify-content: center;
 
 .integrante img{
     width: 14vw;
-    height: 32vh;
+    
 }
 .integrante{
     display: flex;
@@ -291,7 +294,10 @@ justify-content: center;
 
 }
 .integrante h3{
+  
     color: #fff;
+  font-size: 1.5vw;
+
 }
 
 /* Footer */
