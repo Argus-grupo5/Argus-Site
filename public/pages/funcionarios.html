@@ -74,9 +74,10 @@
                 </div>
             </div>
         </div>
- 
+
         <div class="editContainer">
             <img class="iconLapis" src="../assets/funcionarios/lapis.svg" alt="" onclick="exibirEdicao()">
+            <span class="tooltiptextInfo">Editar </span>
         </div>
     </header>
 
@@ -137,10 +138,10 @@
                 .catch(err => console.error("Erro ao carregar cargos:", err));
         }
 
-        
+
         window.onload = () => {
             listarCargo();
-            filtrar(); 
+            filtrar();
         };
 
         // filtra por cargo e pesquisa
@@ -151,13 +152,17 @@
             fetch(`/usuarios/filtrar`).then(res => {
                 if (res.ok) {
                     res.json().then(resposta => {
+
+
                         for (let i = 0; i < resposta.length; i++) {
                             const cargoIgual = filtro === "" || resposta[i].cargo.toLowerCase() === filtro;
                             const pesquisaIgual =
                                 resposta[i].nome.toLowerCase().includes(pesquisa) ||
                                 resposta[i].email.toLowerCase().includes(pesquisa);
 
-
+                            if (resposta[i].sobrenome == null) {
+                                resposta[i].sobrenome = ""
+                            }
 
                             if (cargoIgual && pesquisaIgual) {
                                 const statusIcon = `<img class="iconStatus" src="../assets/funcionarios/eyeClosed.svg" alt="Offline">`;
@@ -167,7 +172,7 @@
                     <div class="funcFoto">
                         <img src="${resposta[i].foto_perfil}" alt="Foto">
                     </div>
-                    <div class="funcName">${resposta[i].nome}</div>
+                    <div class="funcName">${resposta[i].nome} ${resposta[i].sobrenome}</div>
                     <div class="funcEmail">${resposta[i].email}</div>
                     <div class="funcCargo">${resposta[i].cargo}</div>
                     <div class="dtCadastro">${resposta[i].data_cadastro}</div>

@@ -63,8 +63,14 @@
 
 .iconLapis {
   height: 5vh;
-  width: 5vw;
   cursor: pointer;
+  transition: .3s ease;
+}
+.iconLapis:hover{
+  
+  transform: scale(1.3); 
+   border-radius: 5px;
+
 }
 
 .editContainer {
@@ -72,7 +78,8 @@
   display: flex;
   align-items: center;
   height: 5vh;
-  width: 5vw;
+  width: 4vw;
+  
 
 }
 
@@ -80,4 +87,30 @@
   height: 2.5vh;
   width: 2.5vw;
 
+}
+
+.editContainer  {
+  position: relative;
+  display: inline-block;
+}
+
+
+.editContainer  .tooltiptextInfo {
+    visibility: hidden;
+    position: relative;
+    z-index: 1;
+    width: 0px;
+    padding: 0px 1vw;
+    border-radius: 5px;
+    background-color: #000000;
+    color: #ffffff;
+    text-align: center;
+    font-size: 0px;
+}
+
+.editContainer:hover .tooltiptextInfo {
+  visibility: visible;
+  min-width: 15vw;
+  font-size: 0.9vw;
+  transition: .3s ease;
 }
