@@ -17,4 +17,11 @@ router.post("/autenticar", function (req, res) {
     usuarioController.autenticar(req, res);
 });
 
+
+router.get("/filtrar", (req, res) => {
+    usuarioController.filtrar(req, res);
+});
+
+router.get("/listarCargo", usuarioController.listarCargo);
+
 module.exports = router;
