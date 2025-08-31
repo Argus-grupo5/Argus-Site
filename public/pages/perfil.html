@@ -76,5 +76,24 @@
             </div>
         </div>
     </header>
+
+    <div class="containerPerfil">
+        <img id="perfilFoto" src="../assets/fotoPerfil/padrao.svg" alt="Foto de Perfil">
+        <h1 id="perfilNome"></h1>
+        <h3 id="perfilCargo"></h3>
+        <h3 id="perfilEmail"></h3>
+        <h3 id="perfilNumero"></h3>
+        <button id="buttonEditar">Editar informações</button>
+    </div>
 </body>
+
 </html>
+
+<script>
+    userNome.innerHTML = sessionStorage.USER_NAME;
+    userCargo.innerHTML = sessionStorage.CARGO_CARGO;
+    perfilNome.innerHTML = `${sessionStorage.USER_NAME} ${sessionStorage.USER_SOBRENOME}`;
+    perfilCargo.innerHTML = sessionStorage.CARGO_FUNCAO;
+    perfilEmail.innerHTML = sessionStorage.USER_EMAIL;
+    perfilNumero.innerHTML = sessionStorage.USER_TELEFONE;
+</script>
