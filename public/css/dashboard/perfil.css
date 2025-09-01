@@ -1,0 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:slnt,wght@-11..11,200..1000&display=swap');
+
+.containerPerfil {
+    margin-top: 50px;
+    padding-left: 5vw;
+    padding-right: 1vw;
+    text-align: center;
+}
+
+#buttonEditar {
+    background-color: #FF6D4D;
+    width: 25vw;
+    height: 5vh;
+    border-radius: 20px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+#perfilFoto {
+    width: 20vw;
+}
