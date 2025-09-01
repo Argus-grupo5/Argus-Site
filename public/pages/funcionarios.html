@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/dashboard/funcionarios.css">
+    <link rel="stylesheet" href="../css/dashboard/servers.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <title>ARGUS | Funcionários</title>
+</head>
+
+<body>
+    <header class="desktopNav">
+        <div class="navButtons">
+            <div class="navButton tooltipNav" id="navUser">
+                <img src="../assets/dashboard/desktop/user.svg" alt="">
+                <span class="tooltiptextNav">
+                    <div id="userNome"></div>
+                    <div id="userCargo">ADM</div>
+                </span>
+            </div>
+            <a href="../pages/servers.html" class="navButton tooltipNav" id="navServers">
+                <img src="../assets/dashboard/desktop/box.svg" alt="Servidores">
+                <span class="tooltiptextNav">Servidores</span>
+            </a>
+
+            <a href="../pages/funcionarios.html" class="navButton tooltipNav" id="navServers">
+                <img class="selected" src="../assets/dashboard/desktop/employes.svg" alt="Funcionários">
+                <span class="tooltiptextNav">Funcionários</span>
+            </a>
+            <div class="navButton tooltipNav" id="navServers">
+                <img src="../assets/dashboard/desktop/logs.svg" alt="Logs">
+                <span class="tooltiptextNav">Logs</span>
+            </div>
+            <div class="navButton tooltipNav" id="navServers">
+                <img src="../assets/dashboard/desktop/headphone.svg" alt="Suporte">
+                <span class="tooltiptextNav">Suporte</span>
+            </div>
+            <div class="navButton tooltipNav" id="navServers" onclick="sair()">
+                <img src="../assets/dashboard/desktop/logout.svg" alt="Sair">
+                <span class="tooltiptextNav">Sair</span>
+            </div>
+        </div>
+        <img class="logo" src="../assets/icon/logoBlack.svg" alt="">
+    </header>
+    <header class="headerTop">
+        <div class="geralInfo">
+            <div class="info tooltipInfo">
+                <div class="server">
+                    <img src="../assets/dashboard/desktop/server.svg" alt="">
+                </div>
+                <div class="serversMonitoring" id="id_servidores_monitorados">
+                </div>
+                <span class="tooltiptextInfo">
+                    Servidores em monitoramento
+                </span>
+            </div>
+            <div class="info">
+                <div class="bell">
+                    <img src="../assets/dashboard/desktop/bell.svg" alt="">
+                </div>
+                <div class="risk tooltipInfo" id="id_servidores_em_estado_critico">
+                    <p id="qtd_critico"></p>
+                    <span class="tooltiptextInfo">
+                        Servidores em atenção
+                    </span>
+                </div>
+                <div class="atention tooltipInfo" id="id_servidores_em_estado_de_alerta">
+                    <p id="qtd_alerta"></p>
+                    <span class="tooltiptextInfo">
+                        Servidores em alerta
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="editContainer">
+            <img class="iconLapis" src="../assets/funcionarios/lapis.svg" alt="" onclick="exibirEdicao()">
+            <span class="tooltiptextInfo">Editar </span>
+        </div>
+    </header>
+
+    <div class="search">
+        <select id="id_filter" onchange="filtrar()">
+            <option value="" selected>Todos</option>
+        </select>
+        <input type="search" id="id_pesquisa" placeholder="Pesquisar funcionário" oninput="filtrar()">
+    </div>
+
+    <div class="containerFunc">
+        <div class="funcInfo">
+            <div class="funcFoto">
+                Foto
+            </div>
+            <div class="funcName">
+                Nome
+            </div>
+            <div class="funcEmail">
+                Email
+            </div>
+            <div class="funcCargo">
+                Cargo
+            </div>
+            <div class="dtCadastro">
+                Data de Cadastro
+            </div>
+            <div class="functel">
+                Telefone
+            </div>
+            <div class="funcStatus">
+                Status
+            </div>
+
+        </div>
+        <div class="func-list" id="id_func_list">
+
+            <!-- <div class="server-list" id="id_server_list"> -->
+        </div>
+    </div>
+
+    <script>
+        const container = document.getElementById("id_func_list");
+
+        function listarCargo() {
+            const select = document.getElementById("id_filter");
+
+            fetch("/usuarios/listarCargo")
+                .then(res => res.json())
+                .then(cargos => {
+                    cargos.forEach(c => {
+                        const option = document.createElement("option");
+                        option.value = c.cargo;
+                        option.textContent = c.cargo;
+                        select.appendChild(option);
+                    });
+                })
+                .catch(err => console.error("Erro ao carregar cargos:", err));
+        }
+
+
+        window.onload = () => {
+            listarCargo();
+            filtrar();
+        };
+
+        // filtra por cargo e pesquisa
+        function filtrar() {
+            const filtro = document.getElementById("id_filter").value.toLowerCase();
+            const pesquisa = document.getElementById("id_pesquisa").value.toLowerCase();
+            container.innerHTML = "";
+            fetch(`/usuarios/filtrar`).then(res => {
+                if (res.ok) {
+                    res.json().then(resposta => {
+
+
+                        for (let i = 0; i < resposta.length; i++) {
+                            const cargoIgual = filtro === "" || resposta[i].cargo.toLowerCase() === filtro;
+                            const pesquisaIgual =
+                                resposta[i].nome.toLowerCase().includes(pesquisa) ||
+                                resposta[i].email.toLowerCase().includes(pesquisa);
+
+                            if (resposta[i].sobrenome == null) {
+                                resposta[i].sobrenome = ""
+                            }
+
+                            if (cargoIgual && pesquisaIgual) {
+                                const statusIcon = `<img class="iconStatus" src="../assets/funcionarios/eyeClosed.svg" alt="Offline">`;
+
+                                container.innerHTML += `
+                <div class="funcionario-item">
+                    <div class="funcFoto">
+                        <img src="${resposta[i].foto_perfil}" alt="Foto">
+                    </div>
+                    <div class="funcName">${resposta[i].nome} ${resposta[i].sobrenome}</div>
+                    <div class="funcEmail">${resposta[i].email}</div>
+                    <div class="funcCargo">${resposta[i].cargo}</div>
+                    <div class="dtCadastro">${resposta[i].data_cadastro}</div>
+                    <div class="functel">${resposta[i].telefone}</div>
+                    <div class="funcStatus">
+                        ${statusIcon}
+                    </div>
+                </div>`;
+                            }
+                        }
+
+
+
+                    })
+                }
+            })//fim fetch
+
+        }
+    </script>
+</body>
+
+</html>

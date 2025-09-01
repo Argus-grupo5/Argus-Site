@@ -34,10 +34,27 @@ function cadastrarEmpresa(nome, telefone, email, senha, cnpj, razao, fkEndereco)
     return database.executar(instrucaoSql);
 }
 
+//tela de funcionários
+function filtrar() {
+    const instrucaoSql = `
+        select u.foto_perfil, u.nome, u.sobrenome, u.email, c.cargo, DATE_FORMAT(u.data_cadastro, '%d/%m/%Y') as data_cadastro, u.telefone 
+        from cargo c
+        join cargousuario uc on c.id = uc.Cargo_id
+        join usuario u on uc.usuario_id = u.id;
+    `;
+    return database.executar(instrucaoSql);
+}
+function listarCargo() {
+    const instrucaoSql = "SELECT cargo FROM cargo ORDER BY cargo";
+    return database.executar(instrucaoSql);
+}
 
 
 module.exports = {
     autenticar,
     cadastrarEmpresa,
-    cadastrarEndereco
+    cadastrarEndereco,
+    filtrar,
+    listarCargo
+
 };
