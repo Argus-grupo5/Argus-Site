@@ -17,4 +17,8 @@ router.post("/autenticar", function (req, res) {
     usuarioController.autenticar(req, res);
 });
 
+router.put("/online", function (req, res) {
+    usuarioController.online(req, res);
+})
+
 module.exports = router;
