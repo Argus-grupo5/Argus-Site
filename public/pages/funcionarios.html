@@ -11,6 +11,8 @@
 </head>
 
 <body>
+    <div id="config_funcionarios">
+    </div>
     <header class="desktopNav">
         <div class="navButtons">
             <div class="navButton tooltipNav" id="navUser">
@@ -73,12 +75,12 @@
                     </span>
                 </div>
             </div>
-        </div>
 
-        <div class="editContainer">
-            <img class="iconLapis" src="../assets/funcionarios/lapis.svg" alt="" onclick="exibirEdicao()">
-            <span class="tooltiptextInfo">Editar </span>
-        </div>
+            <div class="editContainer">
+                <img class="iconLapis" src="../assets/funcionarios/lapis.svg" alt="" onclick="exibirEdicao()">
+                <span class="tooltiptextInfo">Editar </span>
+
+            </div>
     </header>
 
     <div class="search">
@@ -87,7 +89,6 @@
         </select>
         <input type="search" id="id_pesquisa" placeholder="Pesquisar funcionário" oninput="filtrar()">
     </div>
-
     <div class="containerFunc">
         <div class="funcInfo">
             <div class="funcFoto">
@@ -117,57 +118,112 @@
 
             <!-- <div class="server-list" id="id_server_list"> -->
         </div>
-    </div>
-
-    <script>
-        const container = document.getElementById("id_func_list");
-
-        function listarCargo() {
-            const select = document.getElementById("id_filter");
-
-            fetch("/usuarios/listarCargo")
-                .then(res => res.json())
-                .then(cargos => {
-                    cargos.forEach(c => {
-                        const option = document.createElement("option");
-                        option.value = c.cargo;
-                        option.textContent = c.cargo;
-                        select.appendChild(option);
-                    });
-                })
-                .catch(err => console.error("Erro ao carregar cargos:", err));
-        }
 
 
-        window.onload = () => {
-            listarCargo();
-            filtrar();
-        };
+</body>
 
-        // filtra por cargo e pesquisa
-        function filtrar() {
-            const filtro = document.getElementById("id_filter").value.toLowerCase();
-            const pesquisa = document.getElementById("id_pesquisa").value.toLowerCase();
-            container.innerHTML = "";
-            fetch(`/usuarios/filtrar`).then(res => {
-                if (res.ok) {
-                    res.json().then(resposta => {
+</html>
+<script>
+    function exibirEdicao() {
+        config_funcionarios.innerHTML = `
+            <div class="popup_configs">
+                <h1>Editar Usuário</h1>
+                    <div style="Display: flex;  justify-content: space-between;">
+                        <div>
+                            <p class=titulo_configs>Nome</p>
+                        </div>
+                        <div>
+                            <p class=titulo_configs>*obrigatório</p>
+                        </div>
+                    </div>
+                    <input type="text" id="ipt_nome">
+                    <div style="Display: flex;  justify-content: space-between;">
+                    <p class=titulo_configs>Sobrenome</p>
+                    <p class=titulo_configs>*obrigatório</p>
+                    </div>
+                    <input type="text" id="ipt_sobrenome">
+                    <div style="Display: flex;  justify-content: space-between;">
+                    <p class=titulo_configs>Cargo</p>
+                        <p class=titulo_configs>*obrigatório</p>
+                    </div>
+                    <input type="text" id="ipt_cargo">
+                    <div style="Display: flex;  justify-content: space-between;">
+                    <p class=titulo_configs>Email</p>
+                        <p class=titulo_configs>*obrigatório</p>
+                    </div>
+                    <input type="text" id="ipt_email">
+                    <div style="Display: flex;  justify-content: space-between;">
+                    <p class=titulo_configs>Senha</p>
+                        <p class=titulo_configs>*obrigatório</p>
+                    </div>
+                    <input type="text" id="ipt_senha">
+                    <div style="Display: flex;  justify-content: space-between;">
+                    <p class=titulo_configs>Confirmar senha</p>
+                        <p class=titulo_configs>*obrigatório</p>
+                    </div>
+                    <input type="text" id="ipt_confirmar_senha">
+                    <div style="Display: flex;  justify-content: space-between;">
+                    <p class=titulo_configs>Telefone</p>
+                        <p class=titulo_configs>*obrigatório</p>
+                    </div>
+                    <input type="text" id="ipt_telefone">
+                    <div style="Display: flex;  justify-content: space-between;">
+                    <p class=titulo_configs>Foto</p>
+                        <p class=titulo_configs>*obrigatório</p>
+                    </div>
+                    <input type="text" id="ipt_foto">
+                <button class=btn_configs_funcio>Editar</button>
+            </div>
+        `;
+    }
+    const container = document.getElementById("id_func_list");
+
+    function listarCargo() {
+        const select = document.getElementById("id_filter");
+
+        fetch("/usuarios/listarCargo")
+            .then(res => res.json())
+            .then(cargos => {
+                cargos.forEach(c => {
+                    const option = document.createElement("option");
+                    option.value = c.cargo;
+                    option.textContent = c.cargo;
+                    select.appendChild(option);
+                });
+            })
+            .catch(err => console.error("Erro ao carregar cargos:", err));
+    }
 
 
-                        for (let i = 0; i < resposta.length; i++) {
-                            const cargoIgual = filtro === "" || resposta[i].cargo.toLowerCase() === filtro;
-                            const pesquisaIgual =
-                                resposta[i].nome.toLowerCase().includes(pesquisa) ||
-                                resposta[i].email.toLowerCase().includes(pesquisa);
+    window.onload = () => {
+        listarCargo();
+        filtrar();
+    };
 
-                            if (resposta[i].sobrenome == null) {
-                                resposta[i].sobrenome = ""
-                            }
+    // filtra por cargo e pesquisa
+    function filtrar() {
+        const filtro = document.getElementById("id_filter").value.toLowerCase();
+        const pesquisa = document.getElementById("id_pesquisa").value.toLowerCase();
+        container.innerHTML = "";
+        fetch(`/usuarios/filtrar`).then(res => {
+            if (res.ok) {
+                res.json().then(resposta => {
 
-                            if (cargoIgual && pesquisaIgual) {
-                                const statusIcon = `<img class="iconStatus" src="../assets/funcionarios/eyeClosed.svg" alt="Offline">`;
 
-                                container.innerHTML += `
+                    for (let i = 0; i < resposta.length; i++) {
+                        const cargoIgual = filtro === "" || resposta[i].cargo.toLowerCase() === filtro;
+                        const pesquisaIgual =
+                            resposta[i].nome.toLowerCase().includes(pesquisa) ||
+                            resposta[i].email.toLowerCase().includes(pesquisa);
+
+                        if (resposta[i].sobrenome == null) {
+                            resposta[i].sobrenome = ""
+                        }
+
+                        if (cargoIgual && pesquisaIgual) {
+                            const statusIcon = `<img class="iconStatus" src="../assets/funcionarios/eyeClosed.svg" alt="Offline">`;
+
+                            container.innerHTML += `
                 <div class="funcionario-item">
                     <div class="funcFoto">
                         <img src="${resposta[i].foto_perfil}" alt="Foto">
@@ -181,17 +237,26 @@
                         ${statusIcon}
                     </div>
                 </div>`;
-                            }
                         }
+                    }
 
 
 
-                    })
-                }
-            })//fim fetch
+                })
+            }
+        })//fim fetch
+
+        function exibirEdicao() {
 
         }
-    </script>
-</body>
+        function sair_s() {
+            window.location.href = "./login.html";
+            sessionStorage.clear;
+        }
 
-</html>
+        function sair_n() {
+            id_sair.innerHTML = ``;
+        }
+
+    }
+</script>
