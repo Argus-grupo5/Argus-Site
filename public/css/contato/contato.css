@@ -1,120 +1,42 @@
-body {
-  background-color: #000;
+@import url('colors.css');
+
+.contato-form {
   width: 100%;
-  height: 100vh;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2vw;
+  background-color: var(--color-bg-input);
+  border-radius: 10px;
 }
 
-.containerDesktop {
+.contato-form label {
+  display: block;
+  margin-bottom: 0.5vw;
+  font-size: 1vw;
+}
+
+.contato-form input,
+.contato-form textarea {
   width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  padding: 0.8vw;
+  margin-bottom: 1vw;
+  border-radius: 5px;
+  border: none;
+  background-color: #1a1a1a;
+  color: var(--color-text-primary);
 }
 
-.containerDesktop .heroPage {
-  margin-top: 10.55vh;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
+.contato-form button {
+  background-color: var(--color-bg-card);
+  color: var(--color-text-secondary);
+  border: none;
+  padding: 1vw 2vw;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
 }
 
-.containerDesktop .heroPage h1 {
-  align-self: center;
-  font-size: 3.33vw;
-  font-weight: 400;
-}
-
-.containerDesktop .heroPage h1 span {
-  color: #FF6D4D;
-}
-
-
-.containerDesktop .heroPage .cards {
-  background-color: #FF6D4D;
-  width: 100%;
-  border-color: #000;
-  border-style: dashed none;
-  border-width: .5vw;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
-  align-items: center;
-}
-
-.containerDesktop .heroPage .cards .card {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin-block: 10vh;
-  height: 30vh;
-  width: 16vw;
-}
-
-.containerDesktop .heroPage .cards .card img {
-  width: 4vw;
-  height: 6vh;
-}
-
-.containerDesktop .heroPage .cards .card h2 {
-  font-size: 2.22vw;
-  font-weight: 600;
-  color: #000;
-}
-
-.containerDesktop .heroPage .cards .card p {
-  font-size: 1.11vw;
-  color: #000;
-}
-
-
-/* footer */
-.containerDesktop .footer {
-  width: 100%;
-  height: 15vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.containerDesktop .footer .links {
-  margin-top: 15vh;
-  width: 25vw;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-.containerDesktop .footer p {
-  font-size: 1.3vw;
-  font-weight: 400;
-}
-
-
-.containerDesktop .footer .links a {
-  font-size: 1.5vw;
-  font-weight: 400;
-  text-decoration: none;
-  position: relative;
-}
-
-/* Animações do footer */
-.containerDesktop .footer .links a::after {
-  content: '';
-  position: absolute;
-  width: 100%;
-  transform: scaleX(0);
-  height: .22vw;
-  bottom: 0;
-  left: 0;
-  background-color: #fff;
-  transition: transform 0.4s ease-out;
-  transform-origin: bottom center;
-}
-
-.containerDesktop .footer .links a:hover::after {
-  transform: scaleX(1);
-  transform-origin: bottom center;
+.contato-form button:hover {
+  background-color: var(--color-text-highlight);
+  color: var(--color-text-primary);
 }

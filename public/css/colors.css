@@ -1,0 +1,43 @@
+:root {
+  /* ================= Cores ================= */
+  --color-bg-body: #000000;
+  --color-bg-card: #FF6D4D;
+  --color-bg-footer: #FF6D4D;
+  --color-bg-navbar: #FF670A;
+  --color-bg-navbar-hover: #FFA794;
+  --color-bg-input: #313030;
+  --color-bg-input-hover: #4B4343;
+  --color-text-primary: #fff;
+  --color-text-secondary: #000;
+  --color-text-highlight: #FF6D4D;
+  --color-error: #ff4d4d;
+  --color-error-bg: #ffeaea;
+  --color-scroll-thumb-start: #FF6D4D;
+  --color-scroll-thumb-end: #ff0f46;
+
+  /* ================= Tipografia ================= */
+  --font-family: 'Cairo', sans-serif;
+  --font-size-title: 3.33vw;
+  --font-size-card-title: 2.22vw;
+  --font-size-card-text: 1.11vw;
+  --font-size-footer-link: 1.5vw;
+  --font-size-footer-text: 1.3vw;
+  --font-size-input: 1vw;
+
+  /* ================= Dimensões ================= */
+  --header-height: 10.55vh;
+  --footer-height: 15vh;
+  --hero-margin-top: 10.55vh;
+  --card-gap: 10vh;
+  --border-width: 0.5vw;
+
+  /* ================= Botões ================= */
+  --btn-border-radius: 40vw;
+  --btn-transition: 0.4s;
+
+  /* ================= Cards ================= */
+  --card-width: 16vw;
+  --card-height: 30vh;
+  --card-img-width: 4vw;
+  --card-img-height: 6vh;
+}
