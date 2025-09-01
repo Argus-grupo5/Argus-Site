@@ -52,6 +52,7 @@
 
 .funcName,
 .funcEmail,
+.funcStatusInfo,
 .funcStatus,
 .functel,
 .funcCargo,
@@ -113,4 +114,8 @@
   min-width: 15vw;
   font-size: 0.9vw;
   transition: .3s ease;
+}
+
+.buttons-edit{
+  width: 3vw;
 }

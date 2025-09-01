@@ -14,7 +14,7 @@
     <header class="desktopNav">
         <div class="navButtons">
             <div class="navButton tooltipNav" id="navUser">
-                <img src="../assets/dashboard/desktop/user.svg" alt="">
+                <img src="../assets/fotoPerfil/padrao.svg" alt="" id="FotoNavBar">
                 <span class="tooltiptextNav">
                     <div id="userNome"></div>
                     <div id="userCargo">ADM</div>
@@ -108,15 +108,15 @@
             <div class="functel">
                 Telefone
             </div>
-            <div class="funcStatus">
+            <div id="funcStatusInfo" class="funcStatusInfo">
                 Status
             </div>
 
         </div>
         <div class="func-list" id="id_func_list">
 
-            <!-- <div class="server-list" id="id_server_list"> -->
         </div>
+
     </div>
 
     <script>
@@ -149,6 +149,8 @@
             const filtro = document.getElementById("id_filter").value.toLowerCase();
             const pesquisa = document.getElementById("id_pesquisa").value.toLowerCase();
             container.innerHTML = "";
+            var contStatus = 0;
+
             fetch(`/usuarios/filtrar`).then(res => {
                 if (res.ok) {
                     res.json().then(resposta => {
@@ -165,22 +167,22 @@
                             }
 
                             if (cargoIgual && pesquisaIgual) {
+                                contStatus++;
                                 const statusIcon = `<img class="iconStatus" src="../assets/funcionarios/eyeClosed.svg" alt="Offline">`;
-
                                 container.innerHTML += `
-                <div class="funcionario-item">
-                    <div class="funcFoto">
-                        <img src="${resposta[i].foto_perfil}" alt="Foto">
-                    </div>
-                    <div class="funcName">${resposta[i].nome} ${resposta[i].sobrenome}</div>
-                    <div class="funcEmail">${resposta[i].email}</div>
-                    <div class="funcCargo">${resposta[i].cargo}</div>
-                    <div class="dtCadastro">${resposta[i].data_cadastro}</div>
-                    <div class="functel">${resposta[i].telefone}</div>
-                    <div class="funcStatus">
-                        ${statusIcon}
-                    </div>
-                </div>`;
+                                    <div id="funcItem" class="funcionario-item">
+                                        <div class="funcFoto">
+                                            <img src="${resposta[i].foto_perfil}" alt="Foto">
+                                        </div>
+                                        <div class="funcName">${resposta[i].nome} ${resposta[i].sobrenome}</div>
+                                        <div class="funcEmail">${resposta[i].email}</div>
+                                        <div class="funcCargo">${resposta[i].cargo}</div>
+                                        <div class="dtCadastro">${resposta[i].data_cadastro}</div>
+                                        <div class="functel">${resposta[i].telefone}</div>
+                                        <div id="status${contStatus}"class="funcStatus">
+                                            ${statusIcon}
+                                        </div>
+                                    </div>`;
                             }
                         }
 
@@ -190,6 +192,28 @@
                 }
             })//fim fetch
 
+        }
+
+        function exibirEdicao() {
+
+           var funcStatus = document.getElementById("funcStatusInfo")
+
+           funcStatus.innerHTML = `<img  class= "buttons-edit" src="../assets/funcionarios/editGreen.svg" alt="">`;
+
+           var elementosStatus = document.getElementById("id_func_list");
+
+           for(var contador = 1; contador <= elementosStatus.children.length; contador++){
+
+            var statusInfo = document.getElementById(`status${contador}`);
+
+            statusInfo.innerHTML = `
+            <img class= "buttons-edit" src="../assets/funcionarios/editYellow.svg" alt="Editar">
+            <img class= "buttons-edit" src="../assets/funcionarios/iconDelete.svg" alt="Deletar">
+            
+            `;
+
+           }
+           
         }
     </script>
 </body>
