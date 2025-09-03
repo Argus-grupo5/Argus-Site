@@ -78,8 +78,8 @@
                 </div>
             </div>
 
-            <div class="editContainer">
-                <img class="iconLapis" src="../assets/funcionarios/lapis.svg" alt="" >
+            <div class="editContainer" onclick="exibirEdicao()">
+                <img class="iconLapis" src="../assets/funcionarios/lapis.svg" alt="Editar" >
                 <!-- <span class="tooltiptextInfo">Editar</span> -->
 
             </div>
@@ -121,20 +121,21 @@
         </div>
     </div>
 </body>
+
 </html>
 <script>
 
-    function editar_user(){
+    function editar_user() {
         fetch("/usuarios/editar")
             .then(res => res.json()).then(cargos => {
-                    cargos.forEach(c => {
-                        const option = document.createElement("option");
-                        option.value = c.cargo;
-                        option.textContent = c.cargo;
-                        select.appendChild(option);
-                    });
-                })
-                .catch(err => console.error("Erro ao carregar cargos:", err));
+                cargos.forEach(c => {
+                    const option = document.createElement("option");
+                    option.value = c.cargo;
+                    option.textContent = c.cargo;
+                    select.appendChild(option);
+                });
+            })
+            .catch(err => console.error("Erro ao carregar cargos:", err));
     }
     const container = document.getElementById("id_func_list");
 
@@ -160,15 +161,15 @@
         filtrar();
     };
 
-        // filtra por cargo e pesquisa
-        function filtrar() {
-            const filtro = document.getElementById("id_filter").value.toLowerCase();
-            const pesquisa = document.getElementById("id_pesquisa").value.toLowerCase();
-            container.innerHTML = "";
-            var contStatus = 0;
-            fetch(`/usuarios/filtrar`).then(res => {
-                if (res.ok) {
-                    res.json().then(resposta => {
+    // filtra por cargo e pesquisa
+    function filtrar() {
+        const filtro = document.getElementById("id_filter").value.toLowerCase();
+        const pesquisa = document.getElementById("id_pesquisa").value.toLowerCase();
+        container.innerHTML = "";
+        var contStatus = 0;
+        fetch(`/usuarios/filtrar`).then(res => {
+            if (res.ok) {
+                res.json().then(resposta => {
 
 
                     for (let i = 0; i < resposta.length; i++) {
@@ -181,11 +182,11 @@
                             resposta[i].sobrenome = ""
                         }
 
-                            if (cargoIgual && pesquisaIgual) {
-                                contStatus++;
-                                const statusIcon = `<img class="iconStatus" src="../assets/funcionarios/eyeClosed.svg" alt="Offline">`;
+                        if (cargoIgual && pesquisaIgual) {
+                            contStatus++;
+                            const statusIcon = `<img class="iconStatus" src="../assets/funcionarios/eyeClosed.svg" alt="Offline">`;
 
-                                container.innerHTML += `
+                            container.innerHTML += `
                 <div class="funcionario-item" id="funcItem">
                     <div class="funcFoto">
                         <img src="${resposta[i].foto_perfil}" alt="Foto">
@@ -199,35 +200,35 @@
                         ${statusIcon}
                     </div>
                 </div>`;
-                            }
                         }
+                    }
 
 
 
-                    })
-                }
-            })//fim fetch
+                })
+            }
+        })//fim fetch
+    }
 
-             function exibirEdicao() {
+    function exibirEdicao() {
 
-           var funcStatus = document.getElementById("funcStatusInfo")
+        var funcStatus = document.getElementById("funcStatusInfo")
 
-           funcStatus.innerHTML = `<img  class= "buttons-edit" src="../assets/funcionarios/editGreen.svg" alt="">`;
+        funcStatus.innerHTML = `<img  class= "buttons-edit" src="../assets/funcionarios/editGreen.svg" alt="">`;
 
-           var elementosStatus = document.getElementById("id_func_list");
+        var elementosStatus = document.getElementById("id_func_list");
 
-           for(var contador = 1; contador <= elementosStatus.children.length; contador++){
+        for (var contador = 1; contador <= elementosStatus.children.length; contador++) {
 
             var statusInfo = document.getElementById(`status${contador}`);
 
             statusInfo.innerHTML = `
-            <img class= "buttons-edit" src="../assets/funcionarios/editYellow.svg" alt="Editar">
-            <img class= "buttons-edit" src="../assets/funcionarios/iconDelete.svg" alt="Deletar">
-            
-            `;
-
-           }
+                <img class= "buttons-edit" src="../assets/funcionarios/editYellow.svg" alt="Editar">
+                <img class= "buttons-edit" src="../assets/funcionarios/iconDelete.svg" alt="Deletar">
+                
+                `;
 
         }
+
     }
-    </script>
+</script>
