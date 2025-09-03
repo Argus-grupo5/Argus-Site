@@ -143,5 +143,6 @@
 }
 
 .buttons-edit{
-  width: 3vw;
+  width: 2vw;
+  cursor: pointer;
 }
