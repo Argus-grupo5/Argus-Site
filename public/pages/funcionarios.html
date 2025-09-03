@@ -78,7 +78,7 @@
                 </div>
             </div>
 
-            <div class="editContainer" onclick="pop_up()">
+            <div class="editContainer" onclick="exibirEdicao()">
                 <img class="iconLapis" src="../assets/funcionarios/lapis.svg" alt="Editar">
                 <!-- <span class="tooltiptextInfo">Editar</span> -->
 
@@ -122,11 +122,11 @@
     </div>
 </body>
 
-    <script>
-        let edit = false;
-        let funcionariosLista;
+<script>
+    let edit = false;
+    let funcionariosLista;
 
-        const container = document.getElementById("id_func_list");
+    const container = document.getElementById("id_func_list");
 
     function listarCargo() {
         const select = document.getElementById("id_filter");
@@ -145,38 +145,38 @@
     }
 
 
-        window.onload = () => {
-            listarCargo();
-            fetch(`/usuarios/filtrar`).then(res => {
-                if (res.ok) {
-                    res.json().then(resposta => {
-                        funcionariosLista = resposta;
-                        filtrarFuncionarios();
-                    })
-                }
-            })//fim fetch
-        };
+    window.onload = () => {
+        listarCargo();
+        fetch(`/usuarios/filtrar`).then(res => {
+            if (res.ok) {
+                res.json().then(resposta => {
+                    funcionariosLista = resposta;
+                    filtrarFuncionarios();
+                })
+            }
+        })//fim fetch
+    };
 
-        function filtrarFuncionarios() {
-            const filtro = document.getElementById("id_filter").value.toLowerCase();
-            const pesquisa = document.getElementById("id_pesquisa").value.toLowerCase();
-            container.innerHTML = "";
-            var contStatus = 0;
+    function filtrarFuncionarios() {
+        const filtro = document.getElementById("id_filter").value.toLowerCase();
+        const pesquisa = document.getElementById("id_pesquisa").value.toLowerCase();
+        container.innerHTML = "";
+        var contStatus = 0;
 
-            for (let i = 0; i < funcionariosLista.length; i++) {
-                const cargoIgual = filtro === "" || funcionariosLista[i].cargo.toLowerCase() === filtro;
-                const pesquisaIgual =
-                    funcionariosLista[i].nome.toLowerCase().includes(pesquisa) ||
-                    funcionariosLista[i].email.toLowerCase().includes(pesquisa);
+        for (let i = 0; i < funcionariosLista.length; i++) {
+            const cargoIgual = filtro === "" || funcionariosLista[i].cargo.toLowerCase() === filtro;
+            const pesquisaIgual =
+                funcionariosLista[i].nome.toLowerCase().includes(pesquisa) ||
+                funcionariosLista[i].email.toLowerCase().includes(pesquisa);
 
-                if (funcionariosLista[i].sobrenome == null) {
-                    funcionariosLista[i].sobrenome = ""
-                }
+            if (funcionariosLista[i].sobrenome == null) {
+                funcionariosLista[i].sobrenome = ""
+            }
 
-                if (cargoIgual && pesquisaIgual) {
-                    contStatus++;
-                    const statusIcon = `<img class="iconStatus" src="../assets/funcionarios/eyeClosed.svg" alt="Offline">`;
-                    container.innerHTML += `
+            if (cargoIgual && pesquisaIgual) {
+                contStatus++;
+                const statusIcon = `<img class="iconStatus" src="../assets/funcionarios/eyeClosed.svg" alt="Offline">`;
+                container.innerHTML += `
                                     <div id="funcItem" class="funcionario-item">
                                         <div class="funcFoto">
                                             <img src="${funcionariosLista[i].foto_perfil}" alt="Foto">
@@ -190,35 +190,153 @@
                                             ${statusIcon}
                                         </div>
                                     </div>`;
-                }
-            }
-            if (edit) {
-                exibirEdicao();
             }
         }
+        if (edit) {
+            exibirEdicao();
+        }
+    }
 
-        function exibirEdicao() {
-            edit = true;
-            var funcStatus = document.getElementById("funcStatusInfo")
+    function exibirEdicao() {
+        edit = true;
+        var funcStatus = document.getElementById("funcStatusInfo")
 
-            funcStatus.innerHTML = `<img  class= "buttons-edit" src="../assets/funcionarios/editGreen.svg" alt="">`;
+        funcStatus.innerHTML = `<img  class= "buttons-edit" src="../assets/funcionarios/editGreen.svg" alt="" onclick="pop_up_adicionar()">`;
 
-            var elementosStatus = document.getElementById("id_func_list");
+        var elementosStatus = document.getElementById("id_func_list");
 
-            for (var contador = 1; contador <= elementosStatus.children.length; contador++) {
+        for (var contador = 1; contador <= elementosStatus.children.length; contador++) {
 
-                var statusInfo = document.getElementById(`status${contador}`);
+            var statusInfo = document.getElementById(`status${contador}`);
 
-                statusInfo.innerHTML = `
-            <img class= "buttons-edit" src="../assets/funcionarios/editYellow.svg" alt="Editar">
-            <img class= "buttons-edit" src="../assets/funcionarios/iconDelete.svg" alt="Deletar">
+            statusInfo.innerHTML = `
+            <img class= "buttons-edit" src="../assets/funcionarios/editYellow.svg" alt="Editar" onclick="pop_up_editar()">
+            <img class= "buttons-edit" src="../assets/funcionarios/iconDelete.svg" alt="Deletar" onclick="pop_up_excluir()">
             
             `;
 
-            }
-
         }
-    </script>
+
+    }
+    function pop_up_adicionar() {
+        config_funcionarios.innerHTML = `
+            <div class="popup_configs">
+                <h1>Editar Usuário</h1>
+                    <div style="Display: flex;  justify-content: space-between;">
+                        <div>
+                            <p class=titulo_configs>Nome</p>
+                        </div>
+                        <div>
+                            <p class=titulo_configs>*obrigatório</p>
+                        </div>
+                    </div>
+                    <input type="text" id="ipt_nome">
+                    <div style="Display: flex;  justify-content: space-between;">
+                    <p class=titulo_configs>Sobrenome</p>
+                    <p class=titulo_configs>*obrigatório</p>
+                    </div>
+                    <input type="text" id="ipt_sobrenome">
+                    <div style="Display: flex;  justify-content: space-between;">
+                    <p class=titulo_configs>Cargo</p>
+                        <p class=titulo_configs>*obrigatório</p>
+                    </div>
+                    <input type="text" id="ipt_cargo">
+                    <div style="Display: flex;  justify-content: space-between;">
+                    <p class=titulo_configs>Email</p>
+                        <p class=titulo_configs>*obrigatório</p>
+                    </div>
+                    <input type="text" id="ipt_email">
+                    <div style="Display: flex;  justify-content: space-between;">
+                    <p class=titulo_configs>Senha</p>
+                        <p class=titulo_configs>*obrigatório</p>
+                    </div>
+                    <input type="text" id="ipt_senha">
+                    <div style="Display: flex;  justify-content: space-between;">
+                    <p class=titulo_configs>Confirmar senha</p>
+                        <p class=titulo_configs>*obrigatório</p>
+                    </div>
+                    <input type="text" id="ipt_confirmar_senha">
+                    <div style="Display: flex;  justify-content: space-between;">
+                    <p class=titulo_configs>Telefone</p>
+                        <p class=titulo_configs>*obrigatório</p>
+                    </div>
+                    <input type="text" id="ipt_telefone">
+                    <div style="Display: flex;  justify-content: space-between;">
+                    <p class=titulo_configs>Foto</p>
+                        <p class=titulo_configs>*obrigatório</p>
+                    </div>
+                    <input type="text" id="ipt_foto">
+                <button class=btn_configs_funcio>Criar</button>
+                <div onclick="fechar_popup()" class="btnFecharPopup">Fechar</div>
+            </div>
+        `;
+    }
+    function pop_up_editar() {
+        config_funcionarios.innerHTML = `
+            <div class="popup_configs">
+                <h1>Editar Usuário</h1>
+                    <div style="Display: flex;  justify-content: space-between;">
+                        <div>
+                            <p class=titulo_configs>Nome</p>
+                        </div>
+                        <div>
+                            <p class=titulo_configs>*obrigatório</p>
+                        </div>
+                    </div>
+                    <input type="text" id="ipt_nome">
+                    <div style="Display: flex;  justify-content: space-between;">
+                    <p class=titulo_configs>Sobrenome</p>
+                    <p class=titulo_configs>*obrigatório</p>
+                    </div>
+                    <input type="text" id="ipt_sobrenome">
+                    <div style="Display: flex;  justify-content: space-between;">
+                    <p class=titulo_configs>Cargo</p>
+                        <p class=titulo_configs>*obrigatório</p>
+                    </div>
+                    <input type="text" id="ipt_cargo">
+                    <div style="Display: flex;  justify-content: space-between;">
+                    <p class=titulo_configs>Email</p>
+                        <p class=titulo_configs>*obrigatório</p>
+                    </div>
+                    <input type="text" id="ipt_email">
+                    <div style="Display: flex;  justify-content: space-between;">
+                    <p class=titulo_configs>Senha</p>
+                        <p class=titulo_configs>*obrigatório</p>
+                    </div>
+                    <input type="text" id="ipt_senha">
+                    <div style="Display: flex;  justify-content: space-between;">
+                    <p class=titulo_configs>Confirmar senha</p>
+                        <p class=titulo_configs>*obrigatório</p>
+                    </div>
+                    <input type="text" id="ipt_confirmar_senha">
+                    <div style="Display: flex;  justify-content: space-between;">
+                    <p class=titulo_configs>Telefone</p>
+                        <p class=titulo_configs>*obrigatório</p>
+                    </div>
+                    <input type="text" id="ipt_telefone">
+                    <div style="Display: flex;  justify-content: space-between;">
+                    <p class=titulo_configs>Foto</p>
+                        <p class=titulo_configs>*obrigatório</p>
+                    </div>
+                    <input type="text" id="ipt_foto">
+                <button class=btn_configs_funcio>Editar</button>
+                <div onclick="fechar_popup()" class="btnFecharPopup">Fechar</div>
+            </div>
+        `;
+    }
+    function pop_up_excluir() {
+        config_funcionarios.innerHTML = `
+            <div class="popup_configs">
+                <button class=btn_configs_funcio>Excluir</button>
+                <div onclick="fechar_popup()" class="btnFecharPopup">Fechar</div>
+            </div>
+        `;
+    }
+
+    function fechar_popup() {
+        config_funcionarios.innerHTML = '';
+    }
+</script>
 </body>
 
 </html>
