@@ -13,6 +13,8 @@
 <body>
     <div id="config_funcionarios">
     </div>
+    <div id="id_sair">
+    </div>
     <header class="desktopNav">
         <div class="navButtons">
             <div class="navButton tooltipNav" id="navUser">
@@ -77,8 +79,8 @@
             </div>
 
             <div class="editContainer">
-                <img class="iconLapis" src="../assets/funcionarios/lapis.svg" alt="" onclick="exibirEdicao()">
-                <span class="tooltiptextInfo">Editar </span>
+                <img class="iconLapis" src="../assets/funcionarios/lapis.svg" alt="" >
+                <!-- <span class="tooltiptextInfo">Editar</span> -->
 
             </div>
     </header>
@@ -128,53 +130,57 @@
         config_funcionarios.innerHTML = `
             <div class="popup_configs">
                 <h1>Editar Usuário</h1>
-                    <div style="Display: flex;  justify-content: space-between;">
-                        <div>
-                            <p class=titulo_configs>Nome</p>
-                        </div>
-                        <div>
-                            <p class=titulo_configs>*obrigatório</p>
-                        </div>
+                <div style="Display: flex;  justify-content: space-between;">
+                    <div>
+                        <p class=titulo_configs>Nome</p>
                     </div>
-                    <input type="text" id="ipt_nome">
-                    <div style="Display: flex;  justify-content: space-between;">
+                    <div>
+                        <p class=titulo_configs>*obrigatório</p>
+                    </div>
+                </div>
+                <input type="text" id="ipt_nome">
+                <div style="Display: flex;  justify-content: space-between;">
                     <p class=titulo_configs>Sobrenome</p>
                     <p class=titulo_configs>*obrigatório</p>
-                    </div>
-                    <input type="text" id="ipt_sobrenome">
-                    <div style="Display: flex;  justify-content: space-between;">
+                </div>
+                <input type="text" id="ipt_sobrenome">
+                <div style="Display: flex;  justify-content: space-between;">
                     <p class=titulo_configs>Cargo</p>
-                        <p class=titulo_configs>*obrigatório</p>
-                    </div>
-                    <input type="text" id="ipt_cargo">
-                    <div style="Display: flex;  justify-content: space-between;">
+                    <p class=titulo_configs>*obrigatório</p>
+                </div>
+                <input type="text" id="ipt_cargo">
+                <div style="Display: flex;  justify-content: space-between;">
                     <p class=titulo_configs>Email</p>
-                        <p class=titulo_configs>*obrigatório</p>
-                    </div>
-                    <input type="text" id="ipt_email">
-                    <div style="Display: flex;  justify-content: space-between;">
+                    <p class=titulo_configs>*obrigatório</p>
+                </div>
+                <input type="text" id="ipt_email">
+                <div style="Display: flex;  justify-content: space-between;">
                     <p class=titulo_configs>Senha</p>
-                        <p class=titulo_configs>*obrigatório</p>
-                    </div>
-                    <input type="text" id="ipt_senha">
-                    <div style="Display: flex;  justify-content: space-between;">
+                    <p class=titulo_configs>*obrigatório</p>
+                </div>
+                <input type="text" id="ipt_senha">
+                <div style="Display: flex;  justify-content: space-between;">
                     <p class=titulo_configs>Confirmar senha</p>
-                        <p class=titulo_configs>*obrigatório</p>
-                    </div>
-                    <input type="text" id="ipt_confirmar_senha">
-                    <div style="Display: flex;  justify-content: space-between;">
+                    <p class=titulo_configs>*obrigatório</p>
+                </div>
+                <input type="text" id="ipt_confirmar_senha">
+                <div style="Display: flex;  justify-content: space-between;">
                     <p class=titulo_configs>Telefone</p>
-                        <p class=titulo_configs>*obrigatório</p>
-                    </div>
-                    <input type="text" id="ipt_telefone">
-                    <div style="Display: flex;  justify-content: space-between;">
+                    <p class=titulo_configs>*obrigatório</p>
+                </div>
+                <input type="text" id="ipt_telefone">
+                <div style="Display: flex;  justify-content: space-between;">
                     <p class=titulo_configs>Foto</p>
-                        <p class=titulo_configs>*obrigatório</p>
-                    </div>
-                    <input type="text" id="ipt_foto">
-                <button class=btn_configs_funcio>Editar</button>
+                    <p class=titulo_configs>*obrigatório</p>
+                </div>
+                <input type="text" id="ipt_foto">
+                <button class=btn_configs_funcio onclick="editar_user()">Editar</button>
             </div>
         `;
+    }
+
+    function editar_user(){
+        fetch("/usuarios/")
     }
     const container = document.getElementById("id_func_list");
 
@@ -245,18 +251,29 @@
                 })
             }
         })//fim fetch
-
-        function exibirEdicao() {
-
-        }
-        function sair_s() {
-            window.location.href = "./login.html";
-            sessionStorage.clear;
-        }
-
-        function sair_n() {
-            id_sair.innerHTML = ``;
-        }
-
     }
+
+    
+    function sair() {
+        id_sair.innerHTML = `
+        
+            <div class="popup_sair">
+                <h1>Deseja sair?</h1>
+                <button onclick="sair_s()">Sim</button>
+                <button onclick="sair_n()">Não</button>
+            </div>
+        `;
+    }
+    function sair_s() {
+        window.location.href = "./login.html";
+        sessionStorage.clear;
+    }
+
+    function sair_n() {
+        id_sair.innerHTML = ``;
+    }
+    userNome.innerHTML = sessionStorage.USER_NAME;
+    userCargo.innerHTML = sessionStorage.CARGO_CARGO;
+
+    // Funcão editando usuário
 </script>

@@ -63,6 +63,36 @@ function autenticar(req, res) {
     }
 
 }
+function editar(req, res){
+    var email = req.body.emailServer;
+    var senha = req.body.senhaServer;
+    if (nome == undefined) {
+        res.status(400).send("Seu nome está undefined!");
+    } else if (telefone == undefined) {
+        res.status(400).send("Seu telefone está undefined!");
+    } else if (email == undefined) {
+        res.status(400).send("Seu email está undefined!");
+    }else {
+        usuarioModel.editar(email, senha)
+
+            .then(
+                function (resultado) {
+                    res.json(resultado);
+                }
+            ).catch(
+                function (erro) {
+                    console.log(erro);
+                    console.log(
+                        "\nHouve um erro ao realizar o cadastro! Erro: ",
+                        erro.sqlMessage
+                    );
+                    res.status(500).json(erro.sqlMessage);
+                }
+            );
+    }
+    
+    
+}
 
 function cadastrarEndereco(req, res) {
     // Crie uma variável que vá recuperar os valores do arquivo cadastro.html
@@ -182,6 +212,7 @@ function listarCargo(req, res) {
 
 module.exports = {
     autenticar,
+    editar,
     cadastrarEndereco,
     cadastrarEmpresa,
     filtrar,
