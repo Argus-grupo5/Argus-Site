@@ -82,10 +82,10 @@
     </header>
 
     <div class="search">
-        <select id="id_filter" onchange="filtrar()">
+        <select id="id_filter" onchange="filtrarFuncionarios()">
             <option value="" selected>Todos</option>
         </select>
-        <input type="search" id="id_pesquisa" placeholder="Pesquisar funcionário" oninput="filtrar()">
+        <input type="search" id="id_pesquisa" placeholder="Pesquisar funcionário" oninput="filtrarFuncionarios()">
     </div>
 
     <div class="containerFunc">
@@ -120,6 +120,9 @@
     </div>
 
     <script>
+        let edit = false;
+        let funcionariosLista;
+
         const container = document.getElementById("id_func_list");
 
         function listarCargo() {
@@ -141,79 +144,76 @@
 
         window.onload = () => {
             listarCargo();
-            filtrar();
+            fetch(`/usuarios/filtrar`).then(res => {
+                if (res.ok) {
+                    res.json().then(resposta => {
+                        funcionariosLista = resposta;
+                        filtrarFuncionarios();
+                    })
+                }
+            })//fim fetch
         };
 
-        // filtra por cargo e pesquisa
-        function filtrar() {
+        function filtrarFuncionarios() {
             const filtro = document.getElementById("id_filter").value.toLowerCase();
             const pesquisa = document.getElementById("id_pesquisa").value.toLowerCase();
             container.innerHTML = "";
             var contStatus = 0;
 
-            fetch(`/usuarios/filtrar`).then(res => {
-                if (res.ok) {
-                    res.json().then(resposta => {
+            for (let i = 0; i < funcionariosLista.length; i++) {
+                const cargoIgual = filtro === "" || funcionariosLista[i].cargo.toLowerCase() === filtro;
+                const pesquisaIgual =
+                    funcionariosLista[i].nome.toLowerCase().includes(pesquisa) ||
+                    funcionariosLista[i].email.toLowerCase().includes(pesquisa);
 
+                if (funcionariosLista[i].sobrenome == null) {
+                    funcionariosLista[i].sobrenome = ""
+                }
 
-                        for (let i = 0; i < resposta.length; i++) {
-                            const cargoIgual = filtro === "" || resposta[i].cargo.toLowerCase() === filtro;
-                            const pesquisaIgual =
-                                resposta[i].nome.toLowerCase().includes(pesquisa) ||
-                                resposta[i].email.toLowerCase().includes(pesquisa);
-
-                            if (resposta[i].sobrenome == null) {
-                                resposta[i].sobrenome = ""
-                            }
-
-                            if (cargoIgual && pesquisaIgual) {
-                                contStatus++;
-                                const statusIcon = `<img class="iconStatus" src="../assets/funcionarios/eyeClosed.svg" alt="Offline">`;
-                                container.innerHTML += `
+                if (cargoIgual && pesquisaIgual) {
+                    contStatus++;
+                    const statusIcon = `<img class="iconStatus" src="../assets/funcionarios/eyeClosed.svg" alt="Offline">`;
+                    container.innerHTML += `
                                     <div id="funcItem" class="funcionario-item">
                                         <div class="funcFoto">
-                                            <img src="${resposta[i].foto_perfil}" alt="Foto">
+                                            <img src="${funcionariosLista[i].foto_perfil}" alt="Foto">
                                         </div>
-                                        <div class="funcName">${resposta[i].nome} ${resposta[i].sobrenome}</div>
-                                        <div class="funcEmail">${resposta[i].email}</div>
-                                        <div class="funcCargo">${resposta[i].cargo}</div>
-                                        <div class="dtCadastro">${resposta[i].data_cadastro}</div>
-                                        <div class="functel">${resposta[i].telefone}</div>
+                                        <div class="funcName">${funcionariosLista[i].nome} ${funcionariosLista[i].sobrenome}</div>
+                                        <div class="funcEmail">${funcionariosLista[i].email}</div>
+                                        <div class="funcCargo">${funcionariosLista[i].cargo}</div>
+                                        <div class="dtCadastro">${funcionariosLista[i].data_cadastro}</div>
+                                        <div class="functel">${funcionariosLista[i].telefone}</div>
                                         <div id="status${contStatus}"class="funcStatus">
                                             ${statusIcon}
                                         </div>
                                     </div>`;
-                            }
-                        }
-
-
-
-                    })
                 }
-            })//fim fetch
-
+            }
+            if (edit) {
+                exibirEdicao();
+            }
         }
 
         function exibirEdicao() {
+            edit = true;
+            var funcStatus = document.getElementById("funcStatusInfo")
 
-           var funcStatus = document.getElementById("funcStatusInfo")
+            funcStatus.innerHTML = `<img  class= "buttons-edit" src="../assets/funcionarios/editGreen.svg" alt="">`;
 
-           funcStatus.innerHTML = `<img  class= "buttons-edit" src="../assets/funcionarios/editGreen.svg" alt="">`;
+            var elementosStatus = document.getElementById("id_func_list");
 
-           var elementosStatus = document.getElementById("id_func_list");
+            for (var contador = 1; contador <= elementosStatus.children.length; contador++) {
 
-           for(var contador = 1; contador <= elementosStatus.children.length; contador++){
+                var statusInfo = document.getElementById(`status${contador}`);
 
-            var statusInfo = document.getElementById(`status${contador}`);
-
-            statusInfo.innerHTML = `
+                statusInfo.innerHTML = `
             <img class= "buttons-edit" src="../assets/funcionarios/editYellow.svg" alt="Editar">
             <img class= "buttons-edit" src="../assets/funcionarios/iconDelete.svg" alt="Deletar">
             
             `;
 
-           }
-           
+            }
+
         }
     </script>
 </body>
