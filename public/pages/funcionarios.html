@@ -125,6 +125,116 @@
 </html>
 <script>
 
+    const container = document.getElementById("id_func_list");
+    
+    function listarCargo() {
+        const select = document.getElementById("id_filter");
+        
+        fetch("/usuarios/listarCargo")
+        .then(res => res.json())
+        .then(cargos => {
+                cargos.forEach(c => {
+                    const option = document.createElement("option");
+                    option.value = c.cargo;
+                    option.textContent = c.cargo;
+                    select.appendChild(option);
+                });
+            })
+            .catch(err => console.error("Erro ao carregar cargos:", err));
+        }
+
+
+        window.onload = () => {
+            listarCargo();
+        filtrar();
+    };
+    
+    // filtra por cargo e pesquisa
+    var contStatus = 0;
+    function filtrar() {
+        const filtro = document.getElementById("id_filter").value.toLowerCase();
+        const pesquisa = document.getElementById("id_pesquisa").value.toLowerCase();
+        container.innerHTML = "";
+        fetch(`/usuarios/filtrar`).then(res => {
+            if (res.ok) {
+                res.json().then(resposta => {
+                    
+                    
+                    for (let i = 0; i < resposta.length; i++) {
+                        const cargoIgual = filtro === "" || resposta[i].cargo.toLowerCase() === filtro;
+                        const pesquisaIgual =
+                        resposta[i].nome.toLowerCase().includes(pesquisa) ||
+                        resposta[i].email.toLowerCase().includes(pesquisa);
+
+                        if (resposta[i].sobrenome == null) {
+                            resposta[i].sobrenome = ""
+                        }
+
+                        if (cargoIgual && pesquisaIgual) {
+                            contStatus++;
+                            const statusIcon = `<img class="iconStatus" src="../assets/funcionarios/eyeClosed.svg" alt="Offline">`;
+                            
+                            container.innerHTML += `
+                <div class="funcionario-item" id="funcItem">
+                        <div class="funcFoto">
+                            <img src="${resposta[i].foto_perfil}" alt="Foto">
+                        </div>
+                        <div class="funcName">${resposta[i].nome} ${resposta[i].sobrenome}
+                        </div>
+                        <div class="funcEmail">${resposta[i].email}
+                        </div>
+                        <div class="funcCargo">${resposta[i].cargo}
+                        </div>
+                        <div class="dtCadastro">${resposta[i].data_cadastro}
+                        </div>
+                        <div class="functel">${resposta[i].telefone}
+                        </div>
+                        <div class="funcStatus">
+                        ${statusIcon}
+                        </div>
+                    </div>`;
+                    }
+                    }
+                    
+                    
+                    
+                })
+            }
+        })//fim fetch
+    }
+    
+    function exibirEdicao() {
+        // Titulo Status
+        var funcStatus = document.getElementById("funcStatusInfo")
+        
+        funcStatus.innerHTML = `<img  class= "buttons-edit" src="../assets/funcionarios/editGreen.svg" alt="" onclick="adicionar_user()">`;
+        
+        var elementosStatus = document.getElementById("id_func_list");
+        var statusInfo = document.getElementById(`status`);
+        // console.log(contStatus)
+        for (var contador = 1; contador <= elementosStatus.children.length; contador++) {
+            // statusInfo = document.getElementById(`status${contador}`);
+            
+            // Coloquei o mesmo id do icon do olho para ver se mudava alguma coisa. Porém 
+            // o problema é o statusInfo chegando null
+            statusInfo = document.getElementById(`iconStatus`);
+            if(statusInfo == null){
+                alert("Deu erro")
+                console.log(statusInfo)
+            }
+            // statusInfo.innerHTML = `
+            // <img class= "buttons-edit" src="../assets/funcionarios/editYellow.svg" alt="Editar" onclick="editar_user()">
+            // <img class= "buttons-edit" src="../assets/funcionarios/iconDelete.svg" alt="Deletar" onclick="deletar_user()">
+            // `;
+            
+        }
+        
+    }
+    function adicionar_user(){
+        
+    }
+
+    // Arrumar o fetch
     function editar_user() {
         fetch("/usuarios/editar")
             .then(res => res.json()).then(cargos => {
@@ -137,98 +247,8 @@
             })
             .catch(err => console.error("Erro ao carregar cargos:", err));
     }
-    const container = document.getElementById("id_func_list");
 
-    function listarCargo() {
-        const select = document.getElementById("id_filter");
-
-        fetch("/usuarios/listarCargo")
-            .then(res => res.json())
-            .then(cargos => {
-                cargos.forEach(c => {
-                    const option = document.createElement("option");
-                    option.value = c.cargo;
-                    option.textContent = c.cargo;
-                    select.appendChild(option);
-                });
-            })
-            .catch(err => console.error("Erro ao carregar cargos:", err));
-    }
-
-
-    window.onload = () => {
-        listarCargo();
-        filtrar();
-    };
-
-    // filtra por cargo e pesquisa
-    function filtrar() {
-        const filtro = document.getElementById("id_filter").value.toLowerCase();
-        const pesquisa = document.getElementById("id_pesquisa").value.toLowerCase();
-        container.innerHTML = "";
-        var contStatus = 0;
-        fetch(`/usuarios/filtrar`).then(res => {
-            if (res.ok) {
-                res.json().then(resposta => {
-
-
-                    for (let i = 0; i < resposta.length; i++) {
-                        const cargoIgual = filtro === "" || resposta[i].cargo.toLowerCase() === filtro;
-                        const pesquisaIgual =
-                            resposta[i].nome.toLowerCase().includes(pesquisa) ||
-                            resposta[i].email.toLowerCase().includes(pesquisa);
-
-                        if (resposta[i].sobrenome == null) {
-                            resposta[i].sobrenome = ""
-                        }
-
-                        if (cargoIgual && pesquisaIgual) {
-                            contStatus++;
-                            const statusIcon = `<img class="iconStatus" src="../assets/funcionarios/eyeClosed.svg" alt="Offline">`;
-
-                            container.innerHTML += `
-                <div class="funcionario-item" id="funcItem">
-                    <div class="funcFoto">
-                        <img src="${resposta[i].foto_perfil}" alt="Foto">
-                    </div>
-                    <div class="funcName">${resposta[i].nome} ${resposta[i].sobrenome}</div>
-                    <div class="funcEmail">${resposta[i].email}</div>
-                    <div class="funcCargo">${resposta[i].cargo}</div>
-                    <div class="dtCadastro">${resposta[i].data_cadastro}</div>
-                    <div class="functel">${resposta[i].telefone}</div>
-                    <div class="funcStatus">
-                        ${statusIcon}
-                    </div>
-                </div>`;
-                        }
-                    }
-
-
-
-                })
-            }
-        })//fim fetch
-    }
-
-    function exibirEdicao() {
-
-        var funcStatus = document.getElementById("funcStatusInfo")
-
-        funcStatus.innerHTML = `<img  class= "buttons-edit" src="../assets/funcionarios/editGreen.svg" alt="">`;
-
-        var elementosStatus = document.getElementById("id_func_list");
-
-        for (var contador = 1; contador <= elementosStatus.children.length; contador++) {
-
-            var statusInfo = document.getElementById(`status${contador}`);
-
-            statusInfo.innerHTML = `
-                <img class= "buttons-edit" src="../assets/funcionarios/editYellow.svg" alt="Editar">
-                <img class= "buttons-edit" src="../assets/funcionarios/iconDelete.svg" alt="Deletar">
-                
-                `;
-
-        }
+    function deletar_user(){
 
     }
 </script>
