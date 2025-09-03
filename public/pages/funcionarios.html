@@ -125,7 +125,16 @@
 <script>
 
     function editar_user(){
-        fetch("/usuarios/")
+        fetch("/usuarios/editar")
+            .then(res => res.json()).then(cargos => {
+                    cargos.forEach(c => {
+                        const option = document.createElement("option");
+                        option.value = c.cargo;
+                        option.textContent = c.cargo;
+                        select.appendChild(option);
+                    });
+                })
+                .catch(err => console.error("Erro ao carregar cargos:", err));
     }
     const container = document.getElementById("id_func_list");
 
