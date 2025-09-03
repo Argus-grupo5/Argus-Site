@@ -75,7 +75,7 @@
             </div>
         </div>
 
-        <div class="editContainer">
+        <div id="editContainer" class="editContainer">
             <img class="iconLapis" src="../assets/funcionarios/lapis.svg" alt="" onclick="exibirEdicao()">
             <span class="tooltiptextInfo">Editar </span>
         </div>
@@ -191,10 +191,13 @@
             }
             if (edit) {
                 exibirEdicao();
-            }
+            } 
         }
 
         function exibirEdicao() {
+            editContainer.innerHTML = `
+          <img class="iconLapis" src="../assets/funcionarios/salvarAlt.svg" alt="" onclick="fecharEdicao()" >
+            <span class="tooltiptextInfo">Salvar </span>`
             edit = true;
             var funcStatus = document.getElementById("funcStatusInfo")
 
@@ -208,12 +211,23 @@
 
                 statusInfo.innerHTML = `
             <img class= "buttons-edit" src="../assets/funcionarios/editYellow.svg" alt="Editar">
-            <img class= "buttons-edit" src="../assets/funcionarios/iconDelete.svg" alt="Deletar">
+            <img class= "buttons-edit" src="../assets/funcionarios/iconDelete.svg" alt="Deletar" onclick="poupDelete">
             
             `;
 
             }
 
+        }
+
+        function fecharEdicao(){
+            editContainer.innerHTML=`
+             <img class="iconLapis" src="../assets/funcionarios/lapis.svg" alt="" onclick="exibirEdicao()">
+            <span class="tooltiptextInfo">Editar </span>`
+
+            funcStatusInfo.innerHTML =`Status`
+
+            edit=false
+            filtrarFuncionarios()
         }
     </script>
 </body>
