@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
     <link rel="stylesheet" href="../css/style.css">
     <title>ARGUS | Perfil</title>
 </head>
+
 <body>
     <div id="id_sair">
     </div>
@@ -17,8 +19,8 @@
             <div class="navButton tooltipNav" id="navUser">
                 <img class="selected" src="../assets/dashboard/desktop/user.svg" alt="">
                 <span class="tooltiptextNav">
-                <div id="userNome"></div>
-                <div id="userCargo">ADM</div>
+                    <div id="userNome"></div>
+                    <div id="userCargo">ADM</div>
                 </span>
             </div>
             <div class="navButton tooltipNav" id="navServers">
@@ -47,33 +49,38 @@
 
     <header class="headerTop">
         <div class="geralInfo">
-            <div class="info tooltipInfo">
-                <div class="server">
-                    <img src="../assets/dashboard/desktop/server.svg" alt="">
+            <a href="servers.html">
+                <div class="info tooltipInfo">
+                    <div class="server">
+                        <img src="../assets/dashboard/desktop/server.svg" alt="">
+                    </div>
+                    <div class="serversMonitoring" id="id_servidores_monitorados">
+                        5
+                    </div>
+                    <span class="tooltiptextInfo">
+                        Servidores em monitoramento
+                    </span>
                 </div>
-                <div class="serversMonitoring" id="id_servidores_monitorados">
-                </div>
-                <span class="tooltiptextInfo">
-                    Servidores em monitoramento
-                </span>
-            </div>
+            </a>
+            <a href="servers.html">
             <div class="info">
-                <div class="bell">
-                    <img src="../assets/dashboard/desktop/bell.svg" alt="">
+                    <div class="bell">
+                        <img src="../assets/dashboard/desktop/bell.svg" alt="">
+                    </div>
+                    <div class="risk tooltipInfo" id="id_servidores_em_estado_critico">
+                        <p id="qtd_critico">2</p>
+                        <span class="tooltiptextInfo">
+                            Servidores em atenção
+                        </span>
+                    </div>
+                    <div class="atention tooltipInfo" id="id_servidores_em_estado_de_alerta">
+                        <p id="qtd_alerta">2</p>
+                        <span class="tooltiptextInfo">
+                            Servidores em alerta
+                        </span>
+                    </div>
                 </div>
-                <div class="risk tooltipInfo" id="id_servidores_em_estado_critico">
-                    <p id="qtd_critico"></p>
-                    <span class="tooltiptextInfo">
-                        Servidores em atenção
-                    </span>
-                </div>
-                <div class="atention tooltipInfo" id="id_servidores_em_estado_de_alerta">
-                    <p id="qtd_alerta"></p>
-                    <span class="tooltiptextInfo">
-                        Servidores em alerta
-                    </span>
-                </div>
-            </div>
+            </a>
         </div>
     </header>
 
