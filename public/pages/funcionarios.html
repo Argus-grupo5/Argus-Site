@@ -79,7 +79,7 @@
             </div>
 
             <div class="editContainer" onclick="pop_up()">
-                <img class="iconLapis" src="../assets/funcionarios/lapis.svg" alt="Editar" >
+                <img class="iconLapis" src="../assets/funcionarios/lapis.svg" alt="Editar">
                 <!-- <span class="tooltiptextInfo">Editar</span> -->
 
             </div>
@@ -126,13 +126,13 @@
 <script>
 
     const container = document.getElementById("id_func_list");
-    
+
     function listarCargo() {
         const select = document.getElementById("id_filter");
-        
+
         fetch("/usuarios/listarCargo")
-        .then(res => res.json())
-        .then(cargos => {
+            .then(res => res.json())
+            .then(cargos => {
                 cargos.forEach(c => {
                     const option = document.createElement("option");
                     option.value = c.cargo;
@@ -141,14 +141,14 @@
                 });
             })
             .catch(err => console.error("Erro ao carregar cargos:", err));
-        }
+    }
 
 
-        window.onload = () => {
-            listarCargo();
+    window.onload = () => {
+        listarCargo();
         filtrar();
     };
-    
+
     // filtra por cargo e pesquisa
     var contStatus = 0;
     function filtrar() {
@@ -158,13 +158,13 @@
         fetch(`/usuarios/filtrar`).then(res => {
             if (res.ok) {
                 res.json().then(resposta => {
-                    
-                    
+
+
                     for (let i = 0; i < resposta.length; i++) {
                         const cargoIgual = filtro === "" || resposta[i].cargo.toLowerCase() === filtro;
                         const pesquisaIgual =
-                        resposta[i].nome.toLowerCase().includes(pesquisa) ||
-                        resposta[i].email.toLowerCase().includes(pesquisa);
+                            resposta[i].nome.toLowerCase().includes(pesquisa) ||
+                            resposta[i].email.toLowerCase().includes(pesquisa);
 
                         if (resposta[i].sobrenome == null) {
                             resposta[i].sobrenome = ""
@@ -173,7 +173,7 @@
                         if (cargoIgual && pesquisaIgual) {
                             contStatus++;
                             const statusIcon = `<img class="iconStatus" src="../assets/funcionarios/eyeClosed.svg" alt="Offline">`;
-                            
+
                             container.innerHTML += `
                 <div class="funcionario-item" id="funcItem">
                         <div class="funcFoto">
@@ -193,32 +193,32 @@
                         ${statusIcon}
                         </div>
                     </div>`;
+                        }
                     }
-                    }
-                    
-                    
-                    
+
+
+
                 })
             }
         })//fim fetch
     }
-    
+
     function exibirEdicao() {
         // Titulo Status
         var funcStatus = document.getElementById("funcStatusInfo")
-        
+
         funcStatus.innerHTML = `<img  class= "buttons-edit" src="../assets/funcionarios/editGreen.svg" alt="" onclick="adicionar_user()">`;
-        
+
         var elementosStatus = document.getElementById("id_func_list");
         var statusInfo = document.getElementById(`status`);
         // console.log(contStatus)
         for (var contador = 1; contador <= elementosStatus.children.length; contador++) {
             // statusInfo = document.getElementById(`status${contador}`);
-            
+
             // Coloquei o mesmo id do icon do olho para ver se mudava alguma coisa. Porém 
             // o problema é o statusInfo chegando null
             statusInfo = document.getElementById(`iconStatus`);
-            if(statusInfo == null){
+            if (statusInfo == null) {
                 alert("Deu erro")
                 console.log(statusInfo)
             }
@@ -226,12 +226,12 @@
             // <img class= "buttons-edit" src="../assets/funcionarios/editYellow.svg" alt="Editar" onclick="editar_user()">
             // <img class= "buttons-edit" src="../assets/funcionarios/iconDelete.svg" alt="Deletar" onclick="deletar_user()">
             // `;
-            
+
         }
-        
+
     }
-    function adicionar_user(){
-        
+    function adicionar_user() {
+
     }
     function pop_up() {
         config_funcionarios.innerHTML = `
@@ -300,7 +300,7 @@
             .catch(err => console.error("Erro ao carregar cargos:", err));
     }
 
-    function deletar_user(){
+    function deletar_user() {
 
     }
 </script>

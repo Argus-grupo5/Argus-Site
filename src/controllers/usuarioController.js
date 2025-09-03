@@ -243,7 +243,7 @@ module.exports = {
     editar,
     cadastrarEndereco,
     cadastrarEmpresa,
-    online
+    online,
     cadastrarEmpresa,
     filtrar,
     listarCargo
