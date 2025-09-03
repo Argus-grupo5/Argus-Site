@@ -18,7 +18,7 @@
     <header class="desktopNav">
         <div class="navButtons">
             <div class="navButton tooltipNav" id="navUser">
-                <img src="../assets/dashboard/desktop/user.svg" alt="">
+                <img src="../assets/fotoPerfil/padrao.svg" alt="" id="FotoNavBar">
                 <span class="tooltiptextNav">
                     <div id="userNome"></div>
                     <div id="userCargo">ADM</div>
@@ -111,73 +111,15 @@
             <div class="functel">
                 Telefone
             </div>
-            <div class="funcStatus">
+            <div id="funcStatusInfo" class="funcStatusInfo">
                 Status
             </div>
 
         </div>
         <div class="func-list" id="id_func_list">
 
-            <!-- <div class="server-list" id="id_server_list"> -->
         </div>
-
-
-</body>
-
-</html>
-<script>
-    function exibirEdicao() {
-        config_funcionarios.innerHTML = `
-            <div class="popup_configs">
-                <h1>Editar Usuário</h1>
-                <div style="Display: flex;  justify-content: space-between;">
-                    <div>
-                        <p class=titulo_configs>Nome</p>
-                    </div>
-                    <div>
-                        <p class=titulo_configs>*obrigatório</p>
-                    </div>
-                </div>
-                <input type="text" id="ipt_nome">
-                <div style="Display: flex;  justify-content: space-between;">
-                    <p class=titulo_configs>Sobrenome</p>
-                    <p class=titulo_configs>*obrigatório</p>
-                </div>
-                <input type="text" id="ipt_sobrenome">
-                <div style="Display: flex;  justify-content: space-between;">
-                    <p class=titulo_configs>Cargo</p>
-                    <p class=titulo_configs>*obrigatório</p>
-                </div>
-                <input type="text" id="ipt_cargo">
-                <div style="Display: flex;  justify-content: space-between;">
-                    <p class=titulo_configs>Email</p>
-                    <p class=titulo_configs>*obrigatório</p>
-                </div>
-                <input type="text" id="ipt_email">
-                <div style="Display: flex;  justify-content: space-between;">
-                    <p class=titulo_configs>Senha</p>
-                    <p class=titulo_configs>*obrigatório</p>
-                </div>
-                <input type="text" id="ipt_senha">
-                <div style="Display: flex;  justify-content: space-between;">
-                    <p class=titulo_configs>Confirmar senha</p>
-                    <p class=titulo_configs>*obrigatório</p>
-                </div>
-                <input type="text" id="ipt_confirmar_senha">
-                <div style="Display: flex;  justify-content: space-between;">
-                    <p class=titulo_configs>Telefone</p>
-                    <p class=titulo_configs>*obrigatório</p>
-                </div>
-                <input type="text" id="ipt_telefone">
-                <div style="Display: flex;  justify-content: space-between;">
-                    <p class=titulo_configs>Foto</p>
-                    <p class=titulo_configs>*obrigatório</p>
-                </div>
-                <input type="text" id="ipt_foto">
-                <button class=btn_configs_funcio onclick="editar_user()">Editar</button>
-            </div>
-        `;
-    }
+    </div>
 
     function editar_user(){
         fetch("/usuarios/")
@@ -206,14 +148,15 @@
         filtrar();
     };
 
-    // filtra por cargo e pesquisa
-    function filtrar() {
-        const filtro = document.getElementById("id_filter").value.toLowerCase();
-        const pesquisa = document.getElementById("id_pesquisa").value.toLowerCase();
-        container.innerHTML = "";
-        fetch(`/usuarios/filtrar`).then(res => {
-            if (res.ok) {
-                res.json().then(resposta => {
+        // filtra por cargo e pesquisa
+        function filtrar() {
+            const filtro = document.getElementById("id_filter").value.toLowerCase();
+            const pesquisa = document.getElementById("id_pesquisa").value.toLowerCase();
+            container.innerHTML = "";
+            var contStatus = 0;
+            fetch(`/usuarios/filtrar`).then(res => {
+                if (res.ok) {
+                    res.json().then(resposta => {
 
 
                     for (let i = 0; i < resposta.length; i++) {
@@ -226,11 +169,12 @@
                             resposta[i].sobrenome = ""
                         }
 
-                        if (cargoIgual && pesquisaIgual) {
-                            const statusIcon = `<img class="iconStatus" src="../assets/funcionarios/eyeClosed.svg" alt="Offline">`;
+                            if (cargoIgual && pesquisaIgual) {
+                                contStatus++;
+                                const statusIcon = `<img class="iconStatus" src="../assets/funcionarios/eyeClosed.svg" alt="Offline">`;
 
-                            container.innerHTML += `
-                <div class="funcionario-item">
+                                container.innerHTML += `
+                <div class="funcionario-item" id="funcItem">
                     <div class="funcFoto">
                         <img src="${resposta[i].foto_perfil}" alt="Foto">
                     </div>
@@ -243,37 +187,37 @@
                         ${statusIcon}
                     </div>
                 </div>`;
+                            }
                         }
-                    }
 
 
 
-                })
-            }
-        })//fim fetch
-    }
+                    })
+                }
+            })//fim fetch
 
-    
-    function sair() {
-        id_sair.innerHTML = `
-        
-            <div class="popup_sair">
-                <h1>Deseja sair?</h1>
-                <button onclick="sair_s()">Sim</button>
-                <button onclick="sair_n()">Não</button>
-            </div>
-        `;
-    }
-    function sair_s() {
-        window.location.href = "./login.html";
-        sessionStorage.clear;
-    }
+             function exibirEdicao() {
 
-    function sair_n() {
-        id_sair.innerHTML = ``;
-    }
-    userNome.innerHTML = sessionStorage.USER_NAME;
-    userCargo.innerHTML = sessionStorage.CARGO_CARGO;
+           var funcStatus = document.getElementById("funcStatusInfo")
 
-    // Funcão editando usuário
-</script>
+           funcStatus.innerHTML = `<img  class= "buttons-edit" src="../assets/funcionarios/editGreen.svg" alt="">`;
+
+           var elementosStatus = document.getElementById("id_func_list");
+
+           for(var contador = 1; contador <= elementosStatus.children.length; contador++){
+
+            var statusInfo = document.getElementById(`status${contador}`);
+
+            statusInfo.innerHTML = `
+            <img class= "buttons-edit" src="../assets/funcionarios/editYellow.svg" alt="Editar">
+            <img class= "buttons-edit" src="../assets/funcionarios/iconDelete.svg" alt="Deletar">
+            
+            `;
+
+           }
+
+        }
+    </script>
+</body>
+
+</html>
