@@ -26,4 +26,8 @@ router.get("/filtrar", (req, res) => {
 
 router.get("/listarCargo", usuarioController.listarCargo);
 
+router.put("/online", function (req, res) {
+    usuarioController.online(req, res);
+})
+
 module.exports = router;

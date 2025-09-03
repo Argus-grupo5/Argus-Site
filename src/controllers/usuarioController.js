@@ -182,6 +182,34 @@ function cadastrarEmpresa(req, res) {
         );
 }
 
+function online(req, res) {
+    var status = req.body.status;
+    var idUsuario = req.body.idServer;
+    if (status == undefined) {
+        res.status(400).send("Seus status estão undefined!");
+    } else if (idUsuario == undefined) {
+        res.status(400).send("Seu id está undefined!");
+    } else {
+
+        usuarioModel.online(idUsuario, status)
+            .then(
+                function (resultado) {
+                    res.json(resultado);
+                }
+            ).catch(
+                function (erro) {
+                    console.log(erro);
+                    console.log(
+                        "\nHouve um erro ao realizar o cadastroPreferencias! Erro: ",
+                        erro.sqlMessage
+                    );
+                    res.status(500).json(erro.sqlMessage);
+                }
+            );
+    }
+}
+
+
 
 //tela de funcionários
 function filtrar(req, res) {
@@ -214,6 +242,8 @@ module.exports = {
     autenticar,
     editar,
     cadastrarEndereco,
+    cadastrarEmpresa,
+    online
     cadastrarEmpresa,
     filtrar,
     listarCargo

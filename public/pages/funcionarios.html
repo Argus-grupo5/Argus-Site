@@ -233,6 +233,58 @@
     function adicionar_user(){
         
     }
+function pop_up() {
+        config_funcionarios.innerHTML = `
+            <div class="popup_configs">
+                <h1>Editar Usuário</h1>
+                    <div style="Display: flex;  justify-content: space-between;">
+                        <div>
+                            <p class=titulo_configs>Nome</p>
+                        </div>
+                        <div>
+                            <p class=titulo_configs>*obrigatório</p>
+                        </div>
+                    </div>
+                    <input type="text" id="ipt_nome">
+                    <div style="Display: flex;  justify-content: space-between;">
+                    <p class=titulo_configs>Sobrenome</p>
+                    <p class=titulo_configs>*obrigatório</p>
+                    </div>
+                    <input type="text" id="ipt_sobrenome">
+                    <div style="Display: flex;  justify-content: space-between;">
+                    <p class=titulo_configs>Cargo</p>
+                        <p class=titulo_configs>*obrigatório</p>
+                    </div>
+                    <input type="text" id="ipt_cargo">
+                    <div style="Display: flex;  justify-content: space-between;">
+                    <p class=titulo_configs>Email</p>
+                        <p class=titulo_configs>*obrigatório</p>
+                    </div>
+                    <input type="text" id="ipt_email">
+                    <div style="Display: flex;  justify-content: space-between;">
+                    <p class=titulo_configs>Senha</p>
+                        <p class=titulo_configs>*obrigatório</p>
+                    </div>
+                    <input type="text" id="ipt_senha">
+                    <div style="Display: flex;  justify-content: space-between;">
+                    <p class=titulo_configs>Confirmar senha</p>
+                        <p class=titulo_configs>*obrigatório</p>
+                    </div>
+                    <input type="text" id="ipt_confirmar_senha">
+                    <div style="Display: flex;  justify-content: space-between;">
+                    <p class=titulo_configs>Telefone</p>
+                        <p class=titulo_configs>*obrigatório</p>
+                    </div>
+                    <input type="text" id="ipt_telefone">
+                    <div style="Display: flex;  justify-content: space-between;">
+                    <p class=titulo_configs>Foto</p>
+                        <p class=titulo_configs>*obrigatório</p>
+                    </div>
+                    <input type="text" id="ipt_foto">
+                <button class=btn_configs_funcio>Editar</button>
+            </div>
+        `;
+    }
 
     // Arrumar o fetch
     function editar_user() {

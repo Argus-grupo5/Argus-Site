@@ -42,6 +42,32 @@ function cadastrarEmpresa(nome, telefone, email, senha, cnpj, razao, fkEndereco)
     return database.executar(instrucaoSql);
 }
 
+function online(idUsuario, status) {
+    console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function cadastrar():", status, idUsuario);
+
+    var instrucaoSql = `
+        UPDATE usuario
+        SET status_online = ${status}
+        WHERE id = ${idUsuario};
+    `;
+
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
+function online(idUsuario, status) {
+    console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function cadastrar():", status, idUsuario);
+
+    var instrucaoSql = `
+        UPDATE usuario
+        SET status_online = ${status}
+        WHERE id = ${idUsuario};
+    `;
+
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
 //tela de funcionários
 function filtrar() {
     const instrucaoSql = `
