@@ -18,10 +18,12 @@ router.post("/autenticar", function (req, res) {
 });
 
 
-router.get("/filtrar", (req, res) => {
+router.get("/filtrar", function (req, res){
     usuarioController.filtrar(req, res);
 });
 
 router.get("/listarCargo", usuarioController.listarCargo);
+
+router.delete("/deletarFuncionario/:id", usuarioController.deletarFuncionario)
 
 module.exports = router;

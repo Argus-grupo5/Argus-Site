@@ -119,6 +119,9 @@
 
     </div>
 
+    <div id="containerModal" class="containerModal"></div>
+    
+
     <script>
         let edit = false;
         let funcionariosLista;
@@ -174,7 +177,7 @@
                     contStatus++;
                     const statusIcon = `<img class="iconStatus" src="../assets/funcionarios/eyeClosed.svg" alt="Offline">`;
                     container.innerHTML += `
-                                    <div id="funcItem" class="funcionario-item">
+                                    <div id="funcItem" class="funcionario-item" data-idFuncionario=${funcionariosLista[i].id}>
                                         <div class="funcFoto">
                                             <img src="${funcionariosLista[i].foto_perfil}" alt="Foto">
                                         </div>
@@ -191,10 +194,11 @@
             }
             if (edit) {
                 exibirEdicao();
-            } 
+            }
         }
 
-        function exibirEdicao() {
+        function exibirEdicao(idFuncionario) {
+           
             editContainer.innerHTML = `
           <img class="iconLapis" src="../assets/funcionarios/salvarAlt.svg" alt="" onclick="fecharEdicao()" >
             <span class="tooltiptextInfo">Salvar </span>`
@@ -211,23 +215,47 @@
 
                 statusInfo.innerHTML = `
             <img class= "buttons-edit" src="../assets/funcionarios/editYellow.svg" alt="Editar">
-            <img class= "buttons-edit" src="../assets/funcionarios/iconDelete.svg" alt="Deletar" onclick="poupDelete">
+            <img class= "buttons-edit" src="../assets/funcionarios/iconDelete.svg" alt="Deletar" onclick="poupDelete(${idFuncionario})">
             
             `;
-
             }
-
         }
 
-        function fecharEdicao(){
-            editContainer.innerHTML=`
+        function fecharEdicao() {
+            editContainer.innerHTML = `
              <img class="iconLapis" src="../assets/funcionarios/lapis.svg" alt="" onclick="exibirEdicao()">
             <span class="tooltiptextInfo">Editar </span>`
 
-            funcStatusInfo.innerHTML =`Status`
+            funcStatusInfo.innerHTML = `Status`
 
-            edit=false
+            edit = false
             filtrarFuncionarios()
+        }
+
+        function poupDelete(idFuncionario){
+            containerModal.style.display= "flex";
+            containerModal.innerHTML = `
+           <div class="modalDelete">
+            <p>Deseja realmente deletar este usuário?</p>
+            <button onclick="deletarFuncionario(${idFuncionario})">Sim</button>
+            <button onclick="fecharModal()">Cancelar</button>
+        </div>
+            `
+        }
+
+        function deletarFuncionario(idFuncionario) {
+
+            fetch(`/usuarios/deletarFuncionario/${idFuncionario}`, { method: 'DELETE' }).then(res => {
+
+                if (!res.ok) {
+                    console.error("Erro ao deletar funcionário!");
+
+                }
+            })
+                .then(resposta => {
+                    console.log(resposta);
+                    filtrarFuncionarios();
+                })//fim fetch
         }
     </script>
 </body>

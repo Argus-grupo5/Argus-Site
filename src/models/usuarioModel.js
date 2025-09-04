@@ -37,7 +37,7 @@ function cadastrarEmpresa(nome, telefone, email, senha, cnpj, razao, fkEndereco)
 //tela de funcionários
 function filtrar() {
     const instrucaoSql = `
-        select u.foto_perfil, u.nome, u.sobrenome, u.email, c.cargo, DATE_FORMAT(u.data_cadastro, '%d/%m/%Y') as data_cadastro, u.telefone 
+        select u.id, u.foto_perfil, u.nome, u.sobrenome, u.email, c.cargo, DATE_FORMAT(u.data_cadastro, '%d/%m/%Y') as data_cadastro, u.telefone 
         from cargo c
         join cargousuario uc on c.id = uc.Cargo_id
         join usuario u on uc.usuario_id = u.id;
@@ -45,8 +45,14 @@ function filtrar() {
     return database.executar(instrucaoSql);
 }
 function listarCargo() {
-    const instrucaoSql = "SELECT cargo FROM cargo ORDER BY cargo";
+    const instrucaoSql = "select cargo from cargo order by cargo";
     return database.executar(instrucaoSql);
+}
+
+function deletarFuncionario(id) {
+    
+    const instrucaoSql = `delete from usuario where id = ?`;
+    return database.executar(instrucaoSql, [id]);
 }
 
 
@@ -55,6 +61,7 @@ module.exports = {
     cadastrarEmpresa,
     cadastrarEndereco,
     filtrar,
-    listarCargo
+    listarCargo,
+    deletarFuncionario
 
 };

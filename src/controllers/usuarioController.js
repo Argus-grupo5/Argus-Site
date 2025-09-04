@@ -180,10 +180,18 @@ function listarCargo(req, res) {
         });
 }
 
+function deletarFuncionario(req, res){
+    const id = req.params.id;
+    usuarioModel.deletarFuncionario(id)
+        .then(result => res.json({message: "Usuário deletado"}))
+        .catch(err => res.status(500).json({erro: err.message}));
+}
+
 module.exports = {
     autenticar,
     cadastrarEndereco,
     cadastrarEmpresa,
     filtrar,
-    listarCargo
+    listarCargo,
+    deletarFuncionario
 }
