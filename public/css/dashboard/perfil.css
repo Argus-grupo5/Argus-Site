@@ -44,3 +44,73 @@
 a {
     text-decoration: none;
 }
+
+.popup_configs {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  position: fixed;
+  z-index: 1000;
+  width: 50%;
+  height: 80%;
+  background-color: #FF670A;
+  text-align: center;
+  margin-left: 29%;
+  margin-top: 7vh;
+  border-radius: 1vw;
+  padding: 5vh;
+}
+
+.popup_configs h1 {
+  font-size: 150%;
+}
+
+.popup_configs input {
+  width: 40vw;
+  height: 3.5vh;
+  border-radius: 20px;
+  font-size: 0em;
+  border: white 1px solid;
+  background-color: transparent;
+}
+
+.popup_configs .confirmarEdicao {
+    margin-top: 2vh;
+}
+
+.input-label-wrapper {
+    width: 90%;
+    text-align: left;
+    display: flex;
+}
+
+#headerPopup {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    padding: 0;
+}
+
+#buttonFechar {
+    background: none;
+    border: none;
+    padding: 0;
+    margin-left: auto;
+    box-shadow: none;
+    outline: none;
+    cursor: pointer;
+    width: 2vw;
+    height: 4vh;
+}
+
+#buttonFechar img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+#confirmacaoSenha {
+    margin-left: 2.2vw;
+}
