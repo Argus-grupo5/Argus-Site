@@ -262,7 +262,7 @@
                 </div>
                 <input type="text" id="ipt_foto" required>
                 <div class="btns_popup">
-                <button class=btn_configs_funcio>Cadastrar</button>
+                <button class=btn_configs_funcio onclick="funcao_adicionar()">Cadastrar</button>
                 <div onclick="fechar_popup()" class="btnFecharPopup">Fechar</div>
                 </div>
             </div>
@@ -311,7 +311,7 @@
                 </div>
                 <input type="text" id="ipt_foto" required>
                 <div class="btns_popup">
-                <button class=btn_configs_funcio>Editar</button>
+                <button class=btn_configs_funcio onclick="funcao_editar()">Editar</button>
                 <div onclick="fechar_popup()" class="btnFecharPopup">Fechar</div>
                 </div>
             </div>
@@ -322,7 +322,7 @@
             <div class="popup_configs_sair">
                 <h1>Deletar Usuário</h1>
                 <p>Deseja deletar este usuário?</p>
-                <button class=btn_configs_funcio_sim>Sim</button>
+                <button class=btn_configs_funcio_sim onclick="funcao_excluir()">Sim</button>
                 <button class=btn_configs_funcio_nao onclick="fechar_popup()">Não</button>
             </div>
         `;
