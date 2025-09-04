@@ -9,13 +9,38 @@
 
 #buttonEditar {
     background-color: #FF6D4D;
-    width: 25vw;
+    width: 40vw;
     height: 5vh;
-    border-radius: 20px;
+    border-radius: 1vw;
     margin-top: 10px;
-    cursor: pointer;
+    border: solid white 1px;
+    font-size: 110%;
+}
+
+#buttonEditar:hover {
+  cursor: pointer;
+  width: 40vw;
+  height: 5vh;
+  border-radius: 1vw;
+  border: solid white 1px;
+  background-color: #FF0000;
+  font-size: 110%;
+}
+
+#buttonEditar:active {
+  cursor: pointer;
+  width: 40vw;
+  height: 5vh;
+  border-radius: 1vw;
+  border: solid white 1px;
+  background-color: #c00000;
+  font-size: 110%;
 }
 
 #perfilFoto {
     width: 20vw;
+}
+
+a {
+    text-decoration: none;
 }
