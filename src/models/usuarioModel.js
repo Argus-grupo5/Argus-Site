@@ -54,6 +54,19 @@ function deletarFuncionario(id) {
     const instrucaoSql = `delete from usuario where id = ?`;
     return database.executar(instrucaoSql, [id]);
 }
+function online(idUsuario, status) {
+    console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function cadastrar():", status, idUsuario);
+
+    var instrucaoSql = `
+        UPDATE usuario
+        SET status_online = ${status}
+        WHERE id = ${idUsuario};
+    `;
+
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
 
 
 module.exports = {
@@ -62,6 +75,7 @@ module.exports = {
     cadastrarEndereco,
     filtrar,
     listarCargo,
-    deletarFuncionario
+    deletarFuncionario,
 
+    online
 };
