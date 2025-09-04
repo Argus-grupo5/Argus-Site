@@ -148,4 +148,23 @@
         editar_perfil.style.display = 'none';
         containerPerfil.style.display = 'block';
     }
+
+    function sair() {
+        id_sair.innerHTML = `
+        
+            <div class="popup_sair">
+                <h1>Deseja sair?</h1>
+                <button onclick="sair_s()">Sim</button>
+                <button onclick="sair_n()">Não</button>
+            </div>
+        `;
+    }
+    function sair_s() {
+        window.location.href = "./login.html";
+        sessionStorage.clear;
+    }
+
+    function sair_n() {
+        id_sair.innerHTML = ``;
+    }
 </script>
