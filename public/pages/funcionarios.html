@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-    
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="../css/dashboard/funcionarios.css">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/dashboard/funcionarios.css">
     <link rel="stylesheet" href="../css/dashboard/servers.css">
     <link rel="stylesheet" href="../css/style.css">
     <title>ARGUS | Funcionários</title>
@@ -78,12 +78,12 @@
                     </span>
                 </div>
             </div>
+        </div>
 
-            <div id="editContainer" class="editContainer" onclick="exibirEdicao()">
-                <img class="iconLapis" src="../assets/funcionarios/lapis.svg" alt="Editar">
-                <!-- <span class="tooltiptextInfo">Editar</span> -->
-
-            </div>
+        <div id="editContainer" class="editContainer">
+            <img class="iconLapis" src="../assets/funcionarios/lapis.svg" alt="" onclick="filtrarFuncionarios(true)">
+            <span class="tooltiptextInfo">Editar </span>
+        </div>
     </header>
     <div id="config_funcionarios"></div>
 
@@ -121,7 +121,7 @@
         <div class="func-list" id="id_func_list">
 
         </div>
-        
+
     </div>
 </body>
 
@@ -248,7 +248,6 @@
             }
         }
     }
-
 
     function pop_up_adicionar(id) {
         console.log(id)
@@ -400,7 +399,7 @@
             .catch(erro => console.error(`#ERRO: ${erro}`));
     }
 
-    function pop_up_editar() {
+    function pop_up_editar(id) {
         config_funcionarios.innerHTML = `
             <div class="popup_configs">
                 <h1>Editar Usuário</h1>
@@ -449,22 +448,43 @@
             </div>
         `;
     }
-    function pop_up_excluir() {
+    function pop_up_excluir(id) {
         config_funcionarios.innerHTML = `
             <div class="popup_configs_sair">
                 <h1>Deletar Usuário</h1>
                 <p>Deseja deletar este usuário?</p>
-                <button class=btn_configs_funcio_sim onclick="funcao_excluir()">Sim</button>
+                <button class=btn_configs_funcio_sim onclick="funcao_excluir(${id})">Sim</button>
                 <button class=btn_configs_funcio_nao onclick="fechar_popup()">Não</button>
             </div>
         `;
     }
+    function funcao_excluir(idVar) {
+        fetch("/usuarios/funcao_excluir", {
+            method: 'DELETE',
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                idServer: idVar
+
+            })
+        })
+                .then(res => {
+                    if (res.ok) {
+                        console.log('Funcionário deletado com sucesso!');
+                    } else {
+                        console.log('Erro ao deletar Funcionário!');
+                    }
+                })
+                .catch(err => {
+                    console.error('Erro na requisição:', err);
+                });//fim fetch
+        }
+
 
     function fechar_popup() {
-        config_funcionarios.innerHTML = '';
-    }
+                config_funcionarios.innerHTML = '';
+            }
     function sair() {
-        id_sair.innerHTML = `
+                id_sair.innerHTML = `
         
             <div class="popup_sair">
                 <h1>Deseja sair?</h1>
@@ -472,17 +492,17 @@
                 <button onclick="sair_n()">Não</button>
             </div>
         `;
-    }
+            }
     function sair_s() {
-        window.location.href = "./login.html";
-        sessionStorage.clear;
-    }
+                window.location.href = "./login.html";
+                sessionStorage.clear;
+            }
 
     function sair_n() {
-        id_sair.innerHTML = ``;
-    }
+                id_sair.innerHTML = ``;
+            }
     userNome.innerHTML = sessionStorage.USER_NAME;
-    userCargo.innerHTML = sessionStorage.CARGO_CARGO;
+        userCargo.innerHTML = sessionStorage.CARGO_CARGO;
 
 
 
