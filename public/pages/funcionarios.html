@@ -79,7 +79,7 @@
                 </div>
             </div>
 
-            <div class="editContainer" onclick="exibirEdicao()">
+            <div id="editContainer" class="editContainer" onclick="exibirEdicao()">
                 <img class="iconLapis" src="../assets/funcionarios/lapis.svg" alt="Editar">
                 <!-- <span class="tooltiptextInfo">Editar</span> -->
 
@@ -174,7 +174,8 @@
             funcStatusInfo.innerHTML = `Status`
             editContainer.innerHTML = `
                 <img class="iconLapis" src="../assets/funcionarios/lapis.svg" alt="" onclick="filtrarFuncionarios(true)">
-                <span class="tooltiptextInfo">Editar </span>`
+                <span class="tooltiptextInfo">Editar </span>
+                `;
             for (let i = 0; i < funcionariosLista.length; i++) {
                 const cargoIgual = filtro === "" || funcionariosLista[i].cargo.toLowerCase() === filtro;
                 const pesquisaIgual =
