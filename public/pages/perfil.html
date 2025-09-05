@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,35 +9,39 @@
     <link rel="stylesheet" href="../css/style.css">
     <title>ARGUS | Perfil</title>
 </head>
+
 <body>
     <div id="id_sair">
     </div>
 
+    <div id="editar_perfil"></div>
+
     <header class="desktopNav">
         <div class="navButtons">
-            <div class="navButton tooltipNav" id="navUser">
+            <a href="perfil.html" class="navButton tooltipNav" id="navUser">
                 <img class="selected" src="../assets/dashboard/desktop/user.svg" alt="">
                 <span class="tooltiptextNav">
-                <div id="userNome"></div>
-                <div id="userCargo">ADM</div>
+                    <div id="userNome"></div>
+                    <div id="userCargo">ADM</div>
                 </span>
-            </div>
-            <div class="navButton tooltipNav" id="navServers">
+            </a>
+            <a href="../pages/servers.html" class="navButton tooltipNav" id="navServers">
                 <img src="../assets/dashboard/desktop/box.svg" alt="Servidores">
                 <span class="tooltiptextNav">Servidores</span>
-            </div>
-            <div class="navButton tooltipNav" id="navServers">
+            </a>
+            <a href="../pages/funcionarios.html" class="navButton tooltipNav" id="navServers">
                 <img src="../assets/dashboard/desktop/employes.svg" alt="Funcionários">
                 <span class="tooltiptextNav">Funcionários</span>
-            </div>
+            </a>
             <div class="navButton tooltipNav" id="navServers">
                 <img src="../assets/dashboard/desktop/logs.svg" alt="Logs">
                 <span class="tooltiptextNav">Logs</span>
             </div>
-            <div class="navButton tooltipNav" id="navServers">
+            <a href="https://sptech-team-vbjwf7te.atlassian.net/servicedesk/customer/portal/36"
+                class="navButton tooltipNav" id="navServers" target="_blank">
                 <img src="../assets/dashboard/desktop/headphone.svg" alt="Suporte">
                 <span class="tooltiptextNav">Suporte</span>
-            </div>
+            </a>
             <div class="navButton tooltipNav" id="navServers" onclick="sair()">
                 <img src="../assets/dashboard/desktop/logout.svg" alt="Sair">
                 <span class="tooltiptextNav">Sair</span>
@@ -47,43 +52,48 @@
 
     <header class="headerTop">
         <div class="geralInfo">
-            <div class="info tooltipInfo">
-                <div class="server">
-                    <img src="../assets/dashboard/desktop/server.svg" alt="">
-                </div>
-                <div class="serversMonitoring" id="id_servidores_monitorados">
-                </div>
-                <span class="tooltiptextInfo">
-                    Servidores em monitoramento
-                </span>
-            </div>
-            <div class="info">
-                <div class="bell">
-                    <img src="../assets/dashboard/desktop/bell.svg" alt="">
-                </div>
-                <div class="risk tooltipInfo" id="id_servidores_em_estado_critico">
-                    <p id="qtd_critico"></p>
+            <a href="servers.html">
+                <div class="info tooltipInfo">
+                    <div class="server">
+                        <img src="../assets/dashboard/desktop/server.svg" alt="">
+                    </div>
+                    <div class="serversMonitoring" id="id_servidores_monitorados">
+                        7
+                    </div>
                     <span class="tooltiptextInfo">
-                        Servidores em atenção
+                        Servidores em monitoramento
                     </span>
                 </div>
-                <div class="atention tooltipInfo" id="id_servidores_em_estado_de_alerta">
-                    <p id="qtd_alerta"></p>
-                    <span class="tooltiptextInfo">
-                        Servidores em alerta
-                    </span>
+            </a>
+            <a href="servers.html">
+                <div class="info">
+                    <div class="bell">
+                        <img src="../assets/dashboard/desktop/bell.svg" alt="">
+                    </div>
+                    <div class="risk tooltipInfo" id="id_servidores_em_estado_critico">
+                        <p id="qtd_critico">0</p>
+                        <span class="tooltiptextInfo">
+                            Servidores em atenção
+                        </span>
+                    </div>
+                    <div class="atention tooltipInfo" id="id_servidores_em_estado_de_alerta">
+                        <p id="qtd_alerta">2</p>
+                        <span class="tooltiptextInfo">
+                            Servidores em alerta
+                        </span>
+                    </div>
                 </div>
-            </div>
+            </a>
         </div>
     </header>
 
-    <div class="containerPerfil">
+    <div class="containerPerfil" id="containerPerfil">
         <img id="perfilFoto" src="../assets/fotoPerfil/padrao.svg" alt="Foto de Perfil">
         <h1 id="perfilNome"></h1>
         <h3 id="perfilCargo"></h3>
         <h3 id="perfilEmail"></h3>
         <h3 id="perfilNumero"></h3>
-        <button id="buttonEditar">Editar informações</button>
+        <button id="buttonEditar" onclick="pop_up_editar()">Editar informações</button>
     </div>
 </body>
 
@@ -96,4 +106,65 @@
     perfilCargo.innerHTML = sessionStorage.CARGO_FUNCAO;
     perfilEmail.innerHTML = sessionStorage.USER_EMAIL;
     perfilNumero.innerHTML = sessionStorage.USER_TELEFONE;
+
+    function pop_up_editar() {
+        containerPerfil.style.display = 'none';
+        editar_perfil.style.display = 'block';
+
+        editar_perfil.innerHTML = `
+            <div class="popup_configs">
+                <div id="headerPopup">
+                <h1>Editar informações do Perfil</h1>
+                <button id="buttonFechar" onclick="fecharPopup()"><img src="../assets/dashboard/desktop/btnFechar.svg" alt="Botão de Fechar"></button>
+                </div>
+                <div class="input-label-wrapper">
+                    <span class="input-label">Alterar Senha</span>
+                </div>
+                <input type="text" id="ipt_senha">
+                <div class="input-label-wrapper">
+                    <span class="input-label">Alterar Email</span>
+                </div>
+                <input type="text" id="ipt_email">
+                <div class="input-label-wrapper">
+                    <span class="input-label">Alterar Telefone</span>
+                </div>
+                <input type="text" id="ipt_telefone">
+                <div class="input-label-wrapper">
+                    <span class="input-label">Alterar Foto</span>
+                </div>
+                <input type="text" id="ipt_foto">
+                <div class="confirmarEdicao">
+                <div class="input-label-wrapper">
+                    <span class="input-label" id="confirmacaoSenha">Redigite a sua senha para confirmar as alterações</span>
+                </div>
+                <input type="text" id="ipt_confirmarSenha">
+                <button id="buttonEditar">Alterar Informações</button>
+                </div>
+            </div>
+                `;
+    }
+
+    function fecharPopup() {
+        editar_perfil.style.display = 'none';
+        containerPerfil.style.display = 'block';
+    }
+
+    function sair() {
+        id_sair.innerHTML = `
+        
+            <div class="popup_sair">
+                <h1>Deseja sair?</h1>
+                <button onclick="sair_s()">Sim</button>
+                <button onclick="sair_n()">Não</button>
+            </div>
+        `;
+    }
+    function sair_s() {
+        window.location.href = "./login.html";
+        sessionStorage.clear;
+    }
+
+    function sair_n() {
+        id_sair.innerHTML = ``;
+    }
 </script>

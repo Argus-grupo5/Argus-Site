@@ -1,3 +1,4 @@
+const { cadastrarFuncionario } = require("../controllers/usuarioController");
 var database = require("../database/config")
 
 function autenticar(email, senha) {
@@ -75,7 +76,27 @@ function online(idUsuario, status) {
     return database.executar(instrucaoSql);
 }
 
+//tela de funcionários
+function filtrar() {
+    const instrucaoSql = `
+        select u.foto_perfil, u.nome, u.sobrenome, u.email, c.cargo, DATE_FORMAT(u.data_cadastro, '%d/%m/%Y') as data_cadastro, u.telefone 
+        from cargo c
+        join cargousuario uc on c.id = uc.Cargo_id
+        join usuario u on uc.usuario_id = u.id;
+    `;
+    return database.executar(instrucaoSql);
+}
+function listarCargo() {
+    const instrucaoSql = "SELECT cargo FROM cargo ORDER BY cargo";
+    return database.executar(instrucaoSql);
+}
 
+function criarUsuario(nome, sobrenome, email, senha, telefone, idEmpresa) {
+    const instrucaoSql = `INSERT INTO usuario (nome, sobrenome, email, senha, telefone, fkempresa)
+    VALUES ('${nome}', '${sobrenome}', '${email}', SHA2('${senha}', 512), '${telefone}', ${idEmpresa});
+    `;
+    return database.executar(instrucaoSql);
+}
 
 module.exports = {
     autenticar,
@@ -84,7 +105,5 @@ module.exports = {
     cadastrarEndereco,
     filtrar,
     listarCargo,
-    deletarFuncionario,
-
-    online
+    criarUsuario
 };

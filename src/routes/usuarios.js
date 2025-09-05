@@ -27,6 +27,10 @@ router.get("/filtrar", function (req, res){
     usuarioController.filtrar(req, res);
 });
 
+router.post("/criarUsuario", (req, res) => {
+    usuarioController.criarUsuario(req, res);
+});
+
 router.get("/listarCargo", usuarioController.listarCargo);
 >>>>>>>>> Temporary merge branch 2
 
