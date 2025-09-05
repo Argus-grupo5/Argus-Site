@@ -84,131 +84,146 @@
 
 /* --------------------------------------------------------------------------------------*/
 /*Final estilização popup*/
-.popup_configs {
+.overlay {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(.5vw);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 900;
+}
+
+body.popup-open {
+  overflow: hidden;
+}
+
+.popup {
+  position: fixed;
+
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  position: fixed;
+
   z-index: 1000;
-  width: 50%;
-  height: fit-content;
-  background-color: #FF670A;
+  width: 45vw;
+  max-height: 95vh;
+
+  background: #FF670A;
+  border-radius: 20px;
+  padding: 2vw;
   text-align: center;
-  margin-left: 29%;
-  margin-top: 7vh;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 0.3s ease;
 }
 
-.popup_configs h1 {
-  font-size: 150%;
+.popup .btnFecharPopup {
+  position: absolute;
+  align-self: flex-end;
+  margin-bottom: 90%;
+  cursor: pointer;
+
+  width: 3vw;
+  height: 6vh;
 }
 
-.popup_configs input {
-  width: 40vw;
-  height: 3.5vh;
-  border-radius: 20px;
-  font-size: 1em;
-  border: white 1px solid;
-  background-color: transparent;
-
+.popup h1 {
+  font-size: 3.33vw;
+  margin-bottom: .5vh;
+  color: #fff;
+  font-weight: bold;
 }
 
-.popup_configs select {
-  width: 40vw;
-  height: 3.5vh;
-  border-radius: 20px;
-  font-size: 1em;
-  border: white 1px solid;
-  background-color: transparent;
+.popup .inputs {
+  width: 80%;
+  height: 80%;
 }
 
-.popup_configs select option{
-  color: #000000;
+.popup input,
+.popup select {
+  width: 100%;
+  height: 5vh;
+  border-radius: .5vw;
+  font-size: 1.11vw;
+  border: .1vw solid #fff;
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 0 .8vh;
+  color: #fff;
+  transition: 0.3s ease;
 }
 
-.containerFunc {
-  padding-left: 5vw;
-  padding-right: 1vw;
+.popup input:focus,
+.popup select:focus {
+  outline: none;
+  border-color: #fff;
+  background-color: #fe7c2b;
 }
 
-.titulo_configs {
-  font-size: 100%;
-}
-
-/* Wrapper para label e obrigatório */
 .input-label-wrapper {
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  width: 40vw;
-  margin-bottom: 0.2em;
+  width: 100%;
+  margin-bottom: 0.1vh;
 }
 
 .input-label {
   color: #fff;
-  font-size: 1em;
+  font-size: 1.11vw;
   font-weight: 500;
 }
 
+
 .obrigatorio {
-  color: white;
-  font-size: 0.95em;
+  color: #ffcccc;
+  font-size: 1vw;
   font-weight: 600;
 }
 
-/* Alinha o texto obrigatório ao final do input */
-.input-wrapper {
-  position: relative;
-  width: 40vw;
-  margin-bottom: 1.2em;
-}
 
-.input-wrapper .obrigatorio {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #ff3333;
-  font-size: 0.95em;
-  pointer-events: none;
-  font-weight: 600;
-}
 
 .btns_popup {
   margin-top: 5vh;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  gap: 1vw;
+  width: 100%;
 }
 
-.btn_configs_funcio {
-  width: 40vw;
-  height: 5vh;
-  border-radius: 1vw;
-  border: solid white 1px;
-  background-color: #FF6D4D;
-  font-size: 110%;
+.btn {
+  width: 100%;
+  height: 3vw;
+  border-radius: 12px;
+  border: 1px solid #fff;
+  background: linear-gradient(135deg, #FF6D4D, #FF3C00);
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #fff;
+  transition: all 0.3s ease;
 }
-.btn_configs_funcio:hover {
+
+.btn:hover {
+  background: linear-gradient(135deg, #FF3C00, #C90000);
+  transform: scale(1.02);
   cursor: pointer;
-  width: 40vw;
-  height: 5vh;
-  border-radius: 1vw;
-  border: solid white 1px;
-  background-color: #FF0000;
-  font-size: 110%;
 }
-.btn_configs_funcio:active {
-  cursor: pointer;
-  width: 40vw;
-  height: 5vh;
-  border-radius: 1vw;
-  border: solid white 1px;
-  background-color: #b30404;
-  font-size: 110%;
+
+.btn:active {
+  background: #a10000;
+  transform: scale(0.98);
 }
-.btnFecharPopup:hover {
-  cursor: pointer;
-  color: black;
+
+#mensagem_erro {
+    margin-top: 20px;
+    margin-bottom: -18px;
+    font-size: 2.22vw;
 }
 
 /* --------------------------------------------------------------------------------------*/
@@ -320,13 +335,5 @@
 .buttons-edit {
   width: 2vw;
   cursor: pointer;
-  
-}
 
-#mensagem_erro {
-    padding: 10px;
-    border-radius: 10px;
-    margin-top: 20px;
-    margin-bottom: -18px;
-    background-color: #ff3333;
 }
