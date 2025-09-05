@@ -8,6 +8,14 @@ function autenticar(email, senha) {
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
 }
+function editar(email, senha){
+        console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function entrar(): ", email, senha)
+    var instrucaoSql = `
+        SELECT * FROM usuario WHERE email = '${email}' AND senha = SHA2('${senha}');
+    `;
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
 
 function cadastrarEndereco(cep, rua, bairro, cidade, estado, numero, complemento) {
     console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function cadastrar():", cep, rua, bairro, cidade, estado, numero, complemento);
@@ -47,11 +55,41 @@ function online(idUsuario, status) {
     return database.executar(instrucaoSql);
 }
 
+function online(idUsuario, status) {
+    console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function cadastrar():", status, idUsuario);
+
+    var instrucaoSql = `
+        UPDATE usuario
+        SET status_online = ${status}
+        WHERE id = ${idUsuario};
+    `;
+
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
+//tela de funcionários
+function filtrar() {
+    const instrucaoSql = `
+        select u.foto_perfil, u.nome, u.sobrenome, u.email, c.cargo, DATE_FORMAT(u.data_cadastro, '%d/%m/%Y') as data_cadastro, u.telefone 
+        from cargo c
+        join cargousuario uc on c.id = uc.Cargo_id
+        join usuario u on uc.usuario_id = u.id;
+    `;
+    return database.executar(instrucaoSql);
+}
+function listarCargo() {
+    const instrucaoSql = "SELECT cargo FROM cargo ORDER BY cargo";
+    return database.executar(instrucaoSql);
+}
 
 
 module.exports = {
     autenticar,
+    editar,
     cadastrarEmpresa,
     cadastrarEndereco,
-    online
+    filtrar,
+    listarCargo
+
 };

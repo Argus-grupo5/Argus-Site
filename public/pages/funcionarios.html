@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/dashboard/funcionarios.css">
+    <link rel="stylesheet" href="../css/dashboard/servers.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <title>ARGUS | Funcionários</title>
+</head>
+
+<body>
+    <div id="config_funcionarios">
+    </div>
+    <div id="id_sair">
+    </div>
+    <header class="desktopNav">
+        <div class="navButtons">
+            <div class="navButton tooltipNav" id="navUser">
+                <img src="../assets/fotoPerfil/padrao.svg" alt="" id="FotoNavBar">
+                <span class="tooltiptextNav">
+                    <div id="userNome"></div>
+                    <div id="userCargo">ADM</div>
+                </span>
+            </div>
+            <a href="../pages/servers.html" class="navButton tooltipNav" id="navServers">
+                <img src="../assets/dashboard/desktop/box.svg" alt="Servidores">
+                <span class="tooltiptextNav">Servidores</span>
+            </a>
+
+            <a href="../pages/funcionarios.html" class="navButton tooltipNav" id="navServers">
+                <img class="selected" src="../assets/dashboard/desktop/employes.svg" alt="Funcionários">
+                <span class="tooltiptextNav">Funcionários</span>
+            </a>
+            <div class="navButton tooltipNav" id="navServers">
+                <img src="../assets/dashboard/desktop/logs.svg" alt="Logs">
+                <span class="tooltiptextNav">Logs</span>
+            </div>
+            <div class="navButton tooltipNav" id="navServers">
+                <img src="../assets/dashboard/desktop/headphone.svg" alt="Suporte">
+                <span class="tooltiptextNav">Suporte</span>
+            </div>
+            <div class="navButton tooltipNav" id="navServers" onclick="sair()">
+                <img src="../assets/dashboard/desktop/logout.svg" alt="Sair">
+                <span class="tooltiptextNav">Sair</span>
+            </div>
+        </div>
+        <img class="logo" src="../assets/icon/logoBlack.svg" alt="">
+    </header>
+    <header class="headerTop">
+        <div class="geralInfo">
+            <div class="info tooltipInfo">
+                <div class="server">
+                    <img src="../assets/dashboard/desktop/server.svg" alt="">
+                </div>
+                <div class="serversMonitoring" id="id_servidores_monitorados">
+                </div>
+                <span class="tooltiptextInfo">
+                    Servidores em monitoramento
+                </span>
+            </div>
+            <div class="info">
+                <div class="bell">
+                    <img src="../assets/dashboard/desktop/bell.svg" alt="">
+                </div>
+                <div class="risk tooltipInfo" id="id_servidores_em_estado_critico">
+                    <p id="qtd_critico"></p>
+                    <span class="tooltiptextInfo">
+                        Servidores em atenção
+                    </span>
+                </div>
+                <div class="atention tooltipInfo" id="id_servidores_em_estado_de_alerta">
+                    <p id="qtd_alerta"></p>
+                    <span class="tooltiptextInfo">
+                        Servidores em alerta
+                    </span>
+                </div>
+            </div>
+
+            <div class="editContainer" onclick="exibirEdicao()">
+                <img class="iconLapis" src="../assets/funcionarios/lapis.svg" alt="Editar">
+                <!-- <span class="tooltiptextInfo">Editar</span> -->
+
+            </div>
+    </header>
+
+    <div class="search">
+        <select id="id_filter" onchange="filtrarFuncionarios()">
+            <option value="" selected>Todos</option>
+        </select>
+        <input type="search" id="id_pesquisa" placeholder="Pesquisar funcionário" oninput="filtrarFuncionarios()">
+    </div>
+    <div class="containerFunc">
+        <div class="funcInfo">
+            <div class="funcFoto">
+                Foto
+            </div>
+            <div class="funcName">
+                Nome
+            </div>
+            <div class="funcEmail">
+                Email
+            </div>
+            <div class="funcCargo">
+                Cargo
+            </div>
+            <div class="dtCadastro">
+                Data de Cadastro
+            </div>
+            <div class="functel">
+                Telefone
+            </div>
+            <div id="funcStatusInfo" class="funcStatusInfo">
+                Status
+            </div>
+
+        </div>
+        <div class="func-list" id="id_func_list">
+
+        </div>
+    </div>
+</body>
+
+<script>
+    let edit = false;
+    let funcionariosLista;
+
+    const container = document.getElementById("id_func_list");
+
+    function listarCargo() {
+        const select = document.getElementById("id_filter");
+
+        fetch("/usuarios/listarCargo")
+            .then(res => res.json())
+            .then(cargos => {
+                cargos.forEach(c => {
+                    const option = document.createElement("option");
+                    option.value = c.cargo;
+                    option.textContent = c.cargo;
+                    select.appendChild(option);
+                });
+            })
+            .catch(err => console.error("Erro ao carregar cargos:", err));
+    }
+
+
+    window.onload = () => {
+        listarCargo();
+        fetch(`/usuarios/filtrar`).then(res => {
+            if (res.ok) {
+                res.json().then(resposta => {
+                    funcionariosLista = resposta;
+                    filtrarFuncionarios();
+                })
+            }
+        })//fim fetch
+    };
+
+    function filtrarFuncionarios() {
+        const filtro = document.getElementById("id_filter").value.toLowerCase();
+        const pesquisa = document.getElementById("id_pesquisa").value.toLowerCase();
+        container.innerHTML = "";
+        var contStatus = 0;
+
+        for (let i = 0; i < funcionariosLista.length; i++) {
+            const cargoIgual = filtro === "" || funcionariosLista[i].cargo.toLowerCase() === filtro;
+            const pesquisaIgual =
+                funcionariosLista[i].nome.toLowerCase().includes(pesquisa) ||
+                funcionariosLista[i].email.toLowerCase().includes(pesquisa);
+
+            if (funcionariosLista[i].sobrenome == null) {
+                funcionariosLista[i].sobrenome = ""
+            }
+
+            if (cargoIgual && pesquisaIgual) {
+                contStatus++;
+                const statusIcon = `<img class="iconStatus" src="../assets/funcionarios/eyeClosed.svg" alt="Offline">`;
+                container.innerHTML += `
+                                    <div id="funcItem" class="funcionario-item">
+                                        <div class="funcFoto">
+                                            <img src="${funcionariosLista[i].foto_perfil}" alt="Foto">
+                                        </div>
+                                        <div class="funcName">${funcionariosLista[i].nome} ${funcionariosLista[i].sobrenome}</div>
+                                        <div class="funcEmail">${funcionariosLista[i].email}</div>
+                                        <div class="funcCargo">${funcionariosLista[i].cargo}</div>
+                                        <div class="dtCadastro">${funcionariosLista[i].data_cadastro}</div>
+                                        <div class="functel">${funcionariosLista[i].telefone}</div>
+                                        <div id="status${contStatus}"class="funcStatus">
+                                            ${statusIcon}
+                                        </div>
+                                    </div>`;
+            }
+        }
+        if (edit) {
+            exibirEdicao();
+        }
+    }
+
+    function exibirEdicao() {
+        edit = true;
+        var funcStatus = document.getElementById("funcStatusInfo")
+
+        funcStatus.innerHTML = `<img  class= "buttons-edit" src="../assets/funcionarios/editGreen.svg" alt="" onclick="pop_up_adicionar()">`;
+
+        var elementosStatus = document.getElementById("id_func_list");
+
+        for (var contador = 1; contador <= elementosStatus.children.length; contador++) {
+
+            var statusInfo = document.getElementById(`status${contador}`);
+
+            statusInfo.innerHTML = `
+            <img class= "buttons-edit" src="../assets/funcionarios/editYellow.svg" alt="Editar" onclick="pop_up_editar()">
+            <img class= "buttons-edit" src="../assets/funcionarios/iconDelete.svg" alt="Deletar" onclick="pop_up_excluir()">
+            
+            `;
+
+        }
+
+    }
+
+    function pop_up_adicionar() {
+        config_funcionarios.innerHTML = `
+            <div class="popup_configs">
+                <h1>Criar Usuário</h1>
+                <div class="input-label-wrapper">
+                    <span class="input-label">Nome</span>
+                    <span class="obrigatorio">*obrigatório</span>
+                </div>
+                <input type="text" id="ipt_nome" required>
+                <div class="input-label-wrapper">
+                    <span class="input-label">Sobrenome</span>
+                    <span class="obrigatorio">*obrigatório</span>
+                </div>
+                <input type="text" id="ipt_sobrenome" required>
+                <div class="input-label-wrapper">
+                    <span class="input-label">Cargo</span>
+                    <span class="obrigatorio">*obrigatório</span>
+                </div>
+                <input type="text" id="ipt_cargo" required>
+                <div class="input-label-wrapper">
+                    <span class="input-label">Email</span>
+                    <span class="obrigatorio">*obrigatório</span>
+                </div>
+                <input type="text" id="ipt_email" required>
+                <div class="input-label-wrapper">
+                    <span class="input-label">Senha</span>
+                    <span class="obrigatorio">*obrigatório</span>
+                </div>
+                <input type="text" id="ipt_senha" required>
+                <div class="input-label-wrapper">
+                    <span class="input-label">Confirmar senha</span>
+                    <span class="obrigatorio">*obrigatório</span>
+                </div>
+                <input type="text" id="ipt_confirmar_senha" required>
+                <div class="input-label-wrapper">
+                    <span class="input-label">Telefone</span>
+                </div>
+                <input type="text" id="ipt_telefone" required>
+                <div class="input-label-wrapper">
+                    <span class="input-label">Foto</span>
+                </div>
+                <input type="text" id="ipt_foto" required>
+                <div class="btns_popup">
+                <button class=btn_configs_funcio onclick="funcao_adicionar()">Cadastrar</button>
+                <div onclick="fechar_popup()" class="btnFecharPopup">Fechar</div>
+                </div>
+            </div>
+        `;
+    }
+    function pop_up_editar() {
+        config_funcionarios.innerHTML = `
+            <div class="popup_configs">
+                <h1>Editar Usuário</h1>
+                <div class="input-label-wrapper">
+                    <span class="input-label">Nome</span>
+                    <span class="obrigatorio">*obrigatório</span>
+                </div>
+                <input type="text" id="ipt_nome" required>
+                <div class="input-label-wrapper">
+                    <span class="input-label">Sobrenome</span>
+                    <span class="obrigatorio">*obrigatório</span>
+                </div>
+                <input type="text" id="ipt_sobrenome" required>
+                <div class="input-label-wrapper">
+                    <span class="input-label">Cargo</span>
+                    <span class="obrigatorio">*obrigatório</span>
+                </div>
+                <input type="text" id="ipt_cargo" required>
+                <div class="input-label-wrapper">
+                    <span class="input-label">Email</span>
+                    <span class="obrigatorio">*obrigatório</span>
+                </div>
+                <input type="text" id="ipt_email" required>
+                <div class="input-label-wrapper">
+                    <span class="input-label">Senha</span>
+                    <span class="obrigatorio">*obrigatório</span>
+                </div>
+                <input type="text" id="ipt_senha" required>
+                <div class="input-label-wrapper">
+                    <span class="input-label">Confirmar senha</span>
+                    <span class="obrigatorio">*obrigatório</span>
+                </div>
+                <input type="text" id="ipt_confirmar_senha" required>
+                <div class="input-label-wrapper">
+                    <span class="input-label">Telefone</span>
+                </div>
+                <input type="text" id="ipt_telefone" required>
+                <div class="input-label-wrapper">
+                    <span class="input-label">Foto</span>
+                </div>
+                <input type="text" id="ipt_foto" required>
+                <div class="btns_popup">
+                <button class=btn_configs_funcio onclick="funcao_editar()">Editar</button>
+                <div onclick="fechar_popup()" class="btnFecharPopup">Fechar</div>
+                </div>
+            </div>
+        `;
+    }
+    function pop_up_excluir() {
+        config_funcionarios.innerHTML = `
+            <div class="popup_configs_sair">
+                <h1>Deletar Usuário</h1>
+                <p>Deseja deletar este usuário?</p>
+                <button class=btn_configs_funcio_sim onclick="funcao_excluir()">Sim</button>
+                <button class=btn_configs_funcio_nao onclick="fechar_popup()">Não</button>
+            </div>
+        `;
+    }
+
+    function fechar_popup() {
+        config_funcionarios.innerHTML = '';
+    }
+    function sair() {
+        id_sair.innerHTML = `
+        
+            <div class="popup_sair">
+                <h1>Deseja sair?</h1>
+                <button onclick="sair_s()">Sim</button>
+                <button onclick="sair_n()">Não</button>
+            </div>
+        `;
+    }
+    function sair_s() {
+        window.location.href = "./login.html";
+        sessionStorage.clear;
+    }
+
+    function sair_n() {
+        id_sair.innerHTML = ``;
+    }
+    userNome.innerHTML = sessionStorage.USER_NAME;
+    userCargo.innerHTML = sessionStorage.CARGO_CARGO;
+</script>
+</body>
+
+</html>
