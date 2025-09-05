@@ -1,6 +1,7 @@
 
 var express = require("express");
 var router = express.Router();
+const upload = require('../config/configUpload'); // ARQUIVO COM A CONFIGURAÇÃO DO UPLOAD
 
 var usuarioController = require("../controllers/usuarioController");
 
@@ -9,7 +10,7 @@ router.post("/cadastrarEndereco", function (req, res) {
     usuarioController.cadastrarEndereco(req, res);
 })
 
-router.post("/cadastrarEmpresa", function (req, res) {
+router.post("/cadastrarEmpresa", upload.single('fotoServer'), function (req, res) {
     usuarioController.cadastrarEmpresa(req, res);
 })
 
