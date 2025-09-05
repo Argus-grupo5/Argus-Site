@@ -49,11 +49,11 @@ function listarCargo() {
     return database.executar(instrucaoSql);
 }
 
-function deletarFuncionario(id) {
-    
-    const instrucaoSql = `delete from usuario where id = ?`;
-    return database.executar(instrucaoSql, [id]);
+function funcao_excluir(id) {
+    const instrucaoSql = `delete from cargoUsuario where usuario_id = ${id}`;
+    return database.executar(instrucaoSql);
 }
+
 function online(idUsuario, status) {
     console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function cadastrar():", status, idUsuario);
 
@@ -75,7 +75,6 @@ module.exports = {
     cadastrarEndereco,
     filtrar,
     listarCargo,
-    deletarFuncionario,
-
+    funcao_excluir,
     online
 };

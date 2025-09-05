@@ -180,11 +180,24 @@ function listarCargo(req, res) {
         });
 }
 
-function deletarFuncionario(req, res){
-    const id = req.params.id;
-    usuarioModel.deletarFuncionario(id)
-        .then(result => res.json({message: "Usuário deletado"}))
-        .catch(err => res.status(500).json({erro: err.message}));
+function funcao_excluir(req, res) {
+    var id = req.body.idServer;
+    if (id == undefined) {
+        res.status(400).send("O id estão undefined!");
+    }
+    
+    usuarioModel.funcao_excluir(id)
+        .then((resultado) => {
+            if (resultado.length > 0) {
+                res.status(200).json(resultado);
+            } else {
+                res.status(204).send("Nenhum funcionário encontrado");
+            }
+        })
+        .catch((erro) => {
+            console.error("Erro ao buscar funcionários:", erro.sqlMessage || erro);
+            res.status(500).json(erro.sqlMessage || erro);
+        });
 }
 function online(req, res) {
     var status = req.body.status;
@@ -220,6 +233,6 @@ module.exports = {
     cadastrarEmpresa,
     filtrar,
     listarCargo,
-    deletarFuncionario,
+    funcao_excluir,
     online
 }

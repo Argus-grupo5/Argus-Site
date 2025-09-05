@@ -24,7 +24,10 @@ router.get("/filtrar", function (req, res){
 
 router.get("/listarCargo", usuarioController.listarCargo);
 
-router.delete("/deletarFuncionario/:id", usuarioController.deletarFuncionario)
+router.delete("/funcao_excluir", function (req, res){
+    usuarioController.funcao_excluir(req, res)
+})
+
 router.put("/online", function (req, res) {
     usuarioController.online(req, res);
 })
