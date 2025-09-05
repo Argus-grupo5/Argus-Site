@@ -41,13 +41,14 @@
 
   <!-- Menu full-screen -->
   <nav id="mobileNav" class="mobileNav">
-    <nav class="links">
-      <a class="link" href="./pages/suporte.html">Suporte</a>
-      <a class="link" href="./pages/empresa.html">Empresa</a>
-      <a class="link" href="./pages/contato.html">Contato</a>
-    </nav>
-    <a class="btnCadastro" href="./pages/signin.html">Cadastrar-se</a>
-    
+    <ul>
+      <li><a href="./pages/suporte.html">Suporte</a></li>
+      <li><a href="./pages/empresa.html">Empresa</a></li>
+      <li><a href="./pages/contato.html">Contato</a></li>
+      <li><a href="./pages/login.html">Entrar</a></li>
+      <li><a class="btnCadastro" href="#">Cadastrar-se</a></li>
+    </ul>
+
     <footer>
       <div>
         <a href="#">Sobre Nós</a>
@@ -223,8 +224,8 @@
   const mobileNav = document.getElementById('mobileNav');
 
   burgerBtn.addEventListener('click', () => {
-    burgerBtn.classList.toggle('active'); 
-    mobileNav.classList.toggle('active'); 
+    burgerBtn.classList.toggle('active');
+    mobileNav.classList.toggle('active');
   });
 
 </script>
