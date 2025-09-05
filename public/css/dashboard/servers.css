@@ -41,6 +41,7 @@ body {
 }
 
 .desktopNav .navButtons img:hover{
+    cursor: pointer;
     width: 90%;
     background-color: #ffa794; 
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -51,6 +52,7 @@ body {
     width: 90%;
     height: auto;
 }
+
 
 .desktopNav .navButtons {
     display: flex;
@@ -100,7 +102,7 @@ body {
 
 .tooltipNav:hover .tooltiptextNav {
   visibility: visible;
-  width: 12vw;
+  width: fit-content;
   font-size: 1vw;
   transition: .4s ease;
 }
@@ -131,6 +133,10 @@ body {
 }
 
 .user {
+    display: flex;
+}
+.user:hover{
+    cursor: pointer;
     display: flex;
 }
 
@@ -235,7 +241,7 @@ body {
 
 #userCargo{
     font-size: 0.7vw;
-    color: #201010;
+    color: #a0a0a0;
 }
 .search{
     display: flex;
