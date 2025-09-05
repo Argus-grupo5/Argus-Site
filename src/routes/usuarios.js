@@ -16,18 +16,18 @@ router.post("/cadastrarEmpresa", function (req, res) {
 router.post("/autenticar", function (req, res) {
     usuarioController.autenticar(req, res);
 });
-router.post("/editar", function (req, res) {
-    usuarioController.editar(req, res);
-});
 
-router.get("/filtrar", (req, res) => {
+<<<<<<<<< Temporary merge branch 1
+router.put("/online", function (req, res) {
+    usuarioController.online(req, res);
+})
+=========
+
+router.get("/filtrar", function (req, res){
     usuarioController.filtrar(req, res);
 });
 
 router.get("/listarCargo", usuarioController.listarCargo);
-
-router.put("/online", function (req, res) {
-    usuarioController.online(req, res);
-})
+>>>>>>>>> Temporary merge branch 2
 
 module.exports = router;

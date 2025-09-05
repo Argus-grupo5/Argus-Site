@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/dashboard/funcionarios.css">
+    
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../css/dashboard/funcionarios.css">
     <link rel="stylesheet" href="../css/dashboard/servers.css">
     <link rel="stylesheet" href="../css/style.css">
     <title>ARGUS | Funcionários</title>
@@ -77,13 +77,14 @@
                     </span>
                 </div>
             </div>
-
-            <div class="editContainer" onclick="exibirEdicao()">
-                <img class="iconLapis" src="../assets/funcionarios/lapis.svg" alt="Editar">
-                <!-- <span class="tooltiptextInfo">Editar</span> -->
-
-            </div>
+        </div>
+        
+        <div id="editContainer" class="editContainer">
+            <img class="iconLapis" src="../assets/funcionarios/lapis.svg" alt="" onclick="filtrarFuncionarios(true)">
+            <span class="tooltiptextInfo">Editar </span>
+        </div>
     </header>
+    <div id="config_funcionarios"></div>
 
     <div class="search">
         <select id="id_filter" onchange="filtrarFuncionarios()">
@@ -119,11 +120,14 @@
         <div class="func-list" id="id_func_list">
 
         </div>
+        
     </div>
 </body>
 
+</html>
+
 <script>
-    let edit = false;
+    let editar = false;
     let funcionariosLista;
 
     const container = document.getElementById("id_func_list");
@@ -151,35 +155,42 @@
             if (res.ok) {
                 res.json().then(resposta => {
                     funcionariosLista = resposta;
-                    filtrarFuncionarios();
+                    filtrarFuncionarios(editar);
                 })
             }
         })//fim fetch
     };
 
-    function filtrarFuncionarios() {
+    function filtrarFuncionarios(edit) {
+        console.log(edit)
         const filtro = document.getElementById("id_filter").value.toLowerCase();
         const pesquisa = document.getElementById("id_pesquisa").value.toLowerCase();
         container.innerHTML = "";
         var contStatus = 0;
 
-        for (let i = 0; i < funcionariosLista.length; i++) {
-            const cargoIgual = filtro === "" || funcionariosLista[i].cargo.toLowerCase() === filtro;
-            const pesquisaIgual =
-                funcionariosLista[i].nome.toLowerCase().includes(pesquisa) ||
-                funcionariosLista[i].email.toLowerCase().includes(pesquisa);
+        if (!edit) {
+            editar = false;
+            funcStatusInfo.innerHTML = `Status`
+            editContainer.innerHTML = `
+                <img class="iconLapis" src="../assets/funcionarios/lapis.svg" alt="" onclick="filtrarFuncionarios(true)">
+                <span class="tooltiptextInfo">Editar </span>`
+            for (let i = 0; i < funcionariosLista.length; i++) {
+                const cargoIgual = filtro === "" || funcionariosLista[i].cargo.toLowerCase() === filtro;
+                const pesquisaIgual =
+                    funcionariosLista[i].nome.toLowerCase().includes(pesquisa) ||
+                    funcionariosLista[i].email.toLowerCase().includes(pesquisa);
 
             if (funcionariosLista[i].sobrenome == null) {
                 funcionariosLista[i].sobrenome = ""
             }
 
-            if (cargoIgual && pesquisaIgual) {
-                contStatus++;
-                const statusIcon = `<img class="iconStatus" src="../assets/funcionarios/eyeClosed.svg" alt="Offline">`;
-                container.innerHTML += `
-                                    <div id="funcItem" class="funcionario-item">
+                if (cargoIgual && pesquisaIgual) {
+                    contStatus++;
+                    const statusIcon = `<img class="iconStatus" src="../assets/funcionarios/eyeClosed.svg" alt="Offline">`;
+                    container.innerHTML += `
+                                    <div id="funcItem" class="funcionario-item" data-idFuncionario=${funcionariosLista[i].id}>
                                         <div class="funcFoto">
-                                            <img src="${funcionariosLista[i].foto_perfil}" alt="Foto">
+                                            <img src="../assets/fotoPerfil/${funcionariosLista[i].foto_perfil}" alt="Foto">
                                         </div>
                                         <div class="funcName">${funcionariosLista[i].nome} ${funcionariosLista[i].sobrenome}</div>
                                         <div class="funcEmail">${funcionariosLista[i].email}</div>
@@ -190,36 +201,55 @@
                                             ${statusIcon}
                                         </div>
                                     </div>`;
+                }
             }
         }
-        if (edit) {
-            exibirEdicao();
+        else if (edit) {
+            editar = true;
+
+            editContainer.innerHTML = `
+                <img class="iconLapis" src="../assets/funcionarios/salvarAlt.svg" alt="" onclick="filtrarFuncionarios(false)" >
+                <span class="tooltiptextInfo">Salvar </span>`
+
+
+
+            for (let i = 0; i < funcionariosLista.length; i++) {
+                const cargoIgual = filtro === "" || funcionariosLista[i].cargo.toLowerCase() === filtro;
+                const pesquisaIgual =
+                    funcionariosLista[i].nome.toLowerCase().includes(pesquisa) ||
+                    funcionariosLista[i].email.toLowerCase().includes(pesquisa);
+
+                if (funcionariosLista[i].sobrenome == null) {
+                    funcionariosLista[i].sobrenome = ""
+                }
+
+                if (cargoIgual && pesquisaIgual) {
+                    var funcStatus = document.getElementById("funcStatusInfo")
+                    funcStatus.innerHTML = `<img  class= "buttons-edit" src="../assets/funcionarios/editGreen.svg" alt="" onclick="pop_up_adicionar(${funcionariosLista[i].id})">`;
+
+                    container.innerHTML += `
+                                    <div id="funcItem" class="funcionario-item" data-idFuncionario=${funcionariosLista[i].id}>
+                                        <div class="funcFoto">
+                                            <img src="../assets/fotoPerfil/${funcionariosLista[i].foto_perfil}" alt="Foto">
+                                        </div>
+                                        <div class="funcName">${funcionariosLista[i].nome} ${funcionariosLista[i].sobrenome}</div>
+                                        <div class="funcEmail">${funcionariosLista[i].email}</div>
+                                        <div class="funcCargo">${funcionariosLista[i].cargo}</div>
+                                        <div class="dtCadastro">${funcionariosLista[i].data_cadastro}</div>
+                                        <div class="functel">${funcionariosLista[i].telefone}</div>
+                                        <div class="funcStatus">
+                                            <img class= "buttons-edit" src="../assets/funcionarios/editYellow.svg" alt="Editar" onclick="pop_up_editar(${funcionariosLista[i].id})">
+                                            <img class= "buttons-edit" src="../assets/funcionarios/iconDelete.svg" alt="Deletar" onclick="pop_up_excluir(${funcionariosLista[i].id})">
+                                        </div>
+                                    </div>`;
+                }
+            }
         }
     }
 
-    function exibirEdicao() {
-        edit = true;
-        var funcStatus = document.getElementById("funcStatusInfo")
 
-        funcStatus.innerHTML = `<img  class= "buttons-edit" src="../assets/funcionarios/editGreen.svg" alt="" onclick="pop_up_adicionar()">`;
-
-        var elementosStatus = document.getElementById("id_func_list");
-
-        for (var contador = 1; contador <= elementosStatus.children.length; contador++) {
-
-            var statusInfo = document.getElementById(`status${contador}`);
-
-            statusInfo.innerHTML = `
-            <img class= "buttons-edit" src="../assets/funcionarios/editYellow.svg" alt="Editar" onclick="pop_up_editar()">
-            <img class= "buttons-edit" src="../assets/funcionarios/iconDelete.svg" alt="Deletar" onclick="pop_up_excluir()">
-            
-            `;
-
-        }
-
-    }
-
-    function pop_up_adicionar() {
+    function pop_up_adicionar(id) {
+        console.log(id)
         config_funcionarios.innerHTML = `
             <div class="popup_configs">
                 <h1>Criar Usuário</h1>
@@ -268,6 +298,7 @@
             </div>
         `;
     }
+
     function pop_up_editar() {
         config_funcionarios.innerHTML = `
             <div class="popup_configs">
@@ -351,7 +382,7 @@
     }
     userNome.innerHTML = sessionStorage.USER_NAME;
     userCargo.innerHTML = sessionStorage.CARGO_CARGO;
-</script>
-</body>
 
-</html>
+
+
+</script>

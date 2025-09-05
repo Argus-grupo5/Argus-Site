@@ -42,36 +42,10 @@ function cadastrarEmpresa(nome, telefone, email, senha, cnpj, razao, fkEndereco)
     return database.executar(instrucaoSql);
 }
 
-function online(idUsuario, status) {
-    console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function cadastrar():", status, idUsuario);
-
-    var instrucaoSql = `
-        UPDATE usuario
-        SET status_online = ${status}
-        WHERE id = ${idUsuario};
-    `;
-
-    console.log("Executando a instrução SQL: \n" + instrucaoSql);
-    return database.executar(instrucaoSql);
-}
-
-function online(idUsuario, status) {
-    console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function cadastrar():", status, idUsuario);
-
-    var instrucaoSql = `
-        UPDATE usuario
-        SET status_online = ${status}
-        WHERE id = ${idUsuario};
-    `;
-
-    console.log("Executando a instrução SQL: \n" + instrucaoSql);
-    return database.executar(instrucaoSql);
-}
-
 //tela de funcionários
 function filtrar() {
     const instrucaoSql = `
-        select u.foto_perfil, u.nome, u.sobrenome, u.email, c.cargo, DATE_FORMAT(u.data_cadastro, '%d/%m/%Y') as data_cadastro, u.telefone 
+        select u.id, u.foto_perfil, u.nome, u.sobrenome, u.email, c.cargo, DATE_FORMAT(u.data_cadastro, '%d/%m/%Y') as data_cadastro, u.telefone 
         from cargo c
         join cargousuario uc on c.id = uc.Cargo_id
         join usuario u on uc.usuario_id = u.id;
@@ -79,9 +53,28 @@ function filtrar() {
     return database.executar(instrucaoSql);
 }
 function listarCargo() {
-    const instrucaoSql = "SELECT cargo FROM cargo ORDER BY cargo";
+    const instrucaoSql = "select cargo from cargo order by cargo";
     return database.executar(instrucaoSql);
 }
+
+function deletarFuncionario(id) {
+    
+    const instrucaoSql = `delete from usuario where id = ?`;
+    return database.executar(instrucaoSql, [id]);
+}
+function online(idUsuario, status) {
+    console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function cadastrar():", status, idUsuario);
+
+    var instrucaoSql = `
+        UPDATE usuario
+        SET status_online = ${status}
+        WHERE id = ${idUsuario};
+    `;
+
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
 
 
 module.exports = {
@@ -90,6 +83,8 @@ module.exports = {
     cadastrarEmpresa,
     cadastrarEndereco,
     filtrar,
-    listarCargo
+    listarCargo,
+    deletarFuncionario,
 
+    online
 };

@@ -1,0 +1,40 @@
+[33mb5bf904[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mMaria[m[33m)[m HEAD@{0}: commit: Tentando conectar função de delete com o banco
+[33m1e444ad[m[33m ([m[1;31morigin/Maria[m[33m)[m HEAD@{1}: commit: Add função de sair do modo de edição
+[33m5cb6ad7[m HEAD@{2}: commit: Corrigindo script da tela de edição de funcionário
+[33m6f5a8b7[m HEAD@{3}: commit: v1 tela de editar funcionário
+[33mc5a0253[m HEAD@{4}: commit: Ajustando css e como os dados são exibidos no front
+[33mb852124[m HEAD@{5}: commit: Tela de funcionários integrada com o banco
+[33m93a1d49[m HEAD@{6}: commit: Ajustando css da tela de empresa
+[33m8b21dc7[m HEAD@{7}: commit: Ajustando responsividade da tela de empresa
+[33mf30c113[m HEAD@{8}: commit: Adicionando icons na tela de funcionários e ajustando css
+[33m1c48ecc[m HEAD@{9}: commit: Otimizando o Script
+[33m2be6b6c[m HEAD@{10}: commit: V1 da tela de funcionários
+[33m0ed6f58[m[33m ([m[1;31morigin/main[m[33m)[m HEAD@{11}: pull origin main: Fast-forward
+[33m9d9c51e[m HEAD@{12}: pull origin main: Fast-forward
+[33mb00f338[m[33m ([m[1;32mmain[m[33m)[m HEAD@{13}: checkout: moving from main to Maria
+[33mb00f338[m[33m ([m[1;32mmain[m[33m)[m HEAD@{14}: pull origin Maria: Fast-forward
+[33m850ddb6[m HEAD@{15}: pull: Fast-forward
+[33m2be41e4[m[33m ([m[1;32mPedro[m[33m, [m[1;32mMariaa[m[33m, [m[1;32mLeonardo[m[33m, [m[1;32mGustavo[m[33m, [m[1;32mAlly[m[33m)[m HEAD@{16}: checkout: moving from Maria to main
+[33mb00f338[m[33m ([m[1;32mmain[m[33m)[m HEAD@{17}: commit: Adicionando imagens
+[33mf05f679[m HEAD@{18}: pull origin main: Merge made by the 'ort' strategy.
+[33ma8f7c17[m HEAD@{19}: reset: moving to HEAD
+[33ma8f7c17[m HEAD@{20}: reset: moving to HEAD
+[33ma8f7c17[m HEAD@{21}: commit (merge): Alteração css
+[33m6af9d07[m HEAD@{22}: commit: Corrigindo links
+[33m5747a3d[m HEAD@{23}: commit: Corrigindo links
+[33mbebea3d[m HEAD@{24}: commit: Alteração nome da página
+[33m7025591[m HEAD@{25}: commit: Subindo v1 da tela de empresa/sobre nós
+[33m5955574[m HEAD@{26}: pull origin main: Fast-forward
+[33m729b374[m HEAD@{27}: pull origin main: Fast-forward
+[33m2be41e4[m[33m ([m[1;32mPedro[m[33m, [m[1;32mMariaa[m[33m, [m[1;32mLeonardo[m[33m, [m[1;32mGustavo[m[33m, [m[1;32mAlly[m[33m)[m HEAD@{28}: checkout: moving from Pedro to Maria
+[33m2be41e4[m[33m ([m[1;32mPedro[m[33m, [m[1;32mMariaa[m[33m, [m[1;32mLeonardo[m[33m, [m[1;32mGustavo[m[33m, [m[1;32mAlly[m[33m)[m HEAD@{29}: checkout: moving from Mariaa to Pedro
+[33m2be41e4[m[33m ([m[1;32mPedro[m[33m, [m[1;32mMariaa[m[33m, [m[1;32mLeonardo[m[33m, [m[1;32mGustavo[m[33m, [m[1;32mAlly[m[33m)[m HEAD@{30}: checkout: moving from main to Mariaa
+[33m2be41e4[m[33m ([m[1;32mPedro[m[33m, [m[1;32mMariaa[m[33m, [m[1;32mLeonardo[m[33m, [m[1;32mGustavo[m[33m, [m[1;32mAlly[m[33m)[m HEAD@{31}: checkout: moving from Pedro to main
+[33m2be41e4[m[33m ([m[1;32mPedro[m[33m, [m[1;32mMariaa[m[33m, [m[1;32mLeonardo[m[33m, [m[1;32mGustavo[m[33m, [m[1;32mAlly[m[33m)[m HEAD@{32}: checkout: moving from main to Pedro
+[33m2be41e4[m[33m ([m[1;32mPedro[m[33m, [m[1;32mMariaa[m[33m, [m[1;32mLeonardo[m[33m, [m[1;32mGustavo[m[33m, [m[1;32mAlly[m[33m)[m HEAD@{33}: checkout: moving from Gustavo to main
+[33m2be41e4[m[33m ([m[1;32mPedro[m[33m, [m[1;32mMariaa[m[33m, [m[1;32mLeonardo[m[33m, [m[1;32mGustavo[m[33m, [m[1;32mAlly[m[33m)[m HEAD@{34}: checkout: moving from Pedro to Gustavo
+[33m2be41e4[m[33m ([m[1;32mPedro[m[33m, [m[1;32mMariaa[m[33m, [m[1;32mLeonardo[m[33m, [m[1;32mGustavo[m[33m, [m[1;32mAlly[m[33m)[m HEAD@{35}: checkout: moving from Ally to Pedro
+[33m2be41e4[m[33m ([m[1;32mPedro[m[33m, [m[1;32mMariaa[m[33m, [m[1;32mLeonardo[m[33m, [m[1;32mGustavo[m[33m, [m[1;32mAlly[m[33m)[m HEAD@{36}: checkout: moving from Leonardo to Ally
+[33m2be41e4[m[33m ([m[1;32mPedro[m[33m, [m[1;32mMariaa[m[33m, [m[1;32mLeonardo[m[33m, [m[1;32mGustavo[m[33m, [m[1;32mAlly[m[33m)[m HEAD@{37}: checkout: moving from Maria to Leonardo
+[33m2be41e4[m[33m ([m[1;32mPedro[m[33m, [m[1;32mMariaa[m[33m, [m[1;32mLeonardo[m[33m, [m[1;32mGustavo[m[33m, [m[1;32mAlly[m[33m)[m HEAD@{38}: checkout: moving from main to Maria
+[33m2be41e4[m[33m ([m[1;32mPedro[m[33m, [m[1;32mMariaa[m[33m, [m[1;32mLeonardo[m[33m, [m[1;32mGustavo[m[33m, [m[1;32mAlly[m[33m)[m HEAD@{39}: commit (initial): Criando branchs
