@@ -231,7 +231,138 @@
             edit = false
             filtrarFuncionarios()
         }
+ function pop_up_adicionar() {
+        config_funcionarios.innerHTML = `
+            <div class="popup_configs">
+                <h1>Criar Usuário</h1>
+                <div class="input-label-wrapper">
+                    <span class="input-label">Nome</span>
+                    <span class="obrigatorio">*obrigatório</span>
+                </div>
+                <input type="text" id="ipt_nome" required>
+                <div class="input-label-wrapper">
+                    <span class="input-label">Sobrenome</span>
+                    <span class="obrigatorio">*obrigatório</span>
+                </div>
+                <input type="text" id="ipt_sobrenome" required>
+                <div class="input-label-wrapper">
+                    <span class="input-label">Cargo</span>
+                    <span class="obrigatorio">*obrigatório</span>
+                </div>
+                <input type="text" id="ipt_cargo" required>
+                <div class="input-label-wrapper">
+                    <span class="input-label">Email</span>
+                    <span class="obrigatorio">*obrigatório</span>
+                </div>
+                <input type="text" id="ipt_email" required>
+                <div class="input-label-wrapper">
+                    <span class="input-label">Senha</span>
+                    <span class="obrigatorio">*obrigatório</span>
+                </div>
+                <input type="text" id="ipt_senha" required>
+                <div class="input-label-wrapper">
+                    <span class="input-label">Confirmar senha</span>
+                    <span class="obrigatorio">*obrigatório</span>
+                </div>
+                <input type="text" id="ipt_confirmar_senha" required>
+                <div class="input-label-wrapper">
+                    <span class="input-label">Telefone</span>
+                </div>
+                <input type="text" id="ipt_telefone" required>
+                <div class="input-label-wrapper">
+                    <span class="input-label">Foto</span>
+                </div>
+                <input type="text" id="ipt_foto" required>
+                <div class="btns_popup">
+                <button class=btn_configs_funcio onclick="funcao_adicionar()">Cadastrar</button>
+                <div onclick="fechar_popup()" class="btnFecharPopup">Fechar</div>
+                </div>
+            </div>
+        `;
+    }
+    function pop_up_editar() {
+        config_funcionarios.innerHTML = `
+            <div class="popup_configs">
+                <h1>Editar Usuário</h1>
+                <div class="input-label-wrapper">
+                    <span class="input-label">Nome</span>
+                    <span class="obrigatorio">*obrigatório</span>
+                </div>
+                <input type="text" id="ipt_nome" required>
+                <div class="input-label-wrapper">
+                    <span class="input-label">Sobrenome</span>
+                    <span class="obrigatorio">*obrigatório</span>
+                </div>
+                <input type="text" id="ipt_sobrenome" required>
+                <div class="input-label-wrapper">
+                    <span class="input-label">Cargo</span>
+                    <span class="obrigatorio">*obrigatório</span>
+                </div>
+                <input type="text" id="ipt_cargo" required>
+                <div class="input-label-wrapper">
+                    <span class="input-label">Email</span>
+                    <span class="obrigatorio">*obrigatório</span>
+                </div>
+                <input type="text" id="ipt_email" required>
+                <div class="input-label-wrapper">
+                    <span class="input-label">Senha</span>
+                    <span class="obrigatorio">*obrigatório</span>
+                </div>
+                <input type="text" id="ipt_senha" required>
+                <div class="input-label-wrapper">
+                    <span class="input-label">Confirmar senha</span>
+                    <span class="obrigatorio">*obrigatório</span>
+                </div>
+                <input type="text" id="ipt_confirmar_senha" required>
+                <div class="input-label-wrapper">
+                    <span class="input-label">Telefone</span>
+                </div>
+                <input type="text" id="ipt_telefone" required>
+                <div class="input-label-wrapper">
+                    <span class="input-label">Foto</span>
+                </div>
+                <input type="text" id="ipt_foto" required>
+                <div class="btns_popup">
+                <button class=btn_configs_funcio onclick="funcao_editar()">Editar</button>
+                <div onclick="fechar_popup()" class="btnFecharPopup">Fechar</div>
+                </div>
+            </div>
+        `;
+    }
+    function pop_up_excluir() {
+        config_funcionarios.innerHTML = `
+            <div class="popup_configs_sair">
+                <h1>Deletar Usuário</h1>
+                <p>Deseja deletar este usuário?</p>
+                <button class=btn_configs_funcio_sim onclick="funcao_excluir()">Sim</button>
+                <button class=btn_configs_funcio_nao onclick="fechar_popup()">Não</button>
+            </div>
+        `;
+    }
 
+    function fechar_popup() {
+        config_funcionarios.innerHTML = '';
+    }
+    function sair() {
+        id_sair.innerHTML = `
+        
+            <div class="popup_sair">
+                <h1>Deseja sair?</h1>
+                <button onclick="sair_s()">Sim</button>
+                <button onclick="sair_n()">Não</button>
+            </div>
+        `;
+    }
+    function sair_s() {
+        window.location.href = "./login.html";
+        sessionStorage.clear;
+    }
+
+    function sair_n() {
+        id_sair.innerHTML = ``;
+    }
+    userNome.innerHTML = sessionStorage.USER_NAME;
+    userCargo.innerHTML = sessionStorage.CARGO_CARGO;
        
 
        
