@@ -84,11 +84,30 @@ function listarCargo() {
     return database.executar(instrucaoSql);
 }
 
-function criarUsuario(nome, sobrenome, email, senha, telefone, idEmpresa) {
-    const instrucaoSql = `INSERT INTO usuario (nome, sobrenome, email, senha, telefone, fkempresa)
-    VALUES ('${nome}', '${sobrenome}', '${email}', SHA2('${senha}', 512), '${telefone}', ${idEmpresa});
+// function criarUsuario(nome, sobrenome, cargo, email, senha, telefone, idEmpresa) {
+//     const instrucaoSql = `INSERT INTO usuario (nome, sobrenome, email, senha, telefone, fkempresa)
+//     VALUES ('${nome}', '${sobrenome}', '${email}', SHA2('${senha}', 512), '${telefone}', ${idEmpresa})`;
+//     const instrucaoSql2 = `INSERT INTO cargousuario (Cargo_id, usuario_id)
+//     VALUES (${cargo}, (SELECT id FROM usuario where email = '${email}'));`;
+//     return database.executar(instrucaoSql, instrucaoSql2);
+// }
+
+async function criarUsuario(nome, sobrenome, cargo, email, senha, telefone, idEmpresa) {
+    const insertUsuarioSql = `
+        INSERT INTO usuario (nome, sobrenome, email, senha, telefone, fkempresa)
+        VALUES ('${nome}', '${sobrenome}', '${email}', SHA2('${senha}', 512), '${telefone}', ${idEmpresa});
     `;
-    return database.executar(instrucaoSql);
+    const result = await database.executar(insertUsuarioSql);
+
+    const selectIdSql = `SELECT id FROM usuario WHERE email = '${email}' LIMIT 1;`;
+    const usuarioRows = await database.executar(selectIdSql);
+    const usuarioId = usuarioRows[0].id;
+
+    const insertCargoSql = `
+        INSERT INTO cargousuario (Cargo_id, usuario_id)
+        VALUES (${cargo}, ${usuarioId});
+    `;
+    return database.executar(insertCargoSql);
 }
 
 module.exports = {

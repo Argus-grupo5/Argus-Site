@@ -263,7 +263,7 @@ function criarUsuario(req, res) {
         res.status(400).send("Seu idEmpresa está undefined!");
     }
 
-    usuarioModel.criarUsuario(nome, sobrenome, email, senha, telefone, idEmpresa)
+    usuarioModel.criarUsuario(nome, sobrenome, cargo, email, senha, telefone, idEmpresa)
         .then(
             function (resultado) {
                 res.json(resultado);
