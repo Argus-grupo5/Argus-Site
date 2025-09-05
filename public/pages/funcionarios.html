@@ -299,7 +299,8 @@
         var senhaVar = ipt_senha.value;
         var confirmacao_senhaVar = ipt_confirmar_senha.value;
         var telefoneVar = ipt_telefone.value.replace(/\D/g, "");
-        var fotoVar = ipt_foto.value.trim();
+        var idEmpresaVar = sessionStorage.EMPRESA_ID;
+        //var fotoVar = ipt_foto.value.trim();
 
         if (nomeVar === "") {
             marcarErro(ipt_nome, "O campo nome está em branco.");
@@ -309,10 +310,10 @@
             marcarErro(ipt_sobrenome, "O campo sobrenome está em branco.");
             return;
         }
-        if (cargoVar === "") {
-            marcarErro(ipt_cargo, "O campo cargo está em branco.");
-            return;
-        }
+        // if (cargoVar === "") {
+        //     marcarErro(ipt_cargo, "O campo cargo está em branco.");
+        //     return;
+        // }
         if (emailVar === "") {
             marcarErro(ipt_email, "O campo email está em branco.");
             return;
@@ -323,6 +324,10 @@
         }
         if (confirmacao_senhaVar === "") {
             marcarErro(ipt_nome, "O campo confirmar senha está em branco.");
+            return;
+        }
+        if (!/^\d{10,11}$/.test(telefoneVar)) {
+            marcarErro(ipt_telefone, "Telefone deve ter 10 ou 11 números (com DDD)");
             return;
         }
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVar)) {
@@ -337,6 +342,31 @@
             marcarErro(ipt_confirmar_senha, "As senhas não coincidem");
             return;
         }
+
+        fetch("/usuarios/criarUsuario", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                nomeServer: nomeVar,
+                sobrenomeServer: sobrenomeVar,
+                cargoServer: cargoVar,
+                emailServer: emailVar,
+                senhaServer: senhaVar,
+                telefoneServer: telefoneVar,
+                idEmpresaServer: idEmpresaVar
+            }),
+        })
+            .then(resposta => {
+                if (resposta.ok) {
+                    mostrarErro("Cadastro realizado com sucesso!");
+                    setTimeout(() => {
+                        window.location = "funcionarios.html";
+                    }, 2000);
+                } else {
+                    throw "Houve um erro ao tentar realizar o cadastro!";
+                }
+            })
+            .catch(erro => console.error(`#ERRO: ${erro}`));
     }
 
     function pop_up_editar() {

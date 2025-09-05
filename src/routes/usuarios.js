@@ -24,6 +24,10 @@ router.get("/filtrar", (req, res) => {
     usuarioController.filtrar(req, res);
 });
 
+router.post("/criarUsuario", (req, res) => {
+    usuarioController.criarUsuario(req, res);
+});
+
 router.get("/listarCargo", usuarioController.listarCargo);
 
 router.put("/online", function (req, res) {

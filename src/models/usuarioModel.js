@@ -1,3 +1,4 @@
+const { cadastrarFuncionario } = require("../controllers/usuarioController");
 var database = require("../database/config")
 
 function autenticar(email, senha) {
@@ -83,6 +84,12 @@ function listarCargo() {
     return database.executar(instrucaoSql);
 }
 
+function criarUsuario(nome, sobrenome, email, senha, telefone, idEmpresa) {
+    const instrucaoSql = `INSERT INTO usuario (nome, sobrenome, email, senha, telefone, fkempresa)
+    VALUES ('${nome}', '${sobrenome}', '${email}', SHA2('${senha}', 512), '${telefone}', ${idEmpresa});
+    `;
+    return database.executar(instrucaoSql);
+}
 
 module.exports = {
     autenticar,
@@ -90,6 +97,6 @@ module.exports = {
     cadastrarEmpresa,
     cadastrarEndereco,
     filtrar,
-    listarCargo
-
+    listarCargo,
+    criarUsuario
 };
