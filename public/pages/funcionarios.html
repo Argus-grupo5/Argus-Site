@@ -232,31 +232,9 @@
             filtrarFuncionarios()
         }
 
-        function poupDelete(idFuncionario){
-            containerModal.style.display= "flex";
-            containerModal.innerHTML = `
-           <div class="modalDelete">
-            <p>Deseja realmente deletar este usuário?</p>
-            <button onclick="deletarFuncionario(${idFuncionario})">Sim</button>
-            <button onclick="fecharModal()">Cancelar</button>
-        </div>
-            `
-        }
+       
 
-        function deletarFuncionario(idFuncionario) {
-
-            fetch(`/usuarios/deletarFuncionario/${idFuncionario}`, { method: 'DELETE' }).then(res => {
-
-                if (!res.ok) {
-                    console.error("Erro ao deletar funcionário!");
-
-                }
-            })
-                .then(resposta => {
-                    console.log(resposta);
-                    filtrarFuncionarios();
-                })//fim fetch
-        }
+       
     </script>
 </body>
 
