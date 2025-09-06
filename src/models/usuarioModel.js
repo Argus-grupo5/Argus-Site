@@ -12,7 +12,7 @@ function autenticar(email, senha) {
 
 function cadastrarEndereco(cep, rua, bairro, cidade, estado, numero, complemento) {
     console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function cadastrar():", cep, rua, bairro, cidade, estado, numero, complemento);
-
+ 
     // Insira exatamente a query do banco aqui, lembrando da nomenclatura exata nos valores
     //  e na ordem de inserção dos dados.
     var instrucaoSql = `
@@ -51,18 +51,35 @@ function listarCargo() {
     return database.executar(instrucaoSql);
 }
 
-function funcao_adicionar() {
-    // Código para adicionar novo usuário 
+// Adicionar Foto
+async function funcao_adicionar(funcionario_nome, funcionario_sobrenome, funcionario_cargo, funcionario_email, funcionario_senha, funcionario_telefone, funcionario_empresa) {
+    console.log("ACESSEI O USUARIO MODEL");
+
+    const insertUsuario = `
+        INSERT INTO usuario (nome, sobrenome, email, senha, telefone, fkempresa)
+        VALUES ('${funcionario_nome}', '${funcionario_sobrenome}', '${funcionario_email}', SHA2('${funcionario_senha}', 512), '${funcionario_telefone}', ${funcionario_empresa});
+    `;
+    const resultado = await database.executar(insertUsuario);
+    const usuarioId = resultado.insertId;
+    const insertCargo = `
+        INSERT INTO cargousuario (usuario_id, Cargo_id)
+        VALUES (${usuarioId}, ${funcionario_cargo});
+    `;
+
+    return database.executar(insertCargo);
 }
+
+
 
 function funcao_editar() {
     // Código para editar usuário 
 }
 
 function funcao_excluir(id) {
-    const instrucaoSql = `delete from cargoUsuario where usuario_id = ${id}`;
+    const instrucaoSql = `DELETE FROM cargousuario WHERE usuario_id = ${id}`;
     return database.executar(instrucaoSql);
 }
+
 
 function online(idUsuario, status) {
     console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function cadastrar():", status, idUsuario);
