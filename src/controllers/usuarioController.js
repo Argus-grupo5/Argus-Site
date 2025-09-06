@@ -210,6 +210,14 @@ function listarCargo(req, res) {
         });
 }
 
+function funcao_adicionar(req, res){
+    // Código para adicionar usuário
+}
+
+function funcao_editar(req, res) {
+    // Código para editar
+}
+
 function funcao_excluir(req, res) {
     var id = req.body.idServer;
     if (id == undefined) {
@@ -229,6 +237,7 @@ function funcao_excluir(req, res) {
             res.status(500).json(erro.sqlMessage || erro);
         });
 }
+
 function online(req, res) {
     var status = req.body.status;
     var idUsuario = req.body.idServer;
@@ -255,47 +264,10 @@ function online(req, res) {
             );
     }
 }
-function criarUsuario(req, res) {
-    var nome = req.body.nomeServer;
-    var sobrenome = req.body.sobrenomeServer;
-    var cargo = req.body.cargoServer;
-    var email = req.body.emailServer;
-    var senha = req.body.senhaServer;
-    var telefone = req.body.telefoneServer;
-    var idEmpresa = req.body.idEmpresaServer;
 
-    if (nome == undefined) {
-        res.status(400).send("Seu nome está undefined!");
-    } else if (sobrenome == undefined) {
-        res.status(400).send("Seu sobrenome está undefined!");
-    } else if (cargo == undefined) {
-        res.status(400).send("Seu cargo está undefined!");
-    } else if (email == undefined) {
-        res.status(400).send("Seu email está undefined!");
-    } else if (senha == undefined) {
-        res.status(400).send("Seu senha está undefined!");
-    } else if (telefone == undefined) {
-        res.status(400).send("Seu telefone está undefined!");
-    } else if (idEmpresa == undefined) {
-        res.status(400).send("Seu idEmpresa está undefined!");
-    }
 
-    usuarioModel.criarUsuario(nome, sobrenome, cargo, email, senha, telefone, idEmpresa)
-        .then(
-            function (resultado) {
-                res.json(resultado);
-            }
-        ).catch(
-            function (erro) {
-                console.log(erro);
-                console.log(
-                    "\nHouve um erro ao realizar o cadastro! Erro: ",
-                    erro.sqlMessage
-                );
-                res.status(500).json(erro.sqlMessage);
-            }
-        );
-}
+
+
 
 module.exports = {
     autenticar,
@@ -304,7 +276,8 @@ module.exports = {
     cadastrarEmpresa,
     filtrar,
     listarCargo,
-    criarUsuario,
+    funcao_adicionar,
+    funcao_editar,
     funcao_excluir,
     online
 }

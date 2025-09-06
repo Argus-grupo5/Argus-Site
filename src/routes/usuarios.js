@@ -17,10 +17,6 @@ router.post("/autenticar", function (req, res) {
     usuarioController.autenticar(req, res);
 });
 
-router.put("/online", function (req, res) {
-    usuarioController.online(req, res);
-})
-
 router.get("/filtrar", function (req, res){
     usuarioController.filtrar(req, res);
 });
@@ -30,6 +26,15 @@ router.post("/criarUsuario", (req, res) => {
 });
 
 router.get("/listarCargo", usuarioController.listarCargo);
+
+router.post("/funcao_adicionar", function (req, res){
+    usuarioController.funcao_adicionar(req, res)
+})
+
+router.put("/funcao_editar", function (req, res){
+    usuarioController.funcao_editar(req, res)
+})
+
 
 router.delete("/funcao_excluir", function (req, res){
     usuarioController.funcao_excluir(req, res)
