@@ -63,6 +63,36 @@ function autenticar(req, res) {
     }
 
 }
+function editar(req, res) {
+    var email = req.body.emailServer;
+    var senha = req.body.senhaServer;
+    if (nome == undefined) {
+        res.status(400).send("Seu nome está undefined!");
+    } else if (telefone == undefined) {
+        res.status(400).send("Seu telefone está undefined!");
+    } else if (email == undefined) {
+        res.status(400).send("Seu email está undefined!");
+    } else {
+        usuarioModel.editar(email, senha)
+
+            .then(
+                function (resultado) {
+                    res.json(resultado);
+                }
+            ).catch(
+                function (erro) {
+                    console.log(erro);
+                    console.log(
+                        "\nHouve um erro ao realizar o cadastro! Erro: ",
+                        erro.sqlMessage
+                    );
+                    res.status(500).json(erro.sqlMessage);
+                }
+            );
+    }
+
+
+}
 
 function cadastrarEndereco(req, res) {
     // Crie uma variável que vá recuperar os valores do arquivo cadastro.html
@@ -155,6 +185,62 @@ function cadastrarEmpresa(req, res) {
         );
 }
 
+
+//tela de funcionários
+function filtrar(req, res) {
+    usuarioModel.filtrar()
+        .then((resultado) => {
+            if (resultado.length > 0) {
+                res.status(200).json(resultado);
+            } else {
+                res.status(204).send("Nenhum funcionário encontrado");
+            }
+        })
+        .catch((erro) => {
+            console.error("Erro ao buscar funcionários:", erro.sqlMessage || erro);
+            res.status(500).json(erro.sqlMessage || erro);
+        });
+}
+
+function listarCargo(req, res) {
+    usuarioModel.listarCargo()
+        .then((resultado) => {
+            res.status(200).json(resultado);
+        })
+        .catch((erro) => {
+            console.error(erro);
+            res.status(500).json(erro);
+        });
+}
+
+function funcao_adicionar(req, res){
+    // Código para adicionar usuário
+}
+
+function funcao_editar(req, res) {
+    // Código para editar
+}
+
+function funcao_excluir(req, res) {
+    var id = req.body.idServer;
+    if (id == undefined) {
+        res.status(400).send("O id estão undefined!");
+    }
+    
+    usuarioModel.funcao_excluir(id)
+        .then((resultado) => {
+            if (resultado.length > 0) {
+                res.status(200).json(resultado);
+            } else {
+                res.status(204).send("Nenhum funcionário encontrado");
+            }
+        })
+        .catch((erro) => {
+            console.error("Erro ao buscar funcionários:", erro.sqlMessage || erro);
+            res.status(500).json(erro.sqlMessage || erro);
+        });
+}
+
 function online(req, res) {
     var status = req.body.status;
     var idUsuario = req.body.idServer;
@@ -183,9 +269,18 @@ function online(req, res) {
 }
 
 
+
+
+
 module.exports = {
     autenticar,
+    editar,
     cadastrarEndereco,
     cadastrarEmpresa,
+    filtrar,
+    listarCargo,
+    funcao_adicionar,
+    funcao_editar,
+    funcao_excluir,
     online
 }

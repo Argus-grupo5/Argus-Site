@@ -10,13 +10,55 @@
     <title>ARGUS | Servidores</title>
 </head>
 
+
 <body>
     <div id="id_sair">
     </div>
 
-    <header class="desktopNav" id="navDesktop"></header>
+    <header class="desktopNav">
+        <div class="navButtons">
+            <a href="perfil.html" class="navButton tooltipNav" id="navUser">
+                <img src="../assets/dashboard/desktop/user.svg" alt="">
+                <span class="tooltiptextNav">
+                    <div id="userNome"></div>
+                    <div id="userCargo">ADM</div>
+                </span>
+            </a>
+            <a href="../pages/servers.html" class="navButton tooltipNav" id="navServers">
+                <img class="selected" src="../assets/dashboard/desktop/box.svg" alt="Servidores">
+                <span class="tooltiptextNav">Servidores</span>
+            </a>
+
+            <a href="../pages/funcionarios.html" class="navButton tooltipNav" id="navServers">
+                <img src="../assets/dashboard/desktop/employes.svg" alt="Funcionários">
+                <span class="tooltiptextNav">Funcionários</span>
+            </a>
+            <div class="navButton tooltipNav" id="navServers">
+                <img src="../assets/dashboard/desktop/logs.svg" alt="Logs">
+                <span class="tooltiptextNav">Logs</span>
+            </div>
+            <a href="https://sptech-team-vbjwf7te.atlassian.net/servicedesk/customer/portal/36"
+                class="navButton tooltipNav" id="navServers" target="_blank">
+                <img src="../assets/dashboard/desktop/headphone.svg" alt="Suporte">
+                <span class="tooltiptextNav">Suporte</span>
+            </a>
+            <div class="navButton tooltipNav" id="navServers" onclick="sair()">
+                <img src="../assets/dashboard/desktop/logout.svg" alt="Sair">
+                <span class="tooltiptextNav">Sair</span>
+            </div>
+
+        </div>
+        <img class="logo" src="../assets/icon/logoBlack.svg" alt="">
+    </header>
 
     <header class="headerTop">
+        <div class="user">
+            <img src="../assets/dashboard/desktop/user.svg" alt="">
+            <div class="userInfo">
+                <div id="userNome"></div>
+                <div id="userCargo">ADM</div>
+            </div>
+        </div>
         <div class="geralInfo">
             <div class="info tooltipInfo">
                 <div class="server">
@@ -85,7 +127,9 @@
         <div class="server-list" id="id_server_list">
         </div>
     </div>
+    </div>
 </body>
+
 
 </html>
 
@@ -102,10 +146,12 @@
         "recursos": "[CPU, GPU]",
         "localizacao": "São Paulo - SP"
     }, {
+    }, {
         "name": "Servidor BandTec",
         "nivel": "5",
         "recursos": "[CPU, GPU, Armazenamento]",
         "localizacao": "São Paulo - SP"
+    }, {
     }, {
         "name": "Servidor Xbox",
         "nivel": "1",
@@ -123,11 +169,15 @@
     let qtd_servidores_critico = 0;
     let qtd_servidores_alerta = 0;
 
+
     for (let i = 0; i < server.length; i++) {
         if (server[i].nivel == 2 || server[i].nivel == 3) {
-            qtd_servidores_alerta++;
-        } else if (server[i].nivel > 3) {
-            qtd_servidores_critico++;
+            if (server[i].nivel == 2 || server[i].nivel == 3) {
+                qtd_servidores_alerta++;
+            } else if (server[i].nivel > 3) {
+            } else if (server[i].nivel > 3) {
+                qtd_servidores_critico++;
+            }
         }
     }
 
@@ -203,8 +253,6 @@
             }
         }
     }
-
-
 
     filtragem_Servidores();
 
