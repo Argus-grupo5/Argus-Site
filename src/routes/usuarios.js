@@ -18,8 +18,8 @@ router.post("/autenticar", function (req, res) {
     usuarioController.autenticar(req, res);
 });
 
-router.get("/filtrar", function (req, res){
-    usuarioController.filtrar(req, res);
+router.get("/listarFuncionarios", function (req, res){
+    usuarioController.listarFuncionarios(req, res);
 });
 
 router.post("/criarUsuario", (req, res) => {

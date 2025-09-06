@@ -24,19 +24,19 @@ function cadastrarEndereco(cep, rua, bairro, cidade, estado, numero, complemento
 }
 
 // Coloque os mesmos parâmetros aqui. Vá para a var instrucaoSql
-function cadastrarEmpresa(nome, telefone, email, senha, cnpj, razao, fkEndereco, foto) {
-    console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function cadastrar():", nome, telefone, email, senha, cnpj, razao, fkEndereco, foto);
+function cadastrarEmpresa(nome, telefone, email, senha, cnpj, razao, fkEndereco) {
+    console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function cadastrar():", nome, telefone, email, senha, cnpj, razao, fkEndereco);
     // Insira exatamente a query do banco aqui, lembrando da nomenclatura exata nos valores
     //  e na ordem de inserção dos dados.
     var instrucaoSql = `
-        INSERT INTO empresa (nome_fantasia, telefone, email, senha, razao_social, cnpj,  fkEndereco, foto_perfil) VALUES ('${nome}', '${telefone}', '${email}', SHA2('${senha}', 512), '${razao}', ${cnpj}, ${fkEndereco}, '${foto}');
+        INSERT INTO empresa (nome_fantasia, telefone, email, senha, razao_social, cnpj,  fkEndereco) VALUES ('${nome}', '${telefone}', '${email}', SHA2('${senha}', 512), '${razao}', ${cnpj}, ${fkEndereco});
     `;
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
 }
 
 //tela de funcionários
-function filtrar() {
+function listarFuncionarios() {
     const instrucaoSql = `
         select u.id, u.foto_perfil, u.nome, u.sobrenome, u.email, c.cargo, DATE_FORMAT(u.data_cadastro, '%d/%m/%Y') as data_cadastro, u.telefone 
         from cargo c
@@ -81,7 +81,7 @@ module.exports = {
     autenticar,
     cadastrarEmpresa,
     cadastrarEndereco,
-    filtrar,
+    listarFuncionarios,
     listarCargo,
     funcao_adicionar,
     funcao_editar,
