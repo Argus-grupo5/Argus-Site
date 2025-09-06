@@ -11,8 +11,6 @@
 </head>
 
 <body>
-    <div id="config_funcionarios">
-    </div>
     <div id="id_sair">
     </div>
     <header class="desktopNav">
@@ -28,7 +26,7 @@
                 <img src="../assets/dashboard/desktop/box.svg" alt="Servidores">
                 <span class="tooltiptextNav">Servidores</span>
             </a>
-
+            
             <a href="../pages/funcionarios.html" class="navButton tooltipNav" id="navServers">
                 <img class="selected" src="../assets/dashboard/desktop/employes.svg" alt="Funcionários">
                 <span class="tooltiptextNav">Funcionários</span>
@@ -38,7 +36,7 @@
                 <span class="tooltiptextNav">Logs</span>
             </div>
             <a href="https://sptech-team-vbjwf7te.atlassian.net/servicedesk/customer/portal/36"
-                class="navButton tooltipNav" id="navServers" target="_blank">
+            class="navButton tooltipNav" id="navServers" target="_blank">
                 <img src="../assets/dashboard/desktop/headphone.svg" alt="Suporte">
                 <span class="tooltiptextNav">Suporte</span>
             </a>
@@ -79,14 +77,14 @@
                 </div>
             </div>
         </div>
-
+        
         <div id="editContainer" class="editContainer">
             <img class="iconLapis" src="../assets/funcionarios/lapis.svg" alt="" onclick="filtrarFuncionarios(true)">
             <span class="tooltiptextInfo">Editar </span>
         </div>
     </header>
     <div id="config_funcionarios"></div>
-
+    
     <div class="search">
         <select id="id_filter" onchange="filtrarFuncionarios()">
             <option value="" selected>Todos</option>

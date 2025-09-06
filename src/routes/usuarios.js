@@ -35,8 +35,5 @@ router.delete("/funcao_excluir", function (req, res){
     usuarioController.funcao_excluir(req, res)
 })
 
-router.put("/online", function (req, res) {
-    usuarioController.online(req, res);
-})
 
 module.exports = router;
