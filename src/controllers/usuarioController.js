@@ -252,8 +252,79 @@ function funcao_adicionar(req, res){
         );
 }
 
-function funcao_editar(req, res) {
-    // Código para editar
+function funcao_editar(idVar) {
+    var nomeVar = document.getElementById("ipt_nome").value.trim();
+    var sobrenomeVar = document.getElementById("ipt_sobrenome").value.trim();
+    var cargoVar = document.getElementById("ipt_cargo").value;
+    var emailVar = document.getElementById("ipt_email").value.trim();
+    var telefoneVar = document.getElementById("ipt_telefone").value.replace(/\D/g, "");
+
+    console.log("Dados para edição:", { 
+        nome: nomeVar, 
+        sobrenome: sobrenomeVar, 
+        cargo: cargoVar, 
+        email: emailVar, 
+        telefone: telefoneVar 
+    });
+
+    if (nomeVar === "") {
+        marcarErro(document.getElementById("ipt_nome"), "O campo nome está em branco.");
+        return;
+    }
+    if (sobrenomeVar === "") {
+        marcarErro(document.getElementById("ipt_sobrenome"), "O campo sobrenome está em branco.");
+        return;
+    }
+    if (cargoVar === "") {
+        marcarErro(document.getElementById("ipt_cargo"), "Selecione um cargo.");
+        return;
+    }
+    if (emailVar === "") {
+        marcarErro(document.getElementById("ipt_email"), "O campo email está em branco.");
+        return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVar)) {
+        marcarErro(document.getElementById("ipt_email"), "Digite um e-mail válido");
+        return;
+    }
+    if (telefoneVar && !/^\d{10,11}$/.test(telefoneVar)) {
+        marcarErro(document.getElementById("ipt_telefone"), "Telefone deve ter 10 ou 11 números (com DDD)");
+        return;
+    }
+
+    fetch(`/usuarios/editar/${idVar}`, {
+        method: "PUT",
+        headers: { 
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+        body: JSON.stringify({
+            nomeServer: nomeVar,
+            sobrenomeServer: sobrenomeVar,
+            cargoServer: cargoVar,
+            emailServer: emailVar,
+            telefoneServer: telefoneVar
+        }),
+    })
+    .then(resposta => {
+        console.log("Status da resposta:", resposta.status);
+        if (resposta.ok) {
+            return resposta.json();
+        } else {
+            return resposta.text().then(text => { throw new Error(text) });
+        }
+    })
+    .then(dados => {
+        mostrarErro("Usuário atualizado com sucesso!");
+        setTimeout(() => {
+            fechar_popup();
+            window.location.reload();
+        }, 2000);
+    })
+    .catch(erro => {
+        console.error(`Erro completo:`, erro);
+        mostrarErro("Erro ao editar usuário: " + erro.message);
+    });
 }
 
 function funcao_excluir(req, res) {
@@ -304,13 +375,120 @@ function online(req, res) {
     }
 }
 
+function buscarPorId(req, res) {
+    var id = req.params.id;
+
+    if (id == undefined) {
+        res.status(400).send("O id está undefined!");
+    } else {
+        usuarioModel.buscarPorId(id)
+            .then((resultado) => {
+                if (resultado.length > 0) {
+                    res.status(200).json(resultado[0]);
+                } else {
+                    res.status(404).send("Usuário não encontrado");
+                }
+            })
+            .catch((erro) => {
+                console.error("Erro ao buscar usuário:", erro.sqlMessage || erro);
+                res.status(500).json(erro.sqlMessage || erro);
+            });
+    }
+}
+
+function editar(req, res) {
+    var id = req.params.id;
+    var nome = req.body.nomeServer;
+    var sobrenome = req.body.sobrenomeServer;
+    var cargo = req.body.cargoServer;
+    var email = req.body.emailServer;
+    var telefone = req.body.telefoneServer;
+
+    console.log("Dados recebidos para edição:", { id, nome, sobrenome, cargo, email, telefone });
+
+    if (id == undefined) {
+        res.status(400).send("O id está undefined!");
+    } else if (nome == undefined) {
+        res.status(400).send("O nome está undefined!");
+    } else if (email == undefined) {
+        res.status(400).send("O email está undefined!");
+    } else if (cargo == undefined) {
+        res.status(400).send("O cargo está undefined!");
+    } else {
+
+        usuarioModel.editar(id, nome, sobrenome, email, telefone)
+            .then(() => {
+
+                return usuarioModel.editarCargo(id, cargo);
+            })
+            .then(() => {
+                res.status(200).json({ message: "Usuário atualizado com sucesso" });
+            })
+            .catch((erro) => {
+                console.error("Erro ao editar usuário:", erro.sqlMessage || erro);
+                res.status(500).json(erro.sqlMessage || erro);
+            });
+    }
+}
 
 
+function editarPerfil(req, res) {
+    const id = req.body.idServer;
+    const nome = req.body.nomeServer;
+    const sobrenome = req.body.sobrenomeServer;
+    const email = req.body.emailServer;
+    const telefone = req.body.telefoneServer;
+    const novaSenha = req.body.novaSenhaServer;
+    const senhaAtual = req.body.senhaAtualServer;
 
+    console.log("Dados recebidos para edição de perfil:", {
+        id, nome, sobrenome, email, telefone, temNovaSenha: !!novaSenha
+    });
+
+    if (!id) return res.status(400).json({ error: "ID é obrigatório" });
+    if (!nome) return res.status(400).json({ error: "Nome é obrigatório" });
+    if (!sobrenome) return res.status(400).json({ error: "Sobrenome é obrigatório" });
+    if (!email) return res.status(400).json({ error: "Email é obrigatório" });
+    if (!telefone) return res.status(400).json({ error: "Telefone é obrigatório" });
+    if (!senhaAtual) return res.status(400).json({ error: "Senha atual é obrigatória" });
+
+    usuarioModel.verificarSenha(id, senhaAtual)
+        .then(senhaCorreta => {
+            if (!senhaCorreta) {
+                return res.status(401).json({ error: "Senha atual incorreta" });
+            }
+
+            return usuarioModel.editarPerfil(id, nome, sobrenome, email, telefone, novaSenha)
+                .then(() => {
+                    res.json({ message: "Perfil atualizado com sucesso" });
+                });
+        })
+        .catch(error => {
+            console.error("Erro ao editar perfil:", error);
+            res.status(500).json({ error: error.message });
+        });
+}
+
+function verificarSenha(req, res) {
+    const id = req.body.idServer;
+    const senha = req.body.senhaServer;
+
+    if (!id || !senha) {
+        return res.status(400).json({ error: "ID e senha são obrigatórios" });
+    }
+
+    usuarioModel.verificarSenha(id, senha)
+        .then(senhaCorreta => {
+            res.json({ senhaCorreta });
+        })
+        .catch(error => {
+            console.error("Erro ao verificar senha:", error);
+            res.status(500).json({ error: error.message });
+        });
+}
 
 module.exports = {
     autenticar,
-    editar,
     cadastrarEndereco,
     cadastrarEmpresa,
     filtrar,
@@ -318,5 +496,9 @@ module.exports = {
     funcao_adicionar,
     funcao_editar,
     funcao_excluir,
-    online
-}
+    online,
+    buscarPorId,
+    editar,
+    editarPerfil, // ← Adicione esta linha
+    verificarSenha // ← Adicione esta linha
+};

@@ -94,6 +94,88 @@ function online(idUsuario, status) {
     return database.executar(instrucaoSql);
 }
 
+function buscarPorId(id) {
+    const instrucaoSql = `
+        SELECT 
+            u.id, 
+            u.foto_perfil, 
+            u.nome, 
+            u.sobrenome, 
+            u.email, 
+            c.id as cargo_id,
+            c.cargo, 
+            DATE_FORMAT(u.data_cadastro, '%d/%m/%Y') as data_cadastro, 
+            u.telefone 
+        FROM usuario u
+        JOIN cargousuario uc ON u.id = uc.usuario_id
+        JOIN cargo c ON uc.Cargo_id = c.id
+        WHERE u.id = ${id};
+    `;
+    return database.executar(instrucaoSql);
+}
+
+function editar(id, nome, sobrenome, email, telefone) {
+    var instrucao = `
+        UPDATE usuario
+        SET nome = '${nome}',
+            sobrenome = '${sobrenome}',
+            email = '${email}',
+            telefone = '${telefone}'
+        WHERE id = ${id};
+    `;
+    return database.executar(instrucao);
+}
+
+function editarCargo(idUsuario, cargoId) {
+    var instrucao = `
+        UPDATE cargousuario
+        SET Cargo_id = ${cargoId}
+        WHERE usuario_id = ${idUsuario};
+    `;
+    return database.executar(instrucao);
+}
+
+
+function verificarSenha(id, senha) {
+    const instrucaoSql = `
+        SELECT senha FROM usuario 
+        WHERE id = ${id} AND senha = SHA2('${senha}', 512);
+    `;
+    
+    return database.executar(instrucaoSql)
+        .then(resultado => {
+            return resultado.length > 0;
+        });
+}
+
+function editarPerfil(id, nome, sobrenome, email, telefone, novaSenha = null) {
+    let instrucaoSql;
+    
+    if (novaSenha) {
+        instrucaoSql = `
+            UPDATE usuario 
+            SET nome = '${nome}', 
+                sobrenome = '${sobrenome}', 
+                email = '${email}', 
+                telefone = '${telefone}',
+                senha = SHA2('${novaSenha}', 512)
+            WHERE id = ${id};
+        `;
+    } else {
+        instrucaoSql = `
+            UPDATE usuario 
+            SET nome = '${nome}', 
+                sobrenome = '${sobrenome}', 
+                email = '${email}', 
+                telefone = '${telefone}'
+            WHERE id = ${id};
+        `;
+    }
+
+    console.log("Query de edição de perfil:", instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
 module.exports = {
     autenticar,
     cadastrarEmpresa,
@@ -103,5 +185,10 @@ module.exports = {
     funcao_adicionar,
     funcao_editar,
     funcao_excluir,
-    online
+    online,
+    buscarPorId,
+    editar,
+    editarCargo,
+    verificarSenha,
+    editarPerfil
 };

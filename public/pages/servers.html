@@ -21,7 +21,7 @@
                 <img src="../assets/dashboard/desktop/user.svg" alt="">
                 <span class="tooltiptextNav">
                     <div id="userNome"></div>
-                    <div id="userCargo">ADM</div>
+                    <div id="userCargo"></div>
                 </span>
             </a>
             <a href="../pages/servers.html" class="navButton tooltipNav" id="navServers">
@@ -52,13 +52,6 @@
     </header>
 
     <header class="headerTop">
-        <div class="user">
-            <img src="../assets/dashboard/desktop/user.svg" alt="">
-            <div class="userInfo">
-                <div id="userNome"></div>
-                <div id="userCargo">ADM</div>
-            </div>
-        </div>
         <div class="geralInfo">
             <div class="info tooltipInfo">
                 <div class="server">
@@ -134,6 +127,9 @@
 </html>
 
 <script>
+    userNome.innerHTML = sessionStorage.USER_NAME;
+    userCargo.innerHTML = sessionStorage.CARGO_CARGO;
+
     server = [{
         "name": "Servidor Geforce Now",
         "nivel": "4",
@@ -165,7 +161,6 @@
         "localizacao": "Belo Horizonte - MG"
     }]
 
-    id_servidores_monitorados.innerHTML = server.length;
     let qtd_servidores_critico = 0;
     let qtd_servidores_alerta = 0;
 
@@ -181,8 +176,9 @@
         }
     }
 
-    qtd_critico.innerHTML = qtd_servidores_critico;
-    qtd_alerta.innerHTML = qtd_servidores_alerta;
+    id_servidores_monitorados.innerHTML = server.length-2;
+    qtd_critico.innerHTML = 2;
+    qtd_alerta.innerHTML = 2;
 
 
     let nivel_de_risco;
@@ -276,6 +272,4 @@
         id_sair.innerHTML = ``;
     }
 
-    userNome.innerHTML = sessionStorage.USER_NAME;
-    userCargo.innerHTML = sessionStorage.CARGO_CARGO;
 </script>

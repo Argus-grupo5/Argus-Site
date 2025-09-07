@@ -62,6 +62,7 @@
           <img src="../assets/dashboard/desktop/server.svg" alt="">
         </div>
         <div class="serversMonitoring" id="id_servidores_monitorados">
+        5
         </div>
         <span class="tooltiptextInfo">
           Servidores em monitoramento
@@ -72,13 +73,13 @@
           <img src="../assets/dashboard/desktop/bell.svg" alt="">
         </div>
         <div class="risk tooltipInfo" id="id_servidores_em_estado_critico">
-          <p id="qtd_critico"></p>
+          <p id="qtd_critico">2</p>
           <span class="tooltiptextInfo">
             Servidores em atenção
           </span>
         </div>
         <div class="atention tooltipInfo" id="id_servidores_em_estado_de_alerta">
-          <p id="qtd_alerta"></p>
+          <p id="qtd_alerta">2</p>
           <span class="tooltiptextInfo">
             Servidores em alerta
           </span>
@@ -133,6 +134,10 @@
 </html>
 
 <script>
+
+  userNome.innerHTML = sessionStorage.USER_NAME;
+  userCargo.innerHTML = sessionStorage.CARGO_CARGO;
+
   let editar = false;
   let funcionariosLista;
 
@@ -345,6 +350,7 @@
         </div>
         <input type="text" id="ipt_telefone" required>
       </div>
+      
       <div id="mensagem_erro"></div>
       <div class="btns_popup">
         <button class="btn cadastrar" onclick="funcao_adicionar()">Cadastrar</button>
@@ -432,71 +438,126 @@
 
 
   function pop_up_editar(id) {
-    abrir_popup()
-    config_funcionarios.innerHTML = `
-      <h1>Editar Usuário</h1>
-      <div class="inputs">
-        <div class="input-label-wrapper">
-          <span class="input-label">Nome</span>
-          <span class="obrigatorio">*Obrigatório</span>
-        </div>
-        <input type="text" id="ipt_nome" required>
+      fetch(`/usuarios/buscar/${id}`)
+          .then(res => {
+              if (res.ok) {
+                  return res.json();
+              } else {
+                  throw new Error('Erro ao buscar dados do usuário');
+              }
+          })
+          .then(usuario => {
+              abrir_popup();
+              config_funcionarios.innerHTML = `
+                  <h1>Editar Usuário</h1>
+                  <div class="inputs">
+                      <div class="input-label-wrapper">
+                          <span class="input-label">Nome</span>
+                          <span class="obrigatorio">*Obrigatório</span>
+                      </div>
+                      <input type="text" id="ipt_nome" value="${usuario.nome || ''}" required>
 
-        <div class="input-label-wrapper">
-          <span class="input-label">Sobrenome</span>
-          <span class="obrigatorio">*Obrigatório</span>
-        </div>
-        <input type="text" id="ipt_sobrenome" required>
+                      <div class="input-label-wrapper">
+                          <span class="input-label">Sobrenome</span>
+                          <span class="obrigatorio">*Obrigatório</span>
+                      </div>
+                      <input type="text" id="ipt_sobrenome" value="${usuario.sobrenome || ''}" required>
 
-        <div class="input-label-wrapper">
-          <span class="input-label">Cargo</span>
-          <span class="obrigatorio">*Obrigatório</span>
-        </div>
-        <select id="ipt_cargo">
-          <option value="">Selecione um cargo</option>
-          <option value="2">Administrador</option>
-          <option value="3">Analista</option>
-          <option value="4">Operador</option>
-        </select>
+                      <div class="input-label-wrapper">
+                          <span class="input-label">Cargo</span>
+                          <span class="obrigatorio">*Obrigatório</span>
+                      </div>
+                      <select id="ipt_cargo">
+                          <option value="">Selecione um cargo</option>
+                          <option value="2" ${usuario.cargo_id == 2 ? 'selected' : ''}>Administrador</option>
+                          <option value="3" ${usuario.cargo_id == 3 ? 'selected' : ''}>Analista</option>
+                          <option value="4" ${usuario.cargo_id == 4 ? 'selected' : ''}>Operador</option>
+                      </select>
 
-        <div class="input-label-wrapper">
-          <span class="input-label">Email</span>
-          <span class="obrigatorio">*Obrigatório</span>
-        </div>
-        <input type="text" id="ipt_email" required>
+                      <div class="input-label-wrapper">
+                          <span class="input-label">Email</span>
+                          <span class="obrigatorio">*Obrigatório</span>
+                      </div>
+                      <input type="text" id="ipt_email" value="${usuario.email || ''}" required>
 
-        <div class="input-label-wrapper">
-          <span class="input-label">Senha</span>
-          <span class="obrigatorio">*Obrigatório</span>
-        </div>
-        <input type="text" id="ipt_senha" required>
-
-        <div class="input-label-wrapper">
-          <span class="input-label">Confirmar senha</span>
-          <span class="obrigatorio">*Obrigatório</span>
-        </div>
-        <input type="text" id="ipt_confirmar_senha" required>
-
-        <div class="input-label-wrapper">
-          <span class="input-label">Telefone</span>
-        </div>
-        <input type="text" id="ipt_telefone" required>
-        <div class="input-label-wrapper">
-          <span class="input-label">Foto</span>
-        </div>
-        <input type="text" id="ipt_foto" required>
-      </div>
-      <div id="mensagem_erro"></div>
-      <div class="btns_popup">
-        <button class="btn cadastrar" onclick="funcao_editar(${id})">Editar</button>
-        <button class="btn fechar" onclick="fechar_popup()">Fechar</button>
-      </div>
-        `;
-
+                      <div class="input-label-wrapper">
+                          <span class="input-label">Telefone</span>
+                      </div>
+                      <input type="text" id="ipt_telefone" value="${usuario.telefone || ''}">
+                  </div>
+                  <div id="mensagem_erro"></div>
+                  <div class="btns_popup">
+                      <button class="btn cadastrar" onclick="funcao_editar(${id})">Salvar</button>
+                      <button class="btn fechar" onclick="fechar_popup()">Cancelar</button>
+                  </div>
+              `;
+          })
+          .catch(err => {
+              console.error('Erro:', err);
+              mostrarErro('Erro ao carregar dados do usuário');
+          });
   }
-  function funcao_editar(idVar) {
-    // Código para editar
-  }
+  
+function funcao_editar(idVar) {
+    var nomeVar = document.getElementById("ipt_nome").value.trim();
+    var sobrenomeVar = document.getElementById("ipt_sobrenome").value.trim();
+    var cargoVar = document.getElementById("ipt_cargo").value;
+    var emailVar = document.getElementById("ipt_email").value.trim();
+    var telefoneVar = document.getElementById("ipt_telefone").value.replace(/\D/g, "");
+
+    if (nomeVar === "") {
+        marcarErro(document.getElementById("ipt_nome"), "O campo nome está em branco.");
+        return;
+    }
+    if (sobrenomeVar === "") {
+        marcarErro(document.getElementById("ipt_sobrenome"), "O campo sobrenome está em branco.");
+        return;
+    }
+    if (cargoVar === "") {
+        marcarErro(document.getElementById("ipt_cargo"), "Selecione um cargo.");
+        return;
+    }
+    if (emailVar === "") {
+        marcarErro(document.getElementById("ipt_email"), "O campo email está em branco.");
+        return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVar)) {
+        marcarErro(document.getElementById("ipt_email"), "Digite um e-mail válido");
+        return;
+    }
+    if (telefoneVar && !/^\d{10,11}$/.test(telefoneVar)) {
+        marcarErro(document.getElementById("ipt_telefone"), "Telefone deve ter 10 ou 11 números (com DDD)");
+        return;
+    }
+
+    fetch(`/usuarios/editar/${idVar}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            id: idVar,
+            nomeServer: nomeVar,
+            sobrenomeServer: sobrenomeVar,
+            cargoServer: cargoVar,
+            emailServer: emailVar,
+            telefoneServer: telefoneVar
+        }),
+    })
+    .then(resposta => {
+        if (resposta.ok) {
+            mostrarErro("Usuário atualizado com sucesso!");
+            setTimeout(() => {
+                fechar_popup();
+                window.location.reload(); // Recarrega a página para atualizar a lista
+            }, 2000);
+        } else {
+            throw new Error("Houve um erro ao tentar editar o usuário!");
+        }
+    })
+    .catch(erro => {
+        console.error(`#ERRO: ${erro}`);
+        mostrarErro("Erro ao editar usuário");
+    });
+}
 
   function pop_up_excluir(id) {
     abrir_popup()
@@ -556,23 +617,25 @@
 
 
   function sair() {
-    abrir_popup();
-    config_funcionarios.innerHTML = `
-                <h1>Deseja sair?</h1>
-                <button onclick="sair_s()">Sim</button>
-                <button onclick="sair_n()">Não</button>
-        `;
+      id_sair.innerHTML = `
+      
+          <div class="popup_sair">
+              <h1>Deseja sair?</h1>
+              <button onclick="sair_s()">Sim</button>
+              <button onclick="sair_n()">Não</button>
+          </div>
+      `;
   }
+
   function sair_s() {
     window.location.href = "./login.html";
     sessionStorage.clear;
   }
 
   function sair_n() {
-    fechar_popup()
+      id_sair.innerHTML = ``;
   }
-  userNome.innerHTML = sessionStorage.USER_NAME;
-  userCargo.innerHTML = sessionStorage.CARGO_CARGO;
+
 
 
 

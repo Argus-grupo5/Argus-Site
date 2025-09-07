@@ -44,4 +44,20 @@ router.put("/online", function (req, res) {
     usuarioController.online(req, res);
 })
 
+router.get("/buscar/:id", function (req, res) {
+    usuarioController.buscarPorId(req, res);
+});
+
+router.put("/editar/:id", function (req, res) {
+    usuarioController.editar(req, res);
+});
+
+router.put("/editarPerfil", function (req, res) {
+    usuarioController.editarPerfil(req, res);
+});
+
+router.post("/verificarSenha", function (req, res) {
+    usuarioController.verificarSenha(req, res);
+});
+
 module.exports = router;

@@ -109,11 +109,11 @@ body.popup-open {
   align-items: center;
 
   z-index: 1000;
-  width: 45vw;
+  width: 40vw;
   max-height: 95vh;
 
   background: #FF670A;
-  border-radius: 20px;
+  border-radius: 5px;
   padding: 2vw;
   text-align: center;
   top: 50%;
@@ -134,8 +134,8 @@ body.popup-open {
 }
 
 .popup h1 {
-  font-size: 3.33vw;
-  margin-bottom: .5vh;
+  font-size: 1.5vw;
+  margin-bottom: .3vh;
   color: #fff;
   font-weight: bold;
 }
@@ -148,9 +148,9 @@ body.popup-open {
 .popup input,
 .popup select {
   width: 100%;
-  height: 5vh;
+  height: 4vh;
   border-radius: .5vw;
-  font-size: 1.11vw;
+  font-size: 1vw;
   border: .1vw solid #fff;
   background-color: rgba(255, 255, 255, 0.1);
   padding: 0 .8vh;
@@ -194,25 +194,26 @@ body.popup-open {
   display: flex;
   flex-direction: row;
   gap: 1vw;
-  width: 100%;
+  width: 80%;
 }
 
 .btn {
   width: 100%;
   height: 3vw;
-  border-radius: 12px;
+  border-radius: 5px;
   border: 1px solid #fff;
   background: linear-gradient(135deg, #FF6D4D, #FF3C00);
   font-size: 1.1rem;
   font-weight: bold;
   color: #fff;
-  transition: all 0.3s ease;
+  
 }
 
 .btn:hover {
-  background: linear-gradient(135deg, #FF3C00, #C90000);
+  background: black;
   transform: scale(1.02);
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .btn:active {
@@ -223,7 +224,7 @@ body.popup-open {
 #mensagem_erro {
     margin-top: 20px;
     margin-bottom: -18px;
-    font-size: 2.22vw;
+    font-size: 1vw;
 }
 
 /* --------------------------------------------------------------------------------------*/
@@ -261,8 +262,10 @@ body.popup-open {
 }
 
 .funcFoto img {
-  width: 4vw;
-  height: 5vh;
+  width: 2vw;
+  height: 4vh;
+  border-radius: 120px;
+  background-color: #4B4343;
 }
 
 .funcName,

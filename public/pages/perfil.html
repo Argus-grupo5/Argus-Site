@@ -13,7 +13,6 @@
 <body>
     <div id="id_sair">
     </div>
-
     <div id="editar_perfil"></div>
 
     <header class="desktopNav">
@@ -58,7 +57,7 @@
                         <img src="../assets/dashboard/desktop/server.svg" alt="">
                     </div>
                     <div class="serversMonitoring" id="id_servidores_monitorados">
-                        7
+                        5
                     </div>
                     <span class="tooltiptextInfo">
                         Servidores em monitoramento
@@ -71,7 +70,7 @@
                         <img src="../assets/dashboard/desktop/bell.svg" alt="">
                     </div>
                     <div class="risk tooltipInfo" id="id_servidores_em_estado_critico">
-                        <p id="qtd_critico">0</p>
+                        <p id="qtd_critico">2</p>
                         <span class="tooltiptextInfo">
                             Servidores em atenção
                         </span>
@@ -100,71 +99,207 @@
 </html>
 
 <script>
-    userNome.innerHTML = sessionStorage.USER_NAME;
-    userCargo.innerHTML = sessionStorage.CARGO_CARGO;
-    perfilNome.innerHTML = `${sessionStorage.USER_NAME} ${sessionStorage.USER_SOBRENOME}`;
-    perfilCargo.innerHTML = sessionStorage.CARGO_FUNCAO;
-    perfilEmail.innerHTML = sessionStorage.USER_EMAIL;
-    perfilNumero.innerHTML = sessionStorage.USER_TELEFONE;
+        // Carregar dados do sessionStorage
+        userNome.innerHTML = sessionStorage.USER_NAME;
+        userCargo.innerHTML = sessionStorage.CARGO_CARGO;
 
-    function pop_up_editar() {
-        containerPerfil.style.display = 'none';
-        editar_perfil.style.display = 'block';
-
-        editar_perfil.innerHTML = `
-            <div class="popup_configs">
-                <div id="headerPopup">
-                <h1>Editar informações do Perfil</h1>
-                <button id="buttonFechar" onclick="fecharPopup()"><img src="../assets/dashboard/desktop/btnFechar.svg" alt="Botão de Fechar"></button>
-                </div>
-                <div class="input-label-wrapper">
-                    <span class="input-label">Alterar Senha</span>
-                </div>
-                <input type="text" id="ipt_senha">
-                <div class="input-label-wrapper">
-                    <span class="input-label">Alterar Email</span>
-                </div>
-                <input type="text" id="ipt_email">
-                <div class="input-label-wrapper">
-                    <span class="input-label">Alterar Telefone</span>
-                </div>
-                <input type="text" id="ipt_telefone">
-                <div class="input-label-wrapper">
-                    <span class="input-label">Alterar Foto</span>
-                </div>
-                <input type="text" id="ipt_foto">
-                <div class="confirmarEdicao">
-                <div class="input-label-wrapper">
-                    <span class="input-label" id="confirmacaoSenha">Redigite a sua senha para confirmar as alterações</span>
-                </div>
-                <input type="text" id="ipt_confirmarSenha">
-                <button id="buttonEditar">Alterar Informações</button>
-                </div>
-            </div>
-                `;
-    }
-
-    function fecharPopup() {
-        editar_perfil.style.display = 'none';
-        containerPerfil.style.display = 'block';
-    }
-
-    function sair() {
-        id_sair.innerHTML = `
+        if (sessionStorage.CARGO_CARGO == undefined || sessionStorage.CARGO_CARGO == null){
+            perfilCargo.innerHTML = "";
+        } else {
+            perfilCargo.innerHTML = sessionStorage.CARGO_CARGO;
+        }
         
-            <div class="popup_sair">
-                <h1>Deseja sair?</h1>
-                <button onclick="sair_s()">Sim</button>
-                <button onclick="sair_n()">Não</button>
-            </div>
-        `;
-    }
-    function sair_s() {
-        window.location.href = "./login.html";
-        sessionStorage.clear;
-    }
+        if (sessionStorage.USER_SOBRENOME != "undefined" && sessionStorage.USER_SOBRENOME != "null"){
+            perfilNome.innerHTML = `${sessionStorage.USER_NAME} ${sessionStorage.USER_SOBRENOME}`;
+        } else {
+            perfilNome.innerHTML = `${sessionStorage.USER_NAME}`;
+        }
 
-    function sair_n() {
-        id_sair.innerHTML = ``;
-    }
-</script>
+        perfilEmail.innerHTML = sessionStorage.USER_EMAIL;
+        perfilNumero.innerHTML = sessionStorage.USER_TELEFONE;
+
+        function pop_up_editar() {
+            containerPerfil.style.display = 'none';
+            editar_perfil.style.display = 'block';
+
+            editar_perfil.innerHTML = `
+                <div class="popup_configs">
+                    <div id="headerPopup">
+                        <h1>Editar informações do Perfil</h1>
+                    </div>
+                    
+                    <div class="input-label-wrapper">
+                        <span class="input-label">Nome</span>
+                    </div>
+                    <input type="text" id="ipt_nome" value="${sessionStorage.USER_NAME}" required>
+                    
+                    <div class="input-label-wrapper">
+                        <span class="input-label">Sobrenome</span>
+                    </div>
+                    <input type="text" id="ipt_sobrenome" value="${sessionStorage.USER_SOBRENOME}" required>
+                    
+                    <div class="input-label-wrapper">
+                        <span class="input-label">Email</span>
+                    </div>
+                    <input type="email" id="ipt_email" value="${sessionStorage.USER_EMAIL}" required>
+                    
+                    <div class="input-label-wrapper">
+                        <span class="input-label">Telefone</span>
+                    </div>
+                    <input type="text" id="ipt_telefone" value="${sessionStorage.USER_TELEFONE}" required>
+                    
+                    <div class="input-label-wrapper">
+                        <span class="input-label">Nova Senha (deixe em branco para não alterar)</span>
+                    </div>
+                    <input type="password" id="ipt_senha" placeholder="Nova senha">
+                    
+                    <div class="input-label-wrapper">
+                        <span class="input-label">Confirmar Nova Senha</span>
+                    </div>
+                    <input type="password" id="ipt_confirmar_senha" placeholder="Confirmar nova senha">
+                    
+                    <div class="input-label-wrapper">
+                        <span class="input-label">Senha Atual (obrigatória para confirmar alterações)</span>
+                    </div>
+                    <input type="password" id="ipt_senha_atual" placeholder="Digite sua senha atual" required>
+                
+                    <div id="mensagem_erro"></div>
+
+                    <div class="confirmarEdicao">
+                        <button id="buttonConfirmarEdicao" onclick="editarPerfil()">Alterar Informações</button>
+                        <button id="buttonCancelar" onclick="fecharPopup()">Cancelar</button>
+                    </div>
+                
+                </div>
+            `;
+        }
+
+        function fecharPopup() {
+            editar_perfil.style.display = 'none';
+            containerPerfil.style.display = 'block';
+        }
+
+        function editarPerfil() {
+            const nomeVar = document.getElementById("ipt_nome").value.trim();
+            const sobrenomeVar = document.getElementById("ipt_sobrenome").value.trim();
+            const emailVar = document.getElementById("ipt_email").value.trim();
+            const telefoneVar = document.getElementById("ipt_telefone").value.replace(/\D/g, "");
+            const senhaVar = document.getElementById("ipt_senha").value;
+            const confirmarSenhaVar = document.getElementById("ipt_confirmar_senha").value;
+            const senhaAtualVar = document.getElementById("ipt_senha_atual").value;
+
+            // Validações
+            if (!nomeVar) {
+                mostrarErro("O nome é obrigatório");
+                return;
+            }
+            if (!sobrenomeVar) {
+                mostrarErro("O sobrenome é obrigatório");
+                return;
+            }
+            if (!emailVar) {
+                mostrarErro("O email é obrigatório");
+                return;
+            }
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVar)) {
+                mostrarErro("Digite um email válido");
+                return;
+            }
+            if (!telefoneVar) {
+                mostrarErro("O telefone é obrigatório");
+                return;
+            }
+            if (!/^\d{10,11}$/.test(telefoneVar)) {
+                mostrarErro("Telefone deve ter 10 ou 11 dígitos");
+                return;
+            }
+            if (senhaVar && senhaVar.length < 8) {
+                mostrarErro("A senha deve ter pelo menos 8 caracteres");
+                return;
+            }
+            if (senhaVar !== confirmarSenhaVar) {
+                mostrarErro("As senhas não coincidem");
+                return;
+            }
+            if (!senhaAtualVar) {
+                mostrarErro("A senha atual é obrigatória");
+                return;
+            }
+
+            fetch("/usuarios/editarPerfil", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    nomeServer: nomeVar,
+                    sobrenomeServer: sobrenomeVar,
+                    emailServer: emailVar,
+                    telefoneServer: telefoneVar,
+                    novaSenhaServer: senhaVar,
+                    senhaAtualServer: senhaAtualVar,
+                    idServer: sessionStorage.USER_ID
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error("Erro ao editar perfil");
+            })
+            .then(data => {
+                mostrarErro("Perfil atualizado com sucesso!", "success");
+                
+                // Atualizar sessionStorage
+                sessionStorage.USER_NAME = nomeVar;
+                sessionStorage.USER_SOBRENOME = sobrenomeVar;
+                sessionStorage.USER_EMAIL = emailVar;
+                sessionStorage.USER_TELEFONE = telefoneVar;
+                
+                // Atualizar exibição
+                userNome.innerHTML = nomeVar;
+                perfilNome.innerHTML = `${nomeVar} ${sobrenomeVar}`;
+                perfilEmail.innerHTML = emailVar;
+                perfilNumero.innerHTML = telefoneVar;
+                
+                setTimeout(() => {
+                    fecharPopup();
+                }, 2000);
+            })
+            .catch(error => {
+                console.error("Erro:", error);
+                mostrarErro(error.message || "Erro ao editar perfil");
+            });
+        }
+
+        function mostrarErro(mensagem, tipo = "error") {
+            const divErro = document.getElementById("mensagem_erro");
+            divErro.textContent = mensagem;
+            divErro.style.display = "block";
+            
+            setTimeout(() => {
+                divErro.style.display = "none";
+            }, 5000);
+        }
+
+        function sair() {
+            id_sair.innerHTML = `
+                <div class="popup_sair">
+                    <h1>Deseja sair?</h1>
+                    <button onclick="sair_s()">Sim</button>
+                    <button onclick="sair_n()">Não</button>
+                </div>
+            `;
+        }
+
+        function sair_s() {
+            window.location.href = "./login.html";
+            sessionStorage.clear();
+        }
+
+        function sair_n() {
+            id_sair.innerHTML = ``;
+        }
+    </script>
+</body>
+</html>
