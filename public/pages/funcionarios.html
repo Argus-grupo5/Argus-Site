@@ -13,8 +13,6 @@
 <body>
   <div class="overlay" id="overlay">
     <div id="config_funcionarios" class="popup">
-      <img src="../assets/dashboard/desktop/btnFechar.svg" alt="Fechar" class="btnFecharPopup" onclick="fechar_popup()">
-
     </div>
   </div>
 
@@ -267,52 +265,42 @@
   function pop_up_adicionar() {
     abrir_popup();
     config_funcionarios.innerHTML = `
-      <h1>Criar Usuário</h1>
+      <img src="../assets/dashboard/desktop/btnFechar.svg" alt="Fechar" class="btnFecharPopup" onclick="fechar_popup()">
+      <h1>Editar informações do Perfil</h1>
+
       <div class="inputs">
         <div class="input-label-wrapper">
-          <span class="input-label">Nome</span>
-          <span class="obrigatorio">*obrigatório</span>
+          <span class="input-label">Alterar Senha</span>
         </div>
-        <input type="text" id="ipt_nome" required>
+        <input type="text" id="ipt_senha">
 
         <div class="input-label-wrapper">
-          <span class="input-label">Sobrenome</span>
-          <span class="obrigatorio">*obrigatório</span>
+          <span class="input-label">Alterar Email</span>
         </div>
-        <input type="text" id="ipt_sobrenome" required>
+        <input type="text" id="ipt_email">
+
         <div class="input-label-wrapper">
-          <span class="input-label">Cargo</span>
-          <span class="obrigatorio">*obrigatório</span>
+          <span class="input-label">Alterar Telefone</span>
         </div>
-        <select id="ipt_cargo">
-          <option value="">Selecione um cargo</option>
-          <option value="1">Administrador</option>
-          <option value="3">Analista</option>
-          <option value="4">Operador</option>
-        </select>
+        <input type="text" id="ipt_telefone">
+
         <div class="input-label-wrapper">
-          <span class="input-label">Email</span>
-          <span class="obrigatorio">*obrigatório</span>
+          <span class="input-label">Alterar Foto</span>
         </div>
-        <input type="text" id="ipt_email" required>
+        <input type="file" id="ipt_foto">
+
         <div class="input-label-wrapper">
-          <span class="input-label">Senha</span>
-          <span class="obrigatorio">*obrigatório</span>
+          <span class="input-label" id="confirmacaoSenha">
+            Redigite a sua senha para confirmar as alterações
+          </span>
         </div>
-        <input type="text" id="ipt_senha" required>
-        <div class="input-label-wrapper">
-          <span class="input-label">Confirmar senha</span>
-          <span class="obrigatorio">*obrigatório</span>
-        </div>
-        <input type="text" id="ipt_confirmar_senha" required>
-        <div class="input-label-wrapper">
-          <span class="input-label">Telefone</span>
-        </div>
-        <input type="text" id="ipt_telefone" required>
+        <input type="text" id="ipt_confirmarSenha">
       </div>
+
       <div id="mensagem_erro"></div>
+
       <div class="btns_popup">
-        <button class="btn cadastrar" onclick="funcao_adicionar()">Cadastrar</button>
+        <button class="btn cadastrar" id="buttonEditar" onclick="funcao_editar()">Alterar Informações</button>
         <button class="btn fechar" onclick="fechar_popup()">Fechar</button>
       </div>
     `;
@@ -399,6 +387,7 @@
   function pop_up_editar(id) {
     abrir_popup()
     config_funcionarios.innerHTML = `
+      <img src="../assets/dashboard/desktop/btnFechar.svg" alt="Fechar" class="btnFecharPopup" onclick="fechar_popup()">
       <h1>Editar Usuário</h1>
       <div class="inputs">
         <div class="input-label-wrapper">
@@ -466,6 +455,7 @@
   function pop_up_excluir(id) {
     abrir_popup()
     config_funcionarios.innerHTML = `
+    <img src="../assets/dashboard/desktop/btnFechar.svg" alt="Fechar" class="btnFecharPopup" onclick="fechar_popup()">
     <h1>Deletar Usuário</h1>
     <div class="inputs">
       <p>Deseja deletar este usuário?</p>
