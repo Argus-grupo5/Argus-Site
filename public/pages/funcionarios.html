@@ -157,7 +157,7 @@
 
   window.onload = () => {
     listarCargo();
-    fetch(`/usuarios/filtrar`).then(res => {
+    fetch(`/usuarios/listarFuncionarios`).then(res => {
       if (res.ok) {
         res.json().then(resposta => {
           funcionariosLista = resposta;

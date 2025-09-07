@@ -36,7 +36,7 @@ function cadastrarEmpresa(nome, telefone, email, senha, cnpj, razao, fkEndereco)
 }
 
 //tela de funcionários
-function filtrar() {
+function listarFuncionarios() {
     const instrucaoSql = `
         select u.id, u.foto_perfil, u.nome, u.sobrenome, u.email, c.cargo, DATE_FORMAT(u.data_cadastro, '%d/%m/%Y') as data_cadastro, u.telefone 
         from cargo c
@@ -81,7 +81,7 @@ module.exports = {
     autenticar,
     cadastrarEmpresa,
     cadastrarEndereco,
-    filtrar,
+    listarFuncionarios,
     listarCargo,
     funcao_adicionar,
     funcao_editar,

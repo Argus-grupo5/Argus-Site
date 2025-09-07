@@ -103,7 +103,7 @@ function cadastrarEndereco(req, res) {
     var estado = req.body.estadoServer;
     var numero = req.body.numeroServer;
     var complemento = req.body.complementoServer;
-    var id;
+
     // Faça as validações dos valores
     if (cep == undefined) {
         res.status(400).send("Seu cep está undefined!");
@@ -148,7 +148,7 @@ function cadastrarEmpresa(req, res) {
     var razao = req.body.razaoServer;
     var cnpj = req.body.cnpjServer;
     var id = req.body.idServer;
-
+    
     if (nome == undefined) {
         res.status(400).send("Seu nome está undefined!");
     } else if (telefone == undefined) {
@@ -184,8 +184,8 @@ function cadastrarEmpresa(req, res) {
 
 
 //tela de funcionários
-function filtrar(req, res) {
-    usuarioModel.filtrar()
+function listarFuncionarios(req, res) {
+    usuarioModel.listarFuncionarios()
         .then((resultado) => {
             if (resultado.length > 0) {
                 res.status(200).json(resultado);
@@ -274,7 +274,7 @@ module.exports = {
     editar,
     cadastrarEndereco,
     cadastrarEmpresa,
-    filtrar,
+    listarFuncionarios,
     listarCargo,
     funcao_adicionar,
     funcao_editar,
