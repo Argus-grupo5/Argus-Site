@@ -186,7 +186,7 @@
         const pesquisaIgual =
           funcionariosLista[i].nome.toLowerCase().includes(pesquisa) ||
           funcionariosLista[i].email.toLowerCase().includes(pesquisa);
-          funcionariosLista[i].cargo.toLowerCase().includes(pesquisa);
+        funcionariosLista[i].cargo.toLowerCase().includes(pesquisa);
 
         if (funcionariosLista[i].sobrenome == null) {
           funcionariosLista[i].sobrenome = ""
@@ -213,51 +213,51 @@
       }
     }
     else if (edit) {
-  editar = true;
+      editar = true;
 
-  const cargoLogado = sessionStorage.CARGO_CARGO.toUpperCase();
-  const idLogado = Number(sessionStorage.USER_ID);
+      const cargoLogado = sessionStorage.CARGO_CARGO.toUpperCase();
+      const idLogado = Number(sessionStorage.USER_ID);
 
-  let botoesHeader = `
+      let botoesHeader = `
     <img class="iconLapis" src="../assets/funcionarios/salvarAlt.svg" 
          alt="Salvar" onclick="filtrarFuncionarios(false)">
     <span class="tooltiptextInfo">Salvar</span>`;
 
-  if (cargoLogado === "ROOT" || cargoLogado === "ADMINISTRADOR") {
-    var funcStatus = document.getElementById("funcStatusInfo")
-    funcStatus.innerHTML = `<img  class= "buttons-edit" src="../assets/funcionarios/editGreen.svg" alt="" onclick="pop_up_adicionar()">`;
-    botoesHeader += `
+      if (cargoLogado === "ROOT" || cargoLogado === "ADMINISTRADOR") {
+        var funcStatus = document.getElementById("funcStatusInfo")
+        funcStatus.innerHTML = `<img  class= "buttons-edit" src="../assets/funcionarios/editGreen.svg" alt="" onclick="pop_up_adicionar()">`;
+        botoesHeader += `
       <img class="iconAdd" src="../assets/funcionarios/addYellow.svg" `;
-  }
+      }
 
-  editContainer.innerHTML = botoesHeader;
+      editContainer.innerHTML = botoesHeader;
 
-  for (let i = 0; i < funcionariosLista.length; i++) {
-    const cargoIgual = filtro === "" || funcionariosLista[i].cargo.toLowerCase() === filtro;
-    const pesquisaIgual =
-      funcionariosLista[i].nome.toLowerCase().includes(pesquisa) ||
-      funcionariosLista[i].email.toLowerCase().includes(pesquisa);
+      for (let i = 0; i < funcionariosLista.length; i++) {
+        const cargoIgual = filtro === "" || funcionariosLista[i].cargo.toLowerCase() === filtro;
+        const pesquisaIgual =
+          funcionariosLista[i].nome.toLowerCase().includes(pesquisa) ||
+          funcionariosLista[i].email.toLowerCase().includes(pesquisa);
 
-    if (funcionariosLista[i].sobrenome == null) {
-      funcionariosLista[i].sobrenome = "";
-    }
+        if (funcionariosLista[i].sobrenome == null) {
+          funcionariosLista[i].sobrenome = "";
+        }
 
-    if (cargoIgual && pesquisaIgual) {
-      let botoes = "";
+        if (cargoIgual && pesquisaIgual) {
+          let botoes = "";
 
-      const cargoAlvo = funcionariosLista[i].cargo.toUpperCase();
-      const idAlvo = funcionariosLista[i].id;
+          const cargoAlvo = funcionariosLista[i].cargo.toUpperCase();
+          const idAlvo = funcionariosLista[i].id;
 
-      if (cargoLogado === "ROOT") {
-        botoes = `
+          if (cargoLogado === "ROOT") {
+            botoes = `
           <img class="buttons-edit" src="../assets/funcionarios/editYellow.svg" 
                alt="Editar" onclick="pop_up_editar(${idAlvo})">`;
-        if (idAlvo !== idLogado) {
-          botoes += `
+            if (idAlvo !== idLogado) {
+              botoes += `
             <img class="buttons-edit" src="../assets/funcionarios/iconDelete.svg" 
                  alt="Deletar" onclick="pop_up_excluir(${idAlvo})">`;
-        }
-      } 
+            }
+          }
           else if (cargoLogado === "ADMINISTRADOR") {
             if (cargoAlvo === "ANALISTA" || cargoAlvo === "OPERADOR") {
               botoes = `
@@ -269,7 +269,7 @@
                       alt="Deletar" onclick="pop_up_excluir(${idAlvo})">`;
               }
             }
-          } 
+          }
 
           container.innerHTML += `
             <div id="funcItem" class="funcionario-item" data-idFuncionario=${funcionariosLista[i].id}>
@@ -334,12 +334,12 @@
           <span class="input-label">Senha</span>
           <span class="obrigatorio">*Obrigatório</span>
         </div>
-        <input type="text" id="ipt_senha" required>
+        <input type="password" id="ipt_senha" required>
         <div class="input-label-wrapper">
           <span class="input-label">Confirmar senha</span>
           <span class="obrigatorio">*Obrigatório</span>
         </div>
-        <input type="text" id="ipt_confirmar_senha" required>
+        <input type="password" id="ipt_confirmar_senha" required>
         <div class="input-label-wrapper">
           <span class="input-label">Telefone</span>
         </div>
@@ -469,13 +469,13 @@
           <span class="input-label">Senha</span>
           <span class="obrigatorio">*Obrigatório</span>
         </div>
-        <input type="text" id="ipt_senha" required>
+        <input type="password" id="ipt_senha" required>
 
         <div class="input-label-wrapper">
           <span class="input-label">Confirmar senha</span>
           <span class="obrigatorio">*Obrigatório</span>
         </div>
-        <input type="text" id="ipt_confirmar_senha" required>
+        <input type="password" id="ipt_confirmar_senha" required>
 
         <div class="input-label-wrapper">
           <span class="input-label">Telefone</span>
@@ -495,7 +495,78 @@
 
   }
   function funcao_editar(idVar) {
-    // Código para editar
+    var nomeVar = ipt_nome.value.trim();
+    var sobrenomeVar = ipt_sobrenome.value.trim();
+    var cargoVar = ipt_cargo.value;
+    var emailVar = ipt_email.value.trim();
+    var senhaVar = ipt_senha.value;
+    var confirmacao_senhaVar = ipt_confirmar_senha.value;
+    var telefoneVar = ipt_telefone.value.replace(/\D/g, "");
+
+    if (nomeVar === "") {
+      marcarErro(ipt_nome, "O campo nome está em branco.");
+      return;
+    }
+    if (sobrenomeVar === "") {
+      marcarErro(ipt_sobrenome, "O campo sobrenome está em branco.");
+      return;
+    }
+    if (cargoVar === "") {
+      marcarErro(ipt_cargo, "O campo cargo está em branco.");
+      return;
+    }
+    if (emailVar === "") {
+      marcarErro(ipt_email, "O campo email está em branco.");
+      return;
+    }
+    if (senhaVar === "") {
+      marcarErro(ipt_nome, "O campo senha está em branco.");
+      return;
+    }
+    if (confirmacao_senhaVar === "") {
+      marcarErro(ipt_nome, "O campo confirmar senha está em branco.");
+      return;
+    }
+    if (!/^\d{10,11}$/.test(telefoneVar)) {
+      marcarErro(ipt_telefone, "Telefone deve ter 10 ou 11 números (com DDD)");
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVar)) {
+      marcarErro(ipt_email, "Digite um e-mail válido");
+      return;
+    }
+    if (senhaVar.length < 8 || !/[A-Za-z]/.test(senhaVar) || !/\d/.test(senhaVar)) {
+      marcarErro(ipt_senha, "A senha deve ter pelo menos 8 caracteres, incluindo letras e números");
+      return;
+    }
+    if (confirmacao_senhaVar !== senhaVar) {
+      marcarErro(ipt_confirmar_senha, "As senhas não coincidem");
+      return;
+    }
+    fetch("/usuarios/funcao_editar", {
+      method: 'PUT',
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        nomeServer: nomeVar,
+        sobrenomeServer: sobrenomeVar,
+        cargoServer: cargoVar,
+        emailServer: emailVar,
+        senhaServer: senhaVar,
+        telefoneServer: telefoneVar,
+        idServer: idVar
+      }),
+    })
+      .then(resposta => {
+        if (resposta.ok) {
+          mostrarErro("Cadastro realizado com sucesso!");
+          setTimeout(() => {
+            window.location = "funcionarios.html";
+          }, 2000);
+        } else {
+          throw "Houve um erro ao tentar realizar o cadastro!";
+        }
+      })
+      .catch(erro => console.error(`#ERRO: ${erro}`));
   }
 
   function pop_up_excluir(id) {

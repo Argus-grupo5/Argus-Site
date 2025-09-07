@@ -210,7 +210,7 @@ function listarCargo(req, res) {
         });
 }
 
-function funcao_adicionar(req, res){
+function funcao_adicionar(req, res) {
     var funcionario_nome = req.body.nomeServer;
     var funcionario_sobrenome = req.body.sobrenomeServer;
     var funcionario_cargo = req.body.cargoServer;
@@ -224,7 +224,7 @@ function funcao_adicionar(req, res){
     } else if (funcionario_sobrenome == undefined) {
         res.status(400).send("Seu sobrenome está undefined!");
     } else if (funcionario_cargo == undefined) {
-    res.status(400).send("Seu email está undefined!");
+        res.status(400).send("Seu email está undefined!");
     } else if (funcionario_email == undefined) {
         res.status(400).send("Seu email está undefined!");
     } else if (funcionario_senha == undefined) {
@@ -253,7 +253,42 @@ function funcao_adicionar(req, res){
 }
 
 function funcao_editar(req, res) {
-    // Código para editar
+    var funcionario_nome = req.body.nomeServer;
+    var funcionario_sobrenome = req.body.sobrenomeServer;
+    var funcionario_cargo = req.body.cargoServer;
+    var funcionario_email = req.body.emailServer;
+    var funcionario_telefone = req.body.telefoneServer;
+    var id = req.body.idServer;
+
+    if (funcionario_nome == undefined) {
+        res.status(400).send("Seu nome está undefined!");
+    } else if (funcionario_sobrenome == undefined) {
+        res.status(400).send("Seu sobrenome está undefined!");
+    } else if (funcionario_cargo == undefined) {
+        res.status(400).send("Seu email está undefined!");
+    } else if (funcionario_email == undefined) {
+        res.status(400).send("Seu email está undefined!");
+    } else if (funcionario_telefone == undefined) {
+        res.status(400).send("O telefone está undefined!");
+    } else if (id == undefined) {
+        res.status(400).send("O id está undefined!");
+    }
+
+    usuarioModel.funcao_editar(funcionario_nome, funcionario_sobrenome, funcionario_cargo, funcionario_email, funcionario_telefone, id)
+        .then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        ).catch(
+            function (erro) {
+                console.log(erro);
+                console.log(
+                    "\nHouve um erro ao realizar o cadastro! Erro: ",
+                    erro.sqlMessage
+                );
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
 }
 
 function funcao_excluir(req, res) {
@@ -261,7 +296,7 @@ function funcao_excluir(req, res) {
     if (id == undefined) {
         return res.status(400).send("O id está undefined!");
     }
-    
+
     usuarioModel.funcao_excluir(id)
         .then((resultado) => {
             if (resultado.affectedRows > 0) {

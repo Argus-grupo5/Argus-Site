@@ -12,7 +12,7 @@ function autenticar(email, senha) {
 
 function cadastrarEndereco(cep, rua, bairro, cidade, estado, numero, complemento) {
     console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function cadastrar():", cep, rua, bairro, cidade, estado, numero, complemento);
- 
+
     // Insira exatamente a query do banco aqui, lembrando da nomenclatura exata nos valores
     //  e na ordem de inserção dos dados.
     var instrucaoSql = `
@@ -71,8 +71,16 @@ async function funcao_adicionar(funcionario_nome, funcionario_sobrenome, funcion
 
 
 
-function funcao_editar() {
-    // Código para editar usuário 
+function funcao_editar(funcionario_nome, funcionario_sobrenome, funcionario_cargo, funcionario_email, funcionario_telefone, id) {
+    const EditarDadosFuncionario_TabelaUsuario = `
+        update usuario set nome = '${funcionario_nome}', sobrenome = '${funcionario_sobrenome}', email = '${funcionario_email}',
+        telefone = ${funcionario_telefone}, foto_perfil = 'padrao.svg' where id = ${id};
+    `;
+    const EditarDadosFuncionario_TabelaCargoUsuario = `
+        update cargousuario set Cargo_id = ${funcionario_cargo} where usuario_id = ${id};
+    `;
+
+    return database.executar(EditarDadosFuncionario_TabelaUsuario, EditarDadosFuncionario_TabelaCargoUsuario);
 }
 
 function funcao_excluir(id) {
