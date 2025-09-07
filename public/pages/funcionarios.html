@@ -558,12 +558,12 @@
     })
       .then(resposta => {
         if (resposta.ok) {
-          mostrarErro("Cadastro realizado com sucesso!");
+          mostrarErro("Alteração realizada com sucesso!");
           setTimeout(() => {
             window.location = "funcionarios.html";
           }, 2000);
         } else {
-          throw "Houve um erro ao tentar realizar o cadastro!";
+          throw "Houve um erro ao tentar realizar a alteração!";
         }
       })
       .catch(erro => console.error(`#ERRO: ${erro}`));
