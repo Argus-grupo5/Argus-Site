@@ -14,7 +14,10 @@
     <div id="id_sair">
     </div>
 
-    <div id="editar_perfil"></div>
+    <div class="overlay" id="overlay">
+        <div id="config_funcionarios" class="popup">
+        </div>
+    </div>
 
     <header class="desktopNav">
         <div class="navButtons">
@@ -93,7 +96,7 @@
         <h3 id="perfilCargo"></h3>
         <h3 id="perfilEmail"></h3>
         <h3 id="perfilNumero"></h3>
-        <button id="buttonEditar" onclick="pop_up_editar()">Editar informações</button>
+        <button id="buttonEditar" onclick="pop_up_editar(sessionStorage.USER_ID)">Editar informações</button>
     </div>
 </body>
 
@@ -107,46 +110,74 @@
     perfilEmail.innerHTML = sessionStorage.USER_EMAIL;
     perfilNumero.innerHTML = sessionStorage.USER_TELEFONE;
 
-    function pop_up_editar() {
-        containerPerfil.style.display = 'none';
-        editar_perfil.style.display = 'block';
+    function abrir_popup() {
+        document.getElementById("overlay").style.display = "flex";
+        document.body.classList.add("popup-open");
+    }
 
-        editar_perfil.innerHTML = `
-            <div class="popup_configs">
-                <div id="headerPopup">
-                <h1>Editar informações do Perfil</h1>
-                <button id="buttonFechar" onclick="fecharPopup()"><img src="../assets/dashboard/desktop/btnFechar.svg" alt="Botão de Fechar"></button>
-                </div>
+    function fechar_popup() {
+        document.getElementById("overlay").style.display = "none";
+        document.body.classList.remove("popup-open");
+        config_funcionarios.innerHTML = '';
+    }
+
+    function pop_up_editar(id) {
+        abrir_popup();
+
+        config_funcionarios.innerHTML = `
+            <img src="../assets/dashboard/desktop/btnFechar.svg" alt="Fechar" class="btnFecharPopup" onclick="fechar_popup()">
+            <h1>Editar Usuário</h1>
+            <div class="inputs">
                 <div class="input-label-wrapper">
-                    <span class="input-label">Alterar Senha</span>
+                    <span class="input-label">Nome</span>
                 </div>
-                <input type="text" id="ipt_senha">
+                <input type="text" id="ipt_nome" value="${sessionStorage.USER_NAME}" >
+            
                 <div class="input-label-wrapper">
-                    <span class="input-label">Alterar Email</span>
+                    <span class="input-label">Sobrenome</span>
                 </div>
-                <input type="text" id="ipt_email">
+                <input type="text" id="ipt_sobrenome" value="${sessionStorage.USER_SOBRENOME}">
+            
                 <div class="input-label-wrapper">
-                    <span class="input-label">Alterar Telefone</span>
+                    <span class="input-label">Cargo</span>
                 </div>
-                <input type="text" id="ipt_telefone">
+            
                 <div class="input-label-wrapper">
-                    <span class="input-label">Alterar Foto</span>
+                    <span class="input-label">Nova senha</span>
+                    <span class="obrigatorio">*obrigatório</span>
                 </div>
-                <input type="text" id="ipt_foto">
-                <div class="confirmarEdicao">
+                <input type="text" id="ipt_senha" required>
+            
+                
                 <div class="input-label-wrapper">
-                    <span class="input-label" id="confirmacaoSenha">Redigite a sua senha para confirmar as alterações</span>
+                    <span class="input-label">Telefone</span>
                 </div>
-                <input type="text" id="ipt_confirmarSenha">
-                <button id="buttonEditar">Alterar Informações</button>
+                <input type="text" id="ipt_telefone" value="${sessionStorage.USER_TELEFONE}">
+
+                <div class="input-label-wrapper">
+                    <span class="input-label">Foto</span>
                 </div>
+                <input type="file" id="ipt_foto" required>
+                <div class="input-label-wrapper">
+                    <span class="input-label">Confirmar senha</span>
+                    <span class="obrigatorio">*obrigatório</span>
+                </div>
+                
+                <input type="text" id="ipt_confirmar_senha" required>
+            </div>
+
+            <div id="mensagem_erro"></div>
+            <div class="btns_popup">
+                
+                <button class="btn cadastrar" onclick="funcao_editar(${id})">Editar</button>
+                <button class="btn fechar" onclick="fechar_popup()">Fechar</button>
             </div>
                 `;
     }
 
-    function fecharPopup() {
-        editar_perfil.style.display = 'none';
-        containerPerfil.style.display = 'block';
+    function funcao_editar(idVar) {
+        // Código para editar
+        fechar_popup();
     }
 
     function sair() {
