@@ -244,7 +244,7 @@ function funcao_adicionar(req, res) {
             function (erro) {
                 console.log(erro);
                 console.log(
-                    "\nHouve um erro ao realizar o cadastro! Erro: ",
+                    "\nHouve um erro ao realizar ao adicionar! Erro: ",
                     erro.sqlMessage
                 );
                 res.status(500).json(erro.sqlMessage);
@@ -255,6 +255,7 @@ function funcao_adicionar(req, res) {
 function funcao_editar(req, res) {
     var funcionario_nome = req.body.nomeServer;
     var funcionario_sobrenome = req.body.sobrenomeServer;
+    var funcionario_senha = req.body.senhaServer;
     var funcionario_cargo = req.body.cargoServer;
     var funcionario_email = req.body.emailServer;
     var funcionario_telefone = req.body.telefoneServer;
@@ -264,6 +265,8 @@ function funcao_editar(req, res) {
         res.status(400).send("Seu nome está undefined!");
     } else if (funcionario_sobrenome == undefined) {
         res.status(400).send("Seu sobrenome está undefined!");
+    } else if (funcionario_senha == undefined) {
+        res.status(400).send("Sua senha está undefined!");
     } else if (funcionario_cargo == undefined) {
         res.status(400).send("Seu email está undefined!");
     } else if (funcionario_email == undefined) {
@@ -274,7 +277,7 @@ function funcao_editar(req, res) {
         res.status(400).send("O id está undefined!");
     }
 
-    usuarioModel.funcao_editar(funcionario_nome, funcionario_sobrenome, funcionario_cargo, funcionario_email, funcionario_telefone, id)
+    usuarioModel.funcao_editar(funcionario_nome, funcionario_sobrenome, funcionario_senha, funcionario_cargo, funcionario_email, funcionario_telefone, id)
         .then(
             function (resultado) {
                 res.json(resultado);
@@ -283,7 +286,46 @@ function funcao_editar(req, res) {
             function (erro) {
                 console.log(erro);
                 console.log(
-                    "\nHouve um erro ao realizar o cadastro! Erro: ",
+                    "\nHouve um erro ao alterar as informações do usuário ! Erro: ",
+                    erro.sqlMessage
+                );
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
+}
+
+function funcao_editar_proprio(req, res) {
+    var funcionario_nome = req.body.nomeServer;
+    var funcionario_sobrenome = req.body.sobrenomeServer;
+    var funcionario_senha = req.body.senhaServer;
+    var funcionario_email = req.body.emailServer;
+    var funcionario_telefone = req.body.telefoneServer;
+    var id = sessionStorage.USER_ID;
+
+    if (funcionario_nome == undefined) {
+        res.status(400).send("Seu nome está undefined!");
+    } else if (funcionario_sobrenome == undefined) {
+        res.status(400).send("Seu sobrenome está undefined!");
+    } else if(funcionario_senha == undefined){
+        res.status(400).send("Sua senha está undefined!");
+    } else if (funcionario_email == undefined) {
+        res.status(400).send("Seu email está undefined!");
+    } else if (funcionario_telefone == undefined) {
+        res.status(400).send("O telefone está undefined!");
+    } else if (id == undefined) {
+        res.status(400).send("O id está undefined!");
+    }
+
+    usuarioModel.funcao_editar_proprio(funcionario_nome, funcionario_sobrenome, funcionario_senha, funcionario_email, funcionario_telefone, id)
+        .then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        ).catch(
+            function (erro) {
+                console.log(erro);
+                console.log(
+                    "\nHouve um erro ao alterar suas informações ! Erro: ",
                     erro.sqlMessage
                 );
                 res.status(500).json(erro.sqlMessage);
@@ -351,6 +393,7 @@ module.exports = {
     listarCargo,
     funcao_adicionar,
     funcao_editar,
+    funcao_editar_proprio,
     funcao_excluir,
     online
 }

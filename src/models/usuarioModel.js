@@ -38,7 +38,7 @@ function cadastrarEmpresa(nome, telefone, email, senha, cnpj, razao, fkEndereco)
 //tela de funcionários
 function listarFuncionarios() {
     const instrucaoSql = `
-        select u.id, u.foto_perfil, u.nome, u.sobrenome, u.email, c.cargo, DATE_FORMAT(u.data_cadastro, '%d/%m/%Y') as data_cadastro, u.telefone 
+        select u.id, u.foto_perfil, u.nome, u.sobrenome, u.email, c.id AS cargoId, c.cargo, DATE_FORMAT(u.data_cadastro, '%d/%m/%Y') as data_cadastro, u.telefone 
         from cargo c
         join cargousuario uc on c.id = uc.Cargo_id
         join usuario u on uc.usuario_id = u.id;
@@ -47,7 +47,7 @@ function listarFuncionarios() {
 }
 
 function listarCargo() {
-    const instrucaoSql = "select cargo from cargo order by cargo";
+    const instrucaoSql = "select id, cargo from cargo order by id";
     return database.executar(instrucaoSql);
 }
 
@@ -69,10 +69,10 @@ async function funcao_adicionar(funcionario_nome, funcionario_sobrenome, funcion
 }
 
 
-    function funcao_editar(funcionario_nome, funcionario_sobrenome, funcionario_cargo, funcionario_email, funcionario_telefone, id) {
+function funcao_editar(funcionario_nome, funcionario_sobrenome, funcionario_senha, funcionario_cargo, funcionario_email, funcionario_telefone, id) {
     const EditarDadosFuncionario_TabelaUsuario = `
         update usuario set nome = '${funcionario_nome}', sobrenome = '${funcionario_sobrenome}', email = '${funcionario_email}',
-        telefone = ${funcionario_telefone}, foto_perfil = 'padrao.svg' where id = ${id};
+        telefone = ${funcionario_telefone}, senha = SHA2('${funcionario_senha}', 512), foto_perfil = 'padrao.svg' where id = ${id};
     `;
     const EditarDadosFuncionario_TabelaCargoUsuario = `
         update cargousuario set Cargo_id = ${funcionario_cargo} where usuario_id = ${id};
@@ -81,13 +81,23 @@ async function funcao_adicionar(funcionario_nome, funcionario_sobrenome, funcion
     return database.executar(EditarDadosFuncionario_TabelaUsuario, EditarDadosFuncionario_TabelaCargoUsuario);
 }
 
+function funcao_editar_proprio(funcionario_nome, funcionario_sobrenome, funcionario_senha, funcionario_email, funcionario_telefone, id) {
+        console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function funcao_editar():", funcionario_nome, funcionario_sobrenome, funcionario_email, funcionario_telefone, id);
+    var instrucaoSql = `
+        update usuario set nome = '${funcionario_nome}', sobrenome = '${funcionario_sobrenome}', senha = SHA2('${funcionario_senha}', 512), email = '${funcionario_email}',
+        telefone = ${funcionario_telefone}, foto_perfil = 'padrao.svg' where id = ${id};
+    `;
+
+    return database.executar(instrucaoSql);
+}
+
 function funcao_excluir(id) {
     const instrucaoSql = `delete from cargoUsuario where usuario_id = ${id}`;
     return database.executar(instrucaoSql);
 }
 
 function online(idUsuario, status) {
-    console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function cadastrar():", status, idUsuario);
+    console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function online():", status, idUsuario);
 
     var instrucaoSql = `
         UPDATE usuario
@@ -107,6 +117,7 @@ module.exports = {
     listarCargo,
     funcao_adicionar,
     funcao_editar,
+    funcao_editar_proprio,
     funcao_excluir,
     online
 };

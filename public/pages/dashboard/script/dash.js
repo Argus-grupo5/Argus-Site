@@ -1,24 +1,23 @@
-
-window.addEventListener('onbeforeunload', function () {
-  fetch("/usuarios/online", {
-    method: "put",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      status: 0,
-      idServer: sessionStorage.USER_ID
-    }),
-  })
-    .then(response => {
-      if (!response.ok) throw new Error("Erro ao alterar usuário");
-      return response.json();
-    })
-    .catch(error => {
-      console.error(`#ERRO: ${error}`);
-      return false;
-    });
-});
+// window.addEventListener('onbeforeunload', function () {
+//   fetch("/usuarios/online", {
+//     method: "put",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify({
+//       status: 0,
+//       idServer: sessionStorage.USER_ID
+//     }),
+//   })
+//     .then(response => {
+//       if (!response.ok) throw new Error("Erro ao alterar usuário");
+//       return response.json();
+//     })
+//     .catch(error => {
+//       console.error(`#ERRO: ${error}`);
+//       return false;
+//     });
+// });
 
 function header(pag) {
   nav = document.getElementById("navDesktop")

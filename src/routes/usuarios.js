@@ -10,9 +10,11 @@ router.post("/cadastrarEndereco", function (req, res) {
     usuarioController.cadastrarEndereco(req, res);
 })
 
-router.post("/cadastrarEmpresa", upload.single('fotoServer'), function (req, res) {
+router.post("/cadastrarEmpresa", function (req, res) {
     usuarioController.cadastrarEmpresa(req, res);
 })
+
+// , upload.single('fotoServer')
 
 router.post("/autenticar", function (req, res) {
     usuarioController.autenticar(req, res);
@@ -36,6 +38,9 @@ router.put("/funcao_editar", function (req, res){
     usuarioController.funcao_editar(req, res)
 })
 
+router.put("/funcao_editar_proprio", function (req, res){
+    usuarioController.funcao_editar_proprio(req, res)
+})
 
 router.delete("/funcao_excluir", function (req, res){
     usuarioController.funcao_excluir(req, res)

@@ -127,8 +127,77 @@
     }
 
     function funcao_editar(idVar) {
-        // Código para editar
-        fechar_popup();
+        var nomeVar = ipt_nome.value.trim();
+        var sobrenomeVar = ipt_sobrenome.value.trim();
+        var emailVar = ipt_email.value.trim();
+        var senhaVar = ipt_senha.value;
+        var confirmacao_senhaVar = ipt_confirmar_senha.value;
+        var telefoneVar = ipt_telefone.value.replace(/\D/g, "");
+
+        if (nomeVar === "") {
+            marcarErro(ipt_nome, "O campo nome está em branco.");
+            return;
+        }
+        if (sobrenomeVar === "") {
+            marcarErro(ipt_sobrenome, "O campo sobrenome está em branco.");
+            return;
+        }
+        if (cargoVar === "") {
+            marcarErro(ipt_cargo, "O campo cargo está em branco.");
+            return;
+        }
+        if (emailVar === "") {
+            marcarErro(ipt_email, "O campo email está em branco.");
+            return;
+        }
+        if (senhaVar === "") {
+            marcarErro(ipt_nome, "O campo senha está em branco.");
+            return;
+        }
+        if (confirmacao_senhaVar === "") {
+            marcarErro(ipt_nome, "O campo confirmar senha está em branco.");
+            return;
+        }
+        if (!/^\d{10,11}$/.test(telefoneVar)) {
+            marcarErro(ipt_telefone, "Telefone deve ter 10 ou 11 números (com DDD)");
+            return;
+        }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVar)) {
+            marcarErro(ipt_email, "Digite um e-mail válido");
+            return;
+        }
+        if (senhaVar.length < 8 || !/[A-Za-z]/.test(senhaVar) || !/\d/.test(senhaVar)) {
+            marcarErro(ipt_senha, "A senha deve ter pelo menos 8 caracteres, incluindo letras e números");
+            return;
+        }
+        if (confirmacao_senhaVar !== senhaVar) {
+            marcarErro(ipt_confirmar_senha, "As senhas não coincidem");
+            return;
+        }
+        fetch("/usuarios/funcao_editar_proprio", {
+            method: 'PUT',
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                nomeServer: nomeVar,
+                sobrenomeServer: sobrenomeVar,
+                cargoServer: cargoVar,
+                emailServer: emailVar,
+                senhaServer: senhaVar,
+                telefoneServer: telefoneVar,
+                idServer: idVar
+            }),
+        })
+            .then(resposta => {
+                if (resposta.ok) {
+                    mostrarErro("Alteração realizada com sucesso!");
+                    setTimeout(() => {
+                        window.location = "perfil.html";
+                    }, 2000);
+                } else {
+                    throw "Houve um erro ao tentar realizar a alteração!";
+                }
+            })
+            .catch(erro => console.error(`#ERRO: ${erro}`));
     }
 
 

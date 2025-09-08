@@ -117,7 +117,7 @@
       .then(cargos => {
         cargos.forEach(c => {
           const option = document.createElement("option");
-          option.value = c.cargo;
+          option.value = c.id;
           option.textContent = c.cargo;
           select.appendChild(option);
         });
@@ -162,7 +162,7 @@
 
   function filtrarFuncionarios(edit) {
     console.log(edit)
-    const filtro = document.getElementById("id_filter").value.toLowerCase();
+    const filtro = document.getElementById("id_filter").value;
     const pesquisa = document.getElementById("id_pesquisa").value.toLowerCase();
     container.innerHTML = "";
     var contStatus = 0;
@@ -175,7 +175,7 @@
                 <span class="tooltiptextInfo">Editar </span>
                 `;
       for (let i = 0; i < funcionariosLista.length; i++) {
-        const cargoIgual = filtro === "" || funcionariosLista[i].cargo.toLowerCase() === filtro;
+        const cargoIgual = filtro === "" || funcionariosLista[i].cargoId == filtro;
         const pesquisaIgual =
           funcionariosLista[i].nome.toLowerCase().includes(pesquisa) ||
           funcionariosLista[i].email.toLowerCase().includes(pesquisa);
@@ -238,8 +238,8 @@
                                         <div class="dtCadastro">${funcionariosLista[i].data_cadastro}</div>
                                         <div class="functel">${funcionariosLista[i].telefone}</div>
                                         <div class="funcStatus">
-                                            <img class= "buttons-edit" src="../../assets/funcionarios/editYellow.svg" alt="Editar" onclick="pop_up_editar(${funcionariosLista[i].id})">
-                                            <img class= "buttons-edit" src="../../assets/funcionarios/iconDelete.svg" alt="Deletar" onclick="pop_up_excluir(${funcionariosLista[i].id})">
+                                            <img class= "buttons-edit" src="../../assets/funcionarios/editYellow.svg" alt="Editar" onclick="pop_up_editar(${i})">
+                                            <img class= "buttons-edit" src="../../assets/funcionarios/iconDelete.svg" alt="Deletar" onclick="pop_up_excluir(${i})">
                                         </div>
                                     </div>`;
         }
@@ -267,12 +267,7 @@
           <span class="input-label">Cargo</span>
           <span class="obrigatorio">*Obrigatório</span>
         </div>
-        <select id="ipt_cargo">
-          <option value="">Selecione um cargo</option>
-          <option value="2">Administrador</option>
-          <option value="3">Analista</option>
-          <option value="4">Operador</option>
-        </select>
+        <select id="ipt_cargo"></select>
         <div class="input-label-wrapper">
           <span class="input-label">Email</span>
           <span class="obrigatorio">*Obrigatório</span>
@@ -299,6 +294,7 @@
         <button class="btn fechar" onclick="fechar_popup()">Fechar</button>
       </div>
     `;
+    listarCargo("ipt_cargo")
   }
   function funcao_adicionar() {
     var nomeVar = ipt_nome.value.trim();
@@ -380,6 +376,7 @@
 
 
   function pop_up_editar(id) {
+    console.log(funcionariosLista)
     abrir_popup()
     config_funcionarios.innerHTML = `
       <img src="../../assets/dashboard/desktop/btnFechar.svg" alt="Fechar" class="btnFecharPopup" onclick="fechar_popup()">
@@ -432,11 +429,11 @@
       </div>
       <div id="mensagem_erro"></div>
       <div class="btns_popup">
-        <button class="btn cadastrar" onclick="funcao_editar(${id})">Editar</button>
+        <button class="btn cadastrar" onclick="funcao_editar(${funcionariosLista[id].id})">Editar</button>
         <button class="btn fechar" onclick="fechar_popup()">Fechar</button>
       </div>
         `;
-        listarCargo("ipt_cargo")
+    listarCargo("ipt_cargo")
 
   }
   function funcao_editar(idVar) {
@@ -528,28 +525,32 @@
       <button class="btn fechar" onclick="fechar_popup()">Não</button>
     </div>
         `;
-    mensagem_erro.style.display = 'none';
+    mensagem_erro.style.display = 'flex';
   }
   function funcao_excluir(idVar) {
-    fetch("/usuarios/funcao_excluir", {
-      method: 'DELETE',
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        idServer: idVar
+    mostrarErro(`Excluindo o usuário`);
+    setTimeout(() => {
 
-      })
-    })
-      .then(res => {
-        if (res.ok) {
-          mostrarErro("Funcionário deletado com sucesso!")
+      fetch("/usuarios/funcao_excluir", {
+        method: 'DELETE',
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          idServer: idVar
 
-        } else {
-          mostrarErro("Erro ao deletar Funcionário!")
-        }
+        })
       })
-      .catch(err => {
-        console.error('Erro na requisição:', err);
-      });//fim fetch
+        .then(res => {
+          if (res.ok) {
+            mostrarErro("Funcionário deletado com sucesso!")
+
+          } else {
+            mostrarErro("Erro ao deletar Funcionário!")
+          }
+        })
+        .catch(err => {
+          console.error('Erro na requisição:', err);
+        });//fim fetch
+    }, 1000)
   }
 
   function mostrarErro(msg) {
@@ -569,7 +570,7 @@
 
     setTimeout(() => {
       input.classList.remove("erroInput");
-    }, 2500);
+    }, 1500);
   }
 
   userNome.innerHTML = sessionStorage.USER_NAME;

@@ -24,11 +24,12 @@ body.popup-open {
 
   z-index: 1000;
   width: 45vw;
-  max-height: 95vh;
+  height: fit-content;
 
   background: #FF670A;
   border-radius: 20px;
-  padding: 2vw;
+  padding-inline: 2vw;
+  padding-block: 1.5vh;
   text-align: center;
   top: 50%;
   left: 50%;
@@ -38,6 +39,7 @@ body.popup-open {
 }
 
 .popup .btnFecharPopup {
+  display: none;
   position: absolute;
   align-self: flex-end;
   margin-bottom: 90%;
