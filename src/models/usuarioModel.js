@@ -51,12 +51,34 @@ function listarCargo() {
     return database.executar(instrucaoSql);
 }
 
-function funcao_adicionar() {
-    // Código para adicionar novo usuário 
+async function funcao_adicionar(funcionario_nome, funcionario_sobrenome, funcionario_cargo, funcionario_email, funcionario_senha, funcionario_telefone, funcionario_empresa) {
+    console.log("ACESSEI O USUARIO MODEL");
+
+    const insertUsuario = `
+        INSERT INTO usuario (nome, sobrenome, email, senha, telefone, fkempresa)
+        VALUES ('${funcionario_nome}', '${funcionario_sobrenome}', '${funcionario_email}', SHA2('${funcionario_senha}', 512), '${funcionario_telefone}', ${funcionario_empresa});
+    `;
+    const resultado = await database.executar(insertUsuario);
+    const usuarioId = resultado.insertId;
+    const insertCargo = `
+        INSERT INTO cargousuario (usuario_id, Cargo_id)
+        VALUES (${usuarioId}, ${funcionario_cargo});
+    `;
+
+    return database.executar(insertCargo);
 }
 
-function funcao_editar() {
-    // Código para editar usuário 
+
+    function funcao_editar(funcionario_nome, funcionario_sobrenome, funcionario_cargo, funcionario_email, funcionario_telefone, id) {
+    const EditarDadosFuncionario_TabelaUsuario = `
+        update usuario set nome = '${funcionario_nome}', sobrenome = '${funcionario_sobrenome}', email = '${funcionario_email}',
+        telefone = ${funcionario_telefone}, foto_perfil = 'padrao.svg' where id = ${id};
+    `;
+    const EditarDadosFuncionario_TabelaCargoUsuario = `
+        update cargousuario set Cargo_id = ${funcionario_cargo} where usuario_id = ${id};
+    `;
+
+    return database.executar(EditarDadosFuncionario_TabelaUsuario, EditarDadosFuncionario_TabelaCargoUsuario);
 }
 
 function funcao_excluir(id) {

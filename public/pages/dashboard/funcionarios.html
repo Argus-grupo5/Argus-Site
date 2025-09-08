@@ -109,8 +109,8 @@
 
   const container = document.getElementById("id_func_list");
 
-  function listarCargo() {
-    const select = document.getElementById("id_filter");
+  function listarCargo(elementoPai) {
+    const select = document.getElementById(elementoPai);
 
     fetch("/usuarios/listarCargo")
       .then(res => res.json())
@@ -149,7 +149,7 @@
   window.onload = () => {
     header("funcionario")
     online()
-    listarCargo();
+    listarCargo("id_filter");
     fetch(`/usuarios/listarFuncionarios`).then(res => {
       if (res.ok) {
         res.json().then(resposta => {
@@ -250,42 +250,52 @@
   function pop_up_adicionar() {
     abrir_popup();
     config_funcionarios.innerHTML = `
-      <img src="../../assets/dashboard/desktop/btnFechar.svg" alt="Fechar" class="btnFecharPopup" onclick="fechar_popup()">
-      <h1>Editar informações do Perfil</h1>
-
+      <h1>Criar Usuário</h1>
       <div class="inputs">
         <div class="input-label-wrapper">
-          <span class="input-label">Alterar Senha</span>
+          <span class="input-label">Nome</span>
+          <span class="obrigatorio">*Obrigatório</span>
         </div>
-        <input type="text" id="ipt_senha">
+        <input type="text" id="ipt_nome" required>
 
         <div class="input-label-wrapper">
-          <span class="input-label">Alterar Email</span>
+          <span class="input-label">Sobrenome</span>
+          <span class="obrigatorio">*Obrigatório</span>
         </div>
-        <input type="text" id="ipt_email">
-
+        <input type="text" id="ipt_sobrenome" required>
         <div class="input-label-wrapper">
-          <span class="input-label">Alterar Telefone</span>
+          <span class="input-label">Cargo</span>
+          <span class="obrigatorio">*Obrigatório</span>
         </div>
-        <input type="text" id="ipt_telefone">
-
+        <select id="ipt_cargo">
+          <option value="">Selecione um cargo</option>
+          <option value="2">Administrador</option>
+          <option value="3">Analista</option>
+          <option value="4">Operador</option>
+        </select>
         <div class="input-label-wrapper">
-          <span class="input-label">Alterar Foto</span>
+          <span class="input-label">Email</span>
+          <span class="obrigatorio">*Obrigatório</span>
         </div>
-        <input type="file" id="ipt_foto">
-
+        <input type="text" id="ipt_email" required>
         <div class="input-label-wrapper">
-          <span class="input-label" id="confirmacaoSenha">
-            Redigite a sua senha para confirmar as alterações
-          </span>
+          <span class="input-label">Senha</span>
+          <span class="obrigatorio">*Obrigatório</span>
         </div>
-        <input type="text" id="ipt_confirmarSenha">
+        <input type="password" id="ipt_senha" required>
+        <div class="input-label-wrapper">
+          <span class="input-label">Confirmar senha</span>
+          <span class="obrigatorio">*Obrigatório</span>
+        </div>
+        <input type="password" id="ipt_confirmar_senha" required>
+        <div class="input-label-wrapper">
+          <span class="input-label">Telefone</span>
+        </div>
+        <input type="text" id="ipt_telefone" required>
       </div>
-
       <div id="mensagem_erro"></div>
-
       <div class="btns_popup">
-        <button class="btn cadastrar" id="buttonEditar" onclick="funcao_editar()">Alterar Informações</button>
+        <button class="btn cadastrar" onclick="funcao_adicionar()">Cadastrar</button>
         <button class="btn fechar" onclick="fechar_popup()">Fechar</button>
       </div>
     `;
@@ -341,7 +351,7 @@
       return;
     }
 
-    fetch("/usuarios/funcao_cadastrar", {
+    fetch("/usuarios/funcao_adicionar", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -379,51 +389,46 @@
           <span class="input-label">Nome</span>
           <span class="obrigatorio">*obrigatório</span>
         </div>
-        <input type="text" id="ipt_nome" required>
+        <input type="text" id="ipt_nome" value="${funcionariosLista[id].nome}" required>
 
         <div class="input-label-wrapper">
           <span class="input-label">Sobrenome</span>
           <span class="obrigatorio">*obrigatório</span>
         </div>
-        <input type="text" id="ipt_sobrenome" required>
+        <input type="text" id="ipt_sobrenome" value="${funcionariosLista[id].sobrenome}" required>
 
         <div class="input-label-wrapper">
           <span class="input-label">Cargo</span>
           <span class="obrigatorio">*obrigatório</span>
         </div>
-        <select id="ipt_cargo">
-          <option value="">Selecione um cargo</option>
-          <option value="1">Administrador</option>
-          <option value="3">Analista</option>
-          <option value="4">Operador</option>
-        </select>
+        <select id="ipt_cargo"></select>
 
         <div class="input-label-wrapper">
           <span class="input-label">Email</span>
           <span class="obrigatorio">*obrigatório</span>
         </div>
-        <input type="text" id="ipt_email" required>
+        <input type="text" id="ipt_email" value="${funcionariosLista[id].email}" required>
 
         <div class="input-label-wrapper">
           <span class="input-label">Senha</span>
           <span class="obrigatorio">*obrigatório</span>
         </div>
-        <input type="text" id="ipt_senha" required>
+        <input type="password" id="ipt_senha" required>
 
         <div class="input-label-wrapper">
           <span class="input-label">Confirmar senha</span>
           <span class="obrigatorio">*obrigatório</span>
         </div>
-        <input type="text" id="ipt_confirmar_senha" required>
+        <input type="password" id="ipt_confirmar_senha" required>
 
         <div class="input-label-wrapper">
           <span class="input-label">Telefone</span>
         </div>
-        <input type="text" id="ipt_telefone" required>
+        <input type="text" id="ipt_telefone" value="${funcionariosLista[id].telefone}" required>
         <div class="input-label-wrapper">
           <span class="input-label">Foto</span>
         </div>
-        <input type="text" id="ipt_foto" required>
+        <input type="file" id="ipt_foto" required>
       </div>
       <div id="mensagem_erro"></div>
       <div class="btns_popup">
@@ -431,10 +436,82 @@
         <button class="btn fechar" onclick="fechar_popup()">Fechar</button>
       </div>
         `;
+        listarCargo("ipt_cargo")
 
   }
   function funcao_editar(idVar) {
-    // Código para editar
+    var nomeVar = ipt_nome.value.trim();
+    var sobrenomeVar = ipt_sobrenome.value.trim();
+    var cargoVar = ipt_cargo.value;
+    var emailVar = ipt_email.value.trim();
+    var senhaVar = ipt_senha.value;
+    var confirmacao_senhaVar = ipt_confirmar_senha.value;
+    var telefoneVar = ipt_telefone.value.replace(/\D/g, "");
+
+    if (nomeVar === "") {
+      marcarErro(ipt_nome, "O campo nome está em branco.");
+      return;
+    }
+    if (sobrenomeVar === "") {
+      marcarErro(ipt_sobrenome, "O campo sobrenome está em branco.");
+      return;
+    }
+    if (cargoVar === "") {
+      marcarErro(ipt_cargo, "O campo cargo está em branco.");
+      return;
+    }
+    if (emailVar === "") {
+      marcarErro(ipt_email, "O campo email está em branco.");
+      return;
+    }
+    if (senhaVar === "") {
+      marcarErro(ipt_nome, "O campo senha está em branco.");
+      return;
+    }
+    if (confirmacao_senhaVar === "") {
+      marcarErro(ipt_nome, "O campo confirmar senha está em branco.");
+      return;
+    }
+    if (!/^\d{10,11}$/.test(telefoneVar)) {
+      marcarErro(ipt_telefone, "Telefone deve ter 10 ou 11 números (com DDD)");
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVar)) {
+      marcarErro(ipt_email, "Digite um e-mail válido");
+      return;
+    }
+    if (senhaVar.length < 8 || !/[A-Za-z]/.test(senhaVar) || !/\d/.test(senhaVar)) {
+      marcarErro(ipt_senha, "A senha deve ter pelo menos 8 caracteres, incluindo letras e números");
+      return;
+    }
+    if (confirmacao_senhaVar !== senhaVar) {
+      marcarErro(ipt_confirmar_senha, "As senhas não coincidem");
+      return;
+    }
+    fetch("/usuarios/funcao_editar", {
+      method: 'PUT',
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        nomeServer: nomeVar,
+        sobrenomeServer: sobrenomeVar,
+        cargoServer: cargoVar,
+        emailServer: emailVar,
+        senhaServer: senhaVar,
+        telefoneServer: telefoneVar,
+        idServer: idVar
+      }),
+    })
+      .then(resposta => {
+        if (resposta.ok) {
+          mostrarErro("Alteração realizada com sucesso!");
+          setTimeout(() => {
+            window.location = "funcionarios.html";
+          }, 2000);
+        } else {
+          throw "Houve um erro ao tentar realizar a alteração!";
+        }
+      })
+      .catch(erro => console.error(`#ERRO: ${erro}`));
   }
 
   function pop_up_excluir(id) {
