@@ -521,7 +521,7 @@
     </div>
     <div id="mensagem_erro"></div>
     <div class="btns_popup">
-      <button class="btn cadastrar" onclick="funcao_excluir(${id})">Sim</button>
+      <button class="btn cadastrar" onclick="funcao_excluir(${funcionariosLista[id].id})">Sim</button>
       <button class="btn fechar" onclick="fechar_popup()">Não</button>
     </div>
         `;
@@ -573,5 +573,4 @@
     }, 1500);
   }
 
-  userNome.innerHTML = sessionStorage.USER_NAME;
 </script>
