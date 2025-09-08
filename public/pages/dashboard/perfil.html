@@ -4,9 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/dashboard/perfil.css">
-    <link rel="stylesheet" href="../css/dashboard/servers.css">
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../../css/dashboard/perfil.css">
+    <link rel="stylesheet" href="../../css/dashboard/servers.css">
+    <link rel="stylesheet" href="../../css/style.css">
+    <script src="./script/dash.js"></script>
     <title>ARGUS | Perfil</title>
 </head>
 
@@ -19,39 +20,7 @@
         </div>
     </div>
 
-    <header class="desktopNav">
-        <div class="navButtons">
-            <a href="perfil.html" class="navButton tooltipNav" id="navUser">
-                <img class="selected" src="../assets/dashboard/desktop/user.svg" alt="">
-                <span class="tooltiptextNav">
-                    <div id="userNome"></div>
-                    <div id="userCargo">ADM</div>
-                </span>
-            </a>
-            <a href="../pages/servers.html" class="navButton tooltipNav" id="navServers">
-                <img src="../assets/dashboard/desktop/box.svg" alt="Servidores">
-                <span class="tooltiptextNav">Servidores</span>
-            </a>
-            <a href="../pages/funcionarios.html" class="navButton tooltipNav" id="navServers">
-                <img src="../assets/dashboard/desktop/employes.svg" alt="Funcionários">
-                <span class="tooltiptextNav">Funcionários</span>
-            </a>
-            <div class="navButton tooltipNav" id="navServers">
-                <img src="../assets/dashboard/desktop/logs.svg" alt="Logs">
-                <span class="tooltiptextNav">Logs</span>
-            </div>
-            <a href="https://sptech-team-vbjwf7te.atlassian.net/servicedesk/customer/portal/36"
-                class="navButton tooltipNav" id="navServers" target="_blank">
-                <img src="../assets/dashboard/desktop/headphone.svg" alt="Suporte">
-                <span class="tooltiptextNav">Suporte</span>
-            </a>
-            <div class="navButton tooltipNav" id="navServers" onclick="sair()">
-                <img src="../assets/dashboard/desktop/logout.svg" alt="Sair">
-                <span class="tooltiptextNav">Sair</span>
-            </div>
-        </div>
-        <img class="logo" src="../assets/icon/logoBlack.svg" alt="">
-    </header>
+    <header class="desktopNav" id="navDesktop"></header>
 
     <header class="headerTop">
         <div class="geralInfo">
@@ -91,41 +60,28 @@
     </header>
 
     <div class="containerPerfil" id="containerPerfil">
-        <img id="perfilFoto" src="../assets/fotoPerfil/padrao.svg" alt="Foto de Perfil">
-        <h1 id="perfilNome"></h1>
-        <h3 id="perfilCargo"></h3>
-        <h3 id="perfilEmail"></h3>
-        <h3 id="perfilNumero"></h3>
-        <button id="buttonEditar" onclick="pop_up_editar(sessionStorage.USER_ID)">Editar informações</button>
+
     </div>
 </body>
 
 </html>
 
 <script>
-    userNome.innerHTML = sessionStorage.USER_NAME;
-    userCargo.innerHTML = sessionStorage.CARGO_CARGO;
-    perfilNome.innerHTML = `${sessionStorage.USER_NAME} ${sessionStorage.USER_SOBRENOME}`;
-    perfilCargo.innerHTML = sessionStorage.CARGO_FUNCAO;
-    perfilEmail.innerHTML = sessionStorage.USER_EMAIL;
-    perfilNumero.innerHTML = sessionStorage.USER_TELEFONE;
-
-    function abrir_popup() {
-        document.getElementById("overlay").style.display = "flex";
-        document.body.classList.add("popup-open");
-    }
-
-    function fechar_popup() {
-        document.getElementById("overlay").style.display = "none";
-        document.body.classList.remove("popup-open");
-        config_funcionarios.innerHTML = '';
-    }
+    header()
+    containerPerfil.innerHTML = `
+        <img id="perfilFoto" src="../../assets/fotoPerfil/${sessionStorage.USER_FOTO}" alt="Foto de Perfil">
+        <h1 id="perfilNome">${sessionStorage.USER_NAME} ${sessionStorage.USER_SOBRENOME}</h1>
+        <h3 id="perfilCargo">${sessionStorage.CARGO_CARGO}</h3>
+        <h3 id="perfilEmail">${sessionStorage.USER_EMAIL}</h3>
+        <h3 id="perfilNumero">${sessionStorage.USER_TELEFONE}</h3>
+        <button id="buttonEditar" onclick="pop_up_editar(${sessionStorage.USER_ID})">Editar informações</button>
+    `
 
     function pop_up_editar(id) {
         abrir_popup();
 
         config_funcionarios.innerHTML = `
-            <img src="../assets/dashboard/desktop/btnFechar.svg" alt="Fechar" class="btnFecharPopup" onclick="fechar_popup()">
+            <img src="../../assets/dashboard/desktop/btnFechar.svg" alt="Fechar" class="btnFecharPopup" onclick="fechar_popup()">
             <h1>Editar Usuário</h1>
             <div class="inputs">
                 <div class="input-label-wrapper">
@@ -139,16 +95,11 @@
                 <input type="text" id="ipt_sobrenome" value="${sessionStorage.USER_SOBRENOME}">
             
                 <div class="input-label-wrapper">
-                    <span class="input-label">Cargo</span>
-                </div>
-            
-                <div class="input-label-wrapper">
                     <span class="input-label">Nova senha</span>
                     <span class="obrigatorio">*obrigatório</span>
                 </div>
                 <input type="text" id="ipt_senha" required>
-            
-                
+
                 <div class="input-label-wrapper">
                     <span class="input-label">Telefone</span>
                 </div>
@@ -180,22 +131,5 @@
         fechar_popup();
     }
 
-    function sair() {
-        id_sair.innerHTML = `
-        
-            <div class="popup_sair">
-                <h1>Deseja sair?</h1>
-                <button onclick="sair_s()">Sim</button>
-                <button onclick="sair_n()">Não</button>
-            </div>
-        `;
-    }
-    function sair_s() {
-        window.location.href = "./login.html";
-        sessionStorage.clear;
-    }
 
-    function sair_n() {
-        id_sair.innerHTML = ``;
-    }
 </script>
