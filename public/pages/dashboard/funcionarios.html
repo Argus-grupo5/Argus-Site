@@ -4,9 +4,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="../css/dashboard/funcionarios.css">
-  <link rel="stylesheet" href="../css/dashboard/servers.css">
-  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../../css/dashboard/funcionarios.css">
+  <link rel="stylesheet" href="../../css/dashboard/servers.css">
+  <link rel="stylesheet" href="../../css/style.css">
+  <script src="./script/dash.js"></script>
   <title>ARGUS | Funcionários</title>
 </head>
 
@@ -19,45 +20,14 @@
   <div id="id_sair">
   </div>
 
-  <header class="desktopNav">
-    <div class="navButtons">
-      <a href="perfil.html" class="navButton tooltipNav" id="navUser">
-        <img src="../assets/fotoPerfil/padrao.svg" alt="" id="FotoNavBar">
-        <span class="tooltiptextNav">
-          <div id="userNome"></div>
-          <div id="userCargo">ADM</div>
-        </span>
-      </a>
-      <a href="../pages/servers.html" class="navButton tooltipNav" id="navServers">
-        <img src="../assets/dashboard/desktop/box.svg" alt="Servidores">
-        <span class="tooltiptextNav">Servidores</span>
-      </a>
+  <header class="desktopNav" id="navDesktop">
 
-      <a href="../pages/funcionarios.html" class="navButton tooltipNav" id="navServers">
-        <img class="selected" src="../assets/dashboard/desktop/employes.svg" alt="Funcionários">
-        <span class="tooltiptextNav">Funcionários</span>
-      </a>
-      <div class="navButton tooltipNav" id="navServers">
-        <img src="../assets/dashboard/desktop/logs.svg" alt="Logs">
-        <span class="tooltiptextNav">Logs</span>
-      </div>
-      <a href="https://sptech-team-vbjwf7te.atlassian.net/servicedesk/customer/portal/36" class="navButton tooltipNav"
-        id="navServers" target="_blank">
-        <img src="../assets/dashboard/desktop/headphone.svg" alt="Suporte">
-        <span class="tooltiptextNav">Suporte</span>
-      </a>
-      <div class="navButton tooltipNav" id="navServers" onclick="sair()">
-        <img src="../assets/dashboard/desktop/logout.svg" alt="Sair">
-        <span class="tooltiptextNav">Sair</span>
-      </div>
-    </div>
-    <img class="logo" src="../assets/icon/logoBlack.svg" alt="">
   </header>
   <header class="headerTop">
     <div class="geralInfo">
       <div class="info tooltipInfo">
         <div class="server">
-          <img src="../assets/dashboard/desktop/server.svg" alt="">
+          <img src="../../assets/dashboard/desktop/server.svg" alt="">
         </div>
         <div class="serversMonitoring" id="id_servidores_monitorados">
         </div>
@@ -67,7 +37,7 @@
       </div>
       <div class="info">
         <div class="bell">
-          <img src="../assets/dashboard/desktop/bell.svg" alt="">
+          <img src="../../assets/dashboard/desktop/bell.svg" alt="">
         </div>
         <div class="risk tooltipInfo" id="id_servidores_em_estado_critico">
           <p id="qtd_critico"></p>
@@ -85,7 +55,7 @@
     </div>
 
     <div id="editContainer" class="editContainer">
-      <img class="iconLapis" src="../assets/funcionarios/lapis.svg" alt="" onclick="filtrarFuncionarios(true)">
+      <img class="iconLapis" src="../../assets/funcionarios/lapis.svg" alt="" onclick="filtrarFuncionarios(true)">
       <span class="tooltiptextInfo">Editar </span>
     </div>
   </header>
@@ -130,21 +100,24 @@
 
 </html>
 
+
+
+
 <script>
   let editar = false;
   let funcionariosLista;
 
   const container = document.getElementById("id_func_list");
 
-  function listarCargo() {
-    const select = document.getElementById("id_filter");
+  function listarCargo(elementoPai) {
+    const select = document.getElementById(elementoPai);
 
     fetch("/usuarios/listarCargo")
       .then(res => res.json())
       .then(cargos => {
         cargos.forEach(c => {
           const option = document.createElement("option");
-          option.value = c.cargo;
+          option.value = c.id;
           option.textContent = c.cargo;
           select.appendChild(option);
         });
@@ -152,9 +125,31 @@
       .catch(err => console.error("Erro ao carregar cargos:", err));
   }
 
+  function online() {
+    fetch("/usuarios/online", {
+      method: "put",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        status: 1,
+        idServer: sessionStorage.USER_ID
+      }),
+    })
+      .then(response => {
+        if (!response.ok) throw new Error("Erro ao alterar usuário");
+        return response.json();
+      })
+      .catch(error => {
+        console.error(`#ERRO: ${error}`);
+        return false;
+      });
+  }
 
   window.onload = () => {
-    listarCargo();
+    header("funcionario")
+    online()
+    listarCargo("id_filter");
     fetch(`/usuarios/listarFuncionarios`).then(res => {
       if (res.ok) {
         res.json().then(resposta => {
@@ -167,7 +162,7 @@
 
   function filtrarFuncionarios(edit) {
     console.log(edit)
-    const filtro = document.getElementById("id_filter").value.toLowerCase();
+    const filtro = document.getElementById("id_filter").value;
     const pesquisa = document.getElementById("id_pesquisa").value.toLowerCase();
     container.innerHTML = "";
     var contStatus = 0;
@@ -176,11 +171,11 @@
       editar = false;
       funcStatusInfo.innerHTML = `Status`
       editContainer.innerHTML = `
-                <img class="iconLapis" src="../assets/funcionarios/lapis.svg" alt="" onclick="filtrarFuncionarios(true)">
+                <img class="iconLapis" src="../../assets/funcionarios/lapis.svg" alt="" onclick="filtrarFuncionarios(true)">
                 <span class="tooltiptextInfo">Editar </span>
                 `;
       for (let i = 0; i < funcionariosLista.length; i++) {
-        const cargoIgual = filtro === "" || funcionariosLista[i].cargo.toLowerCase() === filtro;
+        const cargoIgual = filtro === "" || funcionariosLista[i].cargoId == filtro;
         const pesquisaIgual =
           funcionariosLista[i].nome.toLowerCase().includes(pesquisa) ||
           funcionariosLista[i].email.toLowerCase().includes(pesquisa);
@@ -191,11 +186,11 @@
 
         if (cargoIgual && pesquisaIgual) {
           contStatus++;
-          const statusIcon = `<img class="iconStatus" src="../assets/funcionarios/eyeClosed.svg" alt="Offline">`;
+          const statusIcon = `<img class="iconStatus" src="../../assets/funcionarios/eyeClosed.svg" alt="Offline">`;
           container.innerHTML += `
                                     <div id="funcItem" class="funcionario-item" data-idFuncionario=${funcionariosLista[i].id}>
                                         <div class="funcFoto">
-                                            <img src="../assets/fotoPerfil/${funcionariosLista[i].foto_perfil}" alt="Foto">
+                                            <img src="../../assets/fotoPerfil/${funcionariosLista[i].foto_perfil}" alt="Foto">
                                         </div>
                                         <div class="funcName">${funcionariosLista[i].nome} ${funcionariosLista[i].sobrenome}</div>
                                         <div class="funcEmail">${funcionariosLista[i].email}</div>
@@ -213,7 +208,7 @@
       editar = true;
 
       editContainer.innerHTML = `
-                <img class="iconLapis" src="../assets/funcionarios/salvarAlt.svg" alt="" onclick="filtrarFuncionarios(false)" >
+                <img class="iconLapis" src="../../assets/funcionarios/salvarAlt.svg" alt="" onclick="filtrarFuncionarios(false)" >
                 <span class="tooltiptextInfo">Salvar </span>`
 
 
@@ -230,12 +225,12 @@
 
         if (cargoIgual && pesquisaIgual) {
           var funcStatus = document.getElementById("funcStatusInfo")
-          funcStatus.innerHTML = `<img  class= "buttons-edit" src="../assets/funcionarios/editGreen.svg" alt="" onclick="pop_up_adicionar()">`;
+          funcStatus.innerHTML = `<img  class= "buttons-edit" src="../../assets/funcionarios/editGreen.svg" alt="" onclick="pop_up_adicionar()">`;
 
           container.innerHTML += `
                                     <div id="funcItem" class="funcionario-item" data-idFuncionario=${funcionariosLista[i].id}>
                                         <div class="funcFoto">
-                                            <img src="../assets/fotoPerfil/${funcionariosLista[i].foto_perfil}" alt="Foto">
+                                            <img src="../../assets/fotoPerfil/${funcionariosLista[i].foto_perfil}" alt="Foto">
                                         </div>
                                         <div class="funcName">${funcionariosLista[i].nome} ${funcionariosLista[i].sobrenome}</div>
                                         <div class="funcEmail">${funcionariosLista[i].email}</div>
@@ -243,67 +238,63 @@
                                         <div class="dtCadastro">${funcionariosLista[i].data_cadastro}</div>
                                         <div class="functel">${funcionariosLista[i].telefone}</div>
                                         <div class="funcStatus">
-                                            <img class= "buttons-edit" src="../assets/funcionarios/editYellow.svg" alt="Editar" onclick="pop_up_editar(${funcionariosLista[i].id})">
-                                            <img class= "buttons-edit" src="../assets/funcionarios/iconDelete.svg" alt="Deletar" onclick="pop_up_excluir(${funcionariosLista[i].id})">
+                                            <img class= "buttons-edit" src="../../assets/funcionarios/editYellow.svg" alt="Editar" onclick="pop_up_editar(${i})">
+                                            <img class= "buttons-edit" src="../../assets/funcionarios/iconDelete.svg" alt="Deletar" onclick="pop_up_excluir(${i})">
                                         </div>
                                     </div>`;
         }
       }
     }
   }
-  function abrir_popup() {
-    document.getElementById("overlay").style.display = "flex";
-    document.body.classList.add("popup-open");
-  }
-
-  function fechar_popup() {
-    document.getElementById("overlay").style.display = "none";
-    document.body.classList.remove("popup-open");
-    config_funcionarios.innerHTML = '';
-  }
 
   function pop_up_adicionar() {
     abrir_popup();
     config_funcionarios.innerHTML = `
-      <img src="../assets/dashboard/desktop/btnFechar.svg" alt="Fechar" class="btnFecharPopup" onclick="fechar_popup()">
-      <h1>Editar informações do Perfil</h1>
-
+      <h1>Criar Usuário</h1>
       <div class="inputs">
         <div class="input-label-wrapper">
-          <span class="input-label">Alterar Senha</span>
+          <span class="input-label">Nome</span>
+          <span class="obrigatorio">*Obrigatório</span>
         </div>
-        <input type="text" id="ipt_senha">
+        <input type="text" id="ipt_nome" required>
 
         <div class="input-label-wrapper">
-          <span class="input-label">Alterar Email</span>
+          <span class="input-label">Sobrenome</span>
+          <span class="obrigatorio">*Obrigatório</span>
         </div>
-        <input type="text" id="ipt_email">
-
+        <input type="text" id="ipt_sobrenome" required>
         <div class="input-label-wrapper">
-          <span class="input-label">Alterar Telefone</span>
+          <span class="input-label">Cargo</span>
+          <span class="obrigatorio">*Obrigatório</span>
         </div>
-        <input type="text" id="ipt_telefone">
-
+        <select id="ipt_cargo"></select>
         <div class="input-label-wrapper">
-          <span class="input-label">Alterar Foto</span>
+          <span class="input-label">Email</span>
+          <span class="obrigatorio">*Obrigatório</span>
         </div>
-        <input type="file" id="ipt_foto">
-
+        <input type="text" id="ipt_email" required>
         <div class="input-label-wrapper">
-          <span class="input-label" id="confirmacaoSenha">
-            Redigite a sua senha para confirmar as alterações
-          </span>
+          <span class="input-label">Senha</span>
+          <span class="obrigatorio">*Obrigatório</span>
         </div>
-        <input type="text" id="ipt_confirmarSenha">
+        <input type="password" id="ipt_senha" required>
+        <div class="input-label-wrapper">
+          <span class="input-label">Confirmar senha</span>
+          <span class="obrigatorio">*Obrigatório</span>
+        </div>
+        <input type="password" id="ipt_confirmar_senha" required>
+        <div class="input-label-wrapper">
+          <span class="input-label">Telefone</span>
+        </div>
+        <input type="text" id="ipt_telefone" required>
       </div>
-
       <div id="mensagem_erro"></div>
-
       <div class="btns_popup">
-        <button class="btn cadastrar" id="buttonEditar" onclick="funcao_editar()">Alterar Informações</button>
+        <button class="btn cadastrar" onclick="funcao_adicionar()">Cadastrar</button>
         <button class="btn fechar" onclick="fechar_popup()">Fechar</button>
       </div>
     `;
+    listarCargo("ipt_cargo")
   }
   function funcao_adicionar() {
     var nomeVar = ipt_nome.value.trim();
@@ -356,7 +347,7 @@
       return;
     }
 
-    fetch("/usuarios/funcao_cadastrar", {
+    fetch("/usuarios/funcao_adicionar", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -385,109 +376,181 @@
 
 
   function pop_up_editar(id) {
+    console.log(funcionariosLista)
     abrir_popup()
     config_funcionarios.innerHTML = `
-      <img src="../assets/dashboard/desktop/btnFechar.svg" alt="Fechar" class="btnFecharPopup" onclick="fechar_popup()">
+      <img src="../../assets/dashboard/desktop/btnFechar.svg" alt="Fechar" class="btnFecharPopup" onclick="fechar_popup()">
       <h1>Editar Usuário</h1>
       <div class="inputs">
         <div class="input-label-wrapper">
           <span class="input-label">Nome</span>
           <span class="obrigatorio">*obrigatório</span>
         </div>
-        <input type="text" id="ipt_nome" required>
+        <input type="text" id="ipt_nome" value="${funcionariosLista[id].nome}" required>
 
         <div class="input-label-wrapper">
           <span class="input-label">Sobrenome</span>
           <span class="obrigatorio">*obrigatório</span>
         </div>
-        <input type="text" id="ipt_sobrenome" required>
+        <input type="text" id="ipt_sobrenome" value="${funcionariosLista[id].sobrenome}" required>
 
         <div class="input-label-wrapper">
           <span class="input-label">Cargo</span>
           <span class="obrigatorio">*obrigatório</span>
         </div>
-        <select id="ipt_cargo">
-          <option value="">Selecione um cargo</option>
-          <option value="1">Administrador</option>
-          <option value="3">Analista</option>
-          <option value="4">Operador</option>
-        </select>
+        <select id="ipt_cargo"></select>
 
         <div class="input-label-wrapper">
           <span class="input-label">Email</span>
           <span class="obrigatorio">*obrigatório</span>
         </div>
-        <input type="text" id="ipt_email" required>
+        <input type="text" id="ipt_email" value="${funcionariosLista[id].email}" required>
 
         <div class="input-label-wrapper">
           <span class="input-label">Senha</span>
           <span class="obrigatorio">*obrigatório</span>
         </div>
-        <input type="text" id="ipt_senha" required>
+        <input type="password" id="ipt_senha" required>
 
         <div class="input-label-wrapper">
           <span class="input-label">Confirmar senha</span>
           <span class="obrigatorio">*obrigatório</span>
         </div>
-        <input type="text" id="ipt_confirmar_senha" required>
+        <input type="password" id="ipt_confirmar_senha" required>
 
         <div class="input-label-wrapper">
           <span class="input-label">Telefone</span>
         </div>
-        <input type="text" id="ipt_telefone" required>
+        <input type="text" id="ipt_telefone" value="${funcionariosLista[id].telefone}" required>
         <div class="input-label-wrapper">
           <span class="input-label">Foto</span>
         </div>
-        <input type="text" id="ipt_foto" required>
+        <input type="file" id="ipt_foto" required>
       </div>
       <div id="mensagem_erro"></div>
       <div class="btns_popup">
-        <button class="btn cadastrar" onclick="funcao_editar(${id})">Editar</button>
+        <button class="btn cadastrar" onclick="funcao_editar(${funcionariosLista[id].id})">Editar</button>
         <button class="btn fechar" onclick="fechar_popup()">Fechar</button>
       </div>
         `;
+    listarCargo("ipt_cargo")
 
   }
   function funcao_editar(idVar) {
-    // Código para editar
+    var nomeVar = ipt_nome.value.trim();
+    var sobrenomeVar = ipt_sobrenome.value.trim();
+    var cargoVar = ipt_cargo.value;
+    var emailVar = ipt_email.value.trim();
+    var senhaVar = ipt_senha.value;
+    var confirmacao_senhaVar = ipt_confirmar_senha.value;
+    var telefoneVar = ipt_telefone.value.replace(/\D/g, "");
+
+    if (nomeVar === "") {
+      marcarErro(ipt_nome, "O campo nome está em branco.");
+      return;
+    }
+    if (sobrenomeVar === "") {
+      marcarErro(ipt_sobrenome, "O campo sobrenome está em branco.");
+      return;
+    }
+    if (cargoVar === "") {
+      marcarErro(ipt_cargo, "O campo cargo está em branco.");
+      return;
+    }
+    if (emailVar === "") {
+      marcarErro(ipt_email, "O campo email está em branco.");
+      return;
+    }
+    if (senhaVar === "") {
+      marcarErro(ipt_nome, "O campo senha está em branco.");
+      return;
+    }
+    if (confirmacao_senhaVar === "") {
+      marcarErro(ipt_nome, "O campo confirmar senha está em branco.");
+      return;
+    }
+    if (!/^\d{10,11}$/.test(telefoneVar)) {
+      marcarErro(ipt_telefone, "Telefone deve ter 10 ou 11 números (com DDD)");
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVar)) {
+      marcarErro(ipt_email, "Digite um e-mail válido");
+      return;
+    }
+    if (senhaVar.length < 8 || !/[A-Za-z]/.test(senhaVar) || !/\d/.test(senhaVar)) {
+      marcarErro(ipt_senha, "A senha deve ter pelo menos 8 caracteres, incluindo letras e números");
+      return;
+    }
+    if (confirmacao_senhaVar !== senhaVar) {
+      marcarErro(ipt_confirmar_senha, "As senhas não coincidem");
+      return;
+    }
+    fetch("/usuarios/funcao_editar", {
+      method: 'PUT',
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        nomeServer: nomeVar,
+        sobrenomeServer: sobrenomeVar,
+        cargoServer: cargoVar,
+        emailServer: emailVar,
+        senhaServer: senhaVar,
+        telefoneServer: telefoneVar,
+        idServer: idVar
+      }),
+    })
+      .then(resposta => {
+        if (resposta.ok) {
+          mostrarErro("Alteração realizada com sucesso!");
+          setTimeout(() => {
+            window.location = "funcionarios.html";
+          }, 2000);
+        } else {
+          throw "Houve um erro ao tentar realizar a alteração!";
+        }
+      })
+      .catch(erro => console.error(`#ERRO: ${erro}`));
   }
 
   function pop_up_excluir(id) {
     abrir_popup()
     config_funcionarios.innerHTML = `
-    <img src="../assets/dashboard/desktop/btnFechar.svg" alt="Fechar" class="btnFecharPopup" onclick="fechar_popup()">
+    <img src="../../assets/dashboard/desktop/btnFechar.svg" alt="Fechar" class="btnFecharPopup" onclick="fechar_popup()">
     <h1>Deletar Usuário</h1>
     <div class="inputs">
       <p>Deseja deletar este usuário?</p>
     </div>
     <div id="mensagem_erro"></div>
     <div class="btns_popup">
-      <button class="btn cadastrar" onclick="funcao_excluir(${id})">Sim</button>
+      <button class="btn cadastrar" onclick="funcao_excluir(${funcionariosLista[id].id})">Sim</button>
       <button class="btn fechar" onclick="fechar_popup()">Não</button>
     </div>
         `;
-    mensagem_erro.style.display = 'none';
+    mensagem_erro.style.display = 'flex';
   }
   function funcao_excluir(idVar) {
-    fetch("/usuarios/funcao_excluir", {
-      method: 'DELETE',
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        idServer: idVar
+    mostrarErro(`Excluindo o usuário`);
+    setTimeout(() => {
 
-      })
-    })
-      .then(res => {
-        if (res.ok) {
-          mostrarErro("Funcionário deletado com sucesso!")
+      fetch("/usuarios/funcao_excluir", {
+        method: 'DELETE',
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          idServer: idVar
 
-        } else {
-          mostrarErro("Erro ao deletar Funcionário!")
-        }
+        })
       })
-      .catch(err => {
-        console.error('Erro na requisição:', err);
-      });//fim fetch
+        .then(res => {
+          if (res.ok) {
+            mostrarErro("Funcionário deletado com sucesso!")
+
+          } else {
+            mostrarErro("Erro ao deletar Funcionário!")
+          }
+        })
+        .catch(err => {
+          console.error('Erro na requisição:', err);
+        });//fim fetch
+    }, 1000)
   }
 
   function mostrarErro(msg) {
@@ -507,30 +570,7 @@
 
     setTimeout(() => {
       input.classList.remove("erroInput");
-    }, 2500);
+    }, 1500);
   }
-
-
-
-  function sair() {
-    abrir_popup();
-    config_funcionarios.innerHTML = `
-                <h1>Deseja sair?</h1>
-                <button onclick="sair_s()">Sim</button>
-                <button onclick="sair_n()">Não</button>
-        `;
-  }
-  function sair_s() {
-    window.location.href = "./login.html";
-    sessionStorage.clear;
-  }
-
-  function sair_n() {
-    fechar_popup()
-  }
-  userNome.innerHTML = sessionStorage.USER_NAME;
-  userCargo.innerHTML = sessionStorage.CARGO_CARGO;
-
-
 
 </script>

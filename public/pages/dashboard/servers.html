@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/dashboard/servers.css">
-    <link rel="stylesheet" href="../css/style.css">
-    <script src="../script/dash.js"></script>
+    <link rel="stylesheet" href="../../css/dashboard/servers.css">
+    <link rel="stylesheet" href="../../css/style.css">
+    <script src="./script/dash.js"></script>
     <title>ARGUS | Servidores</title>
 </head>
 
@@ -15,54 +15,16 @@
     <div id="id_sair">
     </div>
 
-    <header class="desktopNav">
-        <div class="navButtons">
-            <a href="perfil.html" class="navButton tooltipNav" id="navUser">
-                <img src="../assets/dashboard/desktop/user.svg" alt="">
-                <span class="tooltiptextNav">
-                    <div id="userNome"></div>
-                    <div id="userCargo">ADM</div>
-                </span>
-            </a>
-            <a href="../pages/servers.html" class="navButton tooltipNav" id="navServers">
-                <img class="selected" src="../assets/dashboard/desktop/box.svg" alt="Servidores">
-                <span class="tooltiptextNav">Servidores</span>
-            </a>
-
-            <a href="../pages/funcionarios.html" class="navButton tooltipNav" id="navServers">
-                <img src="../assets/dashboard/desktop/employes.svg" alt="Funcionários">
-                <span class="tooltiptextNav">Funcionários</span>
-            </a>
-            <div class="navButton tooltipNav" id="navServers">
-                <img src="../assets/dashboard/desktop/logs.svg" alt="Logs">
-                <span class="tooltiptextNav">Logs</span>
-            </div>
-            <a href="https://sptech-team-vbjwf7te.atlassian.net/servicedesk/customer/portal/36"
-                class="navButton tooltipNav" id="navServers" target="_blank">
-                <img src="../assets/dashboard/desktop/headphone.svg" alt="Suporte">
-                <span class="tooltiptextNav">Suporte</span>
-            </a>
-            <div class="navButton tooltipNav" id="navServers" onclick="sair()">
-                <img src="../assets/dashboard/desktop/logout.svg" alt="Sair">
-                <span class="tooltiptextNav">Sair</span>
-            </div>
-
-        </div>
-        <img class="logo" src="../assets/icon/logoBlack.svg" alt="">
-    </header>
+    <header class="desktopNav" id="navDesktop"></header>
 
     <header class="headerTop">
         <div class="user">
-            <img src="../assets/dashboard/desktop/user.svg" alt="">
-            <div class="userInfo">
-                <div id="userNome"></div>
-                <div id="userCargo">ADM</div>
-            </div>
+            <div class="userInfo" id="userInfo"></div>
         </div>
         <div class="geralInfo">
             <div class="info tooltipInfo">
                 <div class="server">
-                    <img src="../assets/dashboard/desktop/server.svg" alt="">
+                    <img src="../../assets/dashboard/desktop/server.svg" alt="">
                 </div>
                 <div class="serversMonitoring" id="id_servidores_monitorados">
                 </div>
@@ -72,7 +34,7 @@
             </div>
             <div class="info">
                 <div class="bell">
-                    <img src="../assets/dashboard/desktop/bell.svg" alt="">
+                    <img src="../../assets/dashboard/desktop/bell.svg" alt="">
                 </div>
                 <div class="risk tooltipInfo" id="id_servidores_em_estado_critico">
                     <p id="qtd_critico"></p>
@@ -106,7 +68,7 @@
     <div class="container">
         <div class="serverInfo">
             <div class="serverIcon tooltipInfo">
-                <img style="width: 2vw;" src="../assets/dashboard/desktop/tip.svg" alt="Informação sobre os dados">
+                <img style="width: 2vw;" src="../../assets/dashboard/desktop/tip.svg" alt="Informação sobre os dados">
                 <span class="tooltiptextInfo">
                     Dados são atualizados a cada 60s
                 </span>
@@ -134,6 +96,12 @@
 </html>
 
 <script>
+    header("server")
+    userInfo.innerHTML = `
+        <div id="userNome">${sessionStorage.USER_NAME}</div>
+        <div id="userCargo">${sessionStorage.CARGO_CARGO}</div>
+    `
+
     server = [{
         "name": "Servidor Geforce Now",
         "nivel": "4",
@@ -145,17 +113,17 @@
         "nivel": "3",
         "recursos": "[CPU, GPU]",
         "localizacao": "São Paulo - SP"
-    }, {
-    }, {
+    }, 
+    {
         "name": "Servidor BandTec",
         "nivel": "5",
         "recursos": "[CPU, GPU, Armazenamento]",
         "localizacao": "São Paulo - SP"
-    }, {
-    }, {
+    },
+    {
         "name": "Servidor Xbox",
         "nivel": "1",
-        "recursos": "[Nenhum]",
+        "recursos": "[GPU]",
         "localizacao": "Rio de Janeiro - RJ"
     },
     {
@@ -171,13 +139,10 @@
 
 
     for (let i = 0; i < server.length; i++) {
-        if (server[i].nivel == 2 || server[i].nivel == 3) {
-            if (server[i].nivel == 2 || server[i].nivel == 3) {
-                qtd_servidores_alerta++;
-            } else if (server[i].nivel > 3) {
-            } else if (server[i].nivel > 3) {
-                qtd_servidores_critico++;
-            }
+        if (server[i].nivel > 2 || server[i].nivel < 3) {
+            qtd_servidores_alerta++;
+        } else if (server[i].nivel > 3) {
+            qtd_servidores_critico++;
         }
     }
 
@@ -197,7 +162,7 @@
         } else if (nivel >= 4) {
             status = "danger";
         } else {
-            status = "Inválido";
+            status = "indisponivel";
         }
         return status;
     }
@@ -206,7 +171,7 @@
         id_server_list.innerHTML += `            
             <div class="server-object">
                 <div class="serverIcon tooltipInfo">
-                    <img class="server-icon-status" src="../assets/dashboard/desktop/${status}.svg" alt="Status do servidor">
+                    <img class="server-icon-status" src="../../assets/dashboard/desktop/${status}.svg" alt="Status do servidor">
                 </div>
                 <div class="serverName">
                     ${server[id_server].name}
@@ -235,8 +200,7 @@
         }
 
         for (let i = 0; i < server.length; i++) {
-            let status = calculate_risk(i);
-
+            let status =  calculate_risk(i);
             let passouFiltroEstado =
                 (filtro == "Critico_c" && status == "danger" || filtro == "Critico_d" && status == "danger") ||
                 (filtro == "Alerta_c" && status == "atention" || filtro == "Alerta_d" && status == "atention") ||
@@ -256,26 +220,5 @@
 
     filtragem_Servidores();
 
-    function sair() {
-        id_sair.innerHTML = `
-        
-            <div class="popup_sair">
-                <h1>Deseja sair?</h1>
-                <button onclick="sair_s()">Sim</button>
-                <button onclick="sair_n()">Não</button>
-            </div>
-        `;
-    }
 
-    function sair_s() {
-        window.location.href = "./login.html";
-        sessionStorage.clear;
-    }
-
-    function sair_n() {
-        id_sair.innerHTML = ``;
-    }
-
-    userNome.innerHTML = sessionStorage.USER_NAME;
-    userCargo.innerHTML = sessionStorage.CARGO_CARGO;
 </script>
