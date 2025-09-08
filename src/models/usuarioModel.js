@@ -75,46 +75,51 @@ function online(idUsuario, status) {
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
 }
+// Adicionar Foto
+async function funcao_adicionar(funcionario_nome, funcionario_sobrenome, funcionario_cargo, funcionario_email, funcionario_senha, funcionario_telefone, funcionario_empresa) {
+    console.log("ACESSEI O USUARIO MODEL");
 
-//tela de funcionários
-function filtrar() {
-    const instrucaoSql = `
-        select u.foto_perfil, u.nome, u.sobrenome, u.email, c.cargo, DATE_FORMAT(u.data_cadastro, '%d/%m/%Y') as data_cadastro, u.telefone 
-        from cargo c
-        join cargousuario uc on c.id = uc.Cargo_id
-        join usuario u on uc.usuario_id = u.id;
-    `;
-    return database.executar(instrucaoSql);
-}
-function listarCargo() {
-    const instrucaoSql = "SELECT cargo FROM cargo ORDER BY cargo";
-    return database.executar(instrucaoSql);
-}
-
-// function criarUsuario(nome, sobrenome, cargo, email, senha, telefone, idEmpresa) {
-//     const instrucaoSql = `INSERT INTO usuario (nome, sobrenome, email, senha, telefone, fkempresa)
-//     VALUES ('${nome}', '${sobrenome}', '${email}', SHA2('${senha}', 512), '${telefone}', ${idEmpresa})`;
-//     const instrucaoSql2 = `INSERT INTO cargousuario (Cargo_id, usuario_id)
-//     VALUES (${cargo}, (SELECT id FROM usuario where email = '${email}'));`;
-//     return database.executar(instrucaoSql, instrucaoSql2);
-// }
-
-async function criarUsuario(nome, sobrenome, cargo, email, senha, telefone, idEmpresa) {
-    const insertUsuarioSql = `
+    const insertUsuario = `
         INSERT INTO usuario (nome, sobrenome, email, senha, telefone, fkempresa)
-        VALUES ('${nome}', '${sobrenome}', '${email}', SHA2('${senha}', 512), '${telefone}', ${idEmpresa});
+        VALUES ('${funcionario_nome}', '${funcionario_sobrenome}', '${funcionario_email}', SHA2('${funcionario_senha}', 512), '${funcionario_telefone}', ${funcionario_empresa});
     `;
-    const result = await database.executar(insertUsuarioSql);
-
-    const selectIdSql = `SELECT id FROM usuario WHERE email = '${email}' LIMIT 1;`;
-    const usuarioRows = await database.executar(selectIdSql);
-    const usuarioId = usuarioRows[0].id;
-
-    const insertCargoSql = `
-        INSERT INTO cargousuario (Cargo_id, usuario_id)
-        VALUES (${cargo}, ${usuarioId});
+    const resultado = await database.executar(insertUsuario);
+    const usuarioId = resultado.insertId;
+    const insertCargo = `
+        INSERT INTO cargousuario (usuario_id, Cargo_id)
+        VALUES (${usuarioId}, ${funcionario_cargo});
     `;
-    return database.executar(insertCargoSql);
+
+    return database.executar(insertCargo);
+}
+
+
+
+function funcao_editar(funcionario_nome, funcionario_sobrenome, funcionario_cargo, funcionario_email, funcionario_telefone, id) {
+    const EditarDadosFuncionario_TabelaUsuario = `
+        update usuario set nome = '${funcionario_nome}', sobrenome = '${funcionario_sobrenome}', email = '${funcionario_email}',
+        telefone = ${funcionario_telefone}, foto_perfil = 'padrao.svg' where id = ${id};
+    `;
+    const EditarDadosFuncionario_TabelaCargoUsuario = `
+        update cargousuario set Cargo_id = ${funcionario_cargo} where usuario_id = ${id};
+    `;
+
+    return database.executar(EditarDadosFuncionario_TabelaUsuario, EditarDadosFuncionario_TabelaCargoUsuario);
+}
+
+
+
+function online(idUsuario, status) {
+    console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function cadastrar():", status, idUsuario);
+
+    var instrucaoSql = `
+        UPDATE usuario
+        SET status_online = ${status}
+        WHERE id = ${idUsuario};
+    `;
+
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
 }
 
 module.exports = {
@@ -124,7 +129,8 @@ module.exports = {
     cadastrarEndereco,
     filtrar,
     listarCargo,
-    criarUsuario,
+    funcao_adicionar,
+    funcao_editar,
     funcao_excluir,
     online
 };

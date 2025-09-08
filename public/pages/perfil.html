@@ -4,9 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/dashboard/perfil.css">
-    <link rel="stylesheet" href="../css/dashboard/servers.css">
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../../css/dashboard/perfil.css">
+    <link rel="stylesheet" href="../../css/dashboard/servers.css">
+    <link rel="stylesheet" href="../../css/style.css">
+    <script src="./script/dash.js"></script>
     <title>ARGUS | Perfil</title>
 </head>
 
@@ -14,41 +15,12 @@
     <div id="id_sair">
     </div>
 
-    <div id="editar_perfil"></div>
-
-    <header class="desktopNav">
-        <div class="navButtons">
-            <a href="perfil.html" class="navButton tooltipNav" id="navUser">
-                <img class="selected" src="../assets/dashboard/desktop/user.svg" alt="">
-                <span class="tooltiptextNav">
-                    <div id="userNome"></div>
-                    <div id="userCargo">ADM</div>
-                </span>
-            </a>
-            <a href="../pages/servers.html" class="navButton tooltipNav" id="navServers">
-                <img src="../assets/dashboard/desktop/box.svg" alt="Servidores">
-                <span class="tooltiptextNav">Servidores</span>
-            </a>
-            <a href="../pages/funcionarios.html" class="navButton tooltipNav" id="navServers">
-                <img src="../assets/dashboard/desktop/employes.svg" alt="Funcionários">
-                <span class="tooltiptextNav">Funcionários</span>
-            </a>
-            <div class="navButton tooltipNav" id="navServers">
-                <img src="../assets/dashboard/desktop/logs.svg" alt="Logs">
-                <span class="tooltiptextNav">Logs</span>
-            </div>
-            <a href="https://sptech-team-vbjwf7te.atlassian.net/servicedesk/customer/portal/36"
-                class="navButton tooltipNav" id="navServers" target="_blank">
-                <img src="../assets/dashboard/desktop/headphone.svg" alt="Suporte">
-                <span class="tooltiptextNav">Suporte</span>
-            </a>
-            <div class="navButton tooltipNav" id="navServers" onclick="sair()">
-                <img src="../assets/dashboard/desktop/logout.svg" alt="Sair">
-                <span class="tooltiptextNav">Sair</span>
-            </div>
+    <div class="overlay" id="overlay">
+        <div id="config_funcionarios" class="popup">
         </div>
-        <img class="logo" src="../assets/icon/logoBlack.svg" alt="">
-    </header>
+    </div>
+
+    <header class="desktopNav" id="navDesktop"></header>
 
     <header class="headerTop">
         <div class="geralInfo">
@@ -88,83 +60,149 @@
     </header>
 
     <div class="containerPerfil" id="containerPerfil">
-        <img id="perfilFoto" src="../assets/fotoPerfil/padrao.svg" alt="Foto de Perfil">
-        <h1 id="perfilNome"></h1>
-        <h3 id="perfilCargo"></h3>
-        <h3 id="perfilEmail"></h3>
-        <h3 id="perfilNumero"></h3>
-        <button id="buttonEditar" onclick="pop_up_editar()">Editar informações</button>
+
     </div>
 </body>
 
 </html>
 
 <script>
-    userNome.innerHTML = sessionStorage.USER_NAME;
-    userCargo.innerHTML = sessionStorage.CARGO_CARGO;
-    perfilNome.innerHTML = `${sessionStorage.USER_NAME} ${sessionStorage.USER_SOBRENOME}`;
-    perfilCargo.innerHTML = sessionStorage.CARGO_FUNCAO;
-    perfilEmail.innerHTML = sessionStorage.USER_EMAIL;
-    perfilNumero.innerHTML = sessionStorage.USER_TELEFONE;
+    header()
+    containerPerfil.innerHTML = `
+        <img id="perfilFoto" src="../../assets/fotoPerfil/${sessionStorage.USER_FOTO}" alt="Foto de Perfil">
+        <h1 id="perfilNome">${sessionStorage.USER_NAME} ${sessionStorage.USER_SOBRENOME}</h1>
+        <h3 id="perfilCargo">${sessionStorage.CARGO_CARGO}</h3>
+        <h3 id="perfilEmail">${sessionStorage.USER_EMAIL}</h3>
+        <h3 id="perfilNumero">${sessionStorage.USER_TELEFONE}</h3>
+        <button id="buttonEditar" onclick="pop_up_editar(${sessionStorage.USER_ID})">Editar informações</button>
+    `
 
-    function pop_up_editar() {
-        containerPerfil.style.display = 'none';
-        editar_perfil.style.display = 'block';
+    function pop_up_editar(id) {
+        abrir_popup();
 
-        editar_perfil.innerHTML = `
-            <div class="popup_configs">
-                <div id="headerPopup">
-                <h1>Editar informações do Perfil</h1>
-                <button id="buttonFechar" onclick="fecharPopup()"><img src="../assets/dashboard/desktop/btnFechar.svg" alt="Botão de Fechar"></button>
-                </div>
+        config_funcionarios.innerHTML = `
+            <img src="../../assets/dashboard/desktop/btnFechar.svg" alt="Fechar" class="btnFecharPopup" onclick="fechar_popup()">
+            <h1>Editar Usuário</h1>
+            <div class="inputs">
                 <div class="input-label-wrapper">
-                    <span class="input-label">Alterar Senha</span>
+                    <span class="input-label">Nome</span>
                 </div>
-                <input type="text" id="ipt_senha">
+                <input type="text" id="ipt_nome" value="${sessionStorage.USER_NAME}" >
+            
                 <div class="input-label-wrapper">
-                    <span class="input-label">Alterar Email</span>
+                    <span class="input-label">Sobrenome</span>
                 </div>
-                <input type="text" id="ipt_email">
+                <input type="text" id="ipt_sobrenome" value="${sessionStorage.USER_SOBRENOME}">
+            
                 <div class="input-label-wrapper">
-                    <span class="input-label">Alterar Telefone</span>
+                    <span class="input-label">Nova senha</span>
+                    <span class="obrigatorio">*obrigatório</span>
                 </div>
-                <input type="text" id="ipt_telefone">
+                <input type="text" id="ipt_senha" required>
+
                 <div class="input-label-wrapper">
-                    <span class="input-label">Alterar Foto</span>
+                    <span class="input-label">Telefone</span>
                 </div>
-                <input type="text" id="ipt_foto">
-                <div class="confirmarEdicao">
+                <input type="text" id="ipt_telefone" value="${sessionStorage.USER_TELEFONE}">
+
                 <div class="input-label-wrapper">
-                    <span class="input-label" id="confirmacaoSenha">Redigite a sua senha para confirmar as alterações</span>
+                    <span class="input-label">Foto</span>
                 </div>
-                <input type="text" id="ipt_confirmarSenha">
-                <button id="buttonEditar">Alterar Informações</button>
+                <input type="file" id="ipt_foto" required>
+                <div class="input-label-wrapper">
+                    <span class="input-label">Confirmar senha</span>
+                    <span class="obrigatorio">*obrigatório</span>
                 </div>
+                
+                <input type="text" id="ipt_confirmar_senha" required>
+            </div>
+
+            <div id="mensagem_erro"></div>
+            <div class="btns_popup">
+                
+                <button class="btn cadastrar" onclick="funcao_editar(${id})">Editar</button>
+                <button class="btn fechar" onclick="fechar_popup()">Fechar</button>
             </div>
                 `;
     }
 
-    function fecharPopup() {
-        editar_perfil.style.display = 'none';
-        containerPerfil.style.display = 'block';
+    function funcao_editar(idVar) {
+        // Código para editar
+
+         var nomeVar = ipt_nome.value.trim();
+    var sobrenomeVar = ipt_sobrenome.value.trim();
+    var cargoVar = ipt_cargo.value;
+    var emailVar = ipt_email.value.trim();
+    var senhaVar = ipt_senha.value;
+    var confirmacao_senhaVar = ipt_confirmar_senha.value;
+    var telefoneVar = ipt_telefone.value.replace(/\D/g, "");
+
+    if (nomeVar === "") {
+      marcarErro(ipt_nome, "O campo nome está em branco.");
+      return;
+    }
+    if (sobrenomeVar === "") {
+      marcarErro(ipt_sobrenome, "O campo sobrenome está em branco.");
+      return;
+    }
+    if (cargoVar === "") {
+      marcarErro(ipt_cargo, "O campo cargo está em branco.");
+      return;
+    }
+    if (emailVar === "") {
+      marcarErro(ipt_email, "O campo email está em branco.");
+      return;
+    }
+    if (senhaVar === "") {
+      marcarErro(ipt_nome, "O campo senha está em branco.");
+      return;
+    }
+    if (confirmacao_senhaVar === "") {
+      marcarErro(ipt_nome, "O campo confirmar senha está em branco.");
+      return;
+    }
+    if (!/^\d{10,11}$/.test(telefoneVar)) {
+      marcarErro(ipt_telefone, "Telefone deve ter 10 ou 11 números (com DDD)");
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVar)) {
+      marcarErro(ipt_email, "Digite um e-mail válido");
+      return;
+    }
+    if (senhaVar.length < 8 || !/[A-Za-z]/.test(senhaVar) || !/\d/.test(senhaVar)) {
+      marcarErro(ipt_senha, "A senha deve ter pelo menos 8 caracteres, incluindo letras e números");
+      return;
+    }
+    if (confirmacao_senhaVar !== senhaVar) {
+      marcarErro(ipt_confirmar_senha, "As senhas não coincidem");
+      return;
+    }
+    fetch("/usuarios/funcao_editar", {
+      method: 'PUT',
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        nomeServer: nomeVar,
+        sobrenomeServer: sobrenomeVar,
+        cargoServer: cargoVar,
+        emailServer: emailVar,
+        senhaServer: senhaVar,
+        telefoneServer: telefoneVar,
+        idServer: idVar
+      }),
+    })
+      .then(resposta => {
+        if (resposta.ok) {
+          mostrarErro("Alteração realizada com sucesso!");
+          setTimeout(() => {
+            window.location = "funcionarios.html";
+          }, 2000);
+        } else {
+          throw "Houve um erro ao tentar realizar a alteração!";
+        }
+      })
+      .catch(erro => console.error(`#ERRO: ${erro}`));
+        fechar_popup();
     }
 
-    function sair() {
-        id_sair.innerHTML = `
-        
-            <div class="popup_sair">
-                <h1>Deseja sair?</h1>
-                <button onclick="sair_s()">Sim</button>
-                <button onclick="sair_n()">Não</button>
-            </div>
-        `;
-    }
-    function sair_s() {
-        window.location.href = "./login.html";
-        sessionStorage.clear;
-    }
 
-    function sair_n() {
-        id_sair.innerHTML = ``;
-    }
 </script>

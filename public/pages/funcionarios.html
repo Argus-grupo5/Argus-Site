@@ -88,10 +88,10 @@
     <div id="config_funcionarios"></div>
 
     <div class="search">
-        <select id="id_filter" onchange="filtrarFuncionarios()">
+        <select id="id_filter" onchange="filtrarFuncionarios(editar)">
             <option value="" selected>Todos</option>
         </select>
-        <input type="search" id="id_pesquisa" placeholder="Pesquisar funcionário" oninput="filtrarFuncionarios()">
+        <input type="search" id="id_pesquisa" placeholder="Pesquisar funcionário" oninput="filtrarFuncionarios(editar)">
     </div>
     <div class="containerFunc">
         <div class="funcInfo">
@@ -130,6 +130,8 @@
 <script>
     let editar = false;
     let funcionariosLista;
+    const cargoLogado = sessionStorage.CARGO_CARGO.toUpperCase();
+    const idLogado = Number(sessionStorage.USER_ID);
 
     const container = document.getElementById("id_func_list");
 
@@ -176,15 +178,17 @@
                 <img class="iconLapis" src="../assets/funcionarios/lapis.svg" alt="" onclick="filtrarFuncionarios(true)">
                 <span class="tooltiptextInfo">Editar </span>
                 `;
+
+
             for (let i = 0; i < funcionariosLista.length; i++) {
                 const cargoIgual = filtro === "" || funcionariosLista[i].cargo.toLowerCase() === filtro;
                 const pesquisaIgual =
                     funcionariosLista[i].nome.toLowerCase().includes(pesquisa) ||
                     funcionariosLista[i].email.toLowerCase().includes(pesquisa);
 
-            if (funcionariosLista[i].sobrenome == null) {
-                funcionariosLista[i].sobrenome = ""
-            }
+                if (funcionariosLista[i].sobrenome == null) {
+                    funcionariosLista[i].sobrenome = ""
+                }
 
                 if (cargoIgual && pesquisaIgual) {
                     contStatus++;
@@ -209,9 +213,19 @@
         else if (edit) {
             editar = true;
 
-            editContainer.innerHTML = `
-                <img class="iconLapis" src="../assets/funcionarios/salvarAlt.svg" alt="" onclick="filtrarFuncionarios(false)" >
-                <span class="tooltiptextInfo">Salvar </span>`
+            let botoesHeader = `
+    <img class="iconLapis" src="../assets/funcionarios/salvarAlt.svg" 
+         alt="Salvar" onclick="filtrarFuncionarios(false)">
+    <span class="tooltiptextInfo">Salvar</span>`;
+
+            if (cargoLogado === "ROOT" || cargoLogado === "ADMINISTRADOR") {
+                var funcStatus = document.getElementById("funcStatusInfo")
+                funcStatus.innerHTML = `<img  class= "buttons-edit" src="../assets/funcionarios/editGreen.svg" alt="" onclick="pop_up_adicionar()">`;
+                botoesHeader += `
+      <img class="iconAdd" src="../assets/funcionarios/addYellow.svg" `;
+            }
+            editContainer.innerHTML = botoesHeader;
+
 
 
 
@@ -226,10 +240,34 @@
                 }
 
                 if (cargoIgual && pesquisaIgual) {
-                    var funcStatus = document.getElementById("funcStatusInfo")
-                    funcStatus.innerHTML = `<img  class= "buttons-edit" src="../assets/funcionarios/editGreen.svg" alt="" onclick="pop_up_adicionar(${funcionariosLista[i].id})">`;
+                    let botoes = "";
 
-                    container.innerHTML += `
+                    const cargoAlvo = funcionariosLista[i].cargo.toUpperCase();
+                    const idAlvo = funcionariosLista[i].id;
+
+                    if (cargoLogado === "ROOT") {
+                        botoes = `
+          <img class="buttons-edit" src="../assets/funcionarios/editYellow.svg" 
+               alt="Editar" onclick="pop_up_editar(${idAlvo})">`;
+                        if (idAlvo !== idLogado) {
+                            botoes += `
+            <img class="buttons-edit" src="../assets/funcionarios/iconDelete.svg" 
+                 alt="Deletar" onclick="pop_up_excluir(${idAlvo})">`;
+                        }
+                    }
+                    else if (cargoLogado === "ADMINISTRADOR") {
+                        if (cargoAlvo === "ANALISTA" || cargoAlvo === "OPERADOR") {
+                            botoes = `
+                <img class="buttons-edit" src="../assets/funcionarios/editYellow.svg" 
+                    alt="Editar" onclick="pop_up_editar(${idAlvo})">`;
+                            if (idAlvo !== idLogado) {
+                                botoes += `
+                  <img class="buttons-edit" src="../assets/funcionarios/iconDelete.svg" 
+                      alt="Deletar" onclick="pop_up_excluir(${idAlvo})">`;
+                            }
+                        }
+                    }   
+                        container.innerHTML += `
                                     <div id="funcItem" class="funcionario-item" data-idFuncionario=${funcionariosLista[i].id}>
                                         <div class="funcFoto">
                                             <img src="../assets/fotoPerfil/${funcionariosLista[i].foto_perfil}" alt="Foto">
@@ -244,14 +282,14 @@
                                             <img class= "buttons-edit" src="../assets/funcionarios/iconDelete.svg" alt="Deletar" onclick="pop_up_excluir(${funcionariosLista[i].id})">
                                         </div>
                                     </div>`;
+                    }
                 }
             }
         }
-    }
 
-    function pop_up_adicionar(id) {
-        console.log(id)
-        config_funcionarios.innerHTML = `
+        function pop_up_adicionar() {
+          
+            config_funcionarios.innerHTML = `
             <div class="popup_configs">
                 <h1>Criar Usuário</h1>
                 <div class="input-label-wrapper">
@@ -300,107 +338,107 @@
                 </div>
             </div>
         `;
-        mensagem_erro.style.display = 'none';
-    }
-
-    function mostrarErro(msg) {
-        mensagem_erro.style.display = "block";
-        mensagem_erro.innerHTML = msg;
-        setTimeout(() => {
-            mensagem_erro.style.display = "none";
-        }, 5000);
-    }
-
-    function marcarErro(input, msg) {
-        input.classList.add("erroInput");
-        mostrarErro(msg);
-
-        input.scrollIntoView({ behavior: "smooth", block: "center" });
-
-        setTimeout(() => {
-            input.classList.remove("erroInput");
-        }, 2500);
-    }
-
-    function funcao_adicionar() {
-        var nomeVar = ipt_nome.value.trim();
-        var sobrenomeVar = ipt_sobrenome.value.trim();
-        var cargoVar = ipt_cargo.value;
-        var emailVar = ipt_email.value.trim();
-        var senhaVar = ipt_senha.value;
-        var confirmacao_senhaVar = ipt_confirmar_senha.value;
-        var telefoneVar = ipt_telefone.value.replace(/\D/g, "");
-        var idEmpresaVar = sessionStorage.EMPRESA_ID;
-
-        if (nomeVar === "") {
-            marcarErro(ipt_nome, "O campo nome está em branco.");
-            return;
-        }
-        if (sobrenomeVar === "") {
-            marcarErro(ipt_sobrenome, "O campo sobrenome está em branco.");
-            return;
-        }
-        if (cargoVar === "") {
-            marcarErro(ipt_cargo, "O campo cargo está em branco.");
-            return;
-        }
-        if (emailVar === "") {
-            marcarErro(ipt_email, "O campo email está em branco.");
-            return;
-        }
-        if (senhaVar === "") {
-            marcarErro(ipt_nome, "O campo senha está em branco.");
-            return;
-        }
-        if (confirmacao_senhaVar === "") {
-            marcarErro(ipt_nome, "O campo confirmar senha está em branco.");
-            return;
-        }
-        if (!/^\d{10,11}$/.test(telefoneVar)) {
-            marcarErro(ipt_telefone, "Telefone deve ter 10 ou 11 números (com DDD)");
-            return;
-        }
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVar)) {
-            marcarErro(ipt_email, "Digite um e-mail válido");
-            return;
-        }
-        if (senhaVar.length < 8 || !/[A-Za-z]/.test(senhaVar) || !/\d/.test(senhaVar)) {
-            marcarErro(ipt_senha, "A senha deve ter pelo menos 8 caracteres, incluindo letras e números");
-            return;
-        }
-        if (confirmacao_senhaVar !== senhaVar) {
-            marcarErro(ipt_confirmar_senha, "As senhas não coincidem");
-            return;
+            mensagem_erro.style.display = 'none';
         }
 
-        fetch("/usuarios/criarUsuario", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                nomeServer: nomeVar,
-                sobrenomeServer: sobrenomeVar,
-                cargoServer: cargoVar,
-                emailServer: emailVar,
-                senhaServer: senhaVar,
-                telefoneServer: telefoneVar,
-                idEmpresaServer: idEmpresaVar
-            }),
-        })
-            .then(resposta => {
-                if (resposta.ok) {
-                    mostrarErro("Cadastro realizado com sucesso!");
-                    setTimeout(() => {
-                        window.location = "funcionarios.html";
-                    }, 2000);
-                } else {
-                    throw "Houve um erro ao tentar realizar o cadastro!";
-                }
+        function mostrarErro(msg) {
+            mensagem_erro.style.display = "block";
+            mensagem_erro.innerHTML = msg;
+            setTimeout(() => {
+                mensagem_erro.style.display = "none";
+            }, 5000);
+        }
+
+        function marcarErro(input, msg) {
+            input.classList.add("erroInput");
+            mostrarErro(msg);
+
+            input.scrollIntoView({ behavior: "smooth", block: "center" });
+
+            setTimeout(() => {
+                input.classList.remove("erroInput");
+            }, 2500);
+        }
+
+        function funcao_adicionar() {
+            var nomeVar = ipt_nome.value.trim();
+            var sobrenomeVar = ipt_sobrenome.value.trim();
+            var cargoVar = ipt_cargo.value;
+            var emailVar = ipt_email.value.trim();
+            var senhaVar = ipt_senha.value;
+            var confirmacao_senhaVar = ipt_confirmar_senha.value;
+            var telefoneVar = ipt_telefone.value.replace(/\D/g, "");
+            var idEmpresaVar = sessionStorage.EMPRESA_ID;
+
+            if (nomeVar === "") {
+                marcarErro(ipt_nome, "O campo nome está em branco.");
+                return;
+            }
+            if (sobrenomeVar === "") {
+                marcarErro(ipt_sobrenome, "O campo sobrenome está em branco.");
+                return;
+            }
+            if (cargoVar === "") {
+                marcarErro(ipt_cargo, "O campo cargo está em branco.");
+                return;
+            }
+            if (emailVar === "") {
+                marcarErro(ipt_email, "O campo email está em branco.");
+                return;
+            }
+            if (senhaVar === "") {
+                marcarErro(ipt_nome, "O campo senha está em branco.");
+                return;
+            }
+            if (confirmacao_senhaVar === "") {
+                marcarErro(ipt_nome, "O campo confirmar senha está em branco.");
+                return;
+            }
+            if (!/^\d{10,11}$/.test(telefoneVar)) {
+                marcarErro(ipt_telefone, "Telefone deve ter 10 ou 11 números (com DDD)");
+                return;
+            }
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVar)) {
+                marcarErro(ipt_email, "Digite um e-mail válido");
+                return;
+            }
+            if (senhaVar.length < 8 || !/[A-Za-z]/.test(senhaVar) || !/\d/.test(senhaVar)) {
+                marcarErro(ipt_senha, "A senha deve ter pelo menos 8 caracteres, incluindo letras e números");
+                return;
+            }
+            if (confirmacao_senhaVar !== senhaVar) {
+                marcarErro(ipt_confirmar_senha, "As senhas não coincidem");
+                return;
+            }
+
+            fetch("/usuarios/criarUsuario", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    nomeServer: nomeVar,
+                    sobrenomeServer: sobrenomeVar,
+                    cargoServer: cargoVar,
+                    emailServer: emailVar,
+                    senhaServer: senhaVar,
+                    telefoneServer: telefoneVar,
+                    idEmpresaServer: idEmpresaVar
+                }),
             })
-            .catch(erro => console.error(`#ERRO: ${erro}`));
-    }
+                .then(resposta => {
+                    if (resposta.ok) {
+                        mostrarErro("Cadastro realizado com sucesso!");
+                        setTimeout(() => {
+                            window.location = "funcionarios.html";
+                        }, 2000);
+                    } else {
+                        throw "Houve um erro ao tentar realizar o cadastro!";
+                    }
+                })
+                .catch(erro => console.error(`#ERRO: ${erro}`));
+        }
 
-    function pop_up_editar(id) {
-        config_funcionarios.innerHTML = `
+        function pop_up_editar(id) {
+            config_funcionarios.innerHTML = `
             <div class="popup_configs">
                 <h1>Editar Usuário</h1>
                 <div class="input-label-wrapper">
@@ -447,9 +485,85 @@
                 </div>
             </div>
         `;
+        }
+
+         function funcao_editar(idVar) {
+    var nomeVar = ipt_nome.value.trim();
+    var sobrenomeVar = ipt_sobrenome.value.trim();
+    var cargoVar = ipt_cargo.value;
+    var emailVar = ipt_email.value.trim();
+    var senhaVar = ipt_senha.value;
+    var confirmacao_senhaVar = ipt_confirmar_senha.value;
+    var telefoneVar = ipt_telefone.value.replace(/\D/g, "");
+
+    if (nomeVar === "") {
+      marcarErro(ipt_nome, "O campo nome está em branco.");
+      return;
     }
-    function pop_up_excluir(id) {
-        config_funcionarios.innerHTML = `
+    if (sobrenomeVar === "") {
+      marcarErro(ipt_sobrenome, "O campo sobrenome está em branco.");
+      return;
+    }
+    if (cargoVar === "") {
+      marcarErro(ipt_cargo, "O campo cargo está em branco.");
+      return;
+    }
+    if (emailVar === "") {
+      marcarErro(ipt_email, "O campo email está em branco.");
+      return;
+    }
+    if (senhaVar === "") {
+      marcarErro(ipt_nome, "O campo senha está em branco.");
+      return;
+    }
+    if (confirmacao_senhaVar === "") {
+      marcarErro(ipt_nome, "O campo confirmar senha está em branco.");
+      return;
+    }
+    if (!/^\d{10,11}$/.test(telefoneVar)) {
+      marcarErro(ipt_telefone, "Telefone deve ter 10 ou 11 números (com DDD)");
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVar)) {
+      marcarErro(ipt_email, "Digite um e-mail válido");
+      return;
+    }
+    if (senhaVar.length < 8 || !/[A-Za-z]/.test(senhaVar) || !/\d/.test(senhaVar)) {
+      marcarErro(ipt_senha, "A senha deve ter pelo menos 8 caracteres, incluindo letras e números");
+      return;
+    }
+    if (confirmacao_senhaVar !== senhaVar) {
+      marcarErro(ipt_confirmar_senha, "As senhas não coincidem");
+      return;
+    }
+    fetch("/usuarios/funcao_editar", {
+      method: 'PUT',
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        nomeServer: nomeVar,
+        sobrenomeServer: sobrenomeVar,
+        cargoServer: cargoVar,
+        emailServer: emailVar,
+        senhaServer: senhaVar,
+        telefoneServer: telefoneVar,
+        idServer: idVar
+      }),
+    })
+      .then(resposta => {
+        if (resposta.ok) {
+          mostrarErro("Alteração realizada com sucesso!");
+          setTimeout(() => {
+            window.location = "funcionarios.html";
+          }, 2000);
+        } else {
+          throw "Houve um erro ao tentar realizar a alteração!";
+        }
+      })
+      .catch(erro => console.error(`#ERRO: ${erro}`));
+  }
+
+        function pop_up_excluir(id) {
+            config_funcionarios.innerHTML = `
             <div class="popup_configs_sair">
                 <h1>Deletar Usuário</h1>
                 <p>Deseja deletar este usuário?</p>
@@ -457,16 +571,16 @@
                 <button class=btn_configs_funcio_nao onclick="fechar_popup()">Não</button>
             </div>
         `;
-    }
-    function funcao_excluir(idVar) {
-        fetch("/usuarios/funcao_excluir", {
-            method: 'DELETE',
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                idServer: idVar
+        }
+        function funcao_excluir(idVar) {
+            fetch("/usuarios/funcao_excluir", {
+                method: 'DELETE',
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    idServer: idVar
 
+                })
             })
-        })
                 .then(res => {
                     if (res.ok) {
                         console.log('Funcionário deletado com sucesso!');
@@ -480,11 +594,11 @@
         }
 
 
-    function fechar_popup() {
-                config_funcionarios.innerHTML = '';
-            }
-    function sair() {
-                id_sair.innerHTML = `
+        function fechar_popup() {
+            config_funcionarios.innerHTML = '';
+        }
+        function sair() {
+            id_sair.innerHTML = `
         
             <div class="popup_sair">
                 <h1>Deseja sair?</h1>
@@ -492,18 +606,18 @@
                 <button onclick="sair_n()">Não</button>
             </div>
         `;
-            }
-    function sair_s() {
-                window.location.href = "./login.html";
-                sessionStorage.clear;
-            }
+        }
+        function sair_s() {
+            window.location.href = "./login.html";
+            sessionStorage.clear;
+        }
 
-    function sair_n() {
-                id_sair.innerHTML = ``;
-            }
-    userNome.innerHTML = sessionStorage.USER_NAME;
-        userCargo.innerHTML = sessionStorage.CARGO_CARGO;
+        function sair_n() {
+            id_sair.innerHTML = ``;
+        }
 
 
+  userNome.innerHTML = sessionStorage.USER_NAME;
+  userCargo.innerHTML = sessionStorage.CARGO_CARGO;
 
 </script>
