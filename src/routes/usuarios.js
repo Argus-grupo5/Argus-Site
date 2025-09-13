@@ -20,6 +20,10 @@ router.post("/autenticar", function (req, res) {
     usuarioController.autenticar(req, res);
 });
 
+router.post("/autenticarEmpresa", function (req, res) {
+    usuarioController.autenticarEmpresa(req, res);
+});
+
 router.get("/listarFuncionarios", function (req, res){
     usuarioController.listarFuncionarios(req, res);
 });
