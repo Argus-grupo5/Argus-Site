@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:slnt,wght@-11..11,200..1000&display=swap');
+@import url(./popup.css);
+
+
+.containerPerfil {
+    margin-top: 50px;
+    padding-left: 5vw;
+    padding-right: 1vw;
+    text-align: center;
+}
+
+#buttonEditar {
+    background-color: #FF6D4D;
+    width: 40vw;
+    height: 5vh;
+    border-radius: 1vw;
+    margin-top: 10px;
+    border: solid white 1px;
+    font-size: 110%;
+}
+
+#buttonEditar:hover {
+  cursor: pointer;
+  width: 40vw;
+  height: 5vh;
+  border-radius: 1vw;
+  border: solid white 1px;
+  background-color: #FF0000;
+  font-size: 110%;
+}
+
+#buttonEditar:active {
+  cursor: pointer;
+  width: 40vw;
+  height: 5vh;
+  border-radius: 1vw;
+  border: solid white 1px;
+  background-color: #c00000;
+  font-size: 110%;
+}
+
+#perfilFoto {
+    width: 20vw;
+}
+
+a {
+    text-decoration: none;
+}

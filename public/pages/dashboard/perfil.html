@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../css/dashboard/perfil.css">
+    <link rel="stylesheet" href="../../css/dashboard/servers.css">
+    <link rel="stylesheet" href="../../css/style.css">
+    <script src="./script/dash.js"></script>
+    <title>ARGUS | Perfil</title>
+</head>
+
+<body>
+    <div id="id_sair">
+    </div>
+
+    <div class="overlay" id="overlay">
+        <div id="config_funcionarios" class="popup">
+        </div>
+    </div>
+
+    <header class="desktopNav" id="navDesktop"></header>
+
+    <header class="headerTop">
+        <div class="geralInfo">
+            <a href="servers.html">
+                <div class="info tooltipInfo">
+                    <div class="server">
+                        <img src="../assets/dashboard/desktop/server.svg" alt="">
+                    </div>
+                    <div class="serversMonitoring" id="id_servidores_monitorados">
+                        7
+                    </div>
+                    <span class="tooltiptextInfo">
+                        Servidores em monitoramento
+                    </span>
+                </div>
+            </a>
+            <a href="servers.html">
+                <div class="info">
+                    <div class="bell">
+                        <img src="../assets/dashboard/desktop/bell.svg" alt="">
+                    </div>
+                    <div class="risk tooltipInfo" id="id_servidores_em_estado_critico">
+                        <p id="qtd_critico">0</p>
+                        <span class="tooltiptextInfo">
+                            Servidores em atenção
+                        </span>
+                    </div>
+                    <div class="atention tooltipInfo" id="id_servidores_em_estado_de_alerta">
+                        <p id="qtd_alerta">2</p>
+                        <span class="tooltiptextInfo">
+                            Servidores em alerta
+                        </span>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </header>
+
+    <div class="containerPerfil" id="containerPerfil">
+
+    </div>
+</body>
+
+</html>
+
+<script>
+    header()
+    containerPerfil.innerHTML = `
+        <img id="perfilFoto" src="../../assets/fotoPerfil/${sessionStorage.USER_FOTO}" alt="Foto de Perfil">
+        <h1 id="perfilNome">${sessionStorage.USER_NAME} ${sessionStorage.USER_SOBRENOME}</h1>
+        <h3 id="perfilCargo">${sessionStorage.CARGO_CARGO}</h3>
+        <h3 id="perfilEmail">${sessionStorage.USER_EMAIL}</h3>
+        <h3 id="perfilNumero">${sessionStorage.USER_TELEFONE}</h3>
+        <button id="buttonEditar" onclick="pop_up_editar(${sessionStorage.USER_ID})">Editar informações</button>
+    `
+
+    function pop_up_editar(id) {
+        abrir_popup();
+
+        config_funcionarios.innerHTML = `
+            <img src="../../assets/dashboard/desktop/btnFechar.svg" alt="Fechar" class="btnFecharPopup" onclick="fechar_popup()">
+            <h1>Editar Usuário</h1>
+            <div class="inputs">
+                <div class="input-label-wrapper">
+                    <span class="input-label">Nome</span>
+                </div>
+                <input type="text" id="ipt_nome" value="${sessionStorage.USER_NAME}" >
+            
+                <div class="input-label-wrapper">
+                    <span class="input-label">Sobrenome</span>
+                </div>
+                <input type="text" id="ipt_sobrenome" value="${sessionStorage.USER_SOBRENOME}">
+            
+                <div class="input-label-wrapper">
+                    <span class="input-label">Nova senha</span>
+                    <span class="obrigatorio">*obrigatório</span>
+                </div>
+                <input type="text" id="ipt_senha" required>
+
+                <div class="input-label-wrapper">
+                    <span class="input-label">Telefone</span>
+                </div>
+                <input type="text" id="ipt_telefone" value="${sessionStorage.USER_TELEFONE}">
+
+                <div class="input-label-wrapper">
+                    <span class="input-label">Foto</span>
+                </div>
+                <input type="file" id="ipt_foto" required>
+                <div class="input-label-wrapper">
+                    <span class="input-label">Confirmar senha</span>
+                    <span class="obrigatorio">*obrigatório</span>
+                </div>
+                
+                <input type="text" id="ipt_confirmar_senha" required>
+            </div>
+
+            <div id="mensagem_erro"></div>
+            <div class="btns_popup">
+                
+                <button class="btn cadastrar" onclick="funcao_editar(${id})">Editar</button>
+                <button class="btn fechar" onclick="fechar_popup()">Fechar</button>
+            </div>
+                `;
+    }
+
+    function funcao_editar(idVar) {
+        var nomeVar = ipt_nome.value.trim();
+        var sobrenomeVar = ipt_sobrenome.value.trim();
+        var emailVar = ipt_email.value.trim();
+        var senhaVar = ipt_senha.value;
+        var confirmacao_senhaVar = ipt_confirmar_senha.value;
+        var telefoneVar = ipt_telefone.value.replace(/\D/g, "");
+
+        if (nomeVar === "") {
+            marcarErro(ipt_nome, "O campo nome está em branco.");
+            return;
+        }
+        if (sobrenomeVar === "") {
+            marcarErro(ipt_sobrenome, "O campo sobrenome está em branco.");
+            return;
+        }
+        if (cargoVar === "") {
+            marcarErro(ipt_cargo, "O campo cargo está em branco.");
+            return;
+        }
+        if (emailVar === "") {
+            marcarErro(ipt_email, "O campo email está em branco.");
+            return;
+        }
+        if (senhaVar === "") {
+            marcarErro(ipt_nome, "O campo senha está em branco.");
+            return;
+        }
+        if (confirmacao_senhaVar === "") {
+            marcarErro(ipt_nome, "O campo confirmar senha está em branco.");
+            return;
+        }
+        if (!/^\d{10,11}$/.test(telefoneVar)) {
+            marcarErro(ipt_telefone, "Telefone deve ter 10 ou 11 números (com DDD)");
+            return;
+        }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVar)) {
+            marcarErro(ipt_email, "Digite um e-mail válido");
+            return;
+        }
+        if (senhaVar.length < 8 || !/[A-Za-z]/.test(senhaVar) || !/\d/.test(senhaVar)) {
+            marcarErro(ipt_senha, "A senha deve ter pelo menos 8 caracteres, incluindo letras e números");
+            return;
+        }
+        if (confirmacao_senhaVar !== senhaVar) {
+            marcarErro(ipt_confirmar_senha, "As senhas não coincidem");
+            return;
+        }
+        fetch("/usuarios/funcao_editar_proprio", {
+            method: 'PUT',
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                nomeServer: nomeVar,
+                sobrenomeServer: sobrenomeVar,
+                cargoServer: cargoVar,
+                emailServer: emailVar,
+                senhaServer: senhaVar,
+                telefoneServer: telefoneVar,
+                idServer: idVar
+            }),
+        })
+            .then(resposta => {
+                if (resposta.ok) {
+                    mostrarErro("Alteração realizada com sucesso!");
+                    setTimeout(() => {
+                        window.location = "perfil.html";
+                    }, 2000);
+                } else {
+                    throw "Houve um erro ao tentar realizar a alteração!";
+                }
+            })
+            .catch(erro => console.error(`#ERRO: ${erro}`));
+    }
+
+
+</script>
