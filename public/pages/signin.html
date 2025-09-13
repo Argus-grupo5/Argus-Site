@@ -86,6 +86,7 @@
 
 </html>
 <script>
+    var fotoVar;
     // Maiscara para o CEP
     document.getElementById("ipt_cep").addEventListener("input", function (e) {
         let value = e.target.value.replace(/\D/g, "");
@@ -177,17 +178,26 @@
             <p>Confirmar senha</p>
             <input type="password" id="ipt_CSenha" placeholder="********">
         </section>
+        <section class="input">
+            <p>Foto Perfil</p>
+            <input nome="ipt_foto" type="file" id="ipt_foto">
+        </section>
     `;
+        // Adicionar foto nas pastas
+        ipt_foto.addEventListener("change", () => {
+            fotoVar = ipt_foto.files[0];
+            console.log(fotoVar)
+        });
 
-    // Máscara para telefone e CNPJ
+        // Máscara para telefone e CNPJ
         document.getElementById("ipt_telefone").addEventListener("input", function (e) {
             let value = e.target.value.replace(/\D/g, "");
 
             if (value.length > 0) {
-                value = value.replace(/^(\d{2})(\d)/g, "($1) $2"); 
+                value = value.replace(/^(\d{2})(\d)/g, "($1) $2");
             }
             if (value.length >= 10) {
-                value = value.replace(/(\d{5})(\d{4})$/, "$1-$2"); 
+                value = value.replace(/(\d{5})(\d{4})$/, "$1-$2");
             } else {
                 value = value.replace(/(\d{4})(\d{4})$/, "$1-$2");
             }
@@ -229,6 +239,7 @@
         var razaoVar = ipt_razao.value.trim();
         var cnpjVar = ipt_cnpj.value;
 
+
         if (nomeVar.length < 3) {
             marcarErro(ipt_nome, "Nome Fantasia muito curto");
             return;
@@ -241,7 +252,7 @@
             marcarErro(ipt_cnpj, "CNPJ deve ter exatamente 14 números");
             return;
         }
-        if (telefoneVar.length!= 15) {
+        if (telefoneVar.length != 15) {
             marcarErro(ipt_telefone, "Telefone deve ter 11 números (com DDD)");
             return;
         }
@@ -253,6 +264,15 @@
             marcarErro(ipt_CSenha, "As senhas não coincidem");
             return;
         }
+
+        const formData = new FormData();
+        formData.append("fotoServer", fotoVar);
+        formData.append("nomeServer", nomeVar);
+        formData.append("telefoneServer", telefoneVar);
+        formData.append("senhaServer", senhaVar);
+        formData.append("cnpjServer", cnpjVar);
+        formData.append("razaoServer", razaoVar);
+
 
         // Enviar endereço
         fetch("/usuarios/cadastrarEndereco", {
@@ -274,18 +294,10 @@
             })
             .then(data => {
                 let idVar = Number(data.insertId);
-
+                formData.append("idServer", idVar);
                 return fetch("/usuarios/cadastrarEmpresa", {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        nomeServer: nomeVar,
-                        telefoneServer: telefoneVar,
-                        senhaServer: senhaVar,
-                        cnpjServer: cnpjVar,
-                        razaoServer: razaoVar,
-                        idServer: idVar
-                    }),
+                    body: formData
                 });
             })
             .then(resposta => {

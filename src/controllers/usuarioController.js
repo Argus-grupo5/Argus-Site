@@ -190,8 +190,11 @@ function cadastrarEmpresa(req, res) {
   var razao = req.body.razaoServer;
   var cnpj = req.body.cnpjServer;
   var id = req.body.idServer;
+  var foto = req.file.filename;
 
-  if (nome == undefined) {
+  if (foto == undefined) {
+    res.status(400).send("Sua foto está undefined!");
+  } else if (nome == undefined) {
     res.status(400).send("Seu nome está undefined!");
   } else if (telefone == undefined) {
     res.status(400).send("Seu telefone está undefined!");
@@ -205,7 +208,7 @@ function cadastrarEmpresa(req, res) {
     res.status(400).send("O id está undefined!");
   }
 
-  usuarioModel.cadastrarEmpresa(nome, telefone, senha, cnpj, razao, id)
+  usuarioModel.cadastrarEmpresa(nome, telefone, senha, cnpj, razao, id, foto)
     .then(
       function (resultado) {
         res.json(resultado);
