@@ -28,6 +28,7 @@ function header(pag) {
         <img src="../../assets/fotoPerfil/${sessionStorage.FOTO}" alt="" id="FotoNavBar">
         <span class="tooltiptextNav">
           <div id="userNome">${sessionStorage.USER_NAME}</div>
+          <div id="userCargo">${sessionStorage.CARGO_CARGO}</div>
         </span>
       </a>
       <a href="./servers.html" class="navButton tooltipNav" id="navServers">
@@ -90,3 +91,35 @@ function sair_s() {
 function sair_n() {
   id_sair.innerHTML = ``;
 }
+
+function carregarCargoUsuario() {
+    const userId = sessionStorage.USER_ID;
+    
+    if (!userId) {
+        console.warn("USER_ID não encontrado no sessionStorage");
+        return;
+    }
+
+    fetch(`/usuarios/cargoUsuario/${userId}`)
+        .then(response => {
+            if (!response.ok) throw new Error("Erro ao buscar cargo");
+            return response.json();
+        })
+        .then(data => {
+            sessionStorage.CARGO_CARGO = data.cargo;
+            console.log("Cargo carregado:", data.cargo);
+            buscarPermissoesPorCargo();
+            
+            // Atualiza a UI se necessário
+            const elementoCargo = document.getElementById('userCargo');
+            if (elementoCargo) {
+                elementoCargo.textContent = data.cargo;
+            }
+        })
+        .catch(error => {
+            console.error("Erro:", error);
+            sessionStorage.CARGO_CARGO = "N/A"; // Valor padrão
+        });
+}
+
+

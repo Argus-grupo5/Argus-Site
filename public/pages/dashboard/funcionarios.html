@@ -55,8 +55,6 @@
     </div>
 
     <div id="editContainer" class="editContainer">
-      <img class="iconLapis" src="../../assets/funcionarios/lapis.svg" alt="" onclick="filtrarFuncionarios(true)">
-      <span class="tooltiptextInfo">Editar </span>
     </div>
   </header>
 
@@ -101,74 +99,25 @@
 </html>
 <script src="./script/kpiGeral.js"></script>
 <script>
+
+  
   let editar = false;
   let funcionariosLista = []; // Inicialize como array vazio;
   const container = document.getElementById("id_func_list");
 
   window.onload = () => {
+
+    carregarCargoUsuario();
     header("funcionario")
     online()
-    
-    // 🔒 Para o filtro principal, mostrar TODOS os cargos (incluindo ROOT)
-    listarCargo("id_filter", false, true); // filtrarRoot = false, isFiltro = true
+  
+    listarCargo("id_filter", false, true); 
 
     const idEmpresa = sessionStorage.EMPRESA_ID;
     
-    buscarPermissoesPorCargo();
-    
-    fetch(`/usuarios/listarFuncionarios?idEmpresa=${idEmpresa}`)
-      .then(res => {
-        if (!res.ok) {
-          throw new Error(`Erro ${res.status}: ${res.statusText}`);
-        }
-        return res.json();
-      })
-      .then(resposta => {
-        console.log('Funcionários recebidos:', resposta);
-        funcionariosLista = Array.isArray(resposta) ? resposta : [];
-        filtrarFuncionarios(editar);
-        formatarTelefonesExistentes();
-      })
-      .catch(error => {
-        console.error('Erro ao buscar funcionários:', error);
-        funcionariosLista = [];
-        filtrarFuncionarios(editar);
-      });
-      
-    setTimeout(aplicarMascaras, 1000);
-};window.onload = () => {
-    header("funcionario")
-    online()
-    
-    // 🔒 Para o filtro principal, mostrar TODOS os cargos (incluindo ROOT)
-    listarCargo("id_filter", false, true); // filtrarRoot = false, isFiltro = true
-
-    const idEmpresa = sessionStorage.EMPRESA_ID;
-    
-    buscarPermissoesPorCargo();
-    
-    fetch(`/usuarios/listarFuncionarios?idEmpresa=${idEmpresa}`)
-      .then(res => {
-        if (!res.ok) {
-          throw new Error(`Erro ${res.status}: ${res.statusText}`);
-        }
-        return res.json();
-      })
-      .then(resposta => {
-        console.log('Funcionários recebidos:', resposta);
-        funcionariosLista = Array.isArray(resposta) ? resposta : [];
-        filtrarFuncionarios(editar);
-        formatarTelefonesExistentes();
-      })
-      .catch(error => {
-        console.error('Erro ao buscar funcionários:', error);
-        funcionariosLista = [];
-        filtrarFuncionarios(editar);
-      });
       
     setTimeout(aplicarMascaras, 1000);
 };
-
 function listarCargo(elementoPai, filtrarRoot = true, isFiltro = false) {
     const select = document.getElementById(elementoPai);
     const idEmpresa = sessionStorage.EMPRESA_ID;
@@ -184,10 +133,9 @@ function listarCargo(elementoPai, filtrarRoot = true, isFiltro = false) {
       .then(res => res.json())
       .then(cargos => {
         cargos.forEach(c => {
-          // 🔒 Para filtros, mostrar todos os cargos (incluindo ROOT)
-          // Para forms (adição/edição), filtrar ROOT
+          // Filtar root apenas nos forms
           if (filtrarRoot && !isFiltro && c.cargo === 'ROOT') {
-            return; // Pula o cargo ROOT apenas em forms, não no filtro
+            return; 
           }
           
           const option = document.createElement("option");
@@ -199,7 +147,7 @@ function listarCargo(elementoPai, filtrarRoot = true, isFiltro = false) {
       .catch(err => console.error("Erro ao carregar cargos:", err));
 }
 
-  //  Buscar informações sobre o cargo do usuário que está logado
+
   function buscarPermissoesPorCargo() {
     if (sessionStorage.CARGO_CARGO) {
       const nomeCargo = sessionStorage.CARGO_CARGO;
@@ -216,7 +164,7 @@ function listarCargo(elementoPai, filtrarRoot = true, isFiltro = false) {
             console.log('Cargo:', nomeCargo);
             console.log('Permissões retornadas:', cargoEncontrado);
 
-            // 0 = NÃO, 1 = SIM (conforme seu INSERT no banco)
+            // 0 = NÃO, 1 = SIM 
             sessionStorage.PERMISSAO_ADICIONAR = cargoEncontrado.permissao_adicionar === 1 ? 'SIM' : 'NÃO';
             sessionStorage.PERMISSAO_EDITAR = cargoEncontrado.permissao_editar === 1 ? 'SIM' : 'NÃO';
             sessionStorage.PERMISSAO_DELETAR = cargoEncontrado.permissao_excluir === 1 ? 'SIM' : 'NÃO';
@@ -224,6 +172,25 @@ function listarCargo(elementoPai, filtrarRoot = true, isFiltro = false) {
             console.log(`Pode adicionar: ${sessionStorage.PERMISSAO_ADICIONAR}`);
             console.log(`Pode editar: ${sessionStorage.PERMISSAO_EDITAR}`);
             console.log(`Pode deletar: ${sessionStorage.PERMISSAO_DELETAR}`);
+
+                fetch(`/usuarios/listarFuncionarios?idEmpresa=${idEmpresa}`)
+                .then(res => {
+                  if (!res.ok) {
+                    throw new Error(`Erro ${res.status}: ${res.statusText}`);
+                  }
+                  return res.json();
+                })
+                .then(resposta => {
+                  console.log('Funcionários recebidos:', resposta);
+                  funcionariosLista = Array.isArray(resposta) ? resposta : [];
+                  filtrarFuncionarios(editar);
+                  formatarTelefonesExistentes();
+                })
+                .catch(error => {
+                  console.error('Erro ao buscar funcionários:', error);
+                  funcionariosLista = [];
+                  filtrarFuncionarios(editar);
+                });
 
           } else {
             console.log('Cargo não encontrado na lista:', nomeCargo);
@@ -359,7 +326,7 @@ function listarCargo(elementoPai, filtrarRoot = true, isFiltro = false) {
         if (cargoIgual && pesquisaIgual) {
           let botoesAcao = '';
           
-          // 🔒 VERIFICAÇÕES DE SEGURANÇA
+          // VERIFICAÇÕES DE SEGURANÇA
           const isUsuarioRoot = funcionariosLista[i].cargo === 'ROOT';
           const isProprioUsuario = funcionariosLista[i].id == userId;
           
@@ -459,7 +426,7 @@ function pop_up_adicionar() {
       </div>
     `;
     
-    // 🔒 Para forms, filtrar ROOT (filtrarRoot = true, isFiltro = false)
+    // Para forms, filtrar ROOT (filtrarRoot = true, isFiltro = false)
     listarCargo("ipt_cargo", true, false);
     
     setTimeout(aplicarMascaras, 100);
@@ -522,7 +489,7 @@ function pop_up_adicionar() {
       return;
     }
 
-    // 🔒 Verificação adicional no frontend (opcional mas recomendada)
+    // Verificação adicional no frontend (opcional mas recomendada)
     // Obter o nome do cargo selecionado para verificar se não é ROOT
     const selectCargo = document.getElementById('ipt_cargo');
     const cargoSelecionado = selectCargo.options[selectCargo.selectedIndex].text;
@@ -565,13 +532,13 @@ function pop_up_adicionar() {
 }
 
 function pop_up_editar(id) {
-    // 🔒 Verificar se é ROOT antes de abrir o popup
+    // Verificar se é ROOT antes de abrir o popup
     if (funcionariosLista[id].cargo === 'ROOT') {
         mostrarErro("Não é possível editar usuários ROOT");
         return;
     }
     
-    // 🔒 Verificar se é o próprio usuário
+    // Verificar se é o próprio usuário
     if (funcionariosLista[id].id == sessionStorage.USER_ID) {
         mostrarErro("Não é possível editar seu próprio usuário aqui");
         return;
@@ -616,7 +583,7 @@ function pop_up_editar(id) {
     `;
     setTimeout(aplicarMascaras, 100);
     
-    // 🔒 Para forms, filtrar ROOT (filtrarRoot = true, isFiltro = false)
+    // Para forms, filtrar ROOT (filtrarRoot = true, isFiltro = false)
     listarCargo("ipt_cargo", true, false).then(() => {
         setTimeout(() => {
             document.getElementById("ipt_cargo").value = funcionariosLista[id].cargoId;
@@ -654,7 +621,7 @@ function pop_up_editar(id) {
       body: JSON.stringify({
         cargoServer: cargoVar,
         emailServer: emailVar,
-        telefoneServer: telefoneVar, // AGORA FORMATADO
+        telefoneServer: telefoneVar,
         idServer: idVar
       }),
     })
@@ -675,13 +642,13 @@ function pop_up_editar(id) {
   }
 
 function pop_up_excluir(id) {
-    // 🔒 Verificar se é ROOT antes de abrir o popup
+    // Verificar se é ROOT antes de abrir o popup
     if (funcionariosLista[id].cargo === 'ROOT') {
         mostrarErro("Não é possível excluir usuários ROOT");
         return;
     }
     
-    // 🔒 Verificar se é o próprio usuário
+    // Verificar se é o próprio usuário
     if (funcionariosLista[id].id == sessionStorage.USER_ID) {
         mostrarErro("Não é possível excluir seu próprio usuário");
         return;
@@ -705,7 +672,6 @@ function pop_up_excluir(id) {
 }
 
   function funcao_excluir(idVar) {
-    // 🔒 Verificação final de segurança no momento da exclusão
     const usuario = funcionariosLista.find(f => f.id == idVar);
     if (usuario && usuario.cargo === 'ROOT') {
         mostrarErro("Erro: Não é possível excluir usuários ROOT");

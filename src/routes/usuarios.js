@@ -61,4 +61,8 @@ router.put("/editar_empresa_root", upload.single('foto'), function (req, res) {
     usuarioController.editar_empresa_root(req, res);
 });
 
+router.get("/cargoUsuario/:id", function (req, res) {
+    usuarioController.buscar_cargo(req, res);
+});
+
 module.exports = router;

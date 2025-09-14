@@ -109,7 +109,7 @@ function autenticarEmpresa(req, res) {
               cargo_id: user.cargo_id,
               cargo_cargo: user.cargo_nome,
 
-              // 🔑 foto final
+              // 🔑 Foto final
               foto: fotoFinal
             });
           } else if (resultadoAutenticar.length == 0) {
@@ -247,8 +247,7 @@ function cadastrarEmpresa(req, res) {
     );
 }
 
-
-//tela de funcionários
+//Tela de funcionários
 function listarFuncionarios(req, res) {
   const idEmpresa = req.query.idEmpresa;
 
@@ -380,7 +379,6 @@ function funcao_editar(req, res) {
     console.log("Foto filename:", foto);
     console.log("ID do usuário:", id);
 
-    // Validações obrigatórias
     if (funcionario_nome == undefined) {
         return res.status(400).send("O nome é obrigatório!");
     } else if (funcionario_sobrenome == undefined) {
@@ -391,14 +389,13 @@ function funcao_editar(req, res) {
         return res.status(400).send("O id é obrigatório!");
     }
 
-    // Primeiro verificar se a senha antiga está correta
+    // Verificar se a senha antiga está correta
     usuarioModel.verificarSenhaAntiga(id, senhaAntiga)
         .then(resultado => {
             if (resultado.length === 0) {
-                return res.status(400).json({ error: "Senha antiga incorreta" });
+                return res.status(400).json("Senha antiga incorreta");
             }
             
-            // Se senha correta, proceder com a edição
             return usuarioModel.funcao_editar(
                 funcionario_nome, 
                 funcionario_sobrenome, 
@@ -531,15 +528,12 @@ function editar_empresa_root(req, res) {
             .then(function (resultado) {
                 console.log("Resultado da atualização:", resultado);
                 
-                // Retornar os dados atualizados incluindo o nome da foto
                 res.json({
                     success: true,
                     message: "Empresa atualizada com sucesso",
-                    data: {
-                        nomeFantasia: nomeFantasia,
-                        telefone: telefone,
-                        foto: foto // Retornar o nome do arquivo da foto
-                    }
+                    nomeFantasia: nomeFantasia,
+                    telefone: telefone,
+                    foto: foto
                 });
             })
             .catch(function (erro) {
@@ -553,6 +547,26 @@ function editar_empresa_root(req, res) {
     }
 }
 
+function buscar_cargo(req, res) {
+  var userId = req.params.id;
+
+  if (!userId) {
+    return res.status(400).send("ID do usuário é obrigatório");
+  }
+
+  usuarioModel.buscar_cargo(userId)
+    .then((resultado) => {
+      if (resultado.length > 0) {
+        res.status(200).json({ cargo: resultado[0].cargo_cargo });
+      } else {
+        res.status(404).send("Usuário não encontrado");
+      }
+    })
+    .catch((erro) => {
+      console.error("Erro ao buscar cargo:", erro);
+      res.status(500).json({ error: "Erro interno do servidor" });
+    });
+}
 
 
 module.exports = {
@@ -569,5 +583,6 @@ module.exports = {
   funcao_excluir,
   online,
   editar_empresa_root,
-  funcao_editar_funcionario
+  funcao_editar_funcionario,
+  buscar_cargo
 }

@@ -85,8 +85,6 @@
 
         if (isRoot) {
             config_funcionarios.innerHTML = `
-                        <h4>Apos editar suas informações você será deslogado por motivos de segurança.</h4>
-
             <img src="../../assets/dashboard/desktop/btnFechar.svg" alt="Fechar" class="btnFecharPopup" onclick="fechar_popup()">
             <h1>Editar Empresa</h1>
             <div class="inputs">
@@ -186,7 +184,6 @@
         setTimeout(aplicarMascaras, 100);
     }
 
-    // Adicione estas funções para tratar os erros
     function mostrarErro(msg) {
         mensagem_erro.innerHTML = msg;
         setTimeout(() => {
@@ -267,16 +264,17 @@
                 console.log("Sucesso:", data);
                 mostrarErro("Alteração realizada com sucesso!");
 
-
+                sessionStorage.USER_NAME = nomeFantasiaVar;
                 sessionStorage.EMPRESA_NOME_FANTASIA = nomeFantasiaVar;
                 sessionStorage.EMPRESA_TELEFONE = telefoneVar;
 
                 if (data.foto) {
                     sessionStorage.FOTO = data.foto;
                 }
+                
 
                 setTimeout(() => {
-                    window.location = "../login.html";
+                    window.location.reload();
                 }, 2000);
             })
             .catch(erro => {
@@ -349,7 +347,6 @@
         console.log("Sucesso:", data);
         mostrarErro("Alteração realizada com sucesso!");
         
-        // Atualizar sessionStorage
         sessionStorage.USER_NAME = nomeVar;
         sessionStorage.USER_SOBRENOME = sobrenomeVar;
         if (telefoneVar !== "") {
@@ -391,10 +388,8 @@
     }
 
     function aplicarMascaras() {
-        // Aplicar máscara ao telefone
         const telefoneInput = document.getElementById('ipt_telefone');
         if (telefoneInput) {
-            // Formatar valor existente
             if (telefoneInput.value) {
                 let value = telefoneInput.value.replace(/\D/g, '');
                 if (value.length >= 10) {
@@ -408,7 +403,6 @@
     }
 
     function formatarTelefoneExistente() {
-        // Formatar telefone exibido no perfil
         const perfilNumero = document.getElementById('perfilNumero');
         if (perfilNumero && sessionStorage.USER_TELEFONE) {
             let telefone = sessionStorage.USER_TELEFONE.replace(/\D/g, '');
@@ -419,7 +413,6 @@
         }
     }
 
-    // Chamar ao carregar a página
     window.onload = function () {
         header();
 

@@ -31,11 +31,8 @@ function cadastrarEndereco(cep, rua, bairro, cidade, estado, numero, complemento
     return database.executar(instrucaoSql);
 }
 
-// Coloque os mesmos parâmetros aqui. Vá para a var instrucaoSql
 function cadastrarEmpresa(nome, telefone, senha, cnpj, razao, fkEndereco, foto) {
     console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function cadastrar():", nome, telefone, senha, cnpj, razao, fkEndereco, foto);
-    // Insira exatamente a query do banco aqui, lembrando da nomenclatura exata nos valores
-    //  e na ordem de inserção dos dados.
     var instrucaoSql = `
         INSERT INTO empresa (nome_fantasia, telefone, senha, razao_social, cnpj, fkEndereco, foto_perfil) VALUES ('${nome}', '${telefone}', SHA2('${senha}', 512), '${razao}', '${cnpj}', ${fkEndereco}, '${foto}');
     `;
@@ -43,7 +40,7 @@ function cadastrarEmpresa(nome, telefone, senha, cnpj, razao, fkEndereco, foto) 
     return database.executar(instrucaoSql);
 }
 
-//tela de funcionários
+
 function listarFuncionarios(idEmpresa) {
     const instrucaoSql = `
         SELECT 
@@ -219,6 +216,19 @@ function editar_empresa_root(nomeFantasia, telefone, senha, senhaAntiga, empresa
         });
 }
 
+function buscar_cargo(userId) {
+    console.log("Buscando cargo direto pela VIEW para userId:", userId);
+    
+    var instrucaoSql = `
+        SELECT cargo_cargo 
+        FROM vw_user 
+        WHERE user_id = ${userId};
+    `;
+    
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
 module.exports = {
     autenticar,
     autenticarEmpresa,
@@ -231,8 +241,10 @@ module.exports = {
     funcao_editar_proprio,
     funcao_excluir,
     online,
+    buscar_cargo,
     verificarCargo,
     editar_empresa_root,
     verificarSenhaAntiga,
     funcao_editar_funcionario
+    
 };

@@ -11,22 +11,19 @@
 
 #buttonEditar {
     background-color: #FF6D4D;
-    width: 40vw;
+    width: 14vw;
     height: 5vh;
     border-radius: 1vw;
-    margin-top: 10px;
-    border: solid white 1px;
-    font-size: 110%;
+    margin-top: 2vw;
+    border: none;
+    font-size: 1.0vw;
+    transition: .3s ease-in-out;
 }
 
 #buttonEditar:hover {
-  cursor: pointer;
-  width: 40vw;
-  height: 5vh;
-  border-radius: 1vw;
-  border: solid white 1px;
-  background-color: #FF0000;
-  font-size: 110%;
+  background: linear-gradient(135deg, #FF3C00, #C90000);
+  width: 15;
+  height: 6vh;
 }
 
 #buttonEditar:active {
@@ -36,11 +33,13 @@
   border-radius: 1vw;
   border: solid white 1px;
   background-color: #c00000;
-  font-size: 110%;
+  font-size: 1.1vw;
 }
 
 #perfilFoto {
     width: 10vw;
+    object-fit: cover;
+    border-radius: 100px;
 }
 
 a {
