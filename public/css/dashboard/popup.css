@@ -23,7 +23,7 @@ body.popup-open {
   align-items: center;
 
   z-index: 1000;
-  width: 45vw;
+  width: 32vw;
   height: fit-content;
 
   background: #FF670A;
@@ -50,14 +50,13 @@ body.popup-open {
 }
 
 .popup h1 {
-  font-size: 3.33vw;
+  font-size: 2vw;
   margin-bottom: .5vh;
   color: #fff;
-  font-weight: bold;
 }
 
 .popup .inputs {
-  width: 80%;
+  width: 90%;
   height: 80%;
 }
 
@@ -66,8 +65,8 @@ body.popup-open {
   width: 100%;
   height: 5vh;
   border-radius: .5vw;
-  font-size: 1.11vw;
-  border: .1vw solid #fff;
+  font-size: 0.9vw;
+  border: .1vw none;
   background-color: rgba(255, 255, 255, 0.1);
   padding: 0 .8vh;
   color: #fff;
@@ -103,26 +102,25 @@ body.popup-open {
   font-weight: 600;
 }
 
-
-
 .btns_popup {
-  margin-top: 5vh;
+  margin-top: 3vh;
+  margin-bottom: 3vh;
   display: flex;
   flex-direction: row;
   gap: 1vw;
-  width: 100%;
+  width: 90%;
 }
 
 .btn {
-  width: 100%;
+  width: 90%;
   height: 3vw;
-  border-radius: 12px;
-  border: 1px solid #fff;
-  background: linear-gradient(135deg, #FF6D4D, #FF3C00);
-  font-size: 1.1rem;
+  border-radius: 4px;
+  border: 1px none;
+  background: #ff893f;
+  font-size: 1.1vw;
   font-weight: bold;
   color: #fff;
-  transition: all 0.3s ease;
+  transition: all 0.3s ease-in-out;
 }
 
 .btn:hover {
@@ -139,5 +137,5 @@ body.popup-open {
 #mensagem_erro {
     margin-top: 20px;
     margin-bottom: -18px;
-    font-size: 2.22vw;
+    font-size: 1vw;
 }

@@ -2,7 +2,6 @@ body {
   background-color: #000;
 }
 
-
 .bannerDesktop {
   background-image: url(../../assets/home/desktop/background.svg);
   width: 100%;
@@ -73,20 +72,13 @@ body {
 }
 
 /* Explication */
-.containerDesktop .explication .background {
+
+.containerDesktop .explication {
   background-color: #FF6D4D;
   border-color: #000;
   border-style: dashed none;
   border-width: .5vw;
-  width: 100%;
-  height: 70vh;
-  background-repeat: no-repeat;
-  background-size: cover;
-  position: absolute;
-  z-index: -1;
-}
 
-.containerDesktop .explication {
   width: 100%;
   height: 70vh;
   display: flex;
@@ -265,4 +257,226 @@ body {
 .containerDesktop .footer .links a:hover::after {
   transform: scaleX(1);
   transform-origin: bottom center;
+}
+
+
+.bannerMobile {
+  display: none;
+}
+
+.containerMobile {
+  display: none;
+}
+
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .bannerDesktop {
+    display: none;
+  }
+
+  .bannerMobile {
+    display: block;
+    background-image: url(../../assets/home/mobile/banner.svg);
+    width: 100%;
+    height: 110vh;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: absolute;
+    z-index: -1;
+  }
+
+  .containerDesktop {
+    display: none;
+  }
+
+  .containerMobile {
+    width: 100%;
+    height: fit-content;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .containerMobile .heroPage {
+    margin-top: 10.55vh;
+    height: 89.54vh;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+
+  }
+
+  .containerMobile .heroPage h1 {
+    width: 80vw;
+    font-weight: 200;
+    line-height: 1.1;
+    text-align: right;
+    font-size: 8vw;
+  }
+
+  .containerMobile .heroPage a {
+    margin-top: 2.5vh;
+    text-decoration: none;
+    padding-inline: 18vw;
+    font-size: 6vw;
+    color: #fff;
+    background: #FF6D4D;
+    border-radius: 40vw;
+    transition: .4s;
+  }
+
+  .containerMobile .heroPage a:hover {
+    scale: 1.1;
+    transition: .4s;
+    box-shadow: -.3px .2px .5px .5px #000;
+  }
+
+
+  /* Explication */
+  .containerMobile .explication {
+    background-color: #FF6D4D;
+    border-color: #000;
+    border-style: dashed none;
+    border-width: .5rem;
+
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 5vh;
+    padding-block: 5vh;
+  }
+
+  .containerMobile .explication .card {
+    width: 100vw;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+
+  .containerMobile .explication .card img {
+    width: 30vw;
+    height: fit-content;
+    padding-block: 2vh;
+    margin-bottom: .5vh;
+  }
+
+  .containerMobile .explication .card p {
+    width: 50%;
+    font-size: 1rem;
+    text-align: center;
+    line-height: 1.1;
+    color: #000;
+  }
+
+
+
+  /* Vantagens */
+
+  .containerMobile .vantagens {
+    margin-top: 9.11vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .containerMobile .vantagens h1 {
+    text-align: center;
+    width: 80vw;
+    font-weight: 400;
+    font-size: 2rem;
+    color: #fff;
+  }
+
+  .containerMobile .vantagens h1 span {
+    color: #FF6D4D;
+    font-weight: 600;
+  }
+
+
+
+  .containerMobile .vantagens .cards {
+    margin-top: 7vh;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    width: 50vw;
+    height: fit-content;
+    gap: 3vh;
+  }
+
+  .containerMobile .vantagens .cards .card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 30vh;
+    width: 90%;
+    background-color: #FFA794;
+    border-radius: 1vw;
+  }
+
+  .containerMobile .vantagens .cards .card img {
+    position: absolute;
+    top: -6vh;
+    left: 1vw;
+    width: 6.51vw;
+    height: 11.58vh;
+  }
+
+  .containerMobile .vantagens .cards .card h2 {
+    line-height: 1.1;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #000;
+  }
+
+
+  .containerMobile .vantagens .cards .card p {
+    width: 80%;
+    margin-top: 1.7vh;
+    line-height: 1.1;
+    text-align: center;
+    font-size: .9rem;
+    font-weight: 300;
+    color: #000;
+    text-align: center;
+  }
+
+  .containerMobile .vantagens a {
+    width: fit-content;
+    text-align: center;
+    margin-top: 5vh;
+    text-decoration: none;
+    padding-inline: 1.8rem;
+    padding-block: 1.2vh;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #000;
+    background: #FF6D4D;
+    border-radius: 40vw;
+    transition: .4s;
+  }
+
+  .containerMobile .vantagens a:hover {
+    scale: 1.1;
+    transition: .4s;
+    box-shadow: -3px 2px 5px 5px #000;
+  }
+
 }

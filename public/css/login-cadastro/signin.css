@@ -103,6 +103,38 @@ body {
     scale: 1.2;
 }
 
+/* Select */
+.containerDesktop .heroPage select {
+    background: none;
+    font-size: 1vw;
+    padding-left: 0.8vw;
+    padding-right: 2.5vw; /* espaço para a setinha */
+    color: #fff;
+    width: 80%;
+    height: 5vh;
+    margin-inline: 3vw;
+    border-radius: 15vw;
+    border: .1vw solid #fff;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
+
+    /* SVG codificado em URL */
+    background-image: url("../../assets/login-signin/select.svg");
+    background-repeat: no-repeat;
+    background-position: right 1.2vw center;
+    background-size: 1vw;
+}
+
+.containerDesktop .heroPage select option {
+    background: #1e1e1e;
+    color: #fff;
+    font-size: 1vw;
+}
+
+
+
 /* inputs */
 
 ::-webkit-scrollbar {
