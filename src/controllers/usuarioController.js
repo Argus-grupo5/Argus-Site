@@ -103,7 +103,7 @@ function cadastrarEndereco(req, res) {
     var estado = req.body.estadoServer;
     var numero = req.body.numeroServer;
     var complemento = req.body.complementoServer;
-    var id;
+
     // Faça as validações dos valores
     if (cep == undefined) {
         res.status(400).send("Seu cep está undefined!");
@@ -184,8 +184,8 @@ function cadastrarEmpresa(req, res) {
 
 
 //tela de funcionários
-function filtrar(req, res) {
-    usuarioModel.filtrar()
+function listarFuncionarios(req, res) {
+    usuarioModel.listarFuncionarios()
         .then((resultado) => {
             if (resultado.length > 0) {
                 res.status(200).json(resultado);
@@ -210,12 +210,127 @@ function listarCargo(req, res) {
         });
 }
 
-function funcao_adicionar(req, res){
-    // Código para adicionar usuário
+function funcao_adicionar(req, res) {
+    var funcionario_nome = req.body.nomeServer;
+    var funcionario_sobrenome = req.body.sobrenomeServer;
+    var funcionario_cargo = req.body.cargoServer;
+    var funcionario_email = req.body.emailServer;
+    var funcionario_senha = req.body.senhaServer;
+    var funcionario_telefone = req.body.telefoneServer;
+    var funcionario_empresa = req.body.idEmpresaServer;
+
+    if (funcionario_nome == undefined) {
+        res.status(400).send("Seu nome está undefined!");
+    } else if (funcionario_sobrenome == undefined) {
+        res.status(400).send("Seu sobrenome está undefined!");
+    } else if (funcionario_cargo == undefined) {
+        res.status(400).send("Seu email está undefined!");
+    } else if (funcionario_email == undefined) {
+        res.status(400).send("Seu email está undefined!");
+    } else if (funcionario_senha == undefined) {
+        res.status(400).send("Sua senha está undefined!");
+    } else if (funcionario_telefone == undefined) {
+        res.status(400).send("O telefone está undefined!");
+    } else if (funcionario_empresa == undefined) {
+        res.status(400).send("O id está undefined!");
+    }
+
+    usuarioModel.funcao_adicionar(funcionario_nome, funcionario_sobrenome, funcionario_cargo, funcionario_email, funcionario_senha, funcionario_telefone, funcionario_empresa)
+        .then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        ).catch(
+            function (erro) {
+                console.log(erro);
+                console.log(
+                    "\nHouve um erro ao realizar ao adicionar! Erro: ",
+                    erro.sqlMessage
+                );
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
 }
 
 function funcao_editar(req, res) {
-    // Código para editar
+    var funcionario_nome = req.body.nomeServer;
+    var funcionario_sobrenome = req.body.sobrenomeServer;
+    var funcionario_senha = req.body.senhaServer;
+    var funcionario_cargo = req.body.cargoServer;
+    var funcionario_email = req.body.emailServer;
+    var funcionario_telefone = req.body.telefoneServer;
+    var id = req.body.idServer;
+
+    if (funcionario_nome == undefined) {
+        res.status(400).send("Seu nome está undefined!");
+    } else if (funcionario_sobrenome == undefined) {
+        res.status(400).send("Seu sobrenome está undefined!");
+    } else if (funcionario_senha == undefined) {
+        res.status(400).send("Sua senha está undefined!");
+    } else if (funcionario_cargo == undefined) {
+        res.status(400).send("Seu email está undefined!");
+    } else if (funcionario_email == undefined) {
+        res.status(400).send("Seu email está undefined!");
+    } else if (funcionario_telefone == undefined) {
+        res.status(400).send("O telefone está undefined!");
+    } else if (id == undefined) {
+        res.status(400).send("O id está undefined!");
+    }
+
+    usuarioModel.funcao_editar(funcionario_nome, funcionario_sobrenome, funcionario_senha, funcionario_cargo, funcionario_email, funcionario_telefone, id)
+        .then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        ).catch(
+            function (erro) {
+                console.log(erro);
+                console.log(
+                    "\nHouve um erro ao alterar as informações do usuário ! Erro: ",
+                    erro.sqlMessage
+                );
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
+}
+
+function funcao_editar_proprio(req, res) {
+    var funcionario_nome = req.body.nomeServer;
+    var funcionario_sobrenome = req.body.sobrenomeServer;
+    var funcionario_senha = req.body.senhaServer;
+    var funcionario_email = req.body.emailServer;
+    var funcionario_telefone = req.body.telefoneServer;
+    var id = sessionStorage.USER_ID;
+
+    if (funcionario_nome == undefined) {
+        res.status(400).send("Seu nome está undefined!");
+    } else if (funcionario_sobrenome == undefined) {
+        res.status(400).send("Seu sobrenome está undefined!");
+    } else if(funcionario_senha == undefined){
+        res.status(400).send("Sua senha está undefined!");
+    } else if (funcionario_email == undefined) {
+        res.status(400).send("Seu email está undefined!");
+    } else if (funcionario_telefone == undefined) {
+        res.status(400).send("O telefone está undefined!");
+    } else if (id == undefined) {
+        res.status(400).send("O id está undefined!");
+    }
+
+    usuarioModel.funcao_editar_proprio(funcionario_nome, funcionario_sobrenome, funcionario_senha, funcionario_email, funcionario_telefone, id)
+        .then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        ).catch(
+            function (erro) {
+                console.log(erro);
+                console.log(
+                    "\nHouve um erro ao alterar suas informações ! Erro: ",
+                    erro.sqlMessage
+                );
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
 }
 
 function funcao_excluir(req, res) {
@@ -223,7 +338,7 @@ function funcao_excluir(req, res) {
     if (id == undefined) {
         res.status(400).send("O id estão undefined!");
     }
-    
+
     usuarioModel.funcao_excluir(id)
         .then((resultado) => {
             if (resultado.length > 0) {
@@ -274,10 +389,11 @@ module.exports = {
     editar,
     cadastrarEndereco,
     cadastrarEmpresa,
-    filtrar,
+    listarFuncionarios,
     listarCargo,
     funcao_adicionar,
     funcao_editar,
+    funcao_editar_proprio,
     funcao_excluir,
     online
 }
