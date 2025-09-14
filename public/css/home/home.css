@@ -471,6 +471,7 @@ body {
     background: #FF6D4D;
     border-radius: 40vw;
     transition: .4s;
+    margin-bottom: 5vh;
   }
 
   .containerMobile .vantagens a:hover {
