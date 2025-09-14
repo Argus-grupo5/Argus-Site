@@ -59,6 +59,7 @@ function header(pag) {
 
   if(pag == "funcionario") imgFuncionarios.classList.add("selected");
   else if(pag == "server") imgServidores.classList.add("selected");
+  else if(pag == "dashboard") imgServidores.classList.add("selected")
 }
 
 function abrir_popup() {

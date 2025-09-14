@@ -174,7 +174,9 @@
                     <img class="server-icon-status" src="../../assets/dashboard/desktop/${status}.svg" alt="Status do servidor">
                 </div>
                 <div class="serverName">
-                    ${server[id_server].name}
+                    <a href="dashboard.html">
+                        ${server[id_server].name}
+                    </a>
                 </div>
                 <div class="serverStatus">
                     <progress value="${server[id_server].nivel}" max="5"></progress>

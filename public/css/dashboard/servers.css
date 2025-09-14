@@ -108,16 +108,15 @@ body {
 }
 
 .headerTop{
-  padding-left: 5vw;
-  padding-right: 3vw;
-  width: 100%;
-  padding-top: 0.8vw;
-  display: flex;
-  flex-direction: row;
-  align-items: start;
-  gap: 20px;
-  display: flex;
-  justify-content: space-between;
+    padding-left: 5vw;
+    padding-right: 3vw;
+    width: 100%;
+    padding-top: 0.8vw;
+    flex-direction: row;
+    align-items: start;
+    gap: 20px;
+    display: flex;
+    justify-content: flex-start;
 }
 
 .headerTop img{
@@ -306,6 +305,10 @@ body {
 
 .serverName {
     width: 15%;
+}
+.serverName a {
+    text-decoration: none;
+    
 }
 
 .serverStatus {
