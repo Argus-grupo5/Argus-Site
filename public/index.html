@@ -29,7 +29,7 @@
 
   <header class="mobileHeader">
     <a href="./index.html" class="logo">
-      <img src="./assets/icon/logoMobile.svg" alt="Logo">
+      <img src="./assets/icon/logoMobileWhite.svg" alt="Logo">
     </a>
     <button id="burgerBtn" class="burgerBtn">
       <span></span>
@@ -129,10 +129,8 @@
   </div>
   <div class="containerMobile">
     <div class="heroPage">
-
       <h1>SISTEMA PROFISSIONAL DE MONITORAMENTO DE SERVIDORES CLOUD GAMING</h1>
       <a href="./pages/empresa.html">SAIBA MAIS</a>
-
     </div>
     <div class="explication">
       <div class="card">
@@ -185,6 +183,14 @@
       </div>
       <a href="./pages/contato.html">VAMOS FECHAR NEGÓCIO</a>
     </div>
+    <div class="footerMobile">
+      <div class="links">
+        <a href="">EULA</a>
+        <a href="./pages/empresa.html">Sobre Nós</a>
+        <a href="./pages/contato.html">Contato</a>
+      </div>
+      <p>© 2025 Argus Corporation. Ltd. All rights reserved.</p>
+    </div>
   </div>
 </body>
 
@@ -192,16 +198,26 @@
 
 <!-- Script para mudar a cor do scroll -->
 <script>
-  const header = document.querySelector('.desktopHeader');
+  const headerDesktop = document.querySelector('.desktopHeader');
 
   window.addEventListener('scroll', () => {
     if (window.scrollY > 90) { // ponto onde a navbar muda de cor
-      header.classList.add('scrolled');
+      headerDesktop.classList.add('scrolled');
     } else {
-      header.classList.remove('scrolled');
+      headerDesktop.classList.remove('scrolled');
     }
   });
 
+
+  const headerMobile = document.querySelector('.mobileHeader');
+
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 90) { // ponto onde a navbar muda de cor
+      headerMobile.classList.add('scrolled');
+    } else {
+      headerMobile.classList.remove('scrolled');
+    }
+  });
 
   // JS
   const burgerBtn = document.getElementById('burgerBtn');

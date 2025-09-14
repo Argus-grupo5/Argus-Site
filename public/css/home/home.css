@@ -373,7 +373,8 @@ body {
 
   .containerMobile .explication .card p {
     width: 50%;
-    font-size: 1rem;
+    font-size: 5vw;
+    font-weight: 400;
     text-align: center;
     line-height: 1.1;
     color: #000;
@@ -411,11 +412,11 @@ body {
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     flex-wrap: wrap;
-    width: 50vw;
+    width: 100%;
     height: fit-content;
-    gap: 3vh;
+    gap: 8vh;
   }
 
   .containerMobile .vantagens .cards .card {
@@ -425,23 +426,23 @@ body {
     align-items: center;
     justify-content: center;
     height: 30vh;
-    width: 90%;
+    width: 85%;
     background-color: #FFA794;
-    border-radius: 1vw;
+    border-radius: 3vw;
   }
 
   .containerMobile .vantagens .cards .card img {
     position: absolute;
     top: -6vh;
     left: 1vw;
-    width: 6.51vw;
+    width: 15vw;
     height: 11.58vh;
   }
 
   .containerMobile .vantagens .cards .card h2 {
     line-height: 1.1;
     text-align: center;
-    font-size: 1.5rem;
+    font-size: 6vw;
     font-weight: 600;
     color: #000;
   }
@@ -452,7 +453,7 @@ body {
     margin-top: 1.7vh;
     line-height: 1.1;
     text-align: center;
-    font-size: .9rem;
+    font-size: 5vw;
     font-weight: 300;
     color: #000;
     text-align: center;
@@ -480,4 +481,51 @@ body {
     box-shadow: -3px 2px 5px 5px #000;
   }
 
+  .containerMobile .footerMobile {
+    width: 100%;
+    height: fit-content;
+    background-color: #FF6D4D;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-block: 2vh;
+  }
+
+  .containerMobile .footerMobile .links {
+    width: 60vw;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 5vw;
+  }
+
+  .containerMobile .footerMobile .links a {
+    font-size: 5vw;
+    font-weight: 400;
+    text-decoration: none;
+    position: relative;
+    color: #fff;
+  }
+
+  .containerMobile .footerMobile p {
+    font-size: 3.5vw;
+    font-weight: 400;
+    width: 45%;
+    text-align: center;
+    color: #fff;
+  }
+
+  .containerMobile .footerMobile .links a::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    transform: scaleX(0);
+    height: .6vw;
+    bottom: 0;
+    left: 0;
+    background-color: #fff;
+    transition: transform 0.4s ease-out;
+    transform-origin: bottom center;
+  }
 }
