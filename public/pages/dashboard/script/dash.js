@@ -19,12 +19,13 @@
 //     });
 // });
 
+
 function header(pag) {
   nav = document.getElementById("navDesktop")
   nav.innerHTML = `
       <div class="navButtons">
       <a href="./perfil.html" class="navButton tooltipNav" id="navUser">
-        <img src="../../../assets/fotoPerfil/${sessionStorage.USER_FOTO}" alt="" id="FotoNavBar">
+        <img src="../../assets/fotoPerfil/${sessionStorage.FOTO}" alt="" id="FotoNavBar">
         <span class="tooltiptextNav">
           <div id="userNome">${sessionStorage.USER_NAME}</div>
         </span>

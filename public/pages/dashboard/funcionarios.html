@@ -27,7 +27,7 @@
     <div class="geralInfo">
       <div class="info tooltipInfo">
         <div class="server">
-          <img src="../../assets/dashboard/desktop/server.svg" alt="">
+          <img src="../../assets/dashboard/desktop/server.svg" alt="" onclick="goServer()">
         </div>
         <div class="serversMonitoring" id="id_servidores_monitorados">
         </div>
@@ -37,7 +37,7 @@
       </div>
       <div class="info">
         <div class="bell">
-          <img src="../../assets/dashboard/desktop/bell.svg" alt="">
+          <img src="../../assets/dashboard/desktop/bell.svg" alt="" onclick="goServer()">
         </div>
         <div class="risk tooltipInfo" id="id_servidores_em_estado_critico">
           <p id="qtd_critico"></p>
@@ -62,7 +62,7 @@
 
   <div class="search">
     <select id="id_filter" onchange="filtrarFuncionarios()">
-      <option value="" selected>Todos</option>
+      <option value="" selected>Todos os cargos</option>
     </select>
     <input type="search" id="id_pesquisa" placeholder="Pesquisar funcionário" oninput="filtrarFuncionarios()">
   </div>
@@ -87,7 +87,7 @@
         Telefone
       </div>
       <div id="funcStatusInfo" class="funcStatusInfo">
-        Status
+        
       </div>
 
     </div>
@@ -99,23 +99,97 @@
 </body>
 
 </html>
-
-
-
-
+<script src="./script/kpiGeral.js"></script>
 <script>
   let editar = false;
-  let funcionariosLista;
-
+  let funcionariosLista = []; // Inicialize como array vazio;
   const container = document.getElementById("id_func_list");
 
-  function listarCargo(elementoPai) {
-    const select = document.getElementById(elementoPai);
+  window.onload = () => {
+    header("funcionario")
+    online()
+    
+    // 🔒 Para o filtro principal, mostrar TODOS os cargos (incluindo ROOT)
+    listarCargo("id_filter", false, true); // filtrarRoot = false, isFiltro = true
 
-    fetch("/usuarios/listarCargo")
+    const idEmpresa = sessionStorage.EMPRESA_ID;
+    
+    buscarPermissoesPorCargo();
+    
+    fetch(`/usuarios/listarFuncionarios?idEmpresa=${idEmpresa}`)
+      .then(res => {
+        if (!res.ok) {
+          throw new Error(`Erro ${res.status}: ${res.statusText}`);
+        }
+        return res.json();
+      })
+      .then(resposta => {
+        console.log('Funcionários recebidos:', resposta);
+        funcionariosLista = Array.isArray(resposta) ? resposta : [];
+        filtrarFuncionarios(editar);
+        formatarTelefonesExistentes();
+      })
+      .catch(error => {
+        console.error('Erro ao buscar funcionários:', error);
+        funcionariosLista = [];
+        filtrarFuncionarios(editar);
+      });
+      
+    setTimeout(aplicarMascaras, 1000);
+};window.onload = () => {
+    header("funcionario")
+    online()
+    
+    // 🔒 Para o filtro principal, mostrar TODOS os cargos (incluindo ROOT)
+    listarCargo("id_filter", false, true); // filtrarRoot = false, isFiltro = true
+
+    const idEmpresa = sessionStorage.EMPRESA_ID;
+    
+    buscarPermissoesPorCargo();
+    
+    fetch(`/usuarios/listarFuncionarios?idEmpresa=${idEmpresa}`)
+      .then(res => {
+        if (!res.ok) {
+          throw new Error(`Erro ${res.status}: ${res.statusText}`);
+        }
+        return res.json();
+      })
+      .then(resposta => {
+        console.log('Funcionários recebidos:', resposta);
+        funcionariosLista = Array.isArray(resposta) ? resposta : [];
+        filtrarFuncionarios(editar);
+        formatarTelefonesExistentes();
+      })
+      .catch(error => {
+        console.error('Erro ao buscar funcionários:', error);
+        funcionariosLista = [];
+        filtrarFuncionarios(editar);
+      });
+      
+    setTimeout(aplicarMascaras, 1000);
+};
+
+function listarCargo(elementoPai, filtrarRoot = true, isFiltro = false) {
+    const select = document.getElementById(elementoPai);
+    const idEmpresa = sessionStorage.EMPRESA_ID;
+
+    // Limpar select antes de popular
+    if (isFiltro) {
+        select.innerHTML = '<option value="" selected>Todos os cargos</option>';
+    } else {
+        select.innerHTML = '<option value="" disabled selected>Selecione um cargo</option>';
+    }
+    
+    fetch(`/usuarios/listarCargo?idEmpresa=${idEmpresa}`)
       .then(res => res.json())
       .then(cargos => {
         cargos.forEach(c => {
+          // 🔒 Para filtros, mostrar todos os cargos (incluindo ROOT)
+          // Para forms (adição/edição), filtrar ROOT
+          if (filtrarRoot && !isFiltro && c.cargo === 'ROOT') {
+            return; // Pula o cargo ROOT apenas em forms, não no filtro
+          }
+          
           const option = document.createElement("option");
           option.value = c.id;
           option.textContent = c.cargo;
@@ -123,6 +197,45 @@
         });
       })
       .catch(err => console.error("Erro ao carregar cargos:", err));
+}
+
+  //  Buscar informações sobre o cargo do usuário que está logado
+  function buscarPermissoesPorCargo() {
+    if (sessionStorage.CARGO_CARGO) {
+      const nomeCargo = sessionStorage.CARGO_CARGO;
+      const idEmpresa = sessionStorage.EMPRESA_ID;
+
+      fetch(`/usuarios/listarCargo?idEmpresa=${idEmpresa}`)
+        .then(res => res.json())
+        .then(cargos => {
+          // Encontrar o cargo com o nome correspondente
+          const cargoEncontrado = cargos.find(c => c.cargo === nomeCargo);
+
+          if (cargoEncontrado) {
+            console.log('PERMISSÕES DO CARGO LOGADO:');
+            console.log('Cargo:', nomeCargo);
+            console.log('Permissões retornadas:', cargoEncontrado);
+
+            // 0 = NÃO, 1 = SIM (conforme seu INSERT no banco)
+            sessionStorage.PERMISSAO_ADICIONAR = cargoEncontrado.permissao_adicionar === 1 ? 'SIM' : 'NÃO';
+            sessionStorage.PERMISSAO_EDITAR = cargoEncontrado.permissao_editar === 1 ? 'SIM' : 'NÃO';
+            sessionStorage.PERMISSAO_DELETAR = cargoEncontrado.permissao_excluir === 1 ? 'SIM' : 'NÃO';
+
+            console.log(`Pode adicionar: ${sessionStorage.PERMISSAO_ADICIONAR}`);
+            console.log(`Pode editar: ${sessionStorage.PERMISSAO_EDITAR}`);
+            console.log(`Pode deletar: ${sessionStorage.PERMISSAO_DELETAR}`);
+
+          } else {
+            console.log('Cargo não encontrado na lista:', nomeCargo);
+            console.log('Cargos disponíveis:', cargos);
+          }
+        })
+        .catch(err => {
+          console.error('Erro ao buscar cargos:', err);
+        });
+    } else {
+      console.warn('Nome do cargo não encontrado no sessionStorage');
+    }
   }
 
   function online() {
@@ -146,34 +259,93 @@
       });
   }
 
-  window.onload = () => {
-    header("funcionario")
-    online()
-    listarCargo("id_filter");
-    fetch(`/usuarios/listarFuncionarios`).then(res => {
-      if (res.ok) {
-        res.json().then(resposta => {
-          funcionariosLista = resposta;
-          filtrarFuncionarios(editar);
-        })
-      }
-    })//fim fetch
-  };
-
   function filtrarFuncionarios(edit) {
-    console.log(edit)
+    console.log("Edit mode:", edit);
+    console.log("Funcionarios lista:", funcionariosLista);
+    
     const filtro = document.getElementById("id_filter").value;
     const pesquisa = document.getElementById("id_pesquisa").value.toLowerCase();
+    const container = document.getElementById("id_func_list");
     container.innerHTML = "";
+    
+    // Verifique se funcionariosLista está definido
+    if (!funcionariosLista || !Array.isArray(funcionariosLista)) {
+      console.error("funcionariosLista não está definido ou não é um array");
+      funcionariosLista = []; // Garante que seja um array
+      return;
+    }
+    
     var contStatus = 0;
+
+    // Obter permissões do usuário logado
+    const podeEditar = sessionStorage.PERMISSAO_EDITAR === 'SIM';
+    const podeExcluir = sessionStorage.PERMISSAO_DELETAR === 'SIM';
+    const podeAdicionar = sessionStorage.PERMISSAO_ADICIONAR === 'SIM';
+    const isRoot = sessionStorage.CARGO_CARGO === 'ROOT';
+    const userId = sessionStorage.USER_ID; // ID do usuário logado
+
+    // Mostrar/ocultar ícone de edição baseado nas permissões
+    if (podeEditar || podeExcluir || podeAdicionar || isRoot) {
+      if (!edit) {
+        editContainer.innerHTML = `
+          <img class="iconLapis" src="../../assets/funcionarios/lapis.svg" alt="" onclick="filtrarFuncionarios(true)">
+          <span class="tooltiptextInfo">Editar </span>
+        `;
+      } else {
+        editContainer.innerHTML = `
+          <img class="iconLapis" src="../../assets/funcionarios/salvarAlt.svg" alt="" onclick="filtrarFuncionarios(false)" >
+          <span class="tooltiptextInfo">Salvar </span>
+        `;
+      }
+    } else {
+      editContainer.innerHTML = ''; // Esconde o ícone se não tiver permissão
+    }
 
     if (!edit) {
       editar = false;
-      funcStatusInfo.innerHTML = `Status`
-      editContainer.innerHTML = `
-                <img class="iconLapis" src="../../assets/funcionarios/lapis.svg" alt="" onclick="filtrarFuncionarios(true)">
-                <span class="tooltiptextInfo">Editar </span>
-                `;
+      funcStatusInfo.innerHTML = ``;
+      
+      for (let i = 0; i < funcionariosLista.length; i++) {
+        const cargoIgual = filtro === "" || funcionariosLista[i].cargoId == filtro;
+        const pesquisaIgual =
+          funcionariosLista[i].nome.toLowerCase().includes(pesquisa) ||
+          funcionariosLista[i].email.toLowerCase().includes(pesquisa) ||
+          funcionariosLista[i].cargo.toLowerCase().includes(pesquisa);
+
+        if (funcionariosLista[i].sobrenome == null) {
+          funcionariosLista[i].sobrenome = ""
+        }
+
+        if (cargoIgual && pesquisaIgual) {
+          contStatus++;
+          const statusIcon = `<img class="" alt="">`;
+          container.innerHTML += `
+            <div id="funcItem" class="funcionario-item" data-idFuncionario=${funcionariosLista[i].id}>
+              <div class="funcFoto">
+                <img src="../../assets/fotoPerfil/${funcionariosLista[i].foto_perfil}" alt="Foto">
+              </div>
+              <div class="funcName">${funcionariosLista[i].nome} ${funcionariosLista[i].sobrenome}</div>
+              <div class="funcEmail">${funcionariosLista[i].email}</div>
+              <div class="funcCargo">${funcionariosLista[i].cargo}</div>
+              <div class="dtCadastro">${funcionariosLista[i].data_cadastro}</div>
+              <div class="functel">${funcionariosLista[i].telefone}</div>
+              <div id="status${contStatus}"class="funcStatus">
+                ${statusIcon}
+              </div>
+            </div>`;
+        }
+      }
+    }
+    else if (edit) {
+      editar = true;
+
+      // Atualizar cabeçalho apenas se tiver permissão para adicionar
+      if (podeAdicionar || isRoot) {
+        funcStatusInfo.innerHTML = `<img  class= "buttons-edit" src="../../assets/funcionarios/editGreen.svg" alt="" onclick="pop_up_adicionar()">`;
+      } else {
+        funcStatusInfo.innerHTML = ``;
+      }
+
       for (let i = 0; i < funcionariosLista.length; i++) {
         const cargoIgual = filtro === "" || funcionariosLista[i].cargoId == filtro;
         const pesquisaIgual =
@@ -185,69 +357,53 @@
         }
 
         if (cargoIgual && pesquisaIgual) {
-          contStatus++;
-          const statusIcon = `<img class="iconStatus" src="../../assets/funcionarios/eyeClosed.svg" alt="Offline">`;
-          container.innerHTML += `
-                                    <div id="funcItem" class="funcionario-item" data-idFuncionario=${funcionariosLista[i].id}>
-                                        <div class="funcFoto">
-                                            <img src="../../assets/fotoPerfil/${funcionariosLista[i].foto_perfil}" alt="Foto">
-                                        </div>
-                                        <div class="funcName">${funcionariosLista[i].nome} ${funcionariosLista[i].sobrenome}</div>
-                                        <div class="funcEmail">${funcionariosLista[i].email}</div>
-                                        <div class="funcCargo">${funcionariosLista[i].cargo}</div>
-                                        <div class="dtCadastro">${funcionariosLista[i].data_cadastro}</div>
-                                        <div class="functel">${funcionariosLista[i].telefone}</div>
-                                        <div id="status${contStatus}"class="funcStatus">
-                                            ${statusIcon}
-                                        </div>
-                                    </div>`;
-        }
-      }
-    }
-    else if (edit) {
-      editar = true;
-
-      editContainer.innerHTML = `
-                <img class="iconLapis" src="../../assets/funcionarios/salvarAlt.svg" alt="" onclick="filtrarFuncionarios(false)" >
-                <span class="tooltiptextInfo">Salvar </span>`
-
-
-
-      for (let i = 0; i < funcionariosLista.length; i++) {
-        const cargoIgual = filtro === "" || funcionariosLista[i].cargo.toLowerCase() === filtro;
-        const pesquisaIgual =
-          funcionariosLista[i].nome.toLowerCase().includes(pesquisa) ||
-          funcionariosLista[i].email.toLowerCase().includes(pesquisa);
-
-        if (funcionariosLista[i].sobrenome == null) {
-          funcionariosLista[i].sobrenome = ""
-        }
-
-        if (cargoIgual && pesquisaIgual) {
-          var funcStatus = document.getElementById("funcStatusInfo")
-          funcStatus.innerHTML = `<img  class= "buttons-edit" src="../../assets/funcionarios/editGreen.svg" alt="" onclick="pop_up_adicionar()">`;
+          let botoesAcao = '';
+          
+          // 🔒 VERIFICAÇÕES DE SEGURANÇA
+          const isUsuarioRoot = funcionariosLista[i].cargo === 'ROOT';
+          const isProprioUsuario = funcionariosLista[i].id == userId;
+          
+          // Verificar permissões para mostrar os botões apropriados
+          if ((podeEditar || isRoot) && !isUsuarioRoot && !isProprioUsuario) {
+            botoesAcao += `<img class="buttons-edit" src="../../assets/funcionarios/editYellow.svg" alt="Editar" onclick="pop_up_editar(${i})">`;
+          }
+          
+          if ((podeExcluir || isRoot) && !isUsuarioRoot && !isProprioUsuario) {
+            botoesAcao += `<img class="buttons-edit" src="../../assets/funcionarios/iconDelete.svg" alt="Deletar" onclick="pop_up_excluir(${i})">`;
+          }
+          
+          // Mensagens para casos restritos
+          if (isUsuarioRoot) {
+            botoesAcao = '<span class="texto-restrito">Usuário ROOT</span>';
+          } else if (isProprioUsuario) {
+            botoesAcao = '<span class="texto-restrito">Você</span>';
+          }
+          
+          // Se não tiver nenhuma permissão, mostra apenas um espaço vazio
+          if (!botoesAcao) {
+            botoesAcao = '&nbsp;';
+          }
 
           container.innerHTML += `
-                                    <div id="funcItem" class="funcionario-item" data-idFuncionario=${funcionariosLista[i].id}>
-                                        <div class="funcFoto">
-                                            <img src="../../assets/fotoPerfil/${funcionariosLista[i].foto_perfil}" alt="Foto">
-                                        </div>
-                                        <div class="funcName">${funcionariosLista[i].nome} ${funcionariosLista[i].sobrenome}</div>
-                                        <div class="funcEmail">${funcionariosLista[i].email}</div>
-                                        <div class="funcCargo">${funcionariosLista[i].cargo}</div>
-                                        <div class="dtCadastro">${funcionariosLista[i].data_cadastro}</div>
-                                        <div class="functel">${funcionariosLista[i].telefone}</div>
-                                        <div class="funcStatus">
-                                            <img class= "buttons-edit" src="../../assets/funcionarios/editYellow.svg" alt="Editar" onclick="pop_up_editar(${i})">
-                                            <img class= "buttons-edit" src="../../assets/funcionarios/iconDelete.svg" alt="Deletar" onclick="pop_up_excluir(${i})">
-                                        </div>
-                                    </div>`;
+            <div id="funcItem" class="funcionario-item" data-idFuncionario=${funcionariosLista[i].id}>
+              <div class="funcFoto">
+                <img src="../../assets/fotoPerfil/${funcionariosLista[i].foto_perfil}" alt="Foto">
+              </div>
+              <div class="funcName">${funcionariosLista[i].nome} ${funcionariosLista[i].sobrenome}</div>
+              <div class="funcEmail">${funcionariosLista[i].email}</div>
+              <div class="funcCargo">${funcionariosLista[i].cargo}</div>
+              <div class="dtCadastro">${funcionariosLista[i].data_cadastro}</div>
+              <div class="functel">${funcionariosLista[i].telefone}</div>
+              <div class="funcStatus">
+                ${botoesAcao}
+              </div>
+            </div>`;
         }
       }
     }
   }
 
-  function pop_up_adicionar() {
+function pop_up_adicionar() {
     abrir_popup();
     config_funcionarios.innerHTML = `
       <h1>Criar Usuário</h1>
@@ -256,37 +412,45 @@
           <span class="input-label">Nome</span>
           <span class="obrigatorio">*Obrigatório</span>
         </div>
-        <input type="text" id="ipt_nome" required>
+        <input type="text" id="ipt_nome" placeholder="Digite o nome do funcionário" required>
 
         <div class="input-label-wrapper">
           <span class="input-label">Sobrenome</span>
           <span class="obrigatorio">*Obrigatório</span>
         </div>
-        <input type="text" id="ipt_sobrenome" required>
+        <input type="text" id="ipt_sobrenome" placeholder="Digite o sobrenome" required>
+        
         <div class="input-label-wrapper">
           <span class="input-label">Cargo</span>
           <span class="obrigatorio">*Obrigatório</span>
         </div>
-        <select id="ipt_cargo"></select>
+        <select id="ipt_cargo">
+            <option value="" disabled selected>Selecione um cargo</option>
+        </select>
+        
         <div class="input-label-wrapper">
           <span class="input-label">Email</span>
           <span class="obrigatorio">*Obrigatório</span>
         </div>
-        <input type="text" id="ipt_email" required>
+        <input type="email" id="ipt_email" placeholder="exemplo@empresa.com" required>
+        
         <div class="input-label-wrapper">
           <span class="input-label">Senha</span>
           <span class="obrigatorio">*Obrigatório</span>
         </div>
-        <input type="password" id="ipt_senha" required>
+        <input type="password" id="ipt_senha" placeholder="Mínimo 8 caracteres com letras e números" required>
+        
         <div class="input-label-wrapper">
           <span class="input-label">Confirmar senha</span>
           <span class="obrigatorio">*Obrigatório</span>
         </div>
-        <input type="password" id="ipt_confirmar_senha" required>
+        <input type="password" id="ipt_confirmar_senha" placeholder="Digite a senha novamente" required>
+        
         <div class="input-label-wrapper">
           <span class="input-label">Telefone</span>
+          <span class="obrigatorio">*Obrigatório</span>
         </div>
-        <input type="text" id="ipt_telefone" required>
+        <input type="tel" id="ipt_telefone" placeholder="(11) 99999-9999" required>
       </div>
       <div id="mensagem_erro"></div>
       <div class="btns_popup">
@@ -294,8 +458,13 @@
         <button class="btn fechar" onclick="fechar_popup()">Fechar</button>
       </div>
     `;
-    listarCargo("ipt_cargo")
-  }
+    
+    // 🔒 Para forms, filtrar ROOT (filtrarRoot = true, isFiltro = false)
+    listarCargo("ipt_cargo", true, false);
+    
+    setTimeout(aplicarMascaras, 100);
+}
+
   function funcao_adicionar() {
     var nomeVar = ipt_nome.value.trim();
     var sobrenomeVar = ipt_sobrenome.value.trim();
@@ -303,7 +472,10 @@
     var emailVar = ipt_email.value.trim();
     var senhaVar = ipt_senha.value;
     var confirmacao_senhaVar = ipt_confirmar_senha.value;
-    var telefoneVar = ipt_telefone.value.replace(/\D/g, "");
+    
+    // MANTER A FORMATAÇÃO DA MÁSCARA (não remover caracteres)
+    var telefoneVar = ipt_telefone.value;
+    
     var idEmpresaVar = sessionStorage.EMPRESA_ID;
 
     if (nomeVar === "") {
@@ -323,17 +495,20 @@
       return;
     }
     if (senhaVar === "") {
-      marcarErro(ipt_nome, "O campo senha está em branco.");
+      marcarErro(ipt_senha, "O campo senha está em branco.");
       return;
     }
     if (confirmacao_senhaVar === "") {
-      marcarErro(ipt_nome, "O campo confirmar senha está em branco.");
+      marcarErro(ipt_confirmar_senha, "O campo confirmar senha está em branco.");
       return;
     }
-    if (!/^\d{10,11}$/.test(telefoneVar)) {
-      marcarErro(ipt_telefone, "Telefone deve ter 10 ou 11 números (com DDD)");
-      return;
+
+    // ✅ VALIDAÇÃO CORRIGIDA - verificar formato em vez de dígitos
+    if (!/^\(\d{2}\) \d{5}-\d{4}$/.test(telefoneVar)) {
+        marcarErro(ipt_telefone, "Formato de telefone inválido. Use: (11) 99999-9999");
+        return;
     }
+
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVar)) {
       marcarErro(ipt_email, "Digite um e-mail válido");
       return;
@@ -345,6 +520,16 @@
     if (confirmacao_senhaVar !== senhaVar) {
       marcarErro(ipt_confirmar_senha, "As senhas não coincidem");
       return;
+    }
+
+    // 🔒 Verificação adicional no frontend (opcional mas recomendada)
+    // Obter o nome do cargo selecionado para verificar se não é ROOT
+    const selectCargo = document.getElementById('ipt_cargo');
+    const cargoSelecionado = selectCargo.options[selectCargo.selectedIndex].text;
+    
+    if (cargoSelecionado === 'ROOT') {
+        marcarErro(ipt_cargo, "Não é possível criar usuários ROOT");
+        return;
     }
 
     fetch("/usuarios/funcao_adicionar", {
@@ -362,20 +547,36 @@
     })
       .then(resposta => {
         if (resposta.ok) {
-          mostrarErro("Cadastro realizado com sucesso!");
-          setTimeout(() => {
-            window.location = "funcionarios.html";
-          }, 2000);
+          return resposta.json();
         } else {
-          throw "Houve um erro ao tentar realizar o cadastro!";
+          return resposta.text().then(text => { throw new Error(text) });
         }
       })
-      .catch(erro => console.error(`#ERRO: ${erro}`));
-  }
+      .then(data => {
+        mostrarErro("Cadastro realizado com sucesso!");
+        setTimeout(() => {
+          window.location = "funcionarios.html";
+        }, 2000);
+      })
+      .catch(erro => {
+        console.error('Erro no cadastro:', erro);
+        mostrarErro("Erro ao cadastrar: " + (erro.message || "Tente novamente"));
+      });
+}
 
-
-
-  function pop_up_editar(id) {
+function pop_up_editar(id) {
+    // 🔒 Verificar se é ROOT antes de abrir o popup
+    if (funcionariosLista[id].cargo === 'ROOT') {
+        mostrarErro("Não é possível editar usuários ROOT");
+        return;
+    }
+    
+    // 🔒 Verificar se é o próprio usuário
+    if (funcionariosLista[id].id == sessionStorage.USER_ID) {
+        mostrarErro("Não é possível editar seu próprio usuário aqui");
+        return;
+    }
+    
     console.log(funcionariosLista)
     abrir_popup()
     config_funcionarios.innerHTML = `
@@ -384,92 +585,61 @@
       <div class="inputs">
         <div class="input-label-wrapper">
           <span class="input-label">Nome</span>
-          <span class="obrigatorio">*obrigatório</span>
         </div>
-        <input type="text" id="ipt_nome" value="${funcionariosLista[id].nome}" required>
-
-        <div class="input-label-wrapper">
-          <span class="input-label">Sobrenome</span>
-          <span class="obrigatorio">*obrigatório</span>
-        </div>
-        <input type="text" id="ipt_sobrenome" value="${funcionariosLista[id].sobrenome}" required>
+        <input type="text" id="ipt_nome" value="${funcionariosLista[id].nome} ${funcionariosLista[id].sobrenome}" disabled>
 
         <div class="input-label-wrapper">
           <span class="input-label">Cargo</span>
           <span class="obrigatorio">*obrigatório</span>
         </div>
-        <select id="ipt_cargo"></select>
+        <select id="ipt_cargo">
+            <option value="" disabled selected>Selecione um cargo</option>
+        </select>
 
         <div class="input-label-wrapper">
           <span class="input-label">Email</span>
           <span class="obrigatorio">*obrigatório</span>
         </div>
-        <input type="text" id="ipt_email" value="${funcionariosLista[id].email}" required>
-
-        <div class="input-label-wrapper">
-          <span class="input-label">Senha</span>
-          <span class="obrigatorio">*obrigatório</span>
-        </div>
-        <input type="password" id="ipt_senha" required>
-
-        <div class="input-label-wrapper">
-          <span class="input-label">Confirmar senha</span>
-          <span class="obrigatorio">*obrigatório</span>
-        </div>
-        <input type="password" id="ipt_confirmar_senha" required>
+        <input type="email" id="ipt_email" value="${funcionariosLista[id].email}" placeholder="exemplo@empresa.com" required>
 
         <div class="input-label-wrapper">
           <span class="input-label">Telefone</span>
+          <span class="obrigatorio">*obrigatório</span>
         </div>
-        <input type="text" id="ipt_telefone" value="${funcionariosLista[id].telefone}" required>
-        <div class="input-label-wrapper">
-          <span class="input-label">Foto</span>
-        </div>
-        <input type="file" id="ipt_foto" required>
+        <input type="tel" id="ipt_telefone" value="${funcionariosLista[id].telefone}" placeholder="(11) 99999-9999" required>
       </div>
       <div id="mensagem_erro"></div>
       <div class="btns_popup">
-        <button class="btn cadastrar" onclick="funcao_editar(${funcionariosLista[id].id})">Editar</button>
-        <button class="btn fechar" onclick="fechar_popup()">Fechar</button>
+        <button class="btn cadastrar" onclick="funcao_editar_funcionario(${funcionariosLista[id].id})">Salvar</button>
+        <button class="btn fechar" onclick="fechar_popup()">Cancelar</button>
       </div>
-        `;
-    listarCargo("ipt_cargo")
+    `;
+    setTimeout(aplicarMascaras, 100);
+    
+    // 🔒 Para forms, filtrar ROOT (filtrarRoot = true, isFiltro = false)
+    listarCargo("ipt_cargo", true, false).then(() => {
+        setTimeout(() => {
+            document.getElementById("ipt_cargo").value = funcionariosLista[id].cargoId;
+            aplicarMascaras();
+        }, 100);
+    });
+}
 
-  }
-  function funcao_editar(idVar) {
-    var nomeVar = ipt_nome.value.trim();
-    var sobrenomeVar = ipt_sobrenome.value.trim();
+  function funcao_editar_funcionario(idVar) {
     var cargoVar = ipt_cargo.value;
     var emailVar = ipt_email.value.trim();
-    var senhaVar = ipt_senha.value;
-    var confirmacao_senhaVar = ipt_confirmar_senha.value;
-    var telefoneVar = ipt_telefone.value.replace(/\D/g, "");
+    var telefoneVar = ipt_telefone.value;
 
-    if (nomeVar === "") {
-      marcarErro(ipt_nome, "O campo nome está em branco.");
-      return;
-    }
-    if (sobrenomeVar === "") {
-      marcarErro(ipt_sobrenome, "O campo sobrenome está em branco.");
-      return;
-    }
+
     if (cargoVar === "") {
-      marcarErro(ipt_cargo, "O campo cargo está em branco.");
+      marcarErro(ipt_cargo, "Selecione um cargo.");
       return;
     }
     if (emailVar === "") {
       marcarErro(ipt_email, "O campo email está em branco.");
       return;
     }
-    if (senhaVar === "") {
-      marcarErro(ipt_nome, "O campo senha está em branco.");
-      return;
-    }
-    if (confirmacao_senhaVar === "") {
-      marcarErro(ipt_nome, "O campo confirmar senha está em branco.");
-      return;
-    }
-    if (!/^\d{10,11}$/.test(telefoneVar)) {
+    if (!/^\(\d{2}\) \d{5}-\d{4}$/.test(telefoneVar)) {
       marcarErro(ipt_telefone, "Telefone deve ter 10 ou 11 números (com DDD)");
       return;
     }
@@ -477,24 +647,14 @@
       marcarErro(ipt_email, "Digite um e-mail válido");
       return;
     }
-    if (senhaVar.length < 8 || !/[A-Za-z]/.test(senhaVar) || !/\d/.test(senhaVar)) {
-      marcarErro(ipt_senha, "A senha deve ter pelo menos 8 caracteres, incluindo letras e números");
-      return;
-    }
-    if (confirmacao_senhaVar !== senhaVar) {
-      marcarErro(ipt_confirmar_senha, "As senhas não coincidem");
-      return;
-    }
-    fetch("/usuarios/funcao_editar", {
+
+    fetch("/usuarios/funcao_editar_funcionario", {
       method: 'PUT',
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        nomeServer: nomeVar,
-        sobrenomeServer: sobrenomeVar,
         cargoServer: cargoVar,
         emailServer: emailVar,
-        senhaServer: senhaVar,
-        telefoneServer: telefoneVar,
+        telefoneServer: telefoneVar, // AGORA FORMATADO
         idServer: idVar
       }),
     })
@@ -508,50 +668,83 @@
           throw "Houve um erro ao tentar realizar a alteração!";
         }
       })
-      .catch(erro => console.error(`#ERRO: ${erro}`));
+      .catch(erro => {
+        console.error(`#ERRO: ${erro}`);
+        mostrarErro("Erro ao editar usuário: " + erro);
+      });
   }
 
-  function pop_up_excluir(id) {
+function pop_up_excluir(id) {
+    // 🔒 Verificar se é ROOT antes de abrir o popup
+    if (funcionariosLista[id].cargo === 'ROOT') {
+        mostrarErro("Não é possível excluir usuários ROOT");
+        return;
+    }
+    
+    // 🔒 Verificar se é o próprio usuário
+    if (funcionariosLista[id].id == sessionStorage.USER_ID) {
+        mostrarErro("Não é possível excluir seu próprio usuário");
+        return;
+    }
+    
     abrir_popup()
     config_funcionarios.innerHTML = `
     <img src="../../assets/dashboard/desktop/btnFechar.svg" alt="Fechar" class="btnFecharPopup" onclick="fechar_popup()">
     <h1>Deletar Usuário</h1>
     <div class="inputs">
-      <p>Deseja deletar este usuário?</p>
+      <p>Deseja deletar o usuário <strong>${funcionariosLista[id].nome} ${funcionariosLista[id].sobrenome}</strong>?</p>
+      <p class="aviso">⚠️ Esta ação não pode ser desfeita!</p>
     </div>
     <div id="mensagem_erro"></div>
     <div class="btns_popup">
-      <button class="btn cadastrar" onclick="funcao_excluir(${funcionariosLista[id].id})">Sim</button>
-      <button class="btn fechar" onclick="fechar_popup()">Não</button>
+      <button class="btn cadastrar" onclick="funcao_excluir(${funcionariosLista[id].id})">Sim, deletar</button>
+      <button class="btn fechar" onclick="fechar_popup()">Cancelar</button>
     </div>
-        `;
+    `;
     mensagem_erro.style.display = 'flex';
-  }
+}
+
   function funcao_excluir(idVar) {
-    mostrarErro(`Excluindo o usuário`);
-    setTimeout(() => {
-
-      fetch("/usuarios/funcao_excluir", {
+    // 🔒 Verificação final de segurança no momento da exclusão
+    const usuario = funcionariosLista.find(f => f.id == idVar);
+    if (usuario && usuario.cargo === 'ROOT') {
+        mostrarErro("Erro: Não é possível excluir usuários ROOT");
+        return;
+    }
+    
+    if (idVar == sessionStorage.USER_ID) {
+        mostrarErro("Erro: Não é possível excluir seu próprio usuário");
+        return;
+    }
+    
+    mostrarErro(`Excluindo o usuário...`);
+    
+    fetch("/usuarios/funcao_excluir", {
         method: 'DELETE',
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+            "Content-Type": "application/json" 
+        },
         body: JSON.stringify({
-          idServer: idVar
-
+            idServer: idVar
         })
-      })
-        .then(res => {
-          if (res.ok) {
-            mostrarErro("Funcionário deletado com sucesso!")
-
-          } else {
-            mostrarErro("Erro ao deletar Funcionário!")
-          }
-        })
-        .catch(err => {
-          console.error('Erro na requisição:', err);
-        });//fim fetch
-    }, 1000)
-  }
+    })
+    .then(res => {
+        if (res.ok) {
+            return res.json();
+        }
+        throw new Error('Erro ao excluir usuário');
+    })
+    .then(data => {
+        mostrarErro("Funcionário deletado com sucesso!");
+        setTimeout(() => {
+            window.location.reload();
+        }, 2000);
+    })
+    .catch(err => {
+        console.error('Erro na requisição:', err);
+        mostrarErro("Erro ao deletar funcionário: " + err.message);
+    });
+}
 
   function mostrarErro(msg) {
     mensagem_erro.innerHTML = msg;
@@ -571,6 +764,78 @@
     setTimeout(() => {
       input.classList.remove("erroInput");
     }, 1500);
+  }
+
+  function mascaraTelefone(input) {
+    input.addEventListener('input', function (e) {
+      let value = e.target.value.replace(/\D/g, '');
+
+      if (value.length <= 15) {
+        if (value.length <= 2) {
+          value = value;
+        } else if (value.length <= 7) {
+          value = value.replace(/(\d{2})(\d+)/, '($1) $2');
+        } else {
+          value = value.replace(/(\d{2})(\d{5})(\d+)/, '($1) $2-$3');
+        }
+        e.target.value = value;
+      }
+
+      // Limitar a 11 dígitos (DDD + 9 dígitos)
+      if (value.length > 15) {
+        e.target.value = value.slice(0, 15);
+      }
+    });
+  }
+
+  function formatarTelefonesExistentes() {
+    // Formatando telefones já exibidos na lista
+    const telefonesNaLista = document.querySelectorAll('.functel');
+    telefonesNaLista.forEach(telElement => {
+        if (telElement.textContent && telElement.textContent.trim() !== '') {
+            let numericValue = telElement.textContent.replace(/\D/g, '');
+            if (numericValue.length >= 10) {
+                if (numericValue.length <= 11) {
+                    numericValue = numericValue.replace(/(\d{2})(\d{5})(\d+)/, '($1) $2-$3');
+                    telElement.textContent = numericValue;
+                }
+            }
+        }
+    });
+}
+
+  function aplicarMascaras() {
+    // Máscaras para telefone
+    const telefoneInputs = document.querySelectorAll('input[type="text"][id*="telefone"], input[type="tel"]');
+    telefoneInputs.forEach(input => {
+      // Formatar valor existente antes de aplicar a máscara
+      if (input.value) {
+        let value = input.value.replace(/\D/g, '');
+        if (value.length >= 10) {
+          value = value.replace(/(\d{2})(\d{5})(\d+)/, '($1) $2-$3');
+          input.value = value;
+        }
+      }
+      mascaraTelefone(input);
+      input.placeholder = "(11) 99999-9999";
+    });
+    
+
+    // Placeholders para outros campos
+    const nomeInput = document.getElementById('ipt_nome');
+    if (nomeInput) nomeInput.placeholder = "Digite o nome do funcionário";
+
+    const sobrenomeInput = document.getElementById('ipt_sobrenome');
+    if (sobrenomeInput) sobrenomeInput.placeholder = "Digite o sobrenome";
+
+    const emailInput = document.getElementById('ipt_email');
+    if (emailInput) emailInput.placeholder = "cloud@gmail.com";
+
+    const senhaInput = document.getElementById('ipt_senha');
+    if (senhaInput) senhaInput.placeholder = "Mínimo 8 caracteres com letras e números";
+
+    const confirmarSenhaInput = document.getElementById('ipt_confirmar_senha');
+    if (confirmarSenhaInput) confirmarSenhaInput.placeholder = "Digite a senha novamente";
   }
 
 </script>

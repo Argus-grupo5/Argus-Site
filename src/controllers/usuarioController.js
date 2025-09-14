@@ -17,25 +17,28 @@ function autenticar(req, res) {
           console.log(`Resultados: ${JSON.stringify(resultadoAutenticar)}`); // transforma JSON em String
 
           if (resultadoAutenticar.length == 1) {
-            console.log(resultadoAutenticar);
+            const user = resultadoAutenticar[0];
+
+            // Se cargo for ROOT usa a foto da empresa, senão a do usuário
+            const fotoFinal = user.cargo_cargo === 'ROOT' ? user.empresa_foto : user.user_foto;
+
             res.json({
-              user_id: resultadoAutenticar[0].user_id,
-              user_name: resultadoAutenticar[0].user_name,
-              user_sobrenome: resultadoAutenticar[0].user_sobrenome,
-              user_email: resultadoAutenticar[0].user_email,
-              user_senha: resultadoAutenticar[0].user_senha,
-              user_telefone: resultadoAutenticar[0].user_telefone,
-              user_foto: resultadoAutenticar[0].user_foto,
-              user_data: resultadoAutenticar[0].user_data,
-              empresa_id: resultadoAutenticar[0].empresa_id,
-              empresa_nome_fantasia: resultadoAutenticar[0].empresa_nome_fantasia,
-              empresa_razao_social: resultadoAutenticar[0].empresa_razao_social,
-              empresa_cnpj: resultadoAutenticar[0].empresa_cnpj,
-              empresa_foto: resultadoAutenticar[0].empresa_foto,
-              empresa_telefone: resultadoAutenticar[0].empresa_telefone,
-              empresa_data: resultadoAutenticar[0].empresa_data,
-              cargo_id: resultadoAutenticar[0].cargo_id,
-              cargo_cargo: resultadoAutenticar[0].cargo_cargo
+              user_id: user.user_id,
+              user_name: user.user_name,
+              user_sobrenome: user.user_sobrenome,
+              user_email: user.user_email,
+              user_senha: user.user_senha,
+              user_telefone: user.user_telefone,
+              user_data: user.user_data,
+              empresa_id: user.empresa_id,
+              empresa_nome_fantasia: user.empresa_nome_fantasia,
+              empresa_razao_social: user.empresa_razao_social,
+              empresa_cnpj: user.empresa_cnpj,
+              empresa_telefone: user.empresa_telefone,
+              empresa_data: user.empresa_data,
+              cargo_id: user.cargo_id,
+              cargo_cargo: user.cargo_cargo,
+              foto: fotoFinal
             });
           } else if (resultadoAutenticar.length == 0) {
             res.status(403).send("Email e/ou senha inválido(s)");
@@ -72,7 +75,12 @@ function autenticarEmpresa(req, res) {
 
           if (resultadoAutenticar.length == 1) {
             console.log(resultadoAutenticar);
+            
+            const user = resultadoAutenticar[0];
+            const fotoFinal = user.cargo_nome === 'ROOT' ? user.empresa_foto : user.user_foto;
+
             res.json({
+              // Dados da empresa
               empresa_id: resultadoAutenticar[0].empresa_id,
               empresa_cnpj: resultadoAutenticar[0].empresa_cnpj,
               empresa_telefone: resultadoAutenticar[0].empresa_telefone,
@@ -81,6 +89,8 @@ function autenticarEmpresa(req, res) {
               empresa_razao_social: resultadoAutenticar[0].empresa_razao_social,
               empresa_data: resultadoAutenticar[0].empresa_data,
               empresa_foto: resultadoAutenticar[0].empresa_foto,
+
+              // Dados do endereço
               endereco_id: resultadoAutenticar[0].endereco_id,
               endereco_rua: resultadoAutenticar[0].endereco_rua,
               endereco_numero: resultadoAutenticar[0].endereco_numero,
@@ -89,6 +99,18 @@ function autenticarEmpresa(req, res) {
               endereco_cidade: resultadoAutenticar[0].endereco_cidade,
               endereco_estado: resultadoAutenticar[0].endereco_estado,
               endereco_cep: resultadoAutenticar[0].endereco_cep,
+
+              // Dados do usuário ROOT 
+              user_id: resultadoAutenticar[0].user_id,
+              user_name: resultadoAutenticar[0].user_nome,
+              user_email: resultadoAutenticar[0].user_email,
+
+              // Dados do cargo
+              cargo_id: user.cargo_id,
+              cargo_cargo: user.cargo_nome,
+
+              // 🔑 foto final
+              foto: fotoFinal
             });
           } else if (resultadoAutenticar.length == 0) {
             res.status(403).send("Cnpj e/ou senha inválido(s)");
@@ -228,7 +250,13 @@ function cadastrarEmpresa(req, res) {
 
 //tela de funcionários
 function listarFuncionarios(req, res) {
-  usuarioModel.listarFuncionarios()
+  const idEmpresa = req.query.idEmpresa;
+
+  if (!idEmpresa) {
+    return res.status(400).send("ID da empresa é obrigatório");
+  }
+
+  usuarioModel.listarFuncionarios(idEmpresa)
     .then((resultado) => {
       if (resultado.length > 0) {
         res.status(200).json(resultado);
@@ -237,13 +265,20 @@ function listarFuncionarios(req, res) {
       }
     })
     .catch((erro) => {
-      console.error("Erro ao buscar funcionários:", erro.sqlMessage || erro);
-      res.status(500).json(erro.sqlMessage || erro);
+      console.error("Erro ao buscar funcionários:", erro);
+      res.status(500).json({ error: "Erro interno do servidor" });
     });
 }
 
 function listarCargo(req, res) {
-  usuarioModel.listarCargo()
+  var idEmpresa = req.query.idEmpresa || sessionStorage.EMPRESA_ID;
+
+  if (idEmpresa == undefined) {
+    res.status(400).send("ID da empresa está undefined!");
+    return;
+  }
+
+  usuarioModel.listarCargo(idEmpresa)
     .then((resultado) => {
       res.status(200).json(resultado);
     })
@@ -295,32 +330,23 @@ function funcao_adicionar(req, res) {
     );
 }
 
-function funcao_editar(req, res) {
-  var funcionario_nome = req.body.nomeServer;
-  var funcionario_sobrenome = req.body.sobrenomeServer;
-  var funcionario_senha = req.body.senhaServer;
+function funcao_editar_funcionario(req, res) {
   var funcionario_cargo = req.body.cargoServer;
   var funcionario_email = req.body.emailServer;
   var funcionario_telefone = req.body.telefoneServer;
   var id = req.body.idServer;
 
-  if (funcionario_nome == undefined) {
-    res.status(400).send("Seu nome está undefined!");
-  } else if (funcionario_sobrenome == undefined) {
-    res.status(400).send("Seu sobrenome está undefined!");
-  } else if (funcionario_senha == undefined) {
-    res.status(400).send("Sua senha está undefined!");
-  } else if (funcionario_cargo == undefined) {
-    res.status(400).send("Seu email está undefined!");
+  if (funcionario_cargo == undefined) {
+    res.status(400).send("O cargo está undefined!");
   } else if (funcionario_email == undefined) {
-    res.status(400).send("Seu email está undefined!");
+    res.status(400).send("O email está undefined!");
   } else if (funcionario_telefone == undefined) {
     res.status(400).send("O telefone está undefined!");
   } else if (id == undefined) {
     res.status(400).send("O id está undefined!");
   }
 
-  usuarioModel.funcao_editar(funcionario_nome, funcionario_sobrenome, funcionario_senha, funcionario_cargo, funcionario_email, funcionario_telefone, id)
+  usuarioModel.funcao_editar_funcionario(funcionario_cargo, funcionario_email, funcionario_telefone, id)
     .then(
       function (resultado) {
         res.json(resultado);
@@ -329,12 +355,73 @@ function funcao_editar(req, res) {
       function (erro) {
         console.log(erro);
         console.log(
-          "\nHouve um erro ao alterar as informações do usuário ! Erro: ",
+          "\nHouve um erro ao alterar as informações do usuário! Erro: ",
           erro.sqlMessage
         );
         res.status(500).json(erro.sqlMessage);
       }
     );
+}
+
+function funcao_editar(req, res) {
+    console.log("=== DEBUG funcao_editar ===");
+    console.log("Body recebido:", req.body);
+    console.log("Arquivo recebido:", req.file);
+    console.log("Files recebidos:", req.files);
+    
+    var funcionario_nome = req.body.nomeServer;
+    var funcionario_sobrenome = req.body.sobrenomeServer;
+    var funcionario_senha = req.body.senhaServer;
+    var funcionario_telefone = req.body.telefoneServer;
+    var senhaAntiga = req.body.senhaAntigaServer;
+    var id = req.body.idServer;
+    var foto = req.file ? req.file.filename : null;
+
+    console.log("Foto filename:", foto);
+    console.log("ID do usuário:", id);
+
+    // Validações obrigatórias
+    if (funcionario_nome == undefined) {
+        return res.status(400).send("O nome é obrigatório!");
+    } else if (funcionario_sobrenome == undefined) {
+        return res.status(400).send("O sobrenome é obrigatório!");
+    } else if (senhaAntiga == undefined) {
+        return res.status(400).send("A senha antiga é obrigatória!");
+    } else if (id == undefined) {
+        return res.status(400).send("O id é obrigatório!");
+    }
+
+    // Primeiro verificar se a senha antiga está correta
+    usuarioModel.verificarSenhaAntiga(id, senhaAntiga)
+        .then(resultado => {
+            if (resultado.length === 0) {
+                return res.status(400).json({ error: "Senha antiga incorreta" });
+            }
+            
+            // Se senha correta, proceder com a edição
+            return usuarioModel.funcao_editar(
+                funcionario_nome, 
+                funcionario_sobrenome, 
+                funcionario_senha, 
+                funcionario_telefone, 
+                id,
+                foto
+            )
+            .then(resultado => {
+                res.json({
+                    success: true,
+                    message: "Usuário atualizado com sucesso",
+                    foto: foto
+                });
+            });
+        })
+        .catch(erro => {
+            console.log(erro);
+            res.status(500).json({
+                success: false,
+                error: erro.sqlMessage || "Erro interno do servidor"
+            });
+        });
 }
 
 function funcao_editar_proprio(req, res) {
@@ -378,52 +465,93 @@ function funcao_editar_proprio(req, res) {
 
 function funcao_excluir(req, res) {
   var id = req.body.idServer;
+  console.log('Tentando excluir usuário ID:', id);
+
   if (id == undefined) {
+    console.log('ID undefined');
     res.status(400).send("O id estão undefined!");
+    return;
   }
 
   usuarioModel.funcao_excluir(id)
     .then((resultado) => {
-      if (resultado.length > 0) {
-        res.status(200).json(resultado);
+      console.log('Resultado da exclusão:', resultado);
+      if (resultado.affectedRows > 0) {
+        res.status(200).json({ message: "Usuário excluído com sucesso", affectedRows: resultado.affectedRows });
       } else {
-        res.status(204).send("Nenhum funcionário encontrado");
+        res.status(404).send("Nenhum funcionário encontrado com este ID");
       }
     })
     .catch((erro) => {
-      console.error("Erro ao buscar funcionários:", erro.sqlMessage || erro);
-      res.status(500).json(erro.sqlMessage || erro);
+      console.error("Erro ao excluir funcionário:", erro);
+      res.status(500).json({ error: erro.sqlMessage || "Erro interno do servidor" });
     });
 }
+
 
 function online(req, res) {
   var status = req.body.status;
   var idUsuario = req.body.idServer;
-  if (status == undefined) {
-    res.status(400).send("Seus status estão undefined!");
-  } else if (idUsuario == undefined) {
-    res.status(400).send("Seu id está undefined!");
-  } else {
 
-    usuarioModel.online(idUsuario, status)
-      .then(
-        function (resultado) {
-          res.json(resultado);
-        }
-      ).catch(
-        function (erro) {
-          console.log(erro);
-          console.log(
-            "\nHouve um erro ao realizar o cadastroPreferencias! Erro: ",
-            erro.sqlMessage
-          );
-          res.status(500).json(erro.sqlMessage);
-        }
-      );
-  }
+  console.log(`Status update - User: ${idUsuario}, Status: ${status}`);
+
+  usuarioModel.online(idUsuario, status)
+    .then(() => res.json({ success: true }))
+    .catch(erro => {
+      console.error("Erro no online:", erro);
+      res.status(500).json({ error: "Erro interno" });
+    });
 }
 
+function editar_empresa_root(req, res) {
+    console.log("Body recebido:", req.body);
+    console.log("Arquivo recebido:", req.file);
+    
+    var nomeFantasia = req.body.nomeFantasiaServer;
+    var telefone = req.body.telefoneServer;
+    var senha = req.body.senhaServer;
+    var senhaAntiga = req.body.senhaAntigaServer;
+    var empresaId = req.body.empresaIdServer;
+    var foto = req.file ? req.file.filename : null;
 
+    console.log("Dados recebidos:", {
+        nomeFantasia, telefone, senha, senhaAntiga, empresaId, foto
+    });
+
+    if (nomeFantasia == undefined) {
+        res.status(400).send("Nome fantasia está undefined!");
+    } else if (telefone == undefined) {
+        res.status(400).send("Telefone está undefined!");
+    } else if (senhaAntiga == undefined) {
+        res.status(400).send("Senha antiga está undefined!");
+    } else if (empresaId == undefined) {
+        res.status(400).send("ID da empresa está undefined!");
+    } else {
+        usuarioModel.editar_empresa_root(nomeFantasia, telefone, senha, senhaAntiga, empresaId, foto)
+            .then(function (resultado) {
+                console.log("Resultado da atualização:", resultado);
+                
+                // Retornar os dados atualizados incluindo o nome da foto
+                res.json({
+                    success: true,
+                    message: "Empresa atualizada com sucesso",
+                    data: {
+                        nomeFantasia: nomeFantasia,
+                        telefone: telefone,
+                        foto: foto // Retornar o nome do arquivo da foto
+                    }
+                });
+            })
+            .catch(function (erro) {
+                console.log("Erro na atualização:", erro);
+                console.log("\nHouve um erro ao editar a empresa! Erro: ", erro.sqlMessage);
+                res.status(500).json({
+                    success: false,
+                    error: erro.sqlMessage
+                });
+            });
+    }
+}
 
 
 
@@ -439,5 +567,7 @@ module.exports = {
   funcao_editar,
   funcao_editar_proprio,
   funcao_excluir,
-  online
+  online,
+  editar_empresa_root,
+  funcao_editar_funcionario
 }

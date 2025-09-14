@@ -3,7 +3,7 @@
 
 
 .containerPerfil {
-    margin-top: 50px;
+    margin-top: 7vw;
     padding-left: 5vw;
     padding-right: 1vw;
     text-align: center;
@@ -40,7 +40,7 @@
 }
 
 #perfilFoto {
-    width: 20vw;
+    width: 10vw;
 }
 
 a {
