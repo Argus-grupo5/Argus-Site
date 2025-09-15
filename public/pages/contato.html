@@ -16,7 +16,6 @@
       <h1>ARGUS</h1>
     </a>
     <nav class="links">
-      <a class="link" href="./suporte.html">Suporte</a>
       <a class="link" href="./empresa.html">Empresa</a>
       <a class="link" href="./contato.html">Contato</a>
     </nav>
@@ -25,6 +24,37 @@
       <a class="buttons" href="./signin.html">Cadastre-se</a>
     </nav>
   </header>
+  <header class="mobileHeader">
+    <a href="../index.html" class="logo">
+      <img src="../assets/icon/logoMobileWhite.svg" alt="Logo">
+    </a>
+    <button id="burgerBtn" class="burgerBtn">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </header>
+
+  <!-- Menu full-screen -->
+  <nav id="mobileNav" class="mobileNav">
+    <ul>
+      <li><a href="./empresa.html">Empresa</a></li>
+      <li><a href="./contato.html">Contato</a></li>
+      <li><a href="./login.html">Entrar</a></li>
+      <li><a class="btnCadastro" href="#">Cadastrar-se</a></li>
+    </ul>
+    <div class="footer">
+      <div class="links">
+        <a href="./empresa.html">Sobre Nós</a>
+        <a href="./contato.html">Contato</a>
+      </div>
+      <div class="links">
+        <a href="#">EULA</a>
+      </div>
+      <p>© 2025 Argus Corporation. Ltd. All rights reserved.</p>
+    </div>
+  </nav>
+
   <div class="containerDesktop">
     <div class="heroPage">
       <h1>COMO <span>VOCÊ</span> PREFERE FALAR COM A GENTE?</h1>
@@ -32,32 +62,70 @@
         <div class="card">
           <img src="../assets/contato/desktop/mail.svg" alt="">
           <div>
-          <h2>EMAIL </h2>
-          <p>Quer fechar negócio com a gente? Tem alguma dúvida?</p>
-          <p>argus_enterprise@gmail.com</p>
+            <h2>EMAIL </h2>
+            <p>Quer fechar negócio com a gente? Tem alguma dúvida?</p>
+            <p>argus_enterprise@gmail.com</p>
           </div>
         </div>
         <div class="card">
           <img src="../assets/contato/desktop/phone.svg" alt="">
           <div>
-          <h2>TELEFONE</h2>
-          <p>Você pode ligar a qualquer hora.</p>
-          <p>(48) 9366-9121</p>
+            <h2>TELEFONE</h2>
+            <p>Você pode ligar a qualquer hora.</p>
+            <p>(48) 9366-9121</p>
           </div>
         </div>
         <div class="card">
           <img src="../assets/contato/desktop/zap.svg" alt="">
           <div>
-          <h2>WHATSAPP</h2>
-          <p>Precisa de uma alguma ajuda?</p>
-          <p>(79) 98842-6203</p>
+            <h2>WHATSAPP</h2>
+            <p>Precisa de uma alguma ajuda?</p>
+            <p>(79) 98842-6203</p>
           </div>
         </div>
       </div>
     </div>
-    <div class="footer">
+    <div class="footerDesktop">
       <div class="links">
-        <a href="./suporte.html">Suporte</a>
+        <a href="">EULA</a>
+        <a href="./empresa.html">Sobre Nós</a>
+        <a href="./contato.html">Contato</a>
+      </div>
+      <p>© 2025 Argus Corporation. Ltd. All rights reserved.</p>
+    </div>
+  </div>
+  <div class="containerMobile">
+    <div class="heroPage">
+      <h1>COMO <span>VOCÊ</span> PREFERE FALAR COM A GENTE?</h1>
+      <div class="cards">
+        <div class="card">
+          <img src="../assets/contato/desktop/mail.svg" alt="">
+          <div>
+            <h2>EMAIL </h2>
+            <p>Quer fechar negócio com a gente? Tem alguma dúvida?</p>
+            <p>argus_enterprise@gmail.com</p>
+          </div>
+        </div>
+        <div class="card">
+          <img src="../assets/contato/desktop/phone.svg" alt="">
+          <div>
+            <h2>TELEFONE</h2>
+            <p>Você pode ligar a qualquer hora.</p>
+            <p>(48) 9366-9121</p>
+          </div>
+        </div>
+        <div class="card">
+          <img src="../assets/contato/desktop/zap.svg" alt="">
+          <div>
+            <h2>WHATSAPP</h2>
+            <p>Precisa de uma alguma ajuda?</p>
+            <p>(79) 98842-6203</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footerDesktop">
+      <div class="links">
         <a href="">EULA</a>
         <a href="./empresa.html">Sobre Nós</a>
         <a href="./contato.html">Contato</a>
@@ -68,3 +136,13 @@
 </body>
 
 </html>
+
+<script>
+    const burgerBtn = document.getElementById('burgerBtn');
+    const mobileNav = document.getElementById('mobileNav');
+
+    burgerBtn.addEventListener('click', () => {
+        burgerBtn.classList.toggle('active');
+        mobileNav.classList.toggle('active');
+    });
+</script>
