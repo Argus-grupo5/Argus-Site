@@ -6,11 +6,11 @@
   padding: 0;
   box-sizing: border-box;
   font-family: "Cairo", sans-serif;
-  color: white;
 }
 
 body {
     background-color: #000000;
+    color: white;
 }
 
 .desktopNav{
@@ -120,4 +120,113 @@ body {
 canvas {
     width: 100% !important;
     height: 100% !important;
+}
+
+/* Gráficos */
+.infoGraficoSelecionado{
+    display: flex;
+    width: 100vw;
+    height: 54vh;
+    /* background-color: #ffba31; */
+    justify-content: space-evenly;
+    align-items: center;
+}
+.titulosGrafico{
+    background-color: azure;
+    width: 100%;
+    height: 20%;
+}
+.grafico{
+    background-color: rgb(124, 57, 141);
+    width: 100%;
+    height: 80%;
+}
+.graficoSelecionado{
+    background-color: aqua;
+    width: 40%;
+    height: 80%;
+    margin-left: 5%;
+}
+
+
+.infoGrafico{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color:none;
+    width: 40%;
+    height: 80%;
+}
+.caixaInformacoes{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 97%;
+    height: 95%;
+    background-color:none;
+}
+.caixa1{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 93%;
+    height: 95%;
+    background-color: none;
+    margin-right: 5%;
+}
+.titulos1Caixa1{
+    display: flex;
+    font-size: 100%;
+    justify-content: space-around;
+    
+}
+.titulos2Caixa1{
+    display: flex;
+    font-size: 100%;
+    justify-content: space-around;
+    margin-top: 7%;
+}
+.titulos3Caixa1{
+    display: flex;
+    font-size: 100%;
+    margin-left: 3%;
+    justify-content: flex-start;
+    margin-top: 7%;
+}
+.titulosBox{
+    font-size: 90%;
+    color: #a8a8a8;
+}
+.respostasTitulos{
+    font-size: 100%;
+    color: white;
+}
+.caixa2{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 95%;
+    background-color: none;
+}
+.caixa2-box{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+.labelCaixa2{
+    display: flex;
+    justify-content: space-between;
+    font-size: 100%;
+}
+.label{
+    color: #a8a8a8;
+    font-size: 90%;
+
+}
+.respostaLabel{
+    margin-left: 2%;
+    color: #ffffff;
+    font-size: 100%;
 }

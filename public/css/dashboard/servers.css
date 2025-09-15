@@ -6,11 +6,11 @@
   padding: 0;
   box-sizing: border-box;
   font-family: "Cairo", sans-serif;
-  color: white;
 }
 
 body {
     background-color: #1a1a1a;
+    color: white;
 }
 
 /* Navbar */

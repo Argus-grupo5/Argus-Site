@@ -5,11 +5,11 @@
   padding: 0;
   box-sizing: border-box;
   font-family: "Cairo", sans-serif;
-  color: #fff;
 }
 
 body{
   height: 100vh;
+  color: #fff;
 }
 
 ::-webkit-scrollbar {

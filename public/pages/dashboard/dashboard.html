@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,10 +9,11 @@
     <link rel="stylesheet" href="../../css/dashboard/popup.css">
     <link rel="stylesheet" href="../../css/style.css">
     <script src="script/dash.js"></script>
-    
+
     <title>ARGUS | Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
 <body>
     <div id="id_sair">
     </div>
@@ -19,170 +21,249 @@
     <header class="desktopNav" id="navDesktop"></header>
 
     <header class="headerTop">
-           <div class="geralInfo">
-      <div class="info tooltipInfo">
-        <div class="server">
-          <img src="../../assets/dashboard/desktop/server.svg" alt="">
+        <div class="geralInfo">
+            <div class="info tooltipInfo">
+                <div class="server">
+                    <img src="../../assets/dashboard/desktop/server.svg" alt="">
+                </div>
+                <div class="serversMonitoring" id="id_servidores_monitorados">
+                </div>
+                <span class="tooltiptextInfo">
+                    Servidores em monitoramento
+                </span>
+            </div>
+            <div class="info">
+                <div class="bell">
+                    <img src="../../assets/dashboard/desktop/bell.svg" alt="">
+                </div>
+                <div class="risk tooltipInfo" id="id_servidores_em_estado_critico">
+                    <p id="qtd_critico"></p>
+                    <span class="tooltiptextInfo">
+                        Servidores em atenção
+                    </span>
+                </div>
+                <div class="atention tooltipInfo" id="id_servidores_em_estado_de_alerta">
+                    <p id="qtd_alerta"></p>
+                    <span class="tooltiptextInfo">
+                        Servidores em alerta
+                    </span>
+                </div>
+            </div>
         </div>
-        <div class="serversMonitoring" id="id_servidores_monitorados">
-        </div>
-        <span class="tooltiptextInfo">
-          Servidores em monitoramento
-        </span>
-      </div>
-      <div class="info">
-        <div class="bell">
-          <img src="../../assets/dashboard/desktop/bell.svg" alt="">
-        </div>
-        <div class="risk tooltipInfo" id="id_servidores_em_estado_critico">
-          <p id="qtd_critico"></p>
-          <span class="tooltiptextInfo">
-            Servidores em atenção
-          </span>
-        </div>
-        <div class="atention tooltipInfo" id="id_servidores_em_estado_de_alerta">
-          <p id="qtd_alerta"></p>
-          <span class="tooltiptextInfo">
-            Servidores em alerta
-          </span>
-        </div>
-      </div>
-    </div>
     </header>
     <div class="KPIs">
         <div>
-           <canvas id="cpuGauge"></canvas>
+            <canvas id="cpuGauge"></canvas>
         </div>
         <div>
-           <canvas id="memoryGauge"></canvas>
+            <canvas id="memoryGauge"></canvas>
         </div>
-        
+
         <div>
-           <canvas id="gpuGauge"></canvas>
+            <canvas id="gpuGauge"></canvas>
         </div>
-        
+
         <div>
-           <canvas id="storageGauge"></canvas>
+            <canvas id="storageGauge"></canvas>
         </div>
-        
+
         <div>
-           <canvas id="latencyGauge"></canvas>
+            <canvas id="latencyGauge"></canvas>
+        </div>
+    </div>
+    <div class="infoGraficoSelecionado">
+        <div class="graficoSelecionado">
+            <div class="titulosGrafico"></div>
+            <div class="grafico"></div>
+        </div>
+        <div class="infoGrafico">
+            <div class="caixaInformacoes">
+                <div class="caixa1">
+                    <div class="titulos1Caixa1">
+                        <div class="box">
+                            <div class="titulosBox">Utilização</div>
+                            <div class="respostaTitulos">49%</div>
+                        </div>
+                        <div class="box">
+                            <div class="titulosBox">Velocidade</div>
+                            <div class="respostaTitulos">2,73 GHz</div>
+                        </div>
+                    </div>
+                    <div class="titulos2Caixa1">
+                        <div class="box">
+                            <div class="titulosBox">Processos</div>
+                            <div class="respostaTitulos">266</div>
+                        </div>
+                        <div class="box">
+                            <div class="titulosBox">Threads</div>
+                            <div class="respostaTitulos">4072</div>
+                        </div>
+                        <div class="box">
+                            <div class="titulosBox">Identificadores</div>
+                            <div class="respostaTitulos">134021</div>
+                        </div>
+                    </div>
+                    <div class="titulos3Caixa1">
+                        <div class="box">
+                            <div class="titulosBox">Tempo de atividade</div>
+                            <div class="respostaTitulos">11:13:38:01</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="caixa2">
+                    <div class="caixa2-box">
+                        <div class="labelCaixa2">
+                            <div class="label">Velocidade base: </div>
+                            <div class="respostaLabel"> 2,11 Ghz</div>
+                        </div>
+                        <div class="labelCaixa2">
+                            <div class="label">Sockets: </div>
+                            <div class="respostaLabel">1</div>
+                        </div>
+                        <div class="labelCaixa2">
+                            <div class="label">Núcleos</div>
+                            <div class="respostaLabel">4</div>
+                        </div>
+                        <div class="labelCaixa2">
+                            <div class="label">Processadores lógicos:</div>
+                            <div class="respostaLabel">8</div>
+                        </div>
+                        <div class="labelCaixa2">
+                            <div class="label">Virtualização</div>
+                            <div class="respostaLabel">Habilitado</div>
+                        </div>
+                        <div class="labelCaixa2">
+                            <div class="label">Cache L1</div>
+                            <div class="respostaLabel">256 KB</div>
+                        </div>
+                        <div class="labelCaixa2">
+                            <div class="label">Cache L2</div>
+                            <div class="respostaLabel">1,0 MB</div>
+                        </div>
+                        <div class="labelCaixa2">
+                            <div class="label">Cache L3</div>
+                            <div class="respostaLabel">6,0 MB</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </body>
+
 </html>
 
 <script>
-header("dashboard")
-// const select = document.getElementById("servers");
-const serverSpecs = document.querySelector(".serverSpecs");
+    header("dashboard")
+    // const select = document.getElementById("servers");
+    const serverSpecs = document.querySelector(".serverSpecs");
 
 
-// select.addEventListener("change", function () {
-//     const selectedOption = select.options[select.selectedIndex];
-// });
+    // select.addEventListener("change", function () {
+    //     const selectedOption = select.options[select.selectedIndex];
+    // });
 
-// Criar os gráficos
-function createGauge(chartId, title, usage, total, unit, usedText, temperature, differentColors = null) {
-    const ctx = document.getElementById(chartId).getContext('2d');
-    
-    const tempIcon = new Image();
-    tempIcon.src = '../../assets/dashboard/desktop/heat.svg';
-    
-    const usedValue = differentColors ? (usage/100) * differentColors : (total * usage/100).toFixed(1);
-    
-    return new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            datasets: [{
-                data: [usage, 200 - usage],
-                backgroundColor: [
-                    usage < 60 ? "green" : usage < 85 ? "#ffde59" : "#ff3131",
-                    "#333"
-                ],
-                borderWidth: 0,
-                cutout: "90%"
+    // Criar os gráficos
+    function createGauge(chartId, title, usage, total, unit, usedText, temperature, differentColors = null) {
+        const ctx = document.getElementById(chartId).getContext('2d');
+
+        const tempIcon = new Image();
+        tempIcon.src = '../../assets/dashboard/desktop/heat.svg';
+
+        const usedValue = differentColors ? (usage / 100) * differentColors : (total * usage / 100).toFixed(1);
+
+        return new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                datasets: [{
+                    data: [usage, 200 - usage],
+                    backgroundColor: [
+                        usage < 60 ? "green" : usage < 85 ? "#ffde59" : "#ff3131",
+                        "#333"
+                    ],
+                    borderWidth: 0,
+                    cutout: "90%"
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                rotation: -90,
+                circumference: 360,
+                plugins: {
+                    tooltip: { enabled: false },
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        text: title,
+                        color: "#fff",
+                        font: { size: 16, family: "Cairo, Arial, sans-serif", weight: "bold" }
+                    }
+                }
+            },
+            plugins: [{
+                id: 'text',
+                beforeDraw: (chart) => {
+                    const { ctx, chartArea: { width, height } } = chart;
+                    ctx.save();
+                    ctx.textAlign = "center";
+                    ctx.textBaseline = "middle";
+                    const centerX = width / 2;
+                    const centerY = height / 2;
+                    const baseFontSize = width / 10;
+
+                    // Texto principal
+                    ctx.fillStyle = "#fff";
+                    ctx.font = `bold ${baseFontSize}px Cairo`;
+                    ctx.fillText(usage + "%", centerX, centerY - height * 0.015);
+
+                    // Texto secundário
+                    ctx.font = `${baseFontSize / 2}px Cairo`;
+
+                    if (differentColors) {
+                        ctx.fillText(usedValue.toFixed(2) + " de " + differentColors + " " + usedText, centerX, centerY + height * 0.15);
+                    } else {
+                        ctx.fillText(usedValue + unit + " de " + total + unit + " " + usedText, centerX, centerY + height * 0.15);
+                    }
+
+                    // Temperatura
+                    let tempColor;
+                    if (temperature < 50) tempColor = "#32CD32";
+                    else if (temperature < 70) tempColor = "#FFD700";
+                    else tempColor = "#FF4500";
+                    ctx.fillStyle = tempColor;
+
+                    const tempText = temperature + "°C";
+                    ctx.font = `bold ${baseFontSize / 1.3}px Cairo`;
+
+                    const textWidth = ctx.measureText(tempText).width;
+                    const iconSize = baseFontSize / 1.3;
+                    const totalWidth = textWidth + iconSize + 5;
+
+                    const startX = centerX - totalWidth / 1.8;
+
+                    if (tempIcon.complete) {
+                        ctx.drawImage(tempIcon, startX, centerY + height * 0.38 - iconSize / 0.8, iconSize - 5, iconSize + 10);
+                    }
+
+                    ctx.fillText(tempText, startX + iconSize + 5 + textWidth / 2, centerY + height * 0.35);
+
+                    ctx.restore();
+                }
             }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            rotation: -90,
-            circumference: 360,
-            plugins: {
-                tooltip: { enabled: false },
-                legend: { display: false },
-                title: {
-                    display: true,
-                    text: title,
-                    color: "#fff",
-                    font: { size: 16, family: "Cairo, Arial, sans-serif", weight: "bold" }
-                }
-            }
-        },
-        plugins: [{
-            id: 'text',
-            beforeDraw: (chart) => {
-                const {ctx, chartArea: {width, height}} = chart;
-                ctx.save();
-                ctx.textAlign = "center";
-                ctx.textBaseline = "middle";
-                const centerX = width / 2;
-                const centerY = height / 2;
-                const baseFontSize = width / 10;
-                
-                // Texto principal
-                ctx.fillStyle = "#fff";
-                ctx.font = `bold ${baseFontSize}px Cairo`;
-                ctx.fillText(usage + "%", centerX, centerY - height*0.015);
-                
-                // Texto secundário
-                ctx.font = `${baseFontSize / 2}px Cairo`;
-                
-                if (differentColors) {
-                    ctx.fillText(usedValue.toFixed(2) + " de " + differentColors + " " + usedText, centerX, centerY + height*0.15);
-                } else {
-                    ctx.fillText(usedValue + unit + " de " + total + unit + " " + usedText, centerX, centerY + height*0.15);
-                }
-                
-                // Temperatura
-                let tempColor;
-                if (temperature < 50) tempColor = "#32CD32";
-                else if (temperature < 70) tempColor = "#FFD700";
-                else tempColor = "#FF4500";
-                ctx.fillStyle = tempColor;
-                
-                const tempText = temperature + "°C";
-                ctx.font = `bold ${baseFontSize / 1.3}px Cairo`;
-                
-                const textWidth = ctx.measureText(tempText).width;
-                const iconSize = baseFontSize / 1.3;
-                const totalWidth = textWidth + iconSize + 5; 
-                
-                const startX = centerX - totalWidth / 1.8;
-                
-                if (tempIcon.complete) {
-                    ctx.drawImage(tempIcon, startX, centerY + height*0.38 - iconSize/0.8, iconSize-5, iconSize+10);
-                }
-                
-                ctx.fillText(tempText, startX + iconSize + 5 + textWidth/2, centerY + height*0.35);
-                
-                ctx.restore();
-            }
-        }]
-    });
-}
+        });
+    }
 
-document.addEventListener('DOMContentLoaded', function() {
-    createGauge('cpuGauge', 'CPU em Uso', 50, 8, ' cores', 'em uso', 82, 8);
-    createGauge('memoryGauge', 'Memória em Uso', 45, 64, 'GB', 'usados', 65);
-    createGauge('gpuGauge', 'GPU em Uso', 60, 12, 'GB', 'VRAM usados', 78);
-    createGauge('storageGauge', 'Armazenamento', 75, 2, 'TB', 'usados', 48);
-    createGauge('latencyGauge', 'Latência', 15, 100, 'ms', 'de ping', 42);
+    document.addEventListener('DOMContentLoaded', function () {
+        createGauge('cpuGauge', 'CPU em Uso', 50, 8, ' cores', 'em uso', 82, 8);
+        createGauge('memoryGauge', 'Memória em Uso', 45, 64, 'GB', 'usados', 65);
+        createGauge('gpuGauge', 'GPU em Uso', 60, 12, 'GB', 'VRAM usados', 78);
+        createGauge('storageGauge', 'Armazenamento', 75, 2, 'TB', 'usados', 48);
+        createGauge('latencyGauge', 'Latência', 15, 100, 'ms', 'de ping', 42);
 
-    document.querySelectorAll('canvas').forEach(canvas => {
-        canvas.style.width = '100%';
-        canvas.style.height = 'auto';
+        document.querySelectorAll('canvas').forEach(canvas => {
+            canvas.style.width = '100%';
+            canvas.style.height = 'auto';
+        });
     });
-});
 </script>
