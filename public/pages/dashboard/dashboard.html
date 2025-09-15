@@ -9,9 +9,9 @@
     <link rel="stylesheet" href="../../css/dashboard/popup.css">
     <link rel="stylesheet" href="../../css/style.css">
     <script src="script/dash.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <title>ARGUS | Dashboard</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
@@ -73,8 +73,19 @@
     </div>
     <div class="infoGraficoSelecionado">
         <div class="graficoSelecionado">
-            <div class="titulosGrafico"></div>
-            <div class="grafico"></div>
+            <div class="titulosGrafico">
+                <div class="case1">
+                    <div class="tituloGrafico">CPU</div>
+                    <div class="subtituloGrafico">100</div>
+                </div>
+                <div class="case2">
+                    <div class="especGrafico">RyzenX-9750K UltraBurst</div>
+                    <div class="subtituloGrafico" id="respostaEspec">% de utilização</div>
+                </div>
+            </div>
+            <div class="grafico">
+                <canvas id="graficoServidor"></canvas>
+            </div>
         </div>
         <div class="infoGrafico">
             <div class="caixaInformacoes">
@@ -152,6 +163,36 @@
 </body>
 
 </html>
+<!-- Grafico servidores -->
+<script>
+  const ctx = document.getElementById('graficoServidor');
+  let graficoSelecionado = 'CPU'
+  let momentos = ['12:00', '12:01', '12:02', '12:03', '12:04', '12:05'];
+  let dados = [10, 48, 26, 35, 47, 70]
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: momentos,
+      datasets: [{
+        label: '% Utilização ' + graficoSelecionado,
+        data: dados,
+        borderWidth: 1,
+        borderColor: ["#FF6D4D"],
+        backgroundColor: ["#FF6D4D"],
+        fill: true,
+        tension: 0.0,
+        pointStyle: false,
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+</script>
 
 <script>
     header("dashboard")
