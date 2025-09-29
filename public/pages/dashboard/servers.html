@@ -18,9 +18,6 @@
     <header class="desktopNav" id="navDesktop"></header>
 
     <header class="headerTop">
-        <div class="user">
-            <div class="userInfo" id="userInfo"></div>
-        </div>
         <div class="geralInfo">
             <div class="info tooltipInfo">
                 <div class="server">
@@ -94,125 +91,91 @@
 
 
 </html>
-
 <script>
-    header("server")
-    userInfo.innerHTML = `
-        <div id="userNome">${sessionStorage.USER_NAME}</div>
-        <div id="userCargo">${sessionStorage.CARGO_CARGO}</div>
-    `
+    header("server");
 
-    server = [{
-        "name": "Servidor Geforce Now",
-        "nivel": "4",
-        "recursos": "[CPU, RAM]",
-        "localizacao": "São Paulo - SP"
-    },
-    {
-        "name": "Servidor SPTech",
-        "nivel": "3",
-        "recursos": "[CPU, GPU]",
-        "localizacao": "São Paulo - SP"
-    }, 
-    {
-        "name": "Servidor BandTec",
-        "nivel": "5",
-        "recursos": "[CPU, GPU, Armazenamento]",
-        "localizacao": "São Paulo - SP"
-    },
-    {
-        "name": "Servidor Xbox",
-        "nivel": "1",
-        "recursos": "[GPU]",
-        "localizacao": "Rio de Janeiro - RJ"
-    },
-    {
-        "name": "Servidor Stadia",
-        "nivel": "2",
-        "recursos": "[CPU, RAM]",
-        "localizacao": "Belo Horizonte - MG"
-    }]
+    const servers = [
+        { name: "Servidor Geforce Now", nivel: 4, recursos: ["CPU", "RAM"], localizacao: "São Paulo - SP" },
+        { name: "Servidor SPTech", nivel: 3, recursos: ["CPU", "GPU"], localizacao: "São Paulo - SP" },
+        { name: "Servidor BandTec", nivel: 5, recursos: ["CPU", "GPU", "Armazenamento"], localizacao: "São Paulo - SP" },
+        { name: "Servidor Xbox", nivel: 1, recursos: ["GPU"], localizacao: "Rio de Janeiro - RJ" },
+        { name: "Servidor Stadia", nivel: 2, recursos: ["CPU", "RAM"], localizacao: "Belo Horizonte - MG" }
+    ];
 
-    id_servidores_monitorados.innerHTML = server.length;
-    let qtd_servidores_critico = 0;
-    let qtd_servidores_alerta = 0;
+    const elMonitored = document.getElementById("id_servidores_monitorados");
+    const elQtdCritico = document.getElementById("qtd_critico");
+    const elQtdAlerta = document.getElementById("qtd_alerta");
+    const elServerList = document.getElementById("id_server_list");
+    elMonitored.textContent = servers.length;
 
+    function getRiskStatusFromLevel(nivel) {
+        const n = Number(nivel);
+        if (n === 1) return "ok";
+        if (n > 1 && n <= 3) return "atention";
+        if (n >= 4) return "danger";
+        return "indisponivel";
+    }
 
-    for (let i = 0; i < server.length; i++) {
-        if (server[i].nivel > 2 || server[i].nivel < 3) {
-            qtd_servidores_alerta++;
-        } else if (server[i].nivel > 3) {
-            qtd_servidores_critico++;
+    // Atualiza KPIs 
+    function updateKPIs() {
+        let critico = 0;
+        let alerta = 0;
+        for (let i = 0; i < servers.length; i++) {
+            const status = getRiskStatusFromLevel(servers[i].nivel);
+            if (status === "danger") critico++;
+            else if (status === "atention") alerta++;
         }
+        elQtdCritico.textContent = critico;
+        elQtdAlerta.textContent = alerta;
     }
 
-    qtd_critico.innerHTML = qtd_servidores_critico;
-    qtd_alerta.innerHTML = qtd_servidores_alerta;
+    // Cria um servidor como card
+    function gerar_server(idx) {
+        const s = servers[idx];
+        const status = getRiskStatusFromLevel(s.nivel);
+        const recursosText = Array.isArray(s.recursos) ? s.recursos.join(", ") : String(s.recursos);
 
-
-    let nivel_de_risco;
-    let status;
-
-    function calculate_risk(id_server) {
-        let nivel = Number(server[id_server].nivel);
-        if (nivel == 1) {
-            status = "ok";
-        } else if (nivel > 1 && nivel <= 3) {
-            status = "atention";
-        } else if (nivel >= 4) {
-            status = "danger";
-        } else {
-            status = "indisponivel";
-        }
-        return status;
+        elServerList.innerHTML += `
+      <div class="server-object">
+        <div class="serverIcon tooltipInfo">
+          <img class="server-icon-status" src="../../assets/dashboard/desktop/${status}.svg" alt="Status do servidor">
+        </div>
+        <div class="serverName">${s.name}</div>
+        <div class="serverStatus"><progress value="${s.nivel}" max="5"></progress></div>
+        <div class="serverComponents">${recursosText}</div>
+        <div class="serverLocation">${s.localizacao}</div>
+      </div>
+    `;
     }
-    function gerar_server(id_server) {
-        let status = calculate_risk(id_server);
-        id_server_list.innerHTML += `            
-            <div class="server-object">
-                <div class="serverIcon tooltipInfo">
-                    <img class="server-icon-status" src="../../assets/dashboard/desktop/${status}.svg" alt="Status do servidor">
-                </div>
-                <div class="serverName">
-                    <a href="dashboard.html">
-                        ${server[id_server].name}
-                    </a>
-                </div>
-                <div class="serverStatus">
-                    <progress value="${server[id_server].nivel}" max="5"></progress>
-                </div>
-                <div class="serverComponents">
-                    ${server[id_server].recursos}
-                </div>
-                <div class="serverLocation">
-                    ${server[id_server].localizacao}
-                </div>
-            </div>`;
-    }
+
+    // FIltra e ordena os servidores
     function filtragem_Servidores() {
-        let filtro = document.getElementById("id_filter").value;
-        let pesquisa = document.getElementById("id_pesquisa").value.toLowerCase();
+        const filtro = document.getElementById("id_filter").value;
+        const pesquisa = document.getElementById("id_pesquisa").value.toLowerCase();
 
-        id_server_list.innerHTML = "";
+        elServerList.innerHTML = "";
 
-        if (filtro == "Nivel_c" || filtro == "Critico_c" || filtro == "Alerta_c") {
-            server.sort((a, b) => a.nivel - b.nivel);
-        } else if (filtro == "Nivel_d" || filtro == "Critico_d" || filtro == "Alerta_d") {
-            server.sort((a, b) => b.nivel - a.nivel);
+        if (["Nivel_c", "Critico_c", "Alerta_c"].includes(filtro)) {
+            servers.sort((a, b) => Number(a.nivel) - Number(b.nivel));
+        } else if (["Nivel_d", "Critico_d", "Alerta_d"].includes(filtro)) {
+            servers.sort((a, b) => Number(b.nivel) - Number(a.nivel));
         }
 
-        for (let i = 0; i < server.length; i++) {
-            let status =  calculate_risk(i);
-            let passouFiltroEstado =
-                (filtro == "Critico_c" && status == "danger" || filtro == "Critico_d" && status == "danger") ||
-                (filtro == "Alerta_c" && status == "atention" || filtro == "Alerta_d" && status == "atention") ||
-                (filtro == "Bom" && status == "ok") ||
-                (filtro == "Nivel_c" || filtro == "Nivel_d");
+        for (let i = 0; i < servers.length; i++) {
+            const s = servers[i];
+            const status = getRiskStatusFromLevel(s.nivel);
 
-            let passouFiltroPesquisa =
-                server[i].name.toLowerCase().includes(pesquisa) ||
-                server[i].localizacao.toLowerCase().includes(pesquisa) ||
-                server[i].recursos.toLowerCase().includes(pesquisa);
+            const passouFiltroEstado =
+                (filtro.startsWith("Critico") && status === "danger") ||
+                (filtro.startsWith("Alerta") && status === "atention") ||
+                (filtro === "Bom" && status === "ok") ||
+                (filtro.startsWith("Nivel"));
+
+            const recursosText = Array.isArray(s.recursos) ? s.recursos.join(", ") : String(s.recursos);
+            const passouFiltroPesquisa =
+                s.name.toLowerCase().includes(pesquisa) ||
+                s.localizacao.toLowerCase().includes(pesquisa) ||
+                recursosText.toLowerCase().includes(pesquisa);
 
             if (passouFiltroEstado && passouFiltroPesquisa) {
                 gerar_server(i);
@@ -220,7 +183,6 @@
         }
     }
 
+    updateKPIs();
     filtragem_Servidores();
-
-
 </script>

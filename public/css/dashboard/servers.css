@@ -102,7 +102,7 @@ body {
 
 .tooltipNav:hover .tooltiptextNav {
   visibility: visible;
-  width: fit-content;
+  width: 12vw;
   font-size: 1vw;
   transition: .4s ease;
 }
@@ -141,6 +141,7 @@ body {
 
 .user img{
     width: 2.8vw;
+    border-radius: 40px;
 }
 
 .headerTop .info {
@@ -240,7 +241,7 @@ body {
 
 #userCargo{
     font-size: 0.7vw;
-    color: #a0a0a0;
+    color: #201010;
 }
 .search{
     display: flex;

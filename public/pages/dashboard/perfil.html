@@ -27,7 +27,7 @@
             <a href="servers.html">
                 <div class="info tooltipInfo">
                     <div class="server">
-                        <img src="../assets/dashboard/desktop/server.svg" alt="">
+                        <img src="../../assets/dashboard/desktop/server.svg" alt="">
                     </div>
                     <div class="serversMonitoring" id="id_servidores_monitorados">
                         7
@@ -40,7 +40,7 @@
             <a href="servers.html">
                 <div class="info">
                     <div class="bell">
-                        <img src="../assets/dashboard/desktop/bell.svg" alt="">
+                        <img src="../../assets/dashboard/desktop/bell.svg" alt="">
                     </div>
                     <div class="risk tooltipInfo" id="id_servidores_em_estado_critico">
                         <p id="qtd_critico">0</p>
@@ -65,140 +65,382 @@
 </body>
 
 </html>
-
+<script src="./script/kpiGeral.js"></script>
+<script src="../script/onlineSystem.js"></script>
 <script>
     header()
     containerPerfil.innerHTML = `
-        <img id="perfilFoto" src="../../assets/fotoPerfil/${sessionStorage.USER_FOTO}" alt="Foto de Perfil">
+        <img id="perfilFoto" src="../../assets/fotoPerfil/${sessionStorage.FOTO}" alt="Foto de Perfil">
         <h1 id="perfilNome">${sessionStorage.USER_NAME} ${sessionStorage.USER_SOBRENOME}</h1>
         <h3 id="perfilCargo">${sessionStorage.CARGO_CARGO}</h3>
-        <h3 id="perfilEmail">${sessionStorage.USER_EMAIL}</h3>
-        <h3 id="perfilNumero">${sessionStorage.USER_TELEFONE}</h3>
+        <h3 id="perfilEmail" alt=>${sessionStorage.USER_EMAIL}</h3>
+        <br><h3 id="perfilNumero"></h3>
         <button id="buttonEditar" onclick="pop_up_editar(${sessionStorage.USER_ID})">Editar informações</button>
     `
 
     function pop_up_editar(id) {
         abrir_popup();
 
-        config_funcionarios.innerHTML = `
+        const isRoot = sessionStorage.CARGO_CARGO === 'ROOT';
+
+        if (isRoot) {
+            config_funcionarios.innerHTML = `
             <img src="../../assets/dashboard/desktop/btnFechar.svg" alt="Fechar" class="btnFecharPopup" onclick="fechar_popup()">
-            <h1>Editar Usuário</h1>
+            <h1>Editar Empresa</h1>
             <div class="inputs">
-                <div class="input-label-wrapper">
-                    <span class="input-label">Nome</span>
-                </div>
-                <input type="text" id="ipt_nome" value="${sessionStorage.USER_NAME}" >
-            
-                <div class="input-label-wrapper">
-                    <span class="input-label">Sobrenome</span>
-                </div>
-                <input type="text" id="ipt_sobrenome" value="${sessionStorage.USER_SOBRENOME}">
-            
-                <div class="input-label-wrapper">
-                    <span class="input-label">Nova senha</span>
-                    <span class="obrigatorio">*obrigatório</span>
-                </div>
-                <input type="text" id="ipt_senha" required>
-
-                <div class="input-label-wrapper">
-                    <span class="input-label">Telefone</span>
-                </div>
-                <input type="text" id="ipt_telefone" value="${sessionStorage.USER_TELEFONE}">
-
                 <div class="input-label-wrapper">
                     <span class="input-label">Foto</span>
                 </div>
-                <input type="file" id="ipt_foto" required>
+                <input type="file" id="ipt_foto">
+                
                 <div class="input-label-wrapper">
-                    <span class="input-label">Confirmar senha</span>
+                    <span class="input-label">Nome Fantasia</span>
+                </div>
+                <input type="text" id="ipt_nome_fantasia" value="${sessionStorage.EMPRESA_NOME_FANTASIA}">
+                
+                <div class="input-label-wrapper">
+                    <span class="input-label">Telefone</span>
                     <span class="obrigatorio">*obrigatório</span>
                 </div>
+                <input type="tel" id="ipt_telefone" value="${sessionStorage.EMPRESA_TELEFONE}" placeholder="(11) 99999-9999" required>
                 
-                <input type="text" id="ipt_confirmar_senha" required>
+                <div class="input-label-wrapper">
+                    <span class="input-label">Nova senha</span>
+                    <span class="opcional">*opcional</span>
+                </div>
+                <input type="password" id="ipt_senha" placeholder="Deixe em branco para manter a senha atual">
+                
+                <div class="input-label-wrapper">
+                    <span class="input-label">Confirmar nova senha</span>
+                    <span class="opcional">*opcional</span>
+                </div>
+                <input type="password" id="ipt_confirmar_senha" placeholder="Digite a senha novamente">
+                
+                <div class="input-label-wrapper">
+                    <span class="input-label">Senha antiga</span>
+                    <span class="obrigatorio">*obrigatório</span>
+                </div>
+                <input type="password" id="ipt_senha_antiga" placeholder="Digite sua senha atual para confirmar" required>
             </div>
-
             <div id="mensagem_erro"></div>
             <div class="btns_popup">
-                
-                <button class="btn cadastrar" onclick="funcao_editar(${id})">Editar</button>
+                <button class="btn cadastrar" onclick="editar_empresa_root(${sessionStorage.EMPRESA_ID})">Editar</button>
                 <button class="btn fechar" onclick="fechar_popup()">Fechar</button>
             </div>
-                `;
+        `;
+        } else {
+            config_funcionarios.innerHTML = `
+    <img src="../../assets/dashboard/desktop/btnFechar.svg" alt="Fechar" class="btnFecharPopup" onclick="fechar_popup()">
+    <h1>Editar Usuário</h1>
+    <div class="inputs">
+        <div class="input-label-wrapper">
+            <span class="input-label">Foto</span>
+            <span class="opcional">*opcional</span>
+        </div>
+        <input type="file" id="ipt_foto" accept="image/*">
+        
+        <div class="input-label-wrapper">
+            <span class="input-label">Nome</span>
+        </div>
+        <input type="text" id="ipt_nome" value="${sessionStorage.USER_NAME}">
+    
+        <div class="input-label-wrapper">
+            <span class="input-label">Sobrenome</span>
+        </div>
+        <input type="text" id="ipt_sobrenome" value="${sessionStorage.USER_SOBRENOME}">
+        
+        <div class="input-label-wrapper">
+            <span class="input-label">Telefone</span>
+            <span class="opcional">*opcional</span>
+        </div>
+        <input type="tel" id="ipt_telefone" value="${sessionStorage.USER_TELEFONE}" placeholder="(11) 99999-9999">
+        
+        <div class="input-label-wrapper">
+            <span class="input-label">Nova senha</span>
+            <span class="opcional">*opcional</span>
+        </div>
+        <input type="password" id="ipt_senha" placeholder="Deixe em branco para manter a senha atual">
+        
+        <div class="input-label-wrapper">
+            <span class="input-label">Confirmar nova senha</span>
+            <span class="opcional">*opcional</span>
+        </div>
+        <input type="password" id="ipt_confirmar_senha" placeholder="Digite a senha novamente">
+        
+        <div class="input-label-wrapper">
+            <span class="input-label">Senha antiga</span>
+            <span class="obrigatorio">*obrigatório</span>
+        </div>
+        <input type="password" id="ipt_senha_antiga" placeholder="Digite sua senha atual para confirmar" required>
+    </div>
+    <div id="mensagem_erro"></div>
+    <div class="btns_popup">
+        <button class="btn cadastrar" onclick="funcao_editar(${id})">Editar</button>
+        <button class="btn fechar" onclick="fechar_popup()">Fechar</button>
+    </div>
+`;
+        }
+
+        setTimeout(aplicarMascaras, 100);
     }
 
-    function funcao_editar(idVar) {
-        var nomeVar = ipt_nome.value.trim();
-        var sobrenomeVar = ipt_sobrenome.value.trim();
-        var emailVar = ipt_email.value.trim();
-        var senhaVar = ipt_senha.value;
-        var confirmacao_senhaVar = ipt_confirmar_senha.value;
-        var telefoneVar = ipt_telefone.value.replace(/\D/g, "");
+    function mostrarErro(msg) {
+        mensagem_erro.innerHTML = msg;
+        setTimeout(() => {
+            mensagem_erro.innerHTML = "";
+        }, 5000);
+    }
 
-        if (nomeVar === "") {
-            marcarErro(ipt_nome, "O campo nome está em branco.");
+    function marcarErro(input, msg) {
+        input.classList.add("erroInput");
+        mostrarErro(msg);
+
+        input.scrollIntoView({ behavior: "smooth", block: "center" });
+
+        setTimeout(() => {
+            input.classList.remove("erroInput");
+        }, 1500);
+    }
+
+    function editar_empresa_root(empresaId) {
+        console.log("editar_empresa_root chamado");
+
+        var nomeFantasiaVar = document.getElementById('ipt_nome_fantasia').value.trim();
+        var telefoneVar = document.getElementById('ipt_telefone').value;
+        var senhaVar = document.getElementById('ipt_senha').value;
+        var confirmacao_senhaVar = document.getElementById('ipt_confirmar_senha').value;
+        var senhaAntigaVar = document.getElementById('ipt_senha_antiga').value;
+        var fotoFile = document.getElementById('ipt_foto').files[0];
+
+        // Validações
+        if (nomeFantasiaVar === "") {
+            marcarErro(document.getElementById('ipt_nome_fantasia'), "O campo nome fantasia está em branco.");
             return;
         }
-        if (sobrenomeVar === "") {
-            marcarErro(ipt_sobrenome, "O campo sobrenome está em branco.");
+        if (telefoneVar === "") {
+            marcarErro(document.getElementById('ipt_telefone'), "O campo telefone está em branco.");
             return;
         }
-        if (cargoVar === "") {
-            marcarErro(ipt_cargo, "O campo cargo está em branco.");
+        if (senhaAntigaVar === "") {
+            marcarErro(document.getElementById('ipt_senha_antiga'), "O campo senha antiga está em branco.");
             return;
         }
-        if (emailVar === "") {
-            marcarErro(ipt_email, "O campo email está em branco.");
+        if (!/^\(\d{2}\) \d{5}-\d{4}$/.test(telefoneVar)) {
+            marcarErro(document.getElementById('ipt_telefone'), "Formato de telefone inválido. Use: (11) 99999-9999");
             return;
         }
-        if (senhaVar === "") {
-            marcarErro(ipt_nome, "O campo senha está em branco.");
+        if (senhaVar !== "" && (senhaVar.length < 8 || !/[A-Za-z]/.test(senhaVar) || !/\d/.test(senhaVar))) {
+            marcarErro(document.getElementById('ipt_senha'), "A senha deve ter pelo menos 8 caracteres, incluindo letras e números");
             return;
         }
-        if (confirmacao_senhaVar === "") {
-            marcarErro(ipt_nome, "O campo confirmar senha está em branco.");
+        if (senhaVar !== confirmacao_senhaVar) {
+            marcarErro(document.getElementById('ipt_confirmar_senha'), "As senhas não coincidem");
             return;
         }
-        if (!/^\d{10,11}$/.test(telefoneVar)) {
-            marcarErro(ipt_telefone, "Telefone deve ter 10 ou 11 números (com DDD)");
-            return;
+
+        const formData = new FormData();
+        formData.append('nomeFantasiaServer', nomeFantasiaVar);
+        formData.append('telefoneServer', telefoneVar);
+        formData.append('senhaServer', senhaVar);
+        formData.append('senhaAntigaServer', senhaAntigaVar);
+        formData.append('empresaIdServer', empresaId);
+
+        if (fotoFile) {
+            formData.append('foto', fotoFile);
         }
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVar)) {
-            marcarErro(ipt_email, "Digite um e-mail válido");
-            return;
-        }
-        if (senhaVar.length < 8 || !/[A-Za-z]/.test(senhaVar) || !/\d/.test(senhaVar)) {
-            marcarErro(ipt_senha, "A senha deve ter pelo menos 8 caracteres, incluindo letras e números");
-            return;
-        }
-        if (confirmacao_senhaVar !== senhaVar) {
-            marcarErro(ipt_confirmar_senha, "As senhas não coincidem");
-            return;
-        }
-        fetch("/usuarios/funcao_editar_proprio", {
+
+        fetch("/usuarios/editar_empresa_root", {
             method: 'PUT',
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                nomeServer: nomeVar,
-                sobrenomeServer: sobrenomeVar,
-                cargoServer: cargoVar,
-                emailServer: emailVar,
-                senhaServer: senhaVar,
-                telefoneServer: telefoneVar,
-                idServer: idVar
-            }),
+            body: formData
         })
             .then(resposta => {
                 if (resposta.ok) {
-                    mostrarErro("Alteração realizada com sucesso!");
-                    setTimeout(() => {
-                        window.location = "perfil.html";
-                    }, 2000);
+                    return resposta.json();
                 } else {
-                    throw "Houve um erro ao tentar realizar a alteração!";
+                    return resposta.text().then(text => { throw new Error(text) });
                 }
             })
-            .catch(erro => console.error(`#ERRO: ${erro}`));
+            .then(data => {
+                console.log("Sucesso:", data);
+                mostrarErro("Alteração realizada com sucesso!");
+
+                sessionStorage.USER_NAME = nomeFantasiaVar;
+                sessionStorage.EMPRESA_NOME_FANTASIA = nomeFantasiaVar;
+                sessionStorage.EMPRESA_TELEFONE = telefoneVar;
+
+                if (data.foto) {
+                    sessionStorage.FOTO = data.foto;
+                }
+                
+
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
+            })
+            .catch(erro => {
+                console.error(`#ERRO: ${erro}`);
+                mostrarErro("Erro ao editar empresa: " + erro);
+            });
     }
 
+    function funcao_editar(idVar) {
+    var nomeVar = document.getElementById('ipt_nome').value.trim();
+    var sobrenomeVar = document.getElementById('ipt_sobrenome').value.trim();
+    var telefoneVar = document.getElementById('ipt_telefone').value;
+    var senhaVar = document.getElementById('ipt_senha').value;
+    var confirmacao_senhaVar = document.getElementById('ipt_confirmar_senha').value;
+    var senhaAntigaVar = document.getElementById('ipt_senha_antiga').value;
+    var fotoFile = document.getElementById('ipt_foto').files[0];
 
+    // Validações obrigatórias
+    if (nomeVar === "") {
+        marcarErro(document.getElementById('ipt_nome'), "O campo nome está em branco.");
+        return;
+    }
+    if (sobrenomeVar === "") {
+        marcarErro(document.getElementById('ipt_sobrenome'), "O campo sobrenome está em branco.");
+        return;
+    }
+    if (senhaAntigaVar === "") {
+        marcarErro(document.getElementById('ipt_senha_antiga'), "O campo senha antiga é obrigatório.");
+        return;
+    }
+
+    // Validações condicionais
+    if (telefoneVar !== "" && !/^\(\d{2}\) \d{5}-\d{4}$/.test(telefoneVar)) {
+        marcarErro(document.getElementById('ipt_telefone'), "Formato de telefone inválido. Use: (11) 99999-9999");
+        return;
+    }
+    if (senhaVar !== "" && (senhaVar.length < 8 || !/[A-Za-z]/.test(senhaVar) || !/\d/.test(senhaVar))) {
+        marcarErro(document.getElementById('ipt_senha'), "A senha deve ter pelo menos 8 caracteres, incluindo letras e números");
+        return;
+    }
+    if (senhaVar !== "" && senhaVar !== confirmacao_senhaVar) {
+        marcarErro(document.getElementById('ipt_confirmar_senha'), "As senhas não coincidem");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('nomeServer', nomeVar);
+    formData.append('sobrenomeServer', sobrenomeVar);
+    formData.append('telefoneServer', telefoneVar);
+    formData.append('senhaServer', senhaVar);
+    formData.append('senhaAntigaServer', senhaAntigaVar);
+    formData.append('idServer', idVar);
+    
+    if (fotoFile) {
+        formData.append('foto', fotoFile);
+    }
+
+    fetch("/usuarios/funcao_editar", {
+        method: 'PUT',
+        body: formData
+    })
+    .then(resposta => {
+        if (resposta.ok) {
+            return resposta.json();
+        } else {
+            return resposta.text().then(text => { throw new Error(text) });
+        }
+    })
+    .then(data => {
+        console.log("Sucesso:", data);
+        mostrarErro("Alteração realizada com sucesso!");
+        
+        sessionStorage.USER_NAME = nomeVar;
+        sessionStorage.USER_SOBRENOME = sobrenomeVar;
+        if (telefoneVar !== "") {
+            sessionStorage.USER_TELEFONE = telefoneVar;
+        }
+        if (data.foto) {
+            sessionStorage.FOTO = data.foto;
+        }
+        
+        setTimeout(() => {
+            window.location.reload();
+        }, 2000);
+    })
+    .catch(erro => {
+        console.error(`#ERRO: ${erro}`);
+        mostrarErro("Erro ao editar perfil: " + erro);
+    });
+}
+
+    function mascaraTelefone(input) {
+        input.addEventListener('input', function (e) {
+            let value = e.target.value.replace(/\D/g, '');
+
+            if (value.length <= 15) {
+                if (value.length <= 2) {
+                    value = value;
+                } else if (value.length <= 7) {
+                    value = value.replace(/(\d{2})(\d+)/, '($1) $2');
+                } else {
+                    value = value.replace(/(\d{2})(\d{5})(\d+)/, '($1) $2-$3');
+                }
+                e.target.value = value;
+            }
+
+            if (value.length > 15) {
+                e.target.value = value.slice(0, 15);
+            }
+        });
+    }
+
+    function aplicarMascaras() {
+        const telefoneInput = document.getElementById('ipt_telefone');
+        if (telefoneInput) {
+            if (telefoneInput.value) {
+                let value = telefoneInput.value.replace(/\D/g, '');
+                if (value.length >= 10) {
+                    value = value.replace(/(\d{2})(\d{5})(\d+)/, '($1) $2-$3');
+                    telefoneInput.value = value;
+                }
+            }
+            mascaraTelefone(telefoneInput);
+            telefoneInput.placeholder = "(11) 99999-9999";
+        }
+    }
+
+    function formatarTelefoneExistente() {
+        const perfilNumero = document.getElementById('perfilNumero');
+        if (perfilNumero && sessionStorage.USER_TELEFONE) {
+            let telefone = sessionStorage.USER_TELEFONE.replace(/\D/g, '');
+            if (telefone.length >= 10) {
+                telefone = telefone.replace(/(\d{2})(\d{5})(\d+)/, '($1) $2-$3');
+                perfilNumero.textContent = telefone;
+            }
+        }
+    }
+
+    window.onload = function () {
+        header();
+
+        const isRoot = sessionStorage.CARGO_CARGO === 'ROOT';
+
+        if (isRoot) {
+            // Perfil para ROOT - mostra dados da empresa
+            containerPerfil.innerHTML = `
+            <img id="perfilFoto" src="../../assets/fotoPerfil/${sessionStorage.FOTO}" alt="Foto de Perfil">
+            <h1 id="perfilNome">${sessionStorage.EMPRESA_NOME_FANTASIA}</h1>
+            <h3 id="perfilCargo">${sessionStorage.CARGO_CARGO}</h3>
+            <h3 id="perfilEmail">${sessionStorage.EMPRESA_CNPJ}</h3>
+            <h3 id="perfilNumero">${sessionStorage.EMPRESA_TELEFONE}</h3>
+            <button id="buttonEditar" onclick="pop_up_editar(${sessionStorage.USER_ID})">Editar informações</button>
+        `;
+        } else {
+            // Perfil para usuários normais
+            containerPerfil.innerHTML = `
+            <img id="perfilFoto" src="../../assets/fotoPerfil/${sessionStorage.FOTO}" alt="Foto de Perfil">
+            <h1 id="perfilNome">${sessionStorage.USER_NAME} ${sessionStorage.USER_SOBRENOME}</h1>
+            <h3 id="perfilCargo">${sessionStorage.CARGO_CARGO}</h3>
+            <h3 id="perfilEmail">${sessionStorage.USER_EMAIL}</h3>
+            <h3 id="perfilNumero"></h3>
+            <button id="buttonEditar" onclick="pop_up_editar(${sessionStorage.USER_ID})">Editar informações</button>
+        `;
+        }
+
+        formatarTelefoneExistente();
+
+    };
 </script>
