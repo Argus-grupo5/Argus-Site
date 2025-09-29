@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARGUS | Login</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/login-cadastro/signin.css">
+</head>
+
+<body>
+    <header class="desktopHeader">
+        <a href="../index.html" class="logo"><img src="../assets/icon/logoBranca.svg" alt=""></a>
+        <a href="../index.html" class="title">
+            <h1>ARGUS</h1>
+        </a>
+        <nav class="links">
+            <a class="link" href="../pages/suporte.html">Suporte</a>
+            <a class="link" href="../pages/empresa.html">Empresa</a>
+            <a class="link" href="../pages/contato.html">Contato</a>
+        </nav>
+        <nav class="login">
+            <a class="link" href="../pages/login.html">Entrar</a>
+            <a class="buttons" href="../pages/signin.html">Cadastre-se</a>
+        </nav>
+    </header>
+    <div class="bannerDesktop"></div>
+
+    <div class="containerDesktop">
+        <div class="heroPage">
+            <h1>Entrar na Argus</h1>
+            <div class="inputs" style="height: auto;">
+                <section class="input">
+                    <p style="padding-left: 0;">Código de acesso</p>
+                    <div class="input_codigo">
+                        <input type="text" id="ipt_cod1" maxlength="1">
+                        <input type="text" id="ipt_cod2"maxlength="1">
+                        <input type="text" id="ipt_cod3" maxlength="1">
+                        <input type="text" id="ipt_cod4" maxlength="1">
+                    </div>
+                </section>
+            </div>
+            <section class="btnImagem" id="botaoAlteravel">
+                <button class="btnImage" onclick="validar()">
+                    <img src="../assets/login-signin/Buttom.svg" alt="Botão para cadastro">
+                </button>
+            </section>
+        </div>
+
+        <div class="footer">
+            <div class="links">
+                <a href="./suporte.html">Suporte</a>
+                <a href="">EULA</a>
+                <a href="./empresa.html">Sobre Nós</a>
+                <a href="./contato.html">Contato</a>
+            </div>
+            <p>© 2025 Argus Corporation. Ltd. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+<script>
+    function validar() {
+        var cod1 = ipt_cod1.value
+        var cod2 = ipt_cod2.value
+        var cod3 = ipt_cod3.value
+        var cod4 = ipt_cod4.value
+
+        var codigo = Number(cod1 + cod2 + cod3 + cod4)
+
+        var id = sessionStorage.EMPRESA_ID;
+
+        fetch("/usuarios/autenticarCodigo", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                idServer: id,
+                emailServer: sessionStorage.EMPRESA_EMAIL,
+                codigoServer: codigo
+            })
+        })
+            .then(function (resposta) {
+                if (resposta.ok) {
+                    resposta.json().then(json => {
+                        if (json.length == 1) {
+                            fetch(`/usuarios/atualizarAcesso/${id}`, {
+                                method: 'GET',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                }
+                            })
+                                .then((resposta) => {
+                                    sessionStorage.USER_ID = json[0].user_id;
+                                    sessionStorage.USER_NAME = json[0].user_name;
+                                    json[0].user_sobrenome != null ? sessionStorage.USER_SOBRENOME = json.user_sobrenome : sessionStorage.USER_SOBRENOME = "";
+                                    sessionStorage.USER_EMAIL = json[0].user_email;
+                                    sessionStorage.USER_TELEFONE = json[0].user_telefone;
+                                    sessionStorage.USER_FOTO = json[0].user_foto;
+                                    sessionStorage.USER_DATA = json[0].user_data;
+                                    sessionStorage.EMPRESA_ID = json[0].empresa_id;
+                                    sessionStorage.EMPRESA_NOME_FANTASIA = json[0].empresa_nome_fantasia;
+                                    sessionStorage.EMPRESA_RAZAO_SOCIAL = json[0].empresa_razao_social;
+                                    sessionStorage.EMPRESA_CNPJ = json[0].empresa_cnpj;
+                                    sessionStorage.EMPRESA_EMAIL = json[0].empresa_email;
+                                    sessionStorage.EMPRESA_TELEFONE = json[0].empresa_telefone;
+                                    sessionStorage.EMPRESA_DATA = json[0].empresa_data;
+                                    sessionStorage.ENDERECO_RUA = json[0].endereco_rua;
+                                    sessionStorage.ENDERECO_NUMERO = json[0].endereco_numero;
+                                    sessionStorage.ENDERECO_BAIRRO = json[0].endereco_bairro;
+                                    sessionStorage.ENDERECO_CIDADE = json[0].endereco_cidade;
+                                    sessionStorage.ENDERECO_ESTADO = json[0].endereco_estado;
+                                    sessionStorage.ENDERECO_CEP = json[0].endereco_cep;
+                                    sessionStorage.ENDERECO_COMPLEMENTO = json[0].endereco_complemento;
+                                    sessionStorage.CARGO_ID = json[0].cargo_id;
+                                    sessionStorage.CARGO_CARGO = json[0].cargo_cargo;
+
+                                    setTimeout(function () {
+                                        window.location.href = './dashboard/servers.html';
+                                    }, 1000);
+                                })
+                        } else (
+                            console.log(json)
+                        )
+                    })
+                }
+            })
+    }
+</script>
+
+</html>

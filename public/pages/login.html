@@ -223,7 +223,6 @@
                 console.log(erro);
                 mostrarErro("Erro inesperado. Tente novamente.");
             });
-
         return false;
     }
     function loginEmpresa() {
@@ -261,7 +260,15 @@
 
                 if (resposta.ok) {
                     resposta.json().then(json => {
-                        console.log(json);
+                        if (json.empresa_acesso == 1) {
+                            sessionStorage.EMPRESA_ID = json.empresa_id;
+                            sessionStorage.EMPRESA_EMAIL = json.empresa_email;
+
+                            setTimeout(function () {
+                                window.location.href = './codigo.html';
+                            }, 1000);
+                        } else {
+                             console.log(json);
                         sessionStorage.USER_ID = json.user_id;
                         sessionStorage.USER_NAME = json.user_name;
                         json.user_sobrenome != null ? sessionStorage.USER_SOBRENOME = json.user_sobrenome : sessionStorage.USER_SOBRENOME = "";
@@ -286,9 +293,10 @@
                         sessionStorage.CARGO_CARGO = json.cargo_cargo;
                         sessionStorage.FOTO = json.foto;
 
-                        setTimeout(function () {
-                            window.location.href = './dashboard/servers.html';
-                        }, 1000);
+                            setTimeout(function () {
+                                window.location.href = './dashboard/servers.html';
+                            }, 1000);
+                        }
                     });
 
                 } else {

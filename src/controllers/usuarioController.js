@@ -55,8 +55,6 @@ function autenticar(req, res) {
       );
   }
 
-}
-
 function autenticarEmpresa(req, res) {
   var cnpj = req.body.cnpjServer;
   var senha = req.body.senhaServer;
@@ -89,6 +87,8 @@ function autenticarEmpresa(req, res) {
               empresa_razao_social: resultadoAutenticar[0].empresa_razao_social,
               empresa_data: resultadoAutenticar[0].empresa_data,
               empresa_foto: resultadoAutenticar[0].empresa_foto,
+              empresa_acesso: resultadoAutenticar[0].empresa_acesso,
+
 
               // Dados do endereço
               endereco_id: resultadoAutenticar[0].endereco_id,
@@ -126,6 +126,44 @@ function autenticarEmpresa(req, res) {
         }
       );
   }
+}
+
+
+function autenticarCodigo(req, res) {
+    var id = req.body.idServer;
+    var email = req.body.emailServer;
+    var codigo = req.body.codigoServer;
+
+    usuarioModel.autenticarCodigo(id, email, codigo)
+        .then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        ).catch((erro) => {
+            console.log(erro);
+            console.log(
+                "\nHouve um erro ao realizar o cadastro! Erro: ",
+                erro.sqlMessage
+            );
+            res.status(500).json(erro.sqlMessage);
+        }
+        )
+}
+
+function atualizarAcesso(req, res) {
+    var id = req.params.idServer
+
+    usuarioModel.atualizarAcesso(id)
+        .then((resultado) => {
+            res.json(resultado)
+        }).catch((erro) => {
+            console.log(erro);
+            console.log(
+                "\nHouve um erro ao realizar o cadastro! Erro: ",
+                erro.sqlMessage
+            );
+            res.status(500).json(erro.sqlMessage);
+        })
 }
 
 function editar(req, res) {
@@ -206,6 +244,7 @@ function cadastrarEndereco(req, res) {
 }
 
 function cadastrarEmpresa(req, res) {
+
   var nome = req.body.nomeServer;
   var telefone = req.body.telefoneServer;
   var senha = req.body.senhaServer;
@@ -213,6 +252,7 @@ function cadastrarEmpresa(req, res) {
   var cnpj = req.body.cnpjServer;
   var id = req.body.idServer;
   var foto = req.file.filename;
+  var codigo = Math.floor(Math.random() * 9000) + 1000;
 
   if (foto == undefined) {
     res.status(400).send("Sua foto está undefined!");
@@ -230,7 +270,7 @@ function cadastrarEmpresa(req, res) {
     res.status(400).send("O id está undefined!");
   }
 
-  usuarioModel.cadastrarEmpresa(nome, telefone, senha, cnpj, razao, id, foto)
+  usuarioModel.cadastrarEmpresa(nome, telefone, senha, cnpj, razao, id, foto, codigo)
     .then(
       function (resultado) {
         res.json(resultado);
@@ -571,6 +611,8 @@ function buscar_cargo(req, res) {
 
 module.exports = {
   autenticar,
+  autenticarCodigo,
+  atualizarAcesso,
   autenticarEmpresa,
   editar,
   cadastrarEndereco,
@@ -585,4 +627,5 @@ module.exports = {
   editar_empresa_root,
   funcao_editar_funcionario,
   buscar_cargo
+
 }

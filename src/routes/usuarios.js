@@ -20,6 +20,14 @@ router.post("/autenticarEmpresa", function (req, res) {
     usuarioController.autenticarEmpresa(req, res);
 });
 
+router.post("/autenticarCodigo", function (req,res){
+    usuarioController.autenticarCodigo(req, res)
+})
+
+router.get("/atualizarAcesso/:idServer", function (req,res){
+    usuarioController.atualizarAcesso(req, res)
+})
+
 router.get("/listarFuncionarios", function (req, res) {
     usuarioController.listarFuncionarios(req, res);
 });
