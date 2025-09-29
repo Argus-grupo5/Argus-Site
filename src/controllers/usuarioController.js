@@ -34,6 +34,7 @@ function autenticar(req, res) {
                             empresa_email: resultadoAutenticar[0].empresa_email,
                             empresa_telefone: resultadoAutenticar[0].empresa_telefone,
                             empresa_data: resultadoAutenticar[0].empresa_data,
+                            empresa_acesso: resultadoAutenticar[0].empresa_acesso,
 
                             endereco_rua: resultadoAutenticar[0].endereco_rua,
                             endereco_numero: resultadoAutenticar[0].endereco_numero,
@@ -63,6 +64,44 @@ function autenticar(req, res) {
     }
 
 }
+
+function autenticarCodigo(req, res) {
+    var id = req.body.idServer;
+    var email = req.body.emailServer;
+    var codigo = req.body.codigoServer;
+
+    usuarioModel.autenticarCodigo(id, email, codigo)
+        .then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        ).catch((erro) => {
+            console.log(erro);
+            console.log(
+                "\nHouve um erro ao realizar o cadastro! Erro: ",
+                erro.sqlMessage
+            );
+            res.status(500).json(erro.sqlMessage);
+        }
+        )
+}
+
+function atualizarAcesso(req, res) {
+    var id = req.params.idServer
+
+    usuarioModel.atualizarAcesso(id)
+        .then((resultado) => {
+            res.json(resultado)
+        }).catch((erro) => {
+            console.log(erro);
+            console.log(
+                "\nHouve um erro ao realizar o cadastro! Erro: ",
+                erro.sqlMessage
+            );
+            res.status(500).json(erro.sqlMessage);
+        })
+}
+
 function editar(req, res) {
     var email = req.body.emailServer;
     var senha = req.body.senhaServer;
@@ -148,6 +187,7 @@ function cadastrarEmpresa(req, res) {
     var razao = req.body.razaoServer;
     var cnpj = req.body.cnpjServer;
     var id = req.body.idServer;
+    var codigo = Math.floor(Math.random() * 9000) + 1000;
 
     if (nome == undefined) {
         res.status(400).send("Seu nome está undefined!");
@@ -165,7 +205,7 @@ function cadastrarEmpresa(req, res) {
         res.status(400).send("O id está undefined!");
     }
 
-    usuarioModel.cadastrarEmpresa(nome, telefone, email, senha, cnpj, razao, id)
+    usuarioModel.cadastrarEmpresa(nome, telefone, email, senha, cnpj, razao, id, codigo)
         .then(
             function (resultado) {
                 res.json(resultado);
@@ -306,7 +346,7 @@ function funcao_editar_proprio(req, res) {
         res.status(400).send("Seu nome está undefined!");
     } else if (funcionario_sobrenome == undefined) {
         res.status(400).send("Seu sobrenome está undefined!");
-    } else if(funcionario_senha == undefined){
+    } else if (funcionario_senha == undefined) {
         res.status(400).send("Sua senha está undefined!");
     } else if (funcionario_email == undefined) {
         res.status(400).send("Seu email está undefined!");
@@ -386,6 +426,8 @@ function online(req, res) {
 
 module.exports = {
     autenticar,
+    autenticarCodigo,
+    atualizarAcesso,
     editar,
     cadastrarEndereco,
     cadastrarEmpresa,

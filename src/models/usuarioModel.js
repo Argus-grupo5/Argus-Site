@@ -10,6 +10,20 @@ function autenticar(email, senha) {
     return database.executar(instrucaoSql);
 }
 
+function autenticarCodigo(id, email, codigo){
+    var instrucaoSql = `
+        SELECT * from vw_user where empresa_id = ${id} and empresa_email = '${email}' and empresa_codigo = ${codigo}
+    `
+    return database.executar(instrucaoSql)
+}
+
+function atualizarAcesso(id){
+    var instrucaoSql = `
+        UPDATE empresa SET primeiroAcesso = 0 where id = ${id}
+    `
+    return database.executar(instrucaoSql)
+}
+
 function cadastrarEndereco(cep, rua, bairro, cidade, estado, numero, complemento) {
     console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function cadastrar():", cep, rua, bairro, cidade, estado, numero, complemento);
 
@@ -24,12 +38,12 @@ function cadastrarEndereco(cep, rua, bairro, cidade, estado, numero, complemento
 }
 
 // Coloque os mesmos parâmetros aqui. Vá para a var instrucaoSql
-function cadastrarEmpresa(nome, telefone, email, senha, cnpj, razao, fkEndereco) {
-    console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function cadastrar():", nome, telefone, email, senha, cnpj, razao, fkEndereco);
+function cadastrarEmpresa(nome, telefone, email, senha, cnpj, razao, fkEndereco, codigo) {
+    console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function cadastrar():", nome, telefone, email, senha, cnpj, razao, fkEndereco, codigo);
     // Insira exatamente a query do banco aqui, lembrando da nomenclatura exata nos valores
     //  e na ordem de inserção dos dados.
     var instrucaoSql = `
-        INSERT INTO empresa (nome_fantasia, telefone, email, senha, razao_social, cnpj,  fkEndereco) VALUES ('${nome}', '${telefone}', '${email}', SHA2('${senha}', 512), '${razao}', ${cnpj}, ${fkEndereco});
+        INSERT INTO empresa (nome_fantasia, telefone, email, senha, razao_social, cnpj,  fkEndereco, codigo) VALUES ('${nome}', '${telefone}', '${email}', SHA2('${senha}', 512), '${razao}', ${cnpj}, ${fkEndereco}, ${codigo});
     `;
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
@@ -113,6 +127,8 @@ function online(idUsuario, status) {
 
 module.exports = {
     autenticar,
+    autenticarCodigo,
+    atualizarAcesso,
     cadastrarEmpresa,
     cadastrarEndereco,
     listarFuncionarios,
