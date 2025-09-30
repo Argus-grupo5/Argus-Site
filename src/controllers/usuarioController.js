@@ -54,6 +54,7 @@ function autenticar(req, res) {
         }
       );
   }
+}
 
 function autenticarEmpresa(req, res) {
   var cnpj = req.body.cnpjServer;
@@ -131,10 +132,10 @@ function autenticarEmpresa(req, res) {
 
 function autenticarCodigo(req, res) {
     var id = req.body.idServer;
-    var email = req.body.emailServer;
+    var cnpj = req.body.cnpjServer;
     var codigo = req.body.codigoServer;
 
-    usuarioModel.autenticarCodigo(id, email, codigo)
+    usuarioModel.autenticarCodigo(id, cnpj, codigo)
         .then(
             function (resultado) {
                 res.json(resultado);
@@ -167,8 +168,11 @@ function atualizarAcesso(req, res) {
 }
 
 function editar(req, res) {
+  var nome = req.body.nomeServer;
+  var telefone = req.body.telefoneServer;
   var email = req.body.emailServer;
   var senha = req.body.senhaServer;
+
   if (nome == undefined) {
     res.status(400).send("Seu nome está undefined!");
   } else if (telefone == undefined) {
@@ -177,25 +181,17 @@ function editar(req, res) {
     res.status(400).send("Seu email está undefined!");
   } else {
     usuarioModel.editar(email, senha)
-
-      .then(
-        function (resultado) {
-          res.json(resultado);
-        }
-      ).catch(
-        function (erro) {
-          console.log(erro);
-          console.log(
-            "\nHouve um erro ao realizar o cadastro! Erro: ",
-            erro.sqlMessage
-          );
-          res.status(500).json(erro.sqlMessage);
-        }
-      );
+      .then(function (resultado) {
+        res.json(resultado);
+      })
+      .catch(function (erro) {
+        console.log(erro);
+        console.log("\nHouve um erro ao realizar o cadastro! Erro: ", erro.sqlMessage);
+        res.status(500).json(erro.sqlMessage);
+      });
   }
-
-
 }
+
 
 function cadastrarEndereco(req, res) {
   // Crie uma variável que vá recuperar os valores do arquivo cadastro.html
@@ -467,7 +463,7 @@ function funcao_editar_proprio(req, res) {
   var funcionario_senha = req.body.senhaServer;
   var funcionario_email = req.body.emailServer;
   var funcionario_telefone = req.body.telefoneServer;
-  var id = sessionStorage.USER_ID;
+  var id = req.body.idServer;
 
   if (funcionario_nome == undefined) {
     res.status(400).send("Seu nome está undefined!");

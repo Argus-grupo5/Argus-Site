@@ -16,10 +16,11 @@ function autenticarEmpresa(cnpj, senha) {
     `;
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
+}
 
-function autenticarCodigo(id, email, codigo){
+function autenticarCodigo(id, cnpj, codigo){
     var instrucaoSql = `
-        SELECT * from vw_user where empresa_id = ${id} and empresa_email = '${email}' and empresa_codigo = ${codigo}
+        SELECT * from vw_user where empresa_id = ${id} and empresa_cnpj = '${cnpj}' and empresa_codigo = ${codigo}
     `
     return database.executar(instrucaoSql)
 }
