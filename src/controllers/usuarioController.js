@@ -38,83 +38,11 @@ function autenticar(req, res) {
               empresa_data: user.empresa_data,
               cargo_id: user.cargo_id,
               cargo_cargo: user.cargo_cargo,
-              foto: fotoFinal
+              foto: fotoFinal,
+              empresa_acesso: user.empresa_acesso,
             });
           } else if (resultadoAutenticar.length == 0) {
             res.status(403).send("Email e/ou senha inválido(s)");
-          } else {
-            res.status(403).send("Mais de um usuário com o mesmo login e senha!");
-          }
-        }
-      ).catch(
-        function (erro) {
-          console.log(erro);
-          console.log("\nHouve um erro ao realizar o login! Erro: ", erro.sqlMessage);
-          res.status(500).json(erro.sqlMessage);
-        }
-      );
-  }
-}
-
-function autenticarEmpresa(req, res) {
-  var cnpj = req.body.cnpjServer;
-  var senha = req.body.senhaServer;
-
-  if (cnpj == undefined) {
-    res.status(400).send("Seu cnpj está undefined!");
-  } else if (senha == undefined) {
-    res.status(400).send("Sua senha está undefined!");
-  } else {
-
-    usuarioModel.autenticarEmpresa(cnpj, senha)
-      .then(
-        function (resultadoAutenticar) {
-          console.log(`\nResultados encontrados: ${resultadoAutenticar.length}`);
-          console.log(`Resultados: ${JSON.stringify(resultadoAutenticar)}`); // transforma JSON em String
-
-          if (resultadoAutenticar.length == 1) {
-            console.log(resultadoAutenticar);
-            
-            const user = resultadoAutenticar[0];
-            const fotoFinal = user.cargo_nome === 'ROOT' ? user.empresa_foto : user.user_foto;
-
-            res.json({
-              // Dados da empresa
-              empresa_id: resultadoAutenticar[0].empresa_id,
-              empresa_cnpj: resultadoAutenticar[0].empresa_cnpj,
-              empresa_telefone: resultadoAutenticar[0].empresa_telefone,
-              empresa_senha: resultadoAutenticar[0].empresa_senha,
-              empresa_nome_fantasia: resultadoAutenticar[0].empresa_nome_fantasia,
-              empresa_razao_social: resultadoAutenticar[0].empresa_razao_social,
-              empresa_data: resultadoAutenticar[0].empresa_data,
-              empresa_foto: resultadoAutenticar[0].empresa_foto,
-              empresa_acesso: resultadoAutenticar[0].empresa_acesso,
-
-
-              // Dados do endereço
-              endereco_id: resultadoAutenticar[0].endereco_id,
-              endereco_rua: resultadoAutenticar[0].endereco_rua,
-              endereco_numero: resultadoAutenticar[0].endereco_numero,
-              endereco_complemento: resultadoAutenticar[0].endereco_complemento,
-              endereco_bairro: resultadoAutenticar[0].endereco_bairro,
-              endereco_cidade: resultadoAutenticar[0].endereco_cidade,
-              endereco_estado: resultadoAutenticar[0].endereco_estado,
-              endereco_cep: resultadoAutenticar[0].endereco_cep,
-
-              // Dados do usuário ROOT 
-              user_id: resultadoAutenticar[0].user_id,
-              user_name: resultadoAutenticar[0].user_nome,
-              user_email: resultadoAutenticar[0].user_email,
-
-              // Dados do cargo
-              cargo_id: user.cargo_id,
-              cargo_cargo: user.cargo_nome,
-
-              // 🔑 Foto final
-              foto: fotoFinal
-            });
-          } else if (resultadoAutenticar.length == 0) {
-            res.status(403).send("Cnpj e/ou senha inválido(s)");
           } else {
             res.status(403).send("Mais de um usuário com o mesmo login e senha!");
           }
@@ -243,7 +171,6 @@ function cadastrarEmpresa(req, res) {
 
   var nome = req.body.nomeServer;
   var telefone = req.body.telefoneServer;
-  var senha = req.body.senhaServer;
   var razao = req.body.razaoServer;
   var cnpj = req.body.cnpjServer;
   var id = req.body.idServer;
@@ -256,8 +183,6 @@ function cadastrarEmpresa(req, res) {
     res.status(400).send("Seu nome está undefined!");
   } else if (telefone == undefined) {
     res.status(400).send("Seu telefone está undefined!");
-  } else if (senha == undefined) {
-    res.status(400).send("Sua senha está undefined!");
   } else if (cnpj == undefined) {
     res.status(400).send("O cnpj está undefined!");
   } else if (razao == undefined) {
@@ -266,7 +191,7 @@ function cadastrarEmpresa(req, res) {
     res.status(400).send("O id está undefined!");
   }
 
-  usuarioModel.cadastrarEmpresa(nome, telefone, senha, cnpj, razao, id, foto, codigo)
+  usuarioModel.cadastrarEmpresa(nome, telefone, cnpj, razao, id, foto, codigo)
     .then(
       function (resultado) {
         res.json(resultado);
@@ -609,7 +534,6 @@ module.exports = {
   autenticar,
   autenticarCodigo,
   atualizarAcesso,
-  autenticarEmpresa,
   editar,
   cadastrarEndereco,
   cadastrarEmpresa,

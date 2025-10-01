@@ -9,14 +9,6 @@ function autenticar(email, senha) {
     return database.executar(instrucaoSql);
 }
 
-function autenticarEmpresa(cnpj, senha) {
-    console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function entrar(): ", cnpj, senha)
-    var instrucaoSql = `
-        SELECT * FROM vw_empresa WHERE empresa_cnpj = '${cnpj}' AND empresa_senha = SHA2('${senha}', 512);
-    `;
-    console.log("Executando a instrução SQL: \n" + instrucaoSql);
-    return database.executar(instrucaoSql);
-}
 
 function autenticarCodigo(id, cnpj, codigo){
     var instrucaoSql = `
@@ -45,10 +37,10 @@ function cadastrarEndereco(cep, rua, bairro, cidade, estado, numero, complemento
     return database.executar(instrucaoSql);
 }
 
-function cadastrarEmpresa(nome, telefone, senha, cnpj, razao, fkEndereco, foto, codigo) {
-    console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function cadastrar():", nome, telefone, senha, cnpj, razao, fkEndereco, foto, codigo);
+function cadastrarEmpresa(nome, telefone, cnpj, razao, fkEndereco, foto, codigo) {
+    console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function cadastrar():", nome, telefone, cnpj, razao, fkEndereco, foto, codigo);
     var instrucaoSql = `
-        INSERT INTO empresa (nome_fantasia, telefone, senha, razao_social, cnpj, fkEndereco, foto_perfil, codigo) VALUES ('${nome}', '${telefone}', SHA2('${senha}', 512), '${razao}', '${cnpj}', ${fkEndereco}, '${foto}', ${codigo});
+        INSERT INTO empresa (nome_fantasia, telefone, razao_social, cnpj, fkEndereco, logo, codigo) VALUES ('${nome}', '${telefone}', '${razao}', '${cnpj}', ${fkEndereco}, '${foto}', ${codigo});
     `;
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
@@ -245,7 +237,6 @@ function buscar_cargo(userId) {
 
 module.exports = {
     autenticar,
-    autenticarEmpresa,
     autenticarCodigo,
     atualizarAcesso,
     cadastrarEmpresa,

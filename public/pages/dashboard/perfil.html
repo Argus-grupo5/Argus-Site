@@ -80,55 +80,6 @@
 
     function pop_up_editar(id) {
         abrir_popup();
-
-        const isRoot = sessionStorage.CARGO_CARGO === 'ROOT';
-
-        if (isRoot) {
-            config_funcionarios.innerHTML = `
-            <img src="../../assets/dashboard/desktop/btnFechar.svg" alt="Fechar" class="btnFecharPopup" onclick="fechar_popup()">
-            <h1>Editar Empresa</h1>
-            <div class="inputs">
-                <div class="input-label-wrapper">
-                    <span class="input-label">Foto</span>
-                </div>
-                <input type="file" id="ipt_foto">
-                
-                <div class="input-label-wrapper">
-                    <span class="input-label">Nome Fantasia</span>
-                </div>
-                <input type="text" id="ipt_nome_fantasia" value="${sessionStorage.EMPRESA_NOME_FANTASIA}">
-                
-                <div class="input-label-wrapper">
-                    <span class="input-label">Telefone</span>
-                    <span class="obrigatorio">*obrigatório</span>
-                </div>
-                <input type="tel" id="ipt_telefone" value="${sessionStorage.EMPRESA_TELEFONE}" placeholder="(11) 99999-9999" required>
-                
-                <div class="input-label-wrapper">
-                    <span class="input-label">Nova senha</span>
-                    <span class="opcional">*opcional</span>
-                </div>
-                <input type="password" id="ipt_senha" placeholder="Deixe em branco para manter a senha atual">
-                
-                <div class="input-label-wrapper">
-                    <span class="input-label">Confirmar nova senha</span>
-                    <span class="opcional">*opcional</span>
-                </div>
-                <input type="password" id="ipt_confirmar_senha" placeholder="Digite a senha novamente">
-                
-                <div class="input-label-wrapper">
-                    <span class="input-label">Senha antiga</span>
-                    <span class="obrigatorio">*obrigatório</span>
-                </div>
-                <input type="password" id="ipt_senha_antiga" placeholder="Digite sua senha atual para confirmar" required>
-            </div>
-            <div id="mensagem_erro"></div>
-            <div class="btns_popup">
-                <button class="btn cadastrar" onclick="editar_empresa_root(${sessionStorage.EMPRESA_ID})">Editar</button>
-                <button class="btn fechar" onclick="fechar_popup()">Fechar</button>
-            </div>
-        `;
-        } else {
             config_funcionarios.innerHTML = `
     <img src="../../assets/dashboard/desktop/btnFechar.svg" alt="Fechar" class="btnFecharPopup" onclick="fechar_popup()">
     <h1>Editar Usuário</h1>
@@ -179,7 +130,6 @@
         <button class="btn fechar" onclick="fechar_popup()">Fechar</button>
     </div>
 `;
-        }
 
         setTimeout(aplicarMascaras, 100);
     }
