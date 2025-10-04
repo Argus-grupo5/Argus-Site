@@ -123,6 +123,75 @@ body {
     width: 100%;
 }
 
+/* Modal */
+.modal{
+    height: 70vh;
+    width: 40vw;
+    background-color: #FF670A;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 100;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px;
+}
+
+.modal-geral {
+    width: 80%;
+    margin: auto;
+    height: 70%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+}
+
+.modal-label {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: center;
+    text-align: start;
+}
+
+.modal-label input{
+    border: none;
+    height: 20%;
+    border-radius: 5px;
+    background-color: #ff9f64;
+    padding: 5px;
+}
+
+.modal-button {
+    display: flex;
+    width: 100%;
+    gap: 10px;
+    justify-content: center;
+}
+
+.modal-button div{
+    background-color: black;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s;
+}
+
+.modal-button div:hover{
+    cursor: pointer;
+    background-color: #313030;
+}
+
+.modal-button svg {
+    color: white;
+}
+
 /* Alerts */
 .geralInfo {
     margin-left: 1vw;
@@ -278,6 +347,19 @@ body {
 .search input:hover {
     background-color: #4B4343;
     transition: .3s ease;
+}
+
+.search button {
+    width: 20%;
+    border-radius: 5px;
+    border: none;
+    background-image: linear-gradient(to right, #FF0000, #FF670A);
+    transition: background-color 0.3 ease;
+    cursor: pointer;
+}
+
+.search button:hover{
+    background-image: linear-gradient(to right, #c00101, #b04502);
 }
 
 .container {

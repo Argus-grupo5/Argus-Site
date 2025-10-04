@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <input type="text" id="ipt_nome">
+    <button onclick="addServidor()"></button>
+</body>
+<script>
+    function addServidor() {
+        const nome = ipt_nome.value
+
+        fetch("/servidores/addServidor", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                nomeServer: nome,
+                empresaServer: sessionStorage.EMPRESA_ID
+            })
+        })
+        .then((resposta) => {
+            if(resposta.ok){
+                console.log("Cadastro realizado com sucesso")
+            } else(
+                console.log("Erro ao cadastrar")
+            )
+        })
+        .catch((erro) => console.error(`#ERRO: ${erro}`))
+    }
+</script>
+
+</html>

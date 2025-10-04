@@ -15,6 +15,32 @@
     <div id="id_sair">
     </div>
 
+    <div id="modal" class="modal">
+        <div class="modal-geral">
+            <h1>Adicionar servidor</h1>
+            <div class="modal-label">
+                <label for="ipt_nome">Nome do Servidor:</label>
+                <input type="text" name="" id="ipt_nome" placeholder="Digite o nome do servidor">
+            </div>
+            <div class="modal-button">
+                <div onclick="fecharModal()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        <rect width="24" height="24" fill="none" />
+                        <path fill="#fff"
+                            d="M6.4 19L5 17.6l5.6-5.6L5 6.4L6.4 5l5.6 5.6L17.6 5L19 6.4L13.4 12l5.6 5.6l-1.4 1.4l-5.6-5.6z" />
+                    </svg>
+                </div>
+                <div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="24" viewBox="0 0 12 24">
+                        <rect width="12" height="24" fill="none" />
+                        <path fill="#fff" fill-rule="evenodd"
+                            d="M10.157 12.711L4.5 18.368l-1.414-1.414l4.95-4.95l-4.95-4.95L4.5 5.64l5.657 5.657a1 1 0 0 1 0 1.414" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <header class="desktopNav" id="navDesktop"></header>
 
     <header class="headerTop">
@@ -60,6 +86,7 @@
             <option value="Bom">Bom Estado</option>
         </select>
         <input type="search" id="id_pesquisa" placeholder="Pesquisar por um servidor" oninput="filtragem_Servidores()">
+        <button onclick="abrirModal()">Adicionar server</button>
     </div>
 
     <div class="container">
@@ -93,6 +120,16 @@
 </html>
 <script>
     header("server");
+
+    function abrirModal() {
+        let modal = document.getElementById("modal")
+        modal.style.display = "flex"
+    }
+
+    function fecharModal() {
+        let modal = document.getElementById("modal")
+        modal.style.display = "none"
+    }
 
     const servers = [
         { name: "Servidor Geforce Now", nivel: 4, recursos: ["CPU", "RAM"], localizacao: "São Paulo - SP" },
