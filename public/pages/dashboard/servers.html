@@ -23,6 +23,24 @@
                 <input type="text" name="" id="ipt_nome" placeholder="Digite o nome do servidor">
             </div>
             <div class="modal-button">
+                <div class="modal-label">
+                    <form id="formComponentes">
+                        <label>
+                            <input type="checkbox" name="componentes" value="CPU">
+                            CPU
+                        </label><br>
+
+                        <label>
+                            <input type="checkbox" name="componentes" value="RAM">
+                            RAM
+                        </label><br>
+
+                        <label>
+                            <input type="checkbox" name="componentes" value="Disco">
+                            Disco
+                        </label><br><br>
+                    </form>
+                </div>
                 <div onclick="fecharModal()">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                         <rect width="24" height="24" fill="none" />
@@ -132,24 +150,29 @@
     }
 
     function addServidor() {
-        const nome = ipt_nome.value
+        
+        const nome = ipt_nome.value;
+
+        const componentes = Array.from(document.querySelectorAll('#formComponentes input[type="checkbox"]:checked'))
+        .map(cb => cb.value);
 
         fetch("/servidores/addServidor", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 nomeServer: nome,
-                empresaServer: sessionStorage.EMPRESA_ID
+                empresaServer: sessionStorage.EMPRESA_ID,
+                componentes: componentes
             })
         })
-        .then((resposta) => {
-            if(resposta.ok){
-                console.log("Cadastro realizado com sucesso")
-            } else(
-                console.log("Erro ao cadastrar")
-            )
-        })
-        .catch((erro) => console.error(`#ERRO: ${erro}`))
+            .then((resposta) => {
+                if (resposta.ok) {
+                    console.log("Cadastro realizado com sucesso")
+                } else (
+                    console.log("Erro ao cadastrar")
+                )
+            })
+            .catch((erro) => console.error(`#ERRO: ${erro}`))
     }
 
     const servers = [
