@@ -8,7 +8,7 @@ function addServidor(nome, empresa, componentes) {
 
     return database.executar(sqlInstruction).then(resultado => {
 
-        const servidorId = resultado[0].id;
+        const servidorId = resultado.insertId;
 
         const promises = componentes.map(componente => {
             return database.executar(
