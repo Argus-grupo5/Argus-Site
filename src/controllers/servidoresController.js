@@ -35,7 +35,7 @@ function addServidor(req, res){
     }
     else {
 
-  servidoresModel.addServidor(nome, empresa, maxCPU, minCPU, maxRam, minRam, maxDisco, minDisco, maxRede, minRede)
+  servidoresModel.addServidor(nome, empresa, maxCpu, minCpu, maxRam, minRam, maxDisco, minDisco, maxRede, minRede)
     .then(
         (resultadoAdd) => {
             if(resultadoAdd.length > 0) {
