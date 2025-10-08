@@ -1,6 +1,6 @@
 var database = require("../database/config")
 
-function addServidor(nome, empresa, componentes) {
+function addServidor(nome, empresa, max) {
 
     var sqlInstruction = `INSERT INTO servidor (nome, fkempresa)
                             values ('${nome}', ${empresa})`
@@ -12,7 +12,7 @@ function addServidor(nome, empresa, componentes) {
 
         const promises = componentes.map(componente => {
             return database.executar(
-                `INSERT INTO componente (fkServidor, tipo) VALUES ('${servidorId}', '${componente}')`
+                `INSERT INTO componente_maquina(fkservidor,fkcomponente,max, min) values ('${servidorId}', '${componenteId}', '${maxComponente}', '${minComponente}')`
             );
         });
 

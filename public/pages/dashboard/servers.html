@@ -16,42 +16,13 @@
     </div>
 
     <div id="modal" class="modal">
-        <div class="modal-geral">
+        <div class="modal-geral" id="div_modal_label">
             <h1>Adicionar servidor</h1>
             <div class="modal-label">
                 <label for="ipt_nome">Nome do Servidor:</label>
                 <input type="text" name="" id="ipt_nome" placeholder="Digite o nome do servidor">
             </div>
             <div class="modal-button">
-                <div class="modal-label">
-                    <form id="formComponentes">
-                        <label>
-                            <input type="checkbox" name="componentes" value="CPU">
-                            CPU
-                        </label><br>
-
-                        <label>
-                            <input type="checkbox" name="componentes" value="RAM">
-                            RAM
-                        </label><br>
-
-                        <label>
-                            <input type="checkbox" name="componentes" value="Disco">
-                            Disco
-                        </label><br>
-
-                        <label>
-                            <input type="checkbox" name="componentes" value="CPU">
-                            Rede
-                        </label><br>
-
-                        <label>
-                            <input type="checkbox" name="componentes" value="CPU">
-                            Rede
-                        </label><br><br>
-                        
-                    </form>
-                </div>
                 <div onclick="fecharModal()">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                         <rect width="24" height="24" fill="none" />
@@ -59,7 +30,7 @@
                             d="M6.4 19L5 17.6l5.6-5.6L5 6.4L6.4 5l5.6 5.6L17.6 5L19 6.4L13.4 12l5.6 5.6l-1.4 1.4l-5.6-5.6z" />
                     </svg>
                 </div>
-                <div onclick="addServidor()">
+                <div id="modal_prosseguir">
                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="24" viewBox="0 0 12 24">
                         <rect width="12" height="24" fill="none" />
                         <path fill="#fff" fill-rule="evenodd"
@@ -150,6 +121,52 @@
 <script>
     header("server");
 
+    const nomeInput = document.getElementById("ipt_nome")
+    const botaoLimpar = document.getElementById("modal_prosseguir")
+    const nome = ipt_nome.value;
+
+    botaoLimpar.addEventListener('click', function(){
+        nomeInput.value = "";
+        div_modal_label.innerHTML = `<h1>Limite Componentes</h1>
+            <div class="modal-label" id="div_modal_label">
+                <label for="ipt_nome_cpu">Limite CPU:</label>
+                <input type="number" name="" id="ipt_maxCPU" placeholder="Digite o limite máximo da CPU">
+                <input type="number" name="" id="ipt_minCPU" placeholder="Digite o mínimo da CPU">
+            </div><br>
+            <div class="modal-label" id="div_modal_label">
+                <label for="ipt_nome_ram">Limite RAM:</label>
+                <input type="number" name="" id="ipt_maxRAM" placeholder="Digite o limite máximo da RAM">
+                <input type="number" name="" id="ipt_minRAM" placeholder="Digite o mínimo da RAM">
+            </div><br>
+            <div class="modal-label" id="div_modal_label">
+                <label for="ipt_nome_disco">Limite DISCO:</label>
+                <input type="number" name="" id="ipt_maxDISCO" placeholder="Digite o limite máximo do DISCO">
+                <input type="number" name="" id="ipt_minDISCO" placeholder="Digite o mínimo do DISCO">
+            </div><br>
+            <div class="modal-label" id="div_modal_label">
+                <label for="ipt_nome_rede">Limite REDE:</label>
+                <input type="number" name="" id="ipt_maxREDE" placeholder="Digite o limite máximo da REDE">
+                <input type="number" name="" id="ipt_minCPU" placeholder="Digite o mínimo da REDE">
+            </div>
+            
+            <div class="modal-button">
+                <div onclick="fecharModal()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        <rect width="24" height="24" fill="none" />
+                        <path fill="#fff"
+                            d="M6.4 19L5 17.6l5.6-5.6L5 6.4L6.4 5l5.6 5.6L17.6 5L19 6.4L13.4 12l5.6 5.6l-1.4 1.4l-5.6-5.6z" />
+                    </svg>
+                </div>
+                <div onclick="addServidor()" id="modal_prosseguir">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="24" viewBox="0 0 12 24">
+                        <rect width="12" height="24" fill="none" />
+                        <path fill="#fff" fill-rule="evenodd"
+                            d="M10.157 12.711L4.5 18.368l-1.414-1.414l4.95-4.95l-4.95-4.95L4.5 5.64l5.657 5.657a1 1 0 0 1 0 1.414" />
+                    </svg>
+                </div>
+            </div>`;
+    });
+
     function abrirModal() {
         let modal = document.getElementById("modal")
         modal.style.display = "flex"
@@ -161,11 +178,15 @@
     }
 
     function addServidor() {
-        
-        const nome = ipt_nome.value;
 
-        const componentes = Array.from(document.querySelectorAll('#formComponentes input[type="checkbox"]:checked'))
-        .map(cb => cb.value);
+        const maxCPU = ipt_maxCPU.value;
+        const minCPU = ipt_minCPU.value;
+        const maxRAM = ipt_maxRAM.value;
+        const minRAM = ipt_minRAM.value;
+        const maxDISCO = ipt_maxDISCO.value;
+        const minDISCO = ipt_minDISCO.value;
+        const maxREDE = ipt_maxREDE.value;
+        const minREDE = ipt_minREDE.value;
 
         fetch("/servidores/addServidor", {
             method: "POST",
@@ -173,7 +194,14 @@
             body: JSON.stringify({
                 nomeServer: nome,
                 empresaServer: sessionStorage.EMPRESA_ID,
-                componentes: componentes
+                maxCpuServer: maxCPU,
+                minCpuServer: minCPU,
+                maxRamServer: maxRAM,
+                minRamServer: minRAM,
+                maxDiscoServer: maxDISCO,
+                minDiscoServer: minDISCO,
+                maxRedeServer: maxREDE,
+                minRedeServer: minREDE
             })
         })
             .then((resposta) => {
