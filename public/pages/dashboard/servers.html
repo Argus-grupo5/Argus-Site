@@ -100,9 +100,14 @@
     header("server");
 
     var nome = null;
-    
+    var nome_estado = null;
+    var sigla_estado = null;
+
     function botaoLimpar(){
         nome = ipt_nome.value;
+        nome_estado = ipt_nome_estado.value;
+        sigla_estado = ipt_sigla_estado.value;
+
         div_modal_label.innerHTML = `<h1>Limite Componentes</h1>
             <div class="modal-label" id="div_modal_label">
                 <label for="ipt_nome_cpu">Limite CPU:</label>
@@ -160,6 +165,16 @@
             <div class="modal-label">
                 <label for="ipt_nome">Nome do Servidor:</label>
                 <input type="text" name="" id="ipt_nome" placeholder="Digite o nome do servidor">
+
+                <label for="ipt_nome_estado">Nome do Estado:</label>
+                <input type="text" name="" id="ipt_nome_estado" placeholder="Digite o nome do estado">
+
+                <label for="ipt_sigla_estado">Sigla do Servidor:</label>
+                    <input type="text" name="" id="ipt_sigla_estado" placeholder="Digite a sigla do estado">
+            </div>
+            <div class="modal-button">
+            </div>
+            <div class="modal-button">
             </div>
             <div class="modal-button">
                 <div onclick="fecharModal()">
@@ -201,6 +216,8 @@
             body: JSON.stringify({
                 nomeServer: nome,
                 empresaServer: sessionStorage.EMPRESA_ID,
+                nomeEstadoServer: nome_estado,
+                siglaEstadoServer: sigla_estado,
                 maxCpuServer: maxCPU,
                 minCpuServer: minCPU,
                 maxRamServer: maxRAM,

@@ -1,8 +1,8 @@
 var database = require("../database/config")
 
-function addServidor(nome, empresa, maxCpu, minCpu, maxRam, minRam, maxDisco, minDisco, maxRede, minRede) {
-    var sqlInstruction = `INSERT INTO servidor (nome, fkempresa)
-                            VALUES ('${nome}', ${empresa})`;
+function addServidor(nome, empresa, nome_estado, sigla_estado, maxCpu, minCpu, maxRam, minRam, maxDisco, minDisco, maxRede, minRede) {
+    var sqlInstruction = `INSERT INTO servidor (nome, nome_estado, sigla_estado, fkempresa)
+                            VALUES ('${nome}','${nome_estado}','${sigla_estado}', '${empresa}')`;
 
     return database.executar(sqlInstruction).then(resultado => {
         const servidorId = resultado.insertId;

@@ -3,6 +3,8 @@ var servidoresModel = require("../models/servidoresModel")
 function addServidor(req, res){
     var nome = req.body.nomeServer;
     var empresa = req.body.empresaServer;
+    var nome_estado = req.body.nomeEstadoServer;
+    var sigla_estado = req.body.siglaEstadoServer;
     var maxCpu = req.body.maxCpuServer;
     var minCpu = req.body.minCpuServer;
     var maxRam = req.body.maxRamServer;
@@ -16,6 +18,10 @@ function addServidor(req, res){
     res.status(400).send("Seu nome está undefined!");
     } else if (empresa == undefined) {
     res.status(400).send("Sua empresa está indefinida!");
+    } else if (nome_estado == undefined) {
+    res.status(400).send("Seu estado está indefinido.")
+    } else if (sigla_estado == undefined) {
+    res.status(400).send("Sua sigla está indefinida.")
     } else if (maxCpu == undefined) {
     res.status(400).send("Seu máximo de CPU está indefinido!");
     } else if (minCpu == undefined) {
@@ -32,10 +38,10 @@ function addServidor(req, res){
     res.status(400).send("Seu máximo de REDE está indefinido");
     } else if (minRede == undefined) {
     res.status(400).send("Seu máximo de REDE está indefinido");
-    }
+    } 
     else {
 
-  servidoresModel.addServidor(nome, empresa, maxCpu, minCpu, maxRam, minRam, maxDisco, minDisco, maxRede, minRede)
+  servidoresModel.addServidor(nome, empresa, nome_estado, sigla_estado, maxCpu, minCpu, maxRam, minRam, maxDisco, minDisco, maxRede, minRede)
     .then(
         (resultadoAdd) => {
             if(resultadoAdd.length > 0) {
