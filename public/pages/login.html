@@ -4,146 +4,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ARGUS | Login</title>
+    <title>Argus | Login</title>
     <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/login-cadastro/signin.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/5.0.8/inputmask.min.js"></script>
-
+    <link rel="stylesheet" href="../css/login-cadastro/login.css">
+    <link rel="shortcut icon" type="image/x-icon" href="../assets/icon/logoBranca.svg">
 </head>
 
 <body>
-    <header class="desktopHeader">
-        <a href="../index.html" class="logo"><img src="../assets/icon/logoBranca.svg" alt=""></a>
-        <a href="../index.html" class="title">
-            <h1>ARGUS</h1>
-        </a>
-        <nav class="links">
-            <a class="link" href="../pages/empresa.html">Empresa</a>
-            <a class="link" href="../pages/contato.html">Contato</a>
-        </nav>
-        <nav class="login">
-            <a class="link" href="../pages/login.html">Entrar</a>
-            <a class="buttons" href="../pages/signin.html">Cadastre-se</a>
-        </nav>
-    </header>
     <div class="bannerDesktop"></div>
+  <header class="desktopHeader">
+    <a href="../index.html" class="logo"><img src="../assets/icon/logoBranca.svg" alt=""></a>
+    <a href="../index.html" class="title">
+      <h1>ARGUS</h1>
+    </a>
+    <nav class="links">
+      <a class="link" href="../index.html">Home</a>
+      <a class="link" href="./empresa.html">Empresa</a>
+      <a class="link" href="./contato.html">Contato</a>
+    </nav>
+    <nav class="login">
+      <a class="link" href="./login.html">Entrar</a>
+      <a class="buttons" href="./signin.html">Cadastre-se</a>
+    </nav>
+  </header>
+
+
+  <header class="mobileHeader">
+    <a href="../index.html" class="logo">
+      <img src="../assets/icon/logoMobile.svg" alt="Logo">
+    </a>
+    <button id="burgerBtn" class="burgerBtn" aria-label="Abrir menu de navegação" aria-expanded="false" aria-controls="mobileNav">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </header>
+
+  <!-- Menu full-screen -->
+  <nav id="mobileNav" class="mobileNav" aria-hidden="true" role="navigation" aria-label="Menu de navegação mobile">
+    <ul>
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="./empresa.html">Empresa</a></li>
+      <li><a href="./contato.html">Contato</a></li>
+      <li><a href="./login.html">Entrar</a></li>
+      <li><a class="btnCadastro" href="./signin.html">Cadastrar-se</a></li>
+    </ul>
+    <div class="footer">
+      <p>© 2025 Argus Corporation. Ltd. All rights reserved.</p>
+    </div>
+  </nav>
 
     <div class="containerDesktop">
         <div class="heroPage">
             <h1>Entrar na Argus</h1>
-            <select id="ipt_autenticacao" name="autenticacao" onchange="autent()">
-                <option value="usuario">Usuario</option>
-                <option value="empresa">Empresa</option>
-            </select>
             <div class="inputs" id="inputs">
                 <section class="input">
                     <p>Email</p>
-                    <input type="text" id="ipt_email" placeholder="Digite seu email">
+                    <input class="form-input" type="text" id="ipt_email" placeholder="Digite seu email">
                 </section>
                 <section class="input">
                     <p>Senha</p>
-                    <input type="password" id="ipt_senha" placeholder="********">
+                    <input class="form-input" type="password" id="ipt_senha" placeholder="********">
                 </section>
             </div>
-            <div id="mensagem_erro"></div>
-            <section class="btnImagem" id="botaoAlteravel">
-                <button class="btnImage" onclick="loginUsuario()">
-                    <img src="../assets/login-signin/Buttom.svg" alt="Botão para cadastro">
-                </button>
-            </section>
-            <p>Não tem uma conta? <a href="signin.html">Cadastre-se na Argus.</a></p>
-            <div class="vetor"></div>
-        </div>
-
-
-
-        <div class="footer">
-            <div class="links">
-                <a href="">EULA</a>
-                <a href="./empresa.html">Sobre Nós</a>
-                <a href="./contato.html">Contato</a>
+            <div class="options">
+                <div id="mensagem_erro_mobile"></div>
+                <section class="btnImagem" id="botaoAlteravel">
+                    <button class="btnImage" onclick="loginUsuario()">
+                        <img src="../assets/login-signin/Buttom.svg" alt="Botão para cadastro">
+                    </button>
+                </section>
+                <p>Não tem uma conta? <a href="signin.html">Cadastre-se na Argus.</a></p>
+                <div class="vetor"></div>
             </div>
             <p>© 2025 Argus Corporation. Ltd. All rights reserved.</p>
         </div>
     </div>
+    <!-- Single responsive container (mobile/desktop handled by CSS) -->
 </body>
 
 </html>
 
 <script>
     mensagem_erro.style.display = "none";
-    function autent() {
-        if (ipt_autenticacao.value === "empresa") {
-            inputs.innerHTML = `
-                <section class="input">
-                    <p>CNPJ</p>
-                    <input type="text" id="ipt_cnpj" placeholder="Digite seu CNPJ" maxlength="18" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-                </section>
-                <section class="input">
-                    <p>Senha</p>
-                    <input type="password" id="ipt_senha" placeholder="********">
-                </section>
-            `;
-
-
-            document.getElementById("ipt_cnpj").addEventListener("input", function (e) {
-                let value = e.target.value.replace(/\D/g, "");
-                if (value.length > 2) {
-                    value = value.replace(/^(\d{2})(\d)/, "$1.$2");
-                }
-                if (value.length > 5) {
-                    value = value.replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3");
-                }
-                if (value.length > 8) {
-                    value = value.replace(/\.(\d{3})(\d)/, ".$1/$2");
-                }
-                if (value.length > 12) {
-                    value = value.replace(/(\d{4})(\d)/, "$1-$2");
-                }
-
-                e.target.value = value;
-            });
-
-            botaoAlteravel.innerHTML = `
-                <button class="btnImage" onclick="loginEmpresa()">
-                    <img src="../assets/login-signin/Buttom.svg" alt="Botão para login">
-                </button>
-            `;
-        } else if (ipt_autenticacao.value === "usuario") {
-            inputs.innerHTML = `
-                <section class="input">
-                    <p>Email</p>
-                    <input type="text" id="ipt_email" placeholder="Digite seu email">
-                </section>
-                <section class="input">
-                    <p>Senha</p>
-                    <input type="password" id="ipt_senha" placeholder="********">
-                </section>
-            `;
-            botaoAlteravel.innerHTML = `
-                <button class="btnImage" onclick="loginUsuario()">
-                    <img src="../assets/login-signin/Buttom.svg" alt="Botão para login">
-                </button>
-            `;
-        }
-    }
+    mensagem_erro_mobile.style.display = "none";
 
     function mostrarErro(msg) {
         mensagem_erro.style.display = "block";
+        mensagem_erro_mobile.style.display = "block";
         mensagem_erro.innerHTML = msg;
-        setTimeout(() => {
-            mensagem_erro.style.display = "none";
-        }, 2500);
+        mensagem_erro_mobile.innerHTML = msg;
     }
 
     // Borda vermela
     function marcarErro(input, msg) {
         input.classList.add("erroInput");
         mostrarErro(msg);
-        setTimeout(() => {
-            input.classList.remove("erroInput");
-        }, 2500);
+
+    }
+    function desmarcarErro() {
+        ipt_email.classList.remove("erroInput");
+        ipt_senha.classList.remove("erroInput");
+        ipt_cnpj.classList.remove("erroInput");
     }
 
     function loginUsuario() {
@@ -181,6 +143,7 @@
 
                 if (resposta.ok) {
                     resposta.json().then(json => {
+                        
                         console.log(json);
                         sessionStorage.USER_ID = json.user_id;
                         sessionStorage.USER_NAME = json.user_name;
@@ -205,7 +168,7 @@
                         sessionStorage.CARGO_ID = json.cargo_id;
                         sessionStorage.CARGO_CARGO = json.cargo_cargo;
                         sessionStorage.FOTO = json.foto;
-
+                        desmarcarErro();
                         setTimeout(function () {
                             window.location.href = './dashboard/servers.html';
                         }, 1000);
@@ -314,15 +277,68 @@
 
         return false;
     }
+    
+    /* Single responsive container in use now; removed mobile bridge helper. */
 </script>
 
+<!-- Navbar responsiva: mobile menu toggle + scroll class -->
 <script>
-    const header = document.querySelector('.desktopHeader');
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 90) {
-            header.classList.add('scrolled');
-        } else {
-            header.classList.remove('scrolled');
-        }
+  const desktopHeader = document.querySelector('.desktopHeader');
+  const mobileHeader = document.querySelector('.mobileHeader');
+  const burgerBtn = document.getElementById('burgerBtn');
+  const mobileNav = document.getElementById('mobileNav');
+
+  // Funcionalidade de scroll para ambos os headers
+  window.addEventListener('scroll', () => {
+    const scrollPosition = window.scrollY;
+    const scrollThreshold = 50;
+    
+    if (scrollPosition > scrollThreshold) {
+      if (desktopHeader) desktopHeader.classList.add('scrolled');
+      if (mobileHeader) mobileHeader.classList.add('scrolled');
+    } else {
+      if (desktopHeader) desktopHeader.classList.remove('scrolled');
+      if (mobileHeader) mobileHeader.classList.remove('scrolled');
+    }
+  });
+
+  // Funcionalidade do menu mobile
+  if (burgerBtn && mobileNav) {
+    burgerBtn.addEventListener('click', () => {
+      const isActive = burgerBtn.classList.contains('active');
+      
+      burgerBtn.classList.toggle('active');
+      mobileNav.classList.toggle('active');
+      
+      // Prevenir scroll quando o menu estiver aberto
+      document.body.style.overflow = isActive ? 'auto' : 'hidden';
+      
+      // Acessibilidade
+      burgerBtn.setAttribute('aria-expanded', !isActive);
+      mobileNav.setAttribute('aria-hidden', isActive);
     });
+
+    // Fechar menu ao clicar em um link
+    const mobileLinks = mobileNav.querySelectorAll('a');
+    mobileLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        burgerBtn.classList.remove('active');
+        mobileNav.classList.remove('active');
+        document.body.style.overflow = 'auto';
+        burgerBtn.setAttribute('aria-expanded', 'false');
+        mobileNav.setAttribute('aria-hidden', 'true');
+      });
+    });
+
+    // Fechar menu com ESC
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && mobileNav.classList.contains('active')) {
+        burgerBtn.classList.remove('active');
+        mobileNav.classList.remove('active');
+        document.body.style.overflow = 'auto';
+        burgerBtn.setAttribute('aria-expanded', 'false');
+        mobileNav.setAttribute('aria-hidden', 'true');
+      }
+    });
+  }
 </script>
