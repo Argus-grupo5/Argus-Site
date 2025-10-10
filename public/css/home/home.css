@@ -5,7 +5,7 @@ body {
 .bannerDesktop {
   background-image: url(../../assets/home/desktop/background.svg);
   width: 100%;
-  height: 110vh;
+  height: 150vh;
   background-repeat: no-repeat;
   background-size: cover;
   position: absolute;
@@ -26,7 +26,7 @@ body {
 
 .containerDesktop .heroPage {
   margin-top: 10.55vh;
-  height: 89.54vh;
+  min-height: 89.54vh;
 
   display: flex;
   flex-direction: column;
@@ -36,39 +36,39 @@ body {
 }
 
 .containerDesktop .heroPage h1 {
-  width: 51vw;
+  width: 50rem;
   font-weight: 400;
   line-height: 1.1;
   text-align: center;
-  font-size: 2.34vw;
+  font-size: 2.3rem;
+  margin: 2.5rem 2.5rem 0 2.5rem
 }
 
 .containerDesktop .heroPage p {
-  margin-top: 1.57vh;
-  font-size: 1.17vw;
+  margin: 2vh 5vh;
+  font-size: 1.3rem;
+  text-align: center;
 }
 
 .containerDesktop .heroPage a {
   margin-top: 2.5vh;
   text-decoration: none;
-  padding-inline: 1.8vw;
-  font-size: 1.61vw;
+  padding-inline: 1.5rem;
+  font-size: 1.7rem;
   color: #000;
   background: #FF6D4D;
-  border-radius: 40vw;
-  transition: .4s;
+  border-radius: 40px;
+  transition: transform .3s ease, box-shadow .3s ease;
 }
 
 .containerDesktop .heroPage a:hover {
-  scale: 1.1;
-  transition: .4s;
-  box-shadow: -3px 2px 5px 5px #000;
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 .containerDesktop .heroPage img {
-  margin-top: 2vh;
-  width: 36.66vw;
-  height: 41.18vh;
+  margin: 15vh 0;
+  height: 20rem;
 }
 
 /* Explication */
@@ -80,7 +80,6 @@ body {
   border-width: .5vw;
 
   width: 100%;
-  height: 70vh;
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
@@ -88,9 +87,19 @@ body {
   justify-content: center;
 }
 
+.containerDesktop .explication .cards {
+  width: 100%;
+  gap: 2vh;
+  padding: 10vh 0 10vh 0;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+}
+
 .containerDesktop .explication .card {
   width: fit-content;
-  height: 20vh;
   padding-inline: 1vw;
   display: flex;
   flex-direction: column;
@@ -100,14 +109,16 @@ body {
 
 
 .containerDesktop .explication .card img {
-  width: 10vw;
-  height: 15vh;
   margin-bottom: .5vh;
+  width: 6rem;
+  min-width: 10vh;
+  min-height: 15vh;
+  height: 8rem;
 }
 
 .containerDesktop .explication .card p {
-  width: 13vw;
-  font-size: 1.3vw;
+  width: 9rem;
+  font-size: 1.3rem;
   text-align: center;
   line-height: 1.1;
   color: #000;
@@ -116,16 +127,20 @@ body {
 /* Vantagens */
 
 .containerDesktop .vantagens {
-  margin-top: 9.11vh;
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
+  background-color: #000;
+  margin-bottom: 15vh;
 }
 
 .containerDesktop .vantagens h1 {
+  margin-top: 9.11vh;
   font-weight: 400;
-  font-size: 3vw;
+  font-size: 3.4rem;
   color: #fff;
+  text-align: center;
 }
 
 .containerDesktop .vantagens h1 span {
@@ -140,125 +155,74 @@ body {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
-  width: 80vw;
+  justify-content: center;
+  gap: 10vh;
+  width: 100%;
+  flex-wrap: wrap;
 }
 
 .containerDesktop .vantagens .cards .card {
   position: relative;
+  width: 25rem;
+  height: 20rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 40vh;
-  width: 22vw;
   background-color: #FFA794;
   border-radius: 1vw;
+  padding: 3rem;
+  margin-top: 10vh;
 }
 
 .containerDesktop .vantagens .cards .card img {
   position: absolute;
-  top: -8vh;
-  left: 1vw;
-  width: 6.51vw;
-  height: 11.58vh;
+  top: -7rem;
+  left: 1.5rem;
+  width: 6.51rem;
+  height: 11.58rem;
 }
 
 .containerDesktop .vantagens .cards .card h2 {
   line-height: 1.1;
   text-align: center;
-  font-size: 2vw;
+  font-size: 2.2rem;
   font-weight: 400;
   color: #000;
 }
 
 
 .containerDesktop .vantagens .cards .card p {
-  width: 20vw;
-  margin-top: 1.7vh;
+  width: 23rem;
+  margin-top: 1.8vh;
   line-height: 1.1;
   text-align: center;
-  font-size: 1.5vw;
+  font-size: 1.5rem;
   font-weight: 300;
   color: #000;
   text-align: center;
 }
 
 .containerDesktop .vantagens a {
-  width: 18vw;
+  padding: 15vh 0vh;
   line-height: 1.3;
   text-align: center;
-  margin-top: 5vh;
+  margin-top: 10vh;
   text-decoration: none;
-  padding-inline: 1.8vw;
-  padding-block: 1.2vh;
-  font-size: 1.61vw;
+  padding-inline: 1.9vw;
+  padding-block: 1.3vh;
+  font-size: 1.6rem;
   font-weight: 600;
   color: #000;
   background: #FF6D4D;
-  border-radius: 40vw;
-  transition: .4s;
+  border-radius: 40px;
+  transition: transform .3s ease, box-shadow .3s ease;
 }
 
 .containerDesktop .vantagens a:hover {
-  scale: 1.1;
-  transition: .4s;
-  box-shadow: -3px 2px 5px 5px #000;
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
-
-/* Footer */
-.containerDesktop .footer {
-  margin-top: 15vh;
-  width: 100%;
-  height: 15vh;
-  background-color: #FF6D4D;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  z-index: 99999;
-}
-
-.containerDesktop .footer .links {
-  width: 25vw;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-.containerDesktop .footer p {
-  font-size: 1.3vw;
-  font-weight: 400;
-}
-
-
-.containerDesktop .footer .links a {
-  font-size: 1.5vw;
-  font-weight: 400;
-  text-decoration: none;
-  position: relative;
-}
-
-/* Animações do footer */
-.containerDesktop .footer .links a::after {
-  content: '';
-  position: absolute;
-  width: 100%;
-  transform: scaleX(0);
-  height: .22vw;
-  bottom: 0;
-  left: 0;
-  background-color: #fff;
-  transition: transform 0.4s ease-out;
-  transform-origin: bottom center;
-}
-
-.containerDesktop .footer .links a:hover::after {
-  transform: scaleX(1);
-  transform-origin: bottom center;
-}
-
 
 .bannerMobile {
   display: none;
@@ -326,14 +290,13 @@ body {
     font-size: 6vw;
     color: #fff;
     background: #FF6D4D;
-    border-radius: 40vw;
-    transition: .4s;
+    border-radius: 40px;
+    transition: transform .3s ease, box-shadow .3s ease;
   }
 
   .containerMobile .heroPage a:hover {
-    scale: 1.1;
-    transition: .4s;
-    box-shadow: -.3px .2px .5px .5px #000;
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   }
 
 
@@ -365,7 +328,7 @@ body {
 
 
   .containerMobile .explication .card img {
-    width: 30vw;
+    width: 22vw;
     height: fit-content;
     padding-block: 2vh;
     margin-bottom: .5vh;
@@ -373,7 +336,7 @@ body {
 
   .containerMobile .explication .card p {
     width: 50%;
-    font-size: 1rem;
+    font-size: 1.3rem;
     text-align: center;
     line-height: 1.1;
     color: #000;
@@ -411,11 +374,11 @@ body {
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     flex-wrap: wrap;
-    width: 50vw;
+    min-width: 80%;
     height: fit-content;
-    gap: 3vh;
+    gap: 5vh;
   }
 
   .containerMobile .vantagens .cards .card {
@@ -441,7 +404,7 @@ body {
   .containerMobile .vantagens .cards .card h2 {
     line-height: 1.1;
     text-align: center;
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     font-weight: 600;
     color: #000;
   }
@@ -452,7 +415,7 @@ body {
     margin-top: 1.7vh;
     line-height: 1.1;
     text-align: center;
-    font-size: .9rem;
+    font-size: 1.15rem;
     font-weight: 300;
     color: #000;
     text-align: center;
@@ -460,23 +423,23 @@ body {
 
   .containerMobile .vantagens a {
     width: fit-content;
+
     text-align: center;
     margin-top: 5vh;
     text-decoration: none;
     padding-inline: 1.8rem;
     padding-block: 1.2vh;
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     font-weight: 600;
     color: #000;
     background: #FF6D4D;
-    border-radius: 40vw;
-    transition: .4s;
+    border-radius: 40px;
+    transition: transform .3s ease, box-shadow .3s ease;
   }
 
   .containerMobile .vantagens a:hover {
-    scale: 1.1;
-    transition: .4s;
-    box-shadow: -3px 2px 5px 5px #000;
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
   }
 
 }

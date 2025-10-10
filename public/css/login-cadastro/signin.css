@@ -2,21 +2,35 @@ body {
     background-color: black;
 }
 
+:root {
+    --input-height: 2.3rem;
+    --input-font-size: 0.95rem;
+    --input-padding-left: 0.9rem;
+    --input-border-radius: 15vw;
+    --input-border: .1vw solid #fff;
+}
+
+/* Single responsive container: .containerDesktop is used for both desktop and mobile views */
+.containerDesktop { display: block; }
+
 .bannerDesktop {
     background-image: url(../../assets/home/desktop/background.svg);
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
     background-repeat: no-repeat;
     background-size: cover;
     position: absolute;
     z-index: -1;
 }
+.desktopHeader {
+  position: relative;
+}
+
 
 /* Hero */
-
 .containerDesktop {
     width: 100%;
-    height: fit-content;
+    height: 89.45vh;
 
     display: flex;
     flex-direction: column;
@@ -25,12 +39,12 @@ body {
 }
 
 .containerDesktop .heroPage {
-    margin-top: 20vh;
-    min-width: 30%;
-    width: fit-content;
-    height: fit-content;
-    height: 70vh;
-    background-color: black;
+    padding: 3vh 6vh;
+    min-width: fit-content;
+    width: 35rem;
+    min-height: fit-content;
+    height: 100%;
+    background-color: rgba(11, 11, 11, 0.85);
     border-radius: .15vw;
     display: flex;
     flex-direction: column;
@@ -44,14 +58,13 @@ body {
     font-weight: 400;
     line-height: 1.1;
     text-align: center;
-    font-size: 2.34vw;
-    width: 24vw;
-    margin-bottom: 5vh;
+    font-size: 2.1rem;
+    margin-bottom: 4vh;
 }
 
 .containerDesktop .heroPage p {
     margin-top: 1.57vh;
-    font-size: 1.17vw;
+    font-size: 0.9rem;
 }
 
 .containerDesktop .heroPage a {
@@ -101,6 +114,68 @@ body {
     cursor: pointer;
     transition: .2s;
     scale: 1.2;
+}
+
+/* Mobile styles applied to the same container so the DOM remains single-source-of-truth */
+@media (max-width: 768px) {
+    .containerDesktop { padding: 6vh 4vw; height: auto;}
+    .bannerDesktop {
+        background:
+        linear-gradient(to top,
+        rgba(0, 0, 0, 0.2),
+        rgba(0, 0, 0, 0.4)
+        rgb(0, 0, 0)),
+        url(../../assets/home/desktop/background.svg);
+
+            background: 
+    linear-gradient(to top, 
+  rgba(0, 0, 0, 1),
+  rgba(0, 0, 0, 0.8),
+  rgba(0, 0, 0, 0.2),
+  rgba(0, 0, 0, 0),
+  rgba(0, 0, 0, 0)
+),
+    url(../../assets/home/desktop/background.svg) no-repeat ;
+    background-size: cover;
+    }
+    .containerDesktop .heroPage {
+        margin-top: 10vh;
+        width: 100%;
+        padding: 2rem;
+        background-color: rgba(11,11,11,0.9);
+        border-radius: 12px;
+        box-sizing: border-box;
+        min-height: auto;
+    }
+
+    .containerDesktop .heroPage h1 {
+        font-size: 1.4rem;
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+    .containerDesktop .heroPage .inputs {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+    .containerDesktop .heroPage .inputs .input {
+        width: 70%;
+        padding: 0.5rem 0;
+    }
+
+    .containerDesktop .heroPage .inputs .input input.form-input {
+        height: var(--input-height);
+        font-size: var(--input-font-size);
+        padding: 0 1rem;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .containerDesktop .heroPage .btnImagem {
+        width: 60%;
+        height: 3.6rem;
+        margin: 2rem auto 0 auto;
+    }
 }
 
 /* Select */
@@ -153,9 +228,7 @@ input::-webkit-inner-spin-button {
 
 .containerDesktop .heroPage .inputs {
     overflow-y: auto;
-    height: 30vh;
     width: 100%;
-    margin-bottom: 5vh;
 }
 
 .containerDesktop .heroPage .inputs .input {
@@ -181,21 +254,22 @@ input::-webkit-inner-spin-button {
 
 
 .containerDesktop .heroPage .inputs .input p {
-    padding-left: 1vw;
     margin-top: 1.57vh;
-    font-size: 1vw;
+    font-size: 1.2rem;
     text-align: start;
 }
 
-.containerDesktop .heroPage .inputs .input input {
+.containerDesktop .heroPage .inputs .input input.form-input {
     background: none;
-    font-size: 1vw;
-    padding-left: 0.8vw;
+    font-size: var(--input-font-size);
+    padding-left: var(--input-padding-left);
     color: #fff;
     width: 100%;
-    height: 5vh;
-    border-radius: 15vw;
-    border: .1vw solid #fff;
+    max-width: 800px;
+    height: var(--input-height);
+    border-radius: var(--input-border-radius);
+    border: var(--input-border);
+    box-sizing: border-box;
 }
 
 .containerDesktop .heroPage .inputs .input h3 {
@@ -207,7 +281,7 @@ input::-webkit-inner-spin-button {
 }
 
 
-.containerDesktop .heroPage .inputs .input input::placeholder {
+.containerDesktop .heroPage .inputs .input input.form-input::placeholder {
     color: rgb(110, 110, 110);
     opacity: 1;
 }
@@ -223,12 +297,13 @@ input::-webkit-inner-spin-button {
 /* Vetor de fundo */
 .vetor {
     background-image: url(../../assets/login-signin/vetor.svg);
-    margin-top: 55vh;
     width: 100%;
-    height: 18vh;
+    margin-bottom: 5vh;
+    height: 21vh;
     background-repeat: no-repeat;
     background-size: cover;
     z-index: -1;
+    bottom: 0;
     position: absolute;
 }
 
