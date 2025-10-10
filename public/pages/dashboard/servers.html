@@ -15,6 +15,10 @@
     <div id="id_sair">
     </div>
 
+    <div id="modal" class="modal">
+        <div class="modal-geral" id="div_modal_label"></div>
+    </div>
+
     <header class="desktopNav" id="navDesktop"></header>
 
     <header class="headerTop">
@@ -60,6 +64,7 @@
             <option value="Bom">Bom Estado</option>
         </select>
         <input type="search" id="id_pesquisa" placeholder="Pesquisar por um servidor" oninput="filtragem_Servidores()">
+        <button onclick="abrirModal()">Adicionar server</button>
     </div>
 
     <div class="container">
@@ -93,6 +98,145 @@
 </html>
 <script>
     header("server");
+
+    var nome = null;
+    var nome_estado = null;
+    var sigla_estado = null;
+
+    function botaoLimpar(){
+        nome = ipt_nome.value;
+        nome_estado = ipt_nome_estado.value;
+        sigla_estado = ipt_sigla_estado.value;
+
+        div_modal_label.innerHTML = `<h1>Limite Componentes</h1>
+            <div class="modal-label" id="div_modal_label">
+                <label for="ipt_nome_cpu">Limite CPU:</label>
+                <div class="modal-label-comp">
+                    <input type="number" name="" id="ipt_maxCPU" placeholder="Digite o limite máximo da CPU">
+                    <input type="number" name="" id="ipt_minCPU" placeholder="Digite o mínimo da CPU">
+                </div>
+            </div>
+            <div class="modal-label" id="div_modal_label">
+                <label for="ipt_nome_ram">Limite RAM:</label>
+                <div class="modal-label-comp">
+                    <input type="number" name="" id="ipt_maxRAM" placeholder="Digite o limite máximo da RAM">
+                    <input type="number" name="" id="ipt_minRAM" placeholder="Digite o mínimo da RAM">
+                </div>
+            </div>
+            <div class="modal-label" id="div_modal_label">
+                <label for="ipt_nome_disco">Limite DISCO:</label>
+                <div class="modal-label-comp">
+                    <input type="number" name="" id="ipt_maxDISCO" placeholder="Digite o limite máximo do DISCO">
+                    <input type="number" name="" id="ipt_minDISCO" placeholder="Digite o mínimo do DISCO">
+                    </div>
+                </div>
+            <div class="modal-label" id="div_modal_label">
+                <label for="ipt_nome_rede">Limite REDE:</label>
+                <div class="modal-label-comp">
+                    <input type="number" name="" id="ipt_maxREDE" placeholder="Digite o limite máximo da REDE">
+                    <input type="number" name="" id="ipt_minREDE" placeholder="Digite o mínimo da REDE">
+                </div>
+            </div>
+            <div class="modal-button">
+                <div onclick="fecharModal()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        <rect width="24" height="24" fill="none" />
+                        <path fill="#fff"
+                            d="M6.4 19L5 17.6l5.6-5.6L5 6.4L6.4 5l5.6 5.6L17.6 5L19 6.4L13.4 12l5.6 5.6l-1.4 1.4l-5.6-5.6z" />
+                    </svg>
+                </div>
+                <div onclick="addServidor()" id="modal_prosseguir">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="24" viewBox="0 0 12 24">
+                        <rect width="12" height="24" fill="none" />
+                        <path fill="#fff" fill-rule="evenodd"
+                            d="M10.157 12.711L4.5 18.368l-1.414-1.414l4.95-4.95l-4.95-4.95L4.5 5.64l5.657 5.657a1 1 0 0 1 0 1.414" />
+                    </svg>
+                </div>
+            </div>`;
+    };
+
+    function abrirModal() {
+        let modal = document.getElementById("modal")
+        let conteudo = document.getElementById("div_modal_label")
+        modal.style.display = "flex"
+
+        conteudo.innerHTML = `
+            <h1>Adicionar servidor</h1>
+            <div class="modal-label">
+                <label for="ipt_nome">Nome do Servidor:</label>
+                <input type="text" name="" id="ipt_nome" placeholder="Digite o nome do servidor">
+
+                <label for="ipt_nome_estado">Nome do Estado:</label>
+                <input type="text" name="" id="ipt_nome_estado" placeholder="Digite o nome do estado">
+
+                <label for="ipt_sigla_estado">Sigla do Servidor:</label>
+                    <input type="text" name="" id="ipt_sigla_estado" placeholder="Digite a sigla do estado">
+            </div>
+            <div class="modal-button">
+            </div>
+            <div class="modal-button">
+            </div>
+            <div class="modal-button">
+                <div onclick="fecharModal()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        <rect width="24" height="24" fill="none" />
+                        <path fill="#fff"
+                            d="M6.4 19L5 17.6l5.6-5.6L5 6.4L6.4 5l5.6 5.6L17.6 5L19 6.4L13.4 12l5.6 5.6l-1.4 1.4l-5.6-5.6z" />
+                    </svg>
+                </div>
+                <div id="modal_prosseguir" onclick="botaoLimpar()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="24" viewBox="0 0 12 24">
+                        <rect width="12" height="24" fill="none" />
+                        <path fill="#fff" fill-rule="evenodd"
+                            d="M10.157 12.711L4.5 18.368l-1.414-1.414l4.95-4.95l-4.95-4.95L4.5 5.64l5.657 5.657a1 1 0 0 1 0 1.414" />
+                    </svg>
+                </div>
+            </div>`
+    }
+
+    function fecharModal() {
+        let modal = document.getElementById("modal")
+        modal.style.display = "none"
+    }
+
+    function addServidor() {
+
+        const maxCPU = ipt_maxCPU.value;
+        const minCPU = ipt_minCPU.value;
+        const maxRAM = ipt_maxRAM.value;
+        const minRAM = ipt_minRAM.value;
+        const maxDISCO = ipt_maxDISCO.value;
+        const minDISCO = ipt_minDISCO.value;
+        const maxREDE = ipt_maxREDE.value;
+        const minREDE = ipt_minREDE.value;
+
+        fetch("/servidores/addServidor", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                nomeServer: nome,
+                empresaServer: sessionStorage.EMPRESA_ID,
+                nomeEstadoServer: nome_estado,
+                siglaEstadoServer: sigla_estado,
+                maxCpuServer: maxCPU,
+                minCpuServer: minCPU,
+                maxRamServer: maxRAM,
+                minRamServer: minRAM,
+                maxDiscoServer: maxDISCO,
+                minDiscoServer: minDISCO,
+                maxRedeServer: maxREDE,
+                minRedeServer: minREDE
+            })
+        })
+            .then((resposta) => {
+                if (resposta.ok) {
+                    console.log("Cadastro realizado com sucesso")
+                } else (
+                    console.log("Erro ao cadastrar")
+                )
+            })
+            .catch((erro) => console.error(`#ERRO: ${erro}`))
+    }
 
     const servers = [
         { name: "Servidor Geforce Now", nivel: 4, recursos: ["CPU", "RAM"], localizacao: "São Paulo - SP" },

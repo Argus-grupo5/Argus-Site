@@ -57,6 +57,10 @@
     <div class="containerDesktop">
         <div class="heroPage">
             <h1>Entrar na Argus</h1>
+            <select id="ipt_autenticacao" name="autenticacao" onchange="autent()">
+                <option value="usuario">Usuario</option>
+                <option value="empresa">Empresa</option>
+            </select>
             <div class="inputs" id="inputs">
                 <section class="input">
                     <p>Email</p>
@@ -80,14 +84,12 @@
             <p>© 2025 Argus Corporation. Ltd. All rights reserved.</p>
         </div>
     </div>
-    <!-- Single responsive container (mobile/desktop handled by CSS) -->
 </body>
 
 </html>
 
 <script>
     mensagem_erro.style.display = "none";
-    mensagem_erro_mobile.style.display = "none";
 
     function mostrarErro(msg) {
         mensagem_erro.style.display = "block";
@@ -135,86 +137,6 @@
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 emailServer: emailVar,
-                senhaServer: senhaVar
-            })
-        })
-            .then(function (resposta) {
-                console.log("ESTOU NO THEN DO login()!");
-
-                if (resposta.ok) {
-                    resposta.json().then(json => {
-                        
-                        console.log(json);
-                        sessionStorage.USER_ID = json.user_id;
-                        sessionStorage.USER_NAME = json.user_name;
-                        json.user_sobrenome != null ? sessionStorage.USER_SOBRENOME = json.user_sobrenome : sessionStorage.USER_SOBRENOME = "";
-                        sessionStorage.USER_EMAIL = json.user_email;
-                        sessionStorage.USER_TELEFONE = json.user_telefone;
-                        sessionStorage.USER_DATA = json.user_data;
-                        sessionStorage.EMPRESA_ID = json.empresa_id;
-                        sessionStorage.EMPRESA_NOME_FANTASIA = json.empresa_nome_fantasia;
-                        sessionStorage.EMPRESA_RAZAO_SOCIAL = json.empresa_razao_social;
-                        sessionStorage.EMPRESA_CNPJ = json.empresa_cnpj;
-                        sessionStorage.EMPRESA_EMAIL = json.empresa_email;
-                        sessionStorage.EMPRESA_TELEFONE = json.empresa_telefone;
-                        sessionStorage.EMPRESA_DATA = json.empresa_data;
-                        sessionStorage.ENDERECO_RUA = json.endereco_rua;
-                        sessionStorage.ENDERECO_NUMERO = json.endereco_numero;
-                        sessionStorage.ENDERECO_BAIRRO = json.endereco_bairro;
-                        sessionStorage.ENDERECO_CIDADE = json.endereco_cidade;
-                        sessionStorage.ENDERECO_ESTADO = json.endereco_estado;
-                        sessionStorage.ENDERECO_CEP = json.endereco_cep;
-                        sessionStorage.ENDERECO_COMPLEMENTO = json.endereco_complemento;
-                        sessionStorage.CARGO_ID = json.cargo_id;
-                        sessionStorage.CARGO_CARGO = json.cargo_cargo;
-                        sessionStorage.FOTO = json.foto;
-                        desmarcarErro();
-                        setTimeout(function () {
-                            window.location.href = './dashboard/servers.html';
-                        }, 1000);
-                    });
-
-                } else {
-                    console.log("Houve um erro ao tentar realizar o login!");
-                    resposta.text().then(texto => {
-                        console.error(texto);
-                        mostrarErro("Usuário ou senha inválidos!");
-                    });
-                }
-            })
-            .catch(function (erro) {
-                console.log(erro);
-                mostrarErro("Erro inesperado. Tente novamente.");
-            });
-        return false;
-    }
-    function loginEmpresa() {
-        var cnpjVar = ipt_cnpj.value.trim();
-        var senhaVar = ipt_senha.value;
-
-        if (cnpjVar === "" || senhaVar === "") {
-            marcarErro(
-                cnpjVar === "" ? ipt_cnpj : ipt_senha,
-                "Preencha todos os campos."
-            );
-            return;
-        }
-
-        if (cnpjVar.length !== 18) {
-            marcarErro(ipt_cnpj, "Certifique-se de que o cnpj está correto.");
-            return;
-        }
-
-        mensagem_erro.style.display = "none";
-
-        console.log("FORM LOGIN: ", cnpjVar);
-        console.log("FORM SENHA: ", senhaVar);
-
-        fetch("/usuarios/autenticarEmpresa", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                cnpjServer: cnpjVar,
                 senhaServer: senhaVar
             })
         })
@@ -278,10 +200,8 @@
         return false;
     }
     
-    /* Single responsive container in use now; removed mobile bridge helper. */
 </script>
 
-<!-- Navbar responsiva: mobile menu toggle + scroll class -->
 <script>
   const desktopHeader = document.querySelector('.desktopHeader');
   const mobileHeader = document.querySelector('.mobileHeader');
