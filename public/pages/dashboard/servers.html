@@ -170,7 +170,7 @@
                 <input type="text" name="" id="ipt_nome_estado" placeholder="Digite o nome do estado">
 
                 <label for="ipt_sigla_estado">Sigla do Servidor:</label>
-                    <input type="text" name="" id="ipt_sigla_estado" placeholder="Digite a sigla do estado">
+                    <input type="text" name="" id="ipt_sigla_estado" maxlength="2" placeholder="Digite a sigla do estado">
             </div>
             <div class="modal-button">
             </div>
@@ -209,6 +209,39 @@
         const minDISCO = ipt_minDISCO.value;
         const maxREDE = ipt_maxREDE.value;
         const minREDE = ipt_minREDE.value;
+
+        function validarLimite(max, min, nome) {
+        if (isNaN(max) || isNaN(min)) {
+            alert(`Preencha corretamente os valores de ${nome}.`);
+            return false;
+        }
+        if (max < min) {
+            alert(`O valor máximo de ${nome} não pode ser menor que o mínimo.`);
+            return false;
+        }
+        if (max > 100 || max < 1) {
+            alert(`O valor máximo de ${nome} deve ser entre 1 e 100.`);
+            return false;
+        }
+        if (min < 0) {
+            alert(`O valor mínimo de ${nome} não pode ser menor que 0.`);
+            return false;
+        }
+        if (min > max) {
+            alert(`O valor mínimo de ${nome} não pode ser maior que o máximo.`);
+            return false;
+        }
+        return true;
+    }
+
+    if (
+        !validarLimite(maxCPU, minCPU, "CPU") ||
+        !validarLimite(maxRAM, minRAM, "RAM") ||
+        !validarLimite(maxDISCO, minDISCO, "DISCO") ||
+        !validarLimite(maxREDE, minREDE, "REDE")
+    ) {
+        return;
+    }
 
         fetch("/servidores/addServidor", {
             method: "POST",
