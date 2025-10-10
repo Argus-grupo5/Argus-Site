@@ -8,7 +8,7 @@
 }
 
 body{
-  height: 100vh;
+  min-height: 100vh;
   color: #fff;
 }
 
@@ -30,83 +30,80 @@ body{
   color: #fff;
   width: 100%;
   height: 10.55vh;
-  z-index: 10000000000000;
+  z-index: 1000;
   display: flex;
   flex-direction: row;
   align-items: center;
-  transition: .4s;
+  transition: background-color .3s ease;
 }
 
 .desktopHeader .logo {
   width: 5.42%;
   margin-left: 1.9vw;
-  transition: .4s;
+  transition: transform .3s ease;
 }
 
 .desktopHeader .logo img {
-  width: 100%;
+  width: 90%;
 }
 
 .desktopHeader .title {
   text-decoration: none;
+  margin-left: none;
   color: #fff;
-  transition: .4s;
+  transition: color .3s ease;
 }
 
 .desktopHeader .title h1 {
   font-size: 2.54vw;
-  margin-left: 1.46vw;
   color: #fff;
 }
 
 .desktopHeader .links {
-  margin-left: 4.07vw;
+  margin-left: 2.07vw;
   width: 15vw;
   height: 4.17vh;
 
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
   align-items: center;
 }
 
 .desktopHeader .links .link,
 .desktopHeader .login .link {
   text-decoration: none;
+  margin: 0 1.1vw 0 0.5vw;
   color: #fff;
-  font-size: 1.56vw;
+  font-size: 1.3rem;
 }
 
 .desktopHeader .login {
   margin-left: auto;
   margin-right: 1.96vw;
-  width: 18.80vw;
-
+  font-size: clamp(1rem, 2vw, 1.1rem);
+  white-space: nowrap;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 1vw;
 }
 
 .desktopHeader .login .buttons {
   text-decoration: none;
   color: #fff;
-  font-size: 1.56vw;
+  font-size: 1.3rem;
   padding-inline: 1.8vw;
   background: #FF6D4D;
-  border-radius: 40vw;
-  transition: .4s;
-
+  border-radius: 40px;
+  transition: transform .3s ease, box-shadow .3s ease;
 }
 
 .desktopHeader .logo:hover {
-  scale: 1.1;
-  transition: .4s;
+  transform: scale(1.05);
 }
 
 .desktopHeader .login .buttons:hover {
-  scale: 1.1;
-  transition: .4s;
-  box-shadow: -3px 2px 5px 5px #000;
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 /* animação do hover */
@@ -145,6 +142,62 @@ body{
   background-color: #000000cc;
 }
 
+/* Footer */
+.containerDesktop .footer {
+  width: 100%;
+  background-color: #FF6D4D;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 4rem 0 0 0;
+  margin-top: auto;
+}
+
+.containerDesktop .footer .links {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 8rem;
+}
+
+.containerDesktop .footer p {
+  margin-top: 15px;
+  font-size: 1.2rem;
+  font-weight: 400;
+  margin-bottom: 10px;
+}
+
+
+.containerDesktop .footer .links a {
+  font-size: 1.4rem;
+  font-weight: 400;
+  margin-left: 5vh;
+  text-decoration: none;
+  position: relative;
+  color:#fff;
+}
+
+/* Animações do footer */
+.containerDesktop .footer .links a::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: .22vw;
+  bottom: 0;
+  left: 0;
+  background-color: #fff;
+  transition: transform 0.4s ease-out;
+  transform-origin: bottom center;
+}
+
+.containerDesktop .footer .links a:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom center;
+}
+
 .mobileHeader{
   display: none;
 }
@@ -171,6 +224,11 @@ body{
     transition: .4s;
   }
 
+  .mobileHeader img {
+    padding: 5px;
+    height: 15vh;
+  }
+
   .mobileHeader button {
     background: none;
     border: none;
@@ -189,27 +247,33 @@ body{
     color: #fff;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-    transition: right .24s ease;
-    z-index: 9999;
+    padding-top: 20vh;
+    padding-bottom: 5vh;
+    box-sizing: border-box;
+    overflow-y: auto;
+    transition: right .3s ease;
+    z-index: 999;
   }
 
   .mobileNav ul {
     list-style: none;
     padding: 0;
+    padding-top: 30px;
     margin: 0;
     text-align: center;
     display: flex;
     flex-direction: column;
     gap: 2rem;
+    margin-bottom: 3rem;
   }
 
   .mobileNav ul li a {
     color: #fff;
     font-size: 2rem;
     text-decoration: none;
-    transition: color 0.3s;
+    transition: color .25s ease;
   }
 
   .mobileNav ul li a:hover {
@@ -229,7 +293,8 @@ body{
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-top: 2rem;
+    margin-top: auto;
+    margin-bottom: 2rem;
   }
 
   .mobileNav .footer .links{
@@ -253,6 +318,7 @@ body{
     margin-top: 2rem;
     width: 60%;
     text-align: center;
+    margin-top:auto;
   }
 
   .mobileNav.active {
@@ -290,5 +356,51 @@ body{
   .burgerBtn.active span {
     width: 100%;
     transition: .24s;
+  }
+}
+
+/* Ajustes para telas pequenas */
+@media (max-height: 700px) {
+  .mobileNav {
+    padding-top: 15vh;
+    padding-bottom: 3vh;
+  }
+  
+  .mobileNav ul {
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  .mobileNav ul li a {
+    font-size: 1.5rem;
+  }
+  
+  .mobileNav ul li .btnCadastro {
+    font-size: 1.2rem;
+    padding: 0.6rem 1.5rem;
+  }
+  
+  .mobileNav .footer .links a {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-height: 600px) {
+  .mobileNav {
+    padding-top: 12vh;
+    padding-bottom: 2vh;
+  }
+  
+  .mobileNav ul {
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .mobileNav ul li a {
+    font-size: 1.3rem;
+  }
+  
+  .mobileNav .footer {
+    margin-bottom: 1rem;
   }
 }
