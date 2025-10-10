@@ -6,6 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="./css/style.css">
   <link rel="stylesheet" href="./css/home/home.css">
+  <link rel="shortcut icon" type="image/x-icon" href="./assets/icon/logoBranca.svg">
+
   <title>ARGUS | Home</title>
 </head>
 
@@ -16,6 +18,7 @@
       <h1>ARGUS</h1>
     </a>
     <nav class="links">
+      <a class="link" href="./index.html">Home</a>
       <a class="link" href="./pages/empresa.html">Empresa</a>
       <a class="link" href="./pages/contato.html">Contato</a>
     </nav>
@@ -31,7 +34,7 @@
     <a href="./index.html" class="logo">
       <img src="./assets/icon/logoMobile.svg" alt="Logo">
     </a>
-    <button id="burgerBtn" class="burgerBtn">
+    <button id="burgerBtn" class="burgerBtn" aria-label="Abrir menu de navegação" aria-expanded="false" aria-controls="mobileNav">
       <span></span>
       <span></span>
       <span></span>
@@ -39,21 +42,15 @@
   </header>
 
   <!-- Menu full-screen -->
-  <nav id="mobileNav" class="mobileNav">
+  <nav id="mobileNav" class="mobileNav" aria-hidden="true" role="navigation" aria-label="Menu de navegação mobile">
     <ul>
+      <li><a href="./index.html">Home</a></li>
       <li><a href="./pages/empresa.html">Empresa</a></li>
       <li><a href="./pages/contato.html">Contato</a></li>
       <li><a href="./pages/login.html">Entrar</a></li>
-      <li><a class="btnCadastro" href="#">Cadastrar-se</a></li>
+      <li><a class="btnCadastro" href="./pages/signin.html">Cadastrar-se</a></li>
     </ul>
     <div class="footer">
-      <div class="links">
-        <a href="./pages/empresa.html">Sobre Nós</a>
-        <a href="./pages/contato.html">Contato</a>
-      </div>
-      <div class="links">
-        <a href="#">EULA</a>
-      </div>
       <p>© 2025 Argus Corporation. Ltd. All rights reserved.</p>
     </div>
   </nav>
@@ -68,7 +65,9 @@
       <img src="./assets/home/desktop/pc.svg" alt="Foto de um computador com dashboard aparecendo">
     </div>
     <div class="explication">
-      <div class="card">
+      <div class="cards">
+        
+        <div class="card">
         <img src="./assets/home/desktop/python.svg" alt="Icone da linguagem python">
         <p>Uma aplicação Python é instalada diretamente no servidor.</p>
       </div>
@@ -82,8 +81,7 @@
       </div>
       <div class="card">
         <img src="./assets/home/desktop/velocimetro.svg" alt="Icone da linguagem python">
-        <p>As informações são enviadas para o nosso site, onde você acessa dashboards com os indicadores mais
-          importantes.</p>
+        <p>As informações são enviadas para nossas dashboards que mostram os indicadores mais importantes.</p>
       </div>
       <div class="card">
         <img src="./assets/home/desktop/eyeblack.svg" alt="Icone da linguagem python">
@@ -93,6 +91,7 @@
         <img src="./assets/home/desktop/maos.svg" alt="Icone da linguagem python">
         <p>E sempre que precisar, nossa equipe estará pronta para ajudar.</p>
       </div>
+    </div>
     </div>
     <div class="vantagens">
       <h1>COM A ARGUS, <span>VOCÊ</span> SEMPRE TÁ NA <span>VANTAGEM</span></h1>
@@ -120,9 +119,10 @@
     </div>
     <div class="footer">
       <div class="links">
-        <a href="">EULA</a>
-        <a href="./pages/empresa.html">Sobre Nós</a>
-        <a href="./pages/contato.html">Contato</a>
+        <a href="./index.html">Home</a>
+        <a href="./empresa.html">Sobre Nós</a>
+        <a href="./contato.html">Contato</a>
+        <a href="./signin.html">Login</a>
       </div>
       <p>© 2025 Argus Corporation. Ltd. All rights reserved.</p>
     </div>
@@ -149,8 +149,7 @@
       </div>
       <div class="card">
         <img src="./assets/home/desktop/velocimetro.svg" alt="Icone da linguagem python">
-        <p>As informações são enviadas para o nosso site, onde você acessa dashboards com os indicadores mais
-          importantes.</p>
+        <p>As informações são enviadas para nossas dashboards que mostram os indicadores mais importantes.</p>
       </div>
       <div class="card">
         <img src="./assets/home/desktop/eyeblack.svg" alt="Icone da linguagem python">
@@ -190,26 +189,64 @@
 
 </html>
 
-<!-- Script para mudar a cor do scroll -->
+<!-- Script para funcionalidade responsiva do header -->
 <script>
-  const header = document.querySelector('.desktopHeader');
-
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 90) { // ponto onde a navbar muda de cor
-      header.classList.add('scrolled');
-    } else {
-      header.classList.remove('scrolled');
-    }
-  });
-
-
-  // JS
+  const desktopHeader = document.querySelector('.desktopHeader');
+  const mobileHeader = document.querySelector('.mobileHeader');
   const burgerBtn = document.getElementById('burgerBtn');
   const mobileNav = document.getElementById('mobileNav');
 
-  burgerBtn.addEventListener('click', () => {
-    burgerBtn.classList.toggle('active');
-    mobileNav.classList.toggle('active');
+  // Funcionalidade de scroll para ambos os headers
+  window.addEventListener('scroll', () => {
+    const scrollPosition = window.scrollY;
+    const scrollThreshold = 50;
+    
+    if (scrollPosition > scrollThreshold) {
+      if (desktopHeader) desktopHeader.classList.add('scrolled');
+      if (mobileHeader) mobileHeader.classList.add('scrolled');
+    } else {
+      if (desktopHeader) desktopHeader.classList.remove('scrolled');
+      if (mobileHeader) mobileHeader.classList.remove('scrolled');
+    }
   });
 
+  // Funcionalidade do menu mobile
+  if (burgerBtn && mobileNav) {
+    burgerBtn.addEventListener('click', () => {
+      const isActive = burgerBtn.classList.contains('active');
+      
+      burgerBtn.classList.toggle('active');
+      mobileNav.classList.toggle('active');
+      
+      // Prevenir scroll quando o menu estiver aberto
+      document.body.style.overflow = isActive ? 'auto' : 'hidden';
+      
+      // Acessibilidade
+      burgerBtn.setAttribute('aria-expanded', !isActive);
+      mobileNav.setAttribute('aria-hidden', isActive);
+    });
+
+    // Fechar menu ao clicar em um link
+    const mobileLinks = mobileNav.querySelectorAll('a');
+    mobileLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        burgerBtn.classList.remove('active');
+        mobileNav.classList.remove('active');
+        document.body.style.overflow = 'auto';
+        burgerBtn.setAttribute('aria-expanded', 'false');
+        mobileNav.setAttribute('aria-hidden', 'true');
+      });
+    });
+
+    // Fechar menu com ESC
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && mobileNav.classList.contains('active')) {
+        burgerBtn.classList.remove('active');
+        mobileNav.classList.remove('active');
+        document.body.style.overflow = 'auto';
+        burgerBtn.setAttribute('aria-expanded', 'false');
+        mobileNav.setAttribute('aria-hidden', 'true');
+      }
+    });
+  }
 </script>
