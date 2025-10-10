@@ -1,28 +1,37 @@
 body {
   background-color: #000;
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
 .containerDesktop {
   width: 100%;
-  height: 100%;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  box-sizing: border-box;
+}
+
+.containerMobile {
+  display: none;
 }
 
 .containerDesktop .heroPage {
-  margin-top: 10.55vh;
+  min-height: 100%;
   width: 100%;
   display: flex;
+  margin-bottom: 10vh;
   flex-direction: column;
 }
 
 .containerDesktop .heroPage h1 {
+  margin-top: 8rem;
   align-self: center;
-  font-size: 3.33vw;
+  font-size: 3.5rem;
+  text-align: center;
   font-weight: 400;
 }
 
@@ -39,82 +48,129 @@ body {
   border-width: .5vw;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-evenly;
+  justify-content: space-around;
   align-items: center;
 }
 
 .containerDesktop .heroPage .cards .card {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   margin-block: 10vh;
-  height: 30vh;
-  width: 16vw;
+  width: 50vh;
 }
 
+ 
 .containerDesktop .heroPage .cards .card img {
-  width: 4vw;
-  height: 6vh;
+  width: 10rem;
+  height: 12rem;
 }
 
-.containerDesktop .heroPage .cards .card h2 {
-  font-size: 2.22vw;
+.containerDesktop .heroPage .cards .card .textCard {
+  width: 100%;
+  
+}
+
+.containerDesktop .heroPage .cards .card .textCard h2 {
+  font-size: 2.3rem;
   font-weight: 600;
   color: #000;
+  width: 100%;
 }
 
-.containerDesktop .heroPage .cards .card p {
-  font-size: 1.11vw;
+.containerDesktop .heroPage .cards .card .textCard p {
+  font-size: 1.2rem;
   color: #000;
 }
 
 
-/* footer */
-.containerDesktop .footer {
-  width: 100%;
-  height: 15vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
+/* Media Queries - Responsividade */
+@media (max-width: 768px) {
+  .containerDesktop {
+    display: none;
+  }
 
-.containerDesktop .footer .links {
-  margin-top: 15vh;
-  width: 25vw;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
+  .containerMobile {
+    width: 100%;
+    min-height: 100vh;
+    max-width: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+  }
 
-.containerDesktop .footer p {
-  font-size: 1.3vw;
-  font-weight: 400;
-}
+  .containerMobile .heroPage {
+    margin-top: 2rem;
+    margin-bottom: 10vh;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 0 1rem;
+  }
 
+  .containerMobile .heroPage h1 {
+    margin-top: 4rem;
+    align-self: center;
+    font-size: 3.5rem;
+    text-align: center;
+    font-weight: 400;
+    max-width: 95%;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+  }
 
-.containerDesktop .footer .links a {
-  font-size: 1.5vw;
-  font-weight: 400;
-  text-decoration: none;
-  position: relative;
-}
+  .containerMobile .heroPage h1 span {
+    color: #FF6D4D;
+  }
 
-/* Animações do footer */
-.containerDesktop .footer .links a::after {
-  content: '';
-  position: absolute;
-  width: 100%;
-  transform: scaleX(0);
-  height: .22vw;
-  bottom: 0;
-  left: 0;
-  background-color: #fff;
-  transition: transform 0.4s ease-out;
-  transform-origin: bottom center;
-}
+  .containerMobile .heroPage .cards {
+    background-color: #FF6D4D;
+    width: 100%;
+    border-color: #000;
+    border-style: dashed none;
+    border-width: 3px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem 5rem 1rem;
+    gap: 3rem;
+  }
 
-.containerDesktop .footer .links a:hover::after {
-  transform: scaleX(1);
-  transform-origin: bottom center;
+  .containerMobile .heroPage .cards .card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    max-width: 25rem;
+    gap: 1rem;
+  }
+
+  .containerMobile .heroPage .cards .card img {
+    width: 15vw;
+    height: auto;
+    max-height: 6rem;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+
+  .containerMobile .heroPage .cards .card div {
+    flex: 1;
+  }
+
+  .containerMobile .heroPage .cards .card h2 {
+    font-size: 4vw;
+    font-weight: 600;
+    color: #000;
+    margin: 0 0 0.5rem 0;
+  }
+
+  .containerMobile .heroPage .cards .card p {
+    font-size: 3vw;
+    color: #000;
+    line-height: 1.3;
+    margin: 0.1rem 0;
+  }
 }
