@@ -1,136 +1,209 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/empresa/empresa.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="shortcut icon" type="image/x-icon" href="../assets/icon/logoBranca.svg">
     <title>ARGUS | Empresa</title>
 </head>
-<style>
-
-</style>
 
 <body>
+    <!-- Header desktop -->
     <header class="desktopHeader">
-        <a href="../index.html" class="logo"><img src="../assets/icon/logoPreta.svg"  id="logo" alt=""></a>
-        <a href="../index.html" class="title">
-            <h1>ARGUS</h1>
-        </a>
+        <a href="../index.html" class="logo"><img src="../assets/icon/logoBranca.svg" alt="Logo"></a>
+        <a href="../index.html" class="title"><h1>ARGUS</h1></a>
         <nav class="links">
-            <a class="link" href="../pages/suporte.html">Suporte</a>
-            <a class="link" href="../pages/empresa.html">Empresa</a>
-            <a class="link" href="../pages/contato.html">Contato</a>
+            <a class="link" href="../index.html">Home</a>
+            <a class="link" href="./empresa.html">Empresa</a>
+            <a class="link" href="./contato.html">Contato</a>
         </nav>
         <nav class="login">
-            <a class="link in" href="../pages/login.html">Entrar</a>
-            <a class="buttons" href="../pages/signin.html">Cadastre-se</a>
+            <a class="link" href="./login.html">Entrar</a>
+            <a class="buttons" href="./signin.html">Cadastre-se</a>
         </nav>
     </header>
 
-    <div class="container">
-        <div class="quemSomos" id="quemSomos">
-            <img src="../assets/empresa/desktop/imagemCorporativa.svg" alt="">
+    <!-- Header mobile (aparece via CSS @media) -->
+    <header class="mobileHeader">
+        <a href="../index.html" class="logo"><img src="../assets/icon/logoMobile.svg" alt="Logo"></a>
+        <button id="burgerBtn" class="burgerBtn" aria-label="Abrir menu de navegação" aria-expanded="false" aria-controls="mobileNav">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </header>
 
-            <div class="texto">
-                <h2>QUEM SOMOS</h2>
-                <P>Somos uma empresa dedicada ao monitoramento de servidores cloud gaming, oferecendo soluções que
-                    garantem segurança, desempenho e confiabilidade. Nosso objetivo é trazer inovação e eficiência,
-                    ajudando a otimizar recursos e proporcionar experiências de jogo mais estáveis.
-
-                <p>Unimos tecnologia, resiliência e sustentabilidade para construir um futuro mais conectado e
-                    responsável no mundo digital.</P>
-                </p>
-            </div>
-        </div>
-        <div class="quemSomos-second">
-            <div class="cards">
-                <div class="card first">
-                    <img src="../assets/empresa/desktop/iconMissao.svg" alt="">
-                    <h2>Missão</h2>
-                    <p>Trazer inovações para o
-                        ramo do monitoramento
-                        de servidores cloud
-                        gaming</p>
-
-
-                </div>
-                <div class="card second">
-                    <img src="../assets/empresa/desktop/iconVisao.svg" alt="">
-                    <h2>Visão</h2>
-                    <p>Ser reconhecido como uma
-                        das pioneiras no ramo de
-                        monitoramento de
-                        servidores cloud gaming</p>
-
-                </div>
-                <div class="card third">
-                    <img src="../assets/empresa/desktop/iconValores.svg" alt="">
-                    <h2>Valores</h2>
-                    <p>União</p>
-                    <p> Resiliência</p>
-                    <p> Sustentabilidade</p>
-                </div>
-
-
-            </div>
-            <div class="equipe">
-                <h2>NOSSA EQUIPE</h2>
-                <div class="linhas linha-first">
-                    <div class="integrante"><img src="../assets/empresa/desktop/fotos/ally.svg" alt="">
-                        <h3>Ally Awada</h3>
-                    </div>
-                    <div class="integrante"><img src="../assets/empresa/desktop/fotos/gustavo.svg" alt="">
-                        <h3>Gustavo Anthony</h3>
-                    </div>
-                    <div class="integrante"><img src="../assets/empresa/desktop/fotos/leo.svg" alt="">
-                        <h3>Leonardo Borges</h3>
-                    </div>
-
-                </div>
-                <div class="linhas linha-second">
-                    <div class="integrante"><img src="../assets/empresa/desktop/fotos/maria.svg" alt="">
-                        <h3>Maria Eduarda</h3>
-                    </div>
-                    <div class="integrante"><img src="../assets/empresa/desktop/fotos/pedro.svg" alt="">
-                        <h3>Pedro Claudino</h3>
-                    </div>
-                </div>
-                <div class="linhas linha-third"></div>
-
-            </div>
-        </div>
+    <!-- Menu full-screen mobile -->
+    <nav id="mobileNav" class="mobileNav" aria-hidden="true" role="navigation" aria-label="Menu de navegação mobile">
+        <ul>
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="./empresa.html">Empresa</a></li>
+            <li><a href="./contato.html">Contato</a></li>
+            <li><a href="./login.html">Entrar</a></li>
+            <li><a class="btnCadastro" href="./signin.html">Cadastrar-se</a></li>
+        </ul>
         <div class="footer">
-            <div class="links">
-                <a href="../pages/suporte.html">Suporte</a>
-                <a href="">EULA</a>
-                <a href="../pages/empresa.html#quemSomos">Sobre Nós</a>
-                <a href="../pages/contato.html">Contato</a>
-            </div>
             <p>© 2025 Argus Corporation. Ltd. All rights reserved.</p>
         </div>
+    </nav>
 
+    <!-- Conteúdo Desktop -->
+    <main class="containerDesktop">
+        <section class="quemSomos" id="quemSomos">
+            <img src="../assets/empresa/desktop/imagemCorporativa.svg" alt="Imagem corporativa">
+            <div class="texto">
+                <h2>QUEM SOMOS</h2>
+                <p>Somos uma empresa dedicada ao monitoramento de servidores cloud gaming, oferecendo soluções que garantam
+                    segurança, desempenho e confiabilidade. Nosso objetivo é trazer inovação e eficiência, ajudando a otimizar
+                    recursos e proporcionar experiências de jogo mais estáveis.</p>
+                <p>Unimos tecnologia, resiliência e sustentabilidade para construir um futuro mais conectado e responsável no
+                    mundo digital.</p>
+            </div>
+        </section>
+
+        <section class="quemSomos-second">
+            <div class="cards">
+                <article class="card first">
+                    <img src="../assets/empresa/desktop/iconMissao.svg" alt="Missão">
+                    <h2>Missão</h2>
+                    <p>Trazer inovações para o ramo do monitoramento de servidores cloud gaming</p>
+                </article>
+
+                <article class="card second">
+                    <img src="../assets/empresa/desktop/iconVisao.svg" alt="Visão">
+                    <h2>Visão</h2>
+                    <p>Ser reconhecido como uma das pioneiras no ramo de monitoramento de servidores cloud gaming</p>
+                </article>
+
+                <article class="card third">
+                    <img src="../assets/empresa/desktop/iconValores.svg" alt="Valores">
+                    <h2>Valores</h2>
+                    <p>União • Resiliência • Sustentabilidade</p>
+                </article>
+            </div>
+
+            <aside class="equipe">
+                <h2>NOSSA EQUIPE</h2>
+                <div class="linhas linha-first">
+                    <div class="integrante"><img src="../assets/empresa/desktop/fotos/ally.svg" alt="Ally"><h3>Ally Awada</h3></div>
+                    <div class="integrante"><img src="../assets/empresa/desktop/fotos/gustavo.svg" alt="Gustavo"><h3>Gustavo Anthony</h3></div>
+                    <div class="integrante"><img src="../assets/empresa/desktop/fotos/leo.svg" alt="Leo"><h3>Leonardo Borges</h3></div>
+                </div>
+                <div class="linhas linha-second">
+                    <div class="integrante"><img src="../assets/empresa/desktop/fotos/maria.svg" alt="Maria"><h3>Maria Eduarda</h3></div>
+                    <div class="integrante"><img src="../assets/empresa/desktop/fotos/pedro.svg" alt="Pedro"><h3>Pedro Claudino</h3></div>
+                </div>
+            </aside>
+
+        </section>
+
+    <div class="footer">
+      <div class="links">
+        <a href="./index.html">Home</a>
+        <a href="./empresa.html">Sobre Nós</a>
+        <a href="./contato.html">Contato</a>
+        <a href="./signin.html">Login</a>
+      </div>
+      <p>© 2025 Argus Corporation. Ltd. All rights reserved.</p>
     </div>
+    </main>
 
+    <!-- Conteúdo Mobile (simplificado) -->
+    <main class="containerMobile" aria-hidden="true">
+        <section class="quemSomos">
+            <img src="../assets/empresa/desktop/imagemCorporativa.svg" alt="Imagem corporativa">
+            <div class="texto">
+                <h2>QUEM SOMOS</h2>
+                <p>Somos uma empresa dedicada ao monitoramento de servidores cloud gaming, oferecendo soluções que garantam
+                    segurança, desempenho e confiabilidade. Nosso objetivo é trazer inovação e eficiência, ajudando a otimizar
+                    recursos e proporcionar experiências de jogo mais estáveis.</p>
+                <br>
+                <p>Unimos tecnologia, resiliência e sustentabilidade para construir um futuro mais conectado e responsável no
+                    mundo digital.</p>
+            </div>
+        </section>
+
+        <section class="quemSomos-second">
+            <div class="cards">
+                <article class="card first">
+                    <img src="../assets/empresa/desktop/iconMissao.svg" alt="Missão">
+                    <h2>Missão</h2>
+                    <p>Trazer inovações para o ramo do monitoramento de servidores cloud gaming</p>
+                </article>
+
+                <article class="card second">
+                    <img src="../assets/empresa/desktop/iconVisao.svg" alt="Visão">
+                    <h2>Visão</h2>
+                    <p>Ser reconhecido como uma das pioneiras no ramo de monitoramento</p>
+                </article>
+
+                <article class="card third">
+                    <img src="../assets/empresa/desktop/iconValores.svg" alt="Valores">
+                    <h2>Valores</h2>
+                    <p>União • Resiliência • Sustentabilidade</p>
+                </article>
+            </div>
+
+            <aside class="equipe">
+                <h2>NOSSA EQUIPE</h2>
+                <div class="linhas linha-first">
+                    <div class="integrante"><img src="../assets/empresa/desktop/fotos/ally.svg" alt="Ally"><h3>Ally Awada</h3></div>
+                    <div class="integrante"><img src="../assets/empresa/desktop/fotos/gustavo.svg" alt="Gustavo"><h3>Gustavo Anthony</h3></div>
+                    <div class="integrante"><img src="../assets/empresa/desktop/fotos/leo.svg" alt="Leo"><h3>Leonardo Borges</h3></div>
+                </div>
+                <div class="linhas linha-second">
+                    <div class="integrante"><img src="../assets/empresa/desktop/fotos/maria.svg" alt="Maria"><h3>Maria Eduarda</h3></div>
+                    <div class="integrante"><img src="../assets/empresa/desktop/fotos/pedro.svg" alt="Pedro"><h3>Pedro Claudino</h3></div>
+                </div>
+            </aside>
+
+        </section>
+    </main>
+
+    <!-- Navbar responsiva: mobile menu toggle + scroll class -->
+    <script>
+        (function () {
+            const desktopHeader = document.querySelector('.desktopHeader');
+            const mobileHeader = document.querySelector('.mobileHeader');
+            const burgerBtn = document.getElementById('burgerBtn');
+            const mobileNav = document.getElementById('mobileNav');
+
+            // Se não existir o botão/menu, não faz nada
+            if (!burgerBtn || !mobileNav) return;
+
+            // Gerencia classe .scrolled com threshold
+            const onScroll = () => {
+                const threshold = 50;
+                const scrolled = window.scrollY > threshold;
+                if (desktopHeader) desktopHeader.classList.toggle('scrolled', scrolled);
+                if (mobileHeader) mobileHeader.classList.toggle('scrolled', scrolled);
+            };
+            window.addEventListener('scroll', onScroll, { passive: true });
+            onScroll();
+
+            const setMenuOpen = (open) => {
+                burgerBtn.classList.toggle('active', open);
+                mobileNav.classList.toggle('active', open);
+                document.body.style.overflow = open ? 'hidden' : 'auto';
+                burgerBtn.setAttribute('aria-expanded', String(open));
+                mobileNav.setAttribute('aria-hidden', String(!open));
+            };
+
+            // Toggle
+            burgerBtn.addEventListener('click', () => setMenuOpen(!burgerBtn.classList.contains('active')));
+
+            // Fecha ao clicar em links
+            mobileNav.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setMenuOpen(false)));
+
+            // Fecha com ESC
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && mobileNav.classList.contains('active')) setMenuOpen(false);
+            });
+        })();
+    </script>
 </body>
 
 </html>
-
-<!-- Script para mudar a cor do scroll -->
-<script>
-    const header = document.querySelector('.desktopHeader');
-    const img = document.getElementById('logo');
-
-
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 90) { // ponto onde a navbar muda de cor
-            header.classList.add('scrolled');
-            logo.src= '../assets/icon/logoBranca.svg'
-        } else {
-            header.classList.remove('scrolled');
-            logo.src= '../assets/icon/logoPreta.svg'
-
-        }
-    });
-
-</script>
