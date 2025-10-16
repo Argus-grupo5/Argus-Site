@@ -230,7 +230,7 @@
                 responsive: true,
                 maintainAspectRatio: false,
                 rotation: -90,
-                circumference: 360,
+                circumference: 180,
                 plugins: {
                     tooltip: { enabled: false },
                     legend: { display: false },
@@ -238,7 +238,8 @@
                         display: true,
                         text: title,
                         color: "#fff",
-                        font: { size: 16, family: "Cairo, Arial, sans-serif", weight: "bold" }
+                        font: { size: 16, family: "Cairo, Arial, sans-serif", weight: "bold" },
+                        padding: { top: 30 }
                     }
                 }
             },
@@ -250,13 +251,13 @@
                     ctx.textAlign = "center";
                     ctx.textBaseline = "middle";
                     const centerX = width / 2;
-                    const centerY = height / 2;
+                    const centerY = height * 0.9;
                     const baseFontSize = width / 10;
 
                     // Texto principal
                     ctx.fillStyle = "#fff";
                     ctx.font = `bold ${baseFontSize}px Cairo`;
-                    ctx.fillText(usage + "%", centerX, centerY - height * 0.015);
+                    ctx.fillText(usage + "%", centerX, centerY - height * 0.15);
 
                     // Texto secundário
                     ctx.font = `${baseFontSize / 2}px Cairo`;
