@@ -174,12 +174,10 @@ function cadastrarEmpresa(req, res) {
   var razao = req.body.razaoServer;
   var cnpj = req.body.cnpjServer;
   var id = req.body.idServer;
-  var foto = req.file.filename;
+  var foto = req.file ? req.file.filename : 'padrao.svg';
   var codigo = Math.floor(Math.random() * 9000) + 1000;
 
-  if (foto == undefined) {
-    res.status(400).send("Sua foto está undefined!");
-  } else if (nome == undefined) {
+  if (nome == undefined) {
     res.status(400).send("Seu nome está undefined!");
   } else if (telefone == undefined) {
     res.status(400).send("Seu telefone está undefined!");
