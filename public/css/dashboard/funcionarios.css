@@ -113,12 +113,12 @@ body{
   align-items: center;
   text-align: center;
   font-size: 1vw;
+  transition: ease-out .2s;
 
 }
 
 .funcionario-item:hover {
-  background-color: #4B4343;
-  transition: ease .3s;
+    background-color: #3e3e3e;
 }
 
 .funcFoto img {

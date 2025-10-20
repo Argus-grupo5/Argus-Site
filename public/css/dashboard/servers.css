@@ -349,9 +349,9 @@ body {
     font-size: 1vw;
     cursor: pointer;
     color: #fff;
-
+    outline: 0;
+    transition: .2s ease-out;
 }
-
 
 .search input {
     width: 100%;
@@ -363,14 +363,15 @@ body {
     font-size: 1vw;
     color: #fff;
     outline: 0;
+    transition: .3s ease;
 }
-textarea:focus, input:focus, select:focus {
+textarea:focus, input:focus {
     border: 1px solid #b0b0b0 !important;
 }
 
 .search input:hover {
     background-color: #4a4a4a;
-    transition: .3s ease;
+
 }
 
 .search button {
@@ -458,11 +459,11 @@ textarea:focus, input:focus, select:focus {
     align-items: center;
     text-align: center;
     font-size: 1vw;
+    transition: ease-out .2s;
 }
 
 .server-object:hover {
-    background-color: #4B4343;
-    transition: ease .3s;
+    background-color: #3e3e3e;
 }
 
 .server-object progress {
