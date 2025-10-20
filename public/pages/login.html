@@ -68,7 +68,7 @@
                 </section>
             </div>
             <div class="options">
-                <div id="mensagem_erro_mobile"></div>
+                <div id="mensagem_erro"></div>
                 <section class="btnImagem" id="botaoAlteravel">
                     <button class="btnImage" onclick="loginUsuario()">
                         <img src="../assets/login-signin/Buttom.svg" alt="Botão para cadastro">
@@ -89,9 +89,7 @@
 
     function mostrarErro(msg) {
         mensagem_erro.style.display = "block";
-        mensagem_erro_mobile.style.display = "block";
         mensagem_erro.innerHTML = msg;
-        mensagem_erro_mobile.innerHTML = msg;
     }
 
     // Borda vermela
