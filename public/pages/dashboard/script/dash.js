@@ -85,8 +85,8 @@ function sair() {
   `;
 }
 function sair_s() {
+  sessionStorage.clear();
   window.location.href = "../login.html";
-  sessionStorage.clear;
 }
 
 function sair_n() {
