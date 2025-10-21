@@ -16,7 +16,7 @@ function addServidor(nome, empresa, nome_estado, sigla_estado, maxCpu, minCpu, m
 
         const promises = componentes.map(comp => {
             return database.executar(
-                `INSERT INTO componente_maquina (fkservidor, fkcomponente, maximo, minimo) VALUES ('${servidorId}', '${comp.id}', '${comp.max}', '${comp.min}')`
+                `INSERT INTO parametros (fkservidor, fkcomponente, maximo, minimo) VALUES ('${servidorId}', '${comp.id}', '${comp.max}', '${comp.min}')`
             );
         });
 
