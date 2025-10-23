@@ -89,8 +89,6 @@
             </div>
         </div>
         <div class="server-list" id="regioes"></div>
-        <div class="server-list" id="id_server_list">
-        </div>
     </div>
     </div>
 </body>
@@ -280,17 +278,50 @@
                 'Content-Type': 'application/json'
             }
         })
-        .then((resposta) => {
-            resposta.json().then(json => {
-                console.log(json)
-                const regioes = document.getElementById("regioes")
-                for(let i = 0; i < json.length; i++){
-                    regioes.innerHTML += `<div class="regioes-card" data-sigla="${json[i].sigla_estado}">
-                            <p>${json[i].nome_estado} - ${json[i].sigla_estado}</p>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 15 15"><rect width="15" height="15" fill="none"/><path fill="#fff" d="M7.5 12L0 4h15z"/></svg>                        </div>`
-                }
+            .then((resposta) => {
+                resposta.json().then(json => {
+                    console.log(json)
+                    const regioes = document.getElementById("regioes")
+                    for (let i = 0; i < json.length; i++) {
+                        regioes.innerHTML += `<div class="slakk">
+                            <div class="regioes-card" data-sigla="${json[i].sigla_estado}" onclick="listarServidores(this)">
+                                <p>${json[i].nome_estado} - ${json[i].sigla_estado}</p>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 15 15"><rect width="15" height="15" fill="none"/><path fill="#fff" d="M7.5 12L0 4h15z"/></svg>
+                                </div>
+                                <div class="server-list" id="id_server_list_${json[i].nome_estado}">
+                                </div>
+                        </div>`
+                    }
+                })
             })
+    }
+
+    function listarServidores(objetoHTML) {
+        const siglaObjeto = objetoHTML.dataset.sigla
+        const id = sessionStorage.EMPRESA_ID
+        
+        fetch(`/servidores/listarServidores/${id}/${siglaObjeto}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
         })
+        .then(resposta => {
+            resposta.json().then((json) => {
+                console.log(json)
+                json.forEach(servidor => {
+                    const divServ = document.getElementById(`id_server_list_${servidor.nome_estado}`)
+                    
+                    divServ.innerHTML += `
+                         <div class="server-object">
+        <div class="serverName">${servidor.nome}</div>
+        <div class="serverLocation">${servidor.nome_estado}</div>
+      </div>
+                        `
+                    })
+                })
+            })
+
     }
 
     const servers = [
@@ -335,7 +366,7 @@
         const recursosText = Array.isArray(s.recursos) ? s.recursos.join(", ") : String(s.recursos);
 
         elServerList.innerHTML += `
-      <div class="server-object">
+                            < div class="server-object" >
         <div class="serverIcon tooltipInfo">
           <img class="server-icon-status" src="../../assets/dashboard/desktop/${status}.svg" alt="Status do servidor">
         </div>
@@ -343,7 +374,7 @@
         <div class="serverStatus"><progress value="${s.nivel}" max="5"></progress></div>
         <div class="serverComponents">${recursosText}</div>
         <div class="serverLocation">${s.localizacao}</div>
-      </div>
+      </div >
     `;
     }
 
@@ -382,7 +413,7 @@
         }
     }
 
-    updateKPIs();
-    filtragem_Servidores();
+    // updateKPIs();
+    // filtragem_Servidores();
     listarEstados()
 </script>

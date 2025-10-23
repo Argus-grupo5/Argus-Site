@@ -32,7 +32,16 @@ function listar(id) {
     return database.executar(sqlInstruction);
 }
 
+function listarServidores(id, siglaEstado){
+    var sqlInstruction = `SELECT id, nome, nome_estado FROM servidor 
+        WHERE fkempresa = ${id} AND sigla_estado = '${siglaEstado}'
+        ORDER BY nome;`
+    
+    return database.executar(sqlInstruction)
+}
+
 module.exports = {
     addServidor,
-    listar
+    listar,
+    listarServidores
 }

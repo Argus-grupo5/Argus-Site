@@ -69,7 +69,24 @@ function listar(req, res) {
         })
 }
 
+function listarServidores(req, res) {
+    const id = req.params.idServer
+    const siglaEstado = req.params.siglaServer
+
+    servidoresModel.listarServidores(id, siglaEstado)
+        .then((resposta) => {
+            if (resposta.length > 0) {
+                res.json(resposta)
+            }
+        })
+        .catch((erro) => {
+            console.log(erro)
+            res.status(500).json(erro.sqlMessage);
+        })
+}
+
 module.exports = {
     addServidor,
-    listar
+    listar,
+    listarServidores
 }

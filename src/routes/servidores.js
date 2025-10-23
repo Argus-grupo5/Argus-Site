@@ -11,4 +11,8 @@ router.get("/listar/:idServer", function(req, res){
     servidoresController.listar(req, res)
 })
 
+router.get("/listarServidores/:idServer/:siglaServer", function(req, res){
+    servidoresController.listarServidores(req, res)
+})
+
 module.exports = router;
