@@ -75,7 +75,13 @@
         <div class="graficoSelecionado">
             <div class="titulosGrafico">
                 <div class="case1">
-                    <div class="tituloGrafico">CPU</div>
+                    <select id="selectGrafico" class="tituloGrafico">
+                        <option value="CPU" selected>CPU</option>
+                        <option value="Memória">Memória</option>
+                        <option value="GPU">GPU</option>
+                        <option value="Armazenamento">Armazenamento</option>
+                        <option value="Latência">Latência</option>
+                    </select>
                     <div class="subtituloGrafico">100</div>
                 </div>
                 <div class="case2">
@@ -92,12 +98,8 @@
                 <div class="caixa1">
                     <div class="titulos1Caixa1">
                         <div class="box">
-                            <div class="titulosBox">Utilização</div>
-                            <div class="respostaTitulos">49%</div>
-                        </div>
-                        <div class="box">
-                            <div class="titulosBox">Velocidade</div>
-                            <div class="respostaTitulos">2,73 GHz</div>
+                            <div class="titulosBox">Tempo de atividade</div>
+                            <div class="respostaTitulos">11:13:38:01</div>
                         </div>
                     </div>
                     <div class="titulos2Caixa1">
@@ -105,19 +107,11 @@
                             <div class="titulosBox">Processos</div>
                             <div class="respostaTitulos">266</div>
                         </div>
-                        <div class="box">
-                            <div class="titulosBox">Threads</div>
-                            <div class="respostaTitulos">4072</div>
-                        </div>
-                        <div class="box">
-                            <div class="titulosBox">Identificadores</div>
-                            <div class="respostaTitulos">134021</div>
-                        </div>
                     </div>
                     <div class="titulos3Caixa1">
                         <div class="box">
-                            <div class="titulosBox">Tempo de atividade</div>
-                            <div class="respostaTitulos">11:13:38:01</div>
+                            <div class="titulosBox">Threads</div>
+                            <div class="respostaTitulos">4072</div>
                         </div>
                     </div>
                 </div>
@@ -164,35 +158,7 @@
 
 </html>
 <!-- Grafico servidores -->
-<script>
-  const ctx = document.getElementById('graficoServidor');
-  let graficoSelecionado = 'CPU'
-  let momentos = ['12:00', '12:01', '12:02', '12:03', '12:04', '12:05'];
-  let dados = [10, 48, 26, 35, 47, 70]
-  new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: momentos,
-      datasets: [{
-        label: '% Utilização ' + graficoSelecionado,
-        data: dados,
-        borderWidth: 1,
-        borderColor: ["#FF6D4D"],
-        backgroundColor: ["#FF6D4D"],
-        fill: true,
-        tension: 0.0,
-        pointStyle: false,
-      }]
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true
-        }
-      }
-    }
-  });
-</script>
+
 
 <script>
     header("dashboard")
@@ -288,3 +254,53 @@
         });
     });
 </script>
+
+ <script>
+        const selectGrafico = document.getElementById('selectGrafico');
+        const ctxGrafico = document.getElementById('graficoServidor');
+        let chartAtual;
+
+        const dadosGraficos = {
+            CPU: [10, 48, 26, 35, 47, 70],
+            Memória: [30, 32, 28, 35, 38, 40],
+            GPU: [20, 45, 50, 65, 60, 58],
+            Armazenamento: [50, 55, 60, 62, 65, 70],
+            Latência: [5, 10, 15, 12, 20, 18]
+        };
+
+        const momentos = ['12:00', '12:01', '12:02', '12:03', '12:04', '12:05'];
+
+        function criarGrafico(tipo) {
+            if (chartAtual) chartAtual.destroy();
+
+            chartAtual = new Chart(ctxGrafico, {
+                type: 'line',
+                data: {
+                    labels: momentos,
+                    datasets: [{
+                        label: `% Utilização ${tipo}`,
+                        data: dadosGraficos[tipo],
+                        borderWidth: 1,
+                        borderColor: "#FF6D4D",
+                        backgroundColor: "#FF6D4D",
+                        fill: true,
+                        tension: 0.0,
+                        pointStyle: false,
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        }
+
+        criarGrafico('CPU');
+
+        selectGrafico.addEventListener('change', (e) => {
+            criarGrafico(e.target.value);
+            document.getElementById("respostaEspec").textContent =
+                e.target.value === "Latência" ? "Tempo de resposta (ms)" : "% de utilização";
+        });
+    </script>
