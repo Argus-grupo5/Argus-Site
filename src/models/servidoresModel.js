@@ -27,8 +27,9 @@ function addServidor(nome, empresa, nome_estado, sigla_estado, maxCpu, minCpu, m
 
 
 function listar(id) {
-    var sqlInstruction = `SELECT DISTINCT nome_estado, sigla_estado FROM servidor WHERE 
-    fkempresa = ${id} AND nome_estado IS NOT NULL;	`
+    var sqlInstruction = `SELECT DISTINCT nome_estado, sigla_estado, COUNT(nome_estado) AS total_servidores FROM servidor WHERE 
+    fkempresa = ${id} AND nome_estado IS NOT NULL
+    GROUP BY nome_estado,sigla_estado;	`
 
     return database.executar(sqlInstruction);
 }
