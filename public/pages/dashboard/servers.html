@@ -88,6 +88,7 @@
                 Localização
             </div>
         </div>
+        <div class="server-list" id="regioes"></div>
         <div class="server-list" id="id_server_list">
         </div>
     </div>
@@ -103,7 +104,7 @@
     var nome_estado = null;
     var sigla_estado = null;
 
-    function botaoLimpar(){
+    function botaoLimpar() {
         nome = ipt_nome.value;
         nome_estado = ipt_nome_estado.value;
         sigla_estado = ipt_sigla_estado.value;
@@ -211,37 +212,37 @@
         const minREDE = ipt_minREDE.value;
 
         function validarLimite(max, min, nome) {
-        if (isNaN(max) || isNaN(min)) {
-            alert(`Preencha corretamente os valores de ${nome}.`);
-            return false;
+            if (isNaN(max) || isNaN(min)) {
+                alert(`Preencha corretamente os valores de ${nome}.`);
+                return false;
+            }
+            if (max < min) {
+                alert(`O valor máximo de ${nome} não pode ser menor que o mínimo.`);
+                return false;
+            }
+            if (max > 100 || max < 1) {
+                alert(`O valor máximo de ${nome} deve ser entre 1 e 100.`);
+                return false;
+            }
+            if (min < 0) {
+                alert(`O valor mínimo de ${nome} não pode ser menor que 0.`);
+                return false;
+            }
+            if (min > max) {
+                alert(`O valor mínimo de ${nome} não pode ser maior que o máximo.`);
+                return false;
+            }
+            return true;
         }
-        if (max < min) {
-            alert(`O valor máximo de ${nome} não pode ser menor que o mínimo.`);
-            return false;
-        }
-        if (max > 100 || max < 1) {
-            alert(`O valor máximo de ${nome} deve ser entre 1 e 100.`);
-            return false;
-        }
-        if (min < 0) {
-            alert(`O valor mínimo de ${nome} não pode ser menor que 0.`);
-            return false;
-        }
-        if (min > max) {
-            alert(`O valor mínimo de ${nome} não pode ser maior que o máximo.`);
-            return false;
-        }
-        return true;
-    }
 
-    if (
-        !validarLimite(maxCPU, minCPU, "CPU") ||
-        !validarLimite(maxRAM, minRAM, "RAM") ||
-        !validarLimite(maxDISCO, minDISCO, "DISCO") ||
-        !validarLimite(maxREDE, minREDE, "REDE")
-    ) {
-        return;
-    }
+        if (
+            !validarLimite(maxCPU, minCPU, "CPU") ||
+            !validarLimite(maxRAM, minRAM, "RAM") ||
+            !validarLimite(maxDISCO, minDISCO, "DISCO") ||
+            !validarLimite(maxREDE, minREDE, "REDE")
+        ) {
+            return;
+        }
 
         fetch("/servidores/addServidor", {
             method: "POST",
@@ -269,6 +270,27 @@
                 )
             })
             .catch((erro) => console.error(`#ERRO: ${erro}`))
+    }
+
+    function listarEstados() {
+        const id = sessionStorage.EMPRESA_ID;
+        fetch(`/servidores/listar/${id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then((resposta) => {
+            resposta.json().then(json => {
+                console.log(json)
+                const regioes = document.getElementById("regioes")
+                for(let i = 0; i < json.length; i++){
+                    regioes.innerHTML += `<div class="regioes-card" data-sigla="${json[i].sigla_estado}">
+                            <p>${json[i].nome_estado} - ${json[i].sigla_estado}</p>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 15 15"><rect width="15" height="15" fill="none"/><path fill="#fff" d="M7.5 12L0 4h15z"/></svg>                        </div>`
+                }
+            })
+        })
     }
 
     const servers = [
@@ -362,4 +384,5 @@
 
     updateKPIs();
     filtragem_Servidores();
+    listarEstados()
 </script>

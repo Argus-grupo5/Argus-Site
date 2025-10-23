@@ -1,6 +1,6 @@
 var servidoresModel = require("../models/servidoresModel")
 
-function addServidor(req, res){
+function addServidor(req, res) {
     var nome = req.body.nomeServer;
     var empresa = req.body.empresaServer;
     var nome_estado = req.body.nomeEstadoServer;
@@ -15,43 +15,61 @@ function addServidor(req, res){
     var minRede = req.body.minRedeServer;
 
     if (nome == undefined) {
-    res.status(400).send("Seu nome está undefined!");
+        res.status(400).send("Seu nome está undefined!");
     } else if (empresa == undefined) {
-    res.status(400).send("Sua empresa está indefinida!");
+        res.status(400).send("Sua empresa está indefinida!");
     } else if (nome_estado == undefined) {
-    res.status(400).send("Seu estado está indefinido.")
+        res.status(400).send("Seu estado está indefinido.")
     } else if (sigla_estado == undefined) {
-    res.status(400).send("Sua sigla está indefinida.")
+        res.status(400).send("Sua sigla está indefinida.")
     } else if (maxCpu == undefined) {
-    res.status(400).send("Seu máximo de CPU está indefinido!");
+        res.status(400).send("Seu máximo de CPU está indefinido!");
     } else if (minCpu == undefined) {
-    res.status(400).send("Seu mínimo de CPU está indefinido");
+        res.status(400).send("Seu mínimo de CPU está indefinido");
     } else if (maxRam == undefined) {
-    res.status(400).send("Seu máximo de RAM está indefinido");
+        res.status(400).send("Seu máximo de RAM está indefinido");
     } else if (minRam == undefined) {
-    res.status(400).send("Seu máximo de RAM está indefinido");
+        res.status(400).send("Seu máximo de RAM está indefinido");
     } else if (maxDisco == undefined) {
-    res.status(400).send("Seu máximo de DISCO está indefinido");
+        res.status(400).send("Seu máximo de DISCO está indefinido");
     } else if (minDisco == undefined) {
-    res.status(400).send("Seu máximo de DISCO está indefinido");
+        res.status(400).send("Seu máximo de DISCO está indefinido");
     } else if (maxRede == undefined) {
-    res.status(400).send("Seu máximo de REDE está indefinido");
+        res.status(400).send("Seu máximo de REDE está indefinido");
     } else if (minRede == undefined) {
-    res.status(400).send("Seu máximo de REDE está indefinido");
-    } 
+        res.status(400).send("Seu máximo de REDE está indefinido");
+    }
     else {
 
-  servidoresModel.addServidor(nome, empresa, nome_estado, sigla_estado, maxCpu, minCpu, maxRam, minRam, maxDisco, minDisco, maxRede, minRede)
-    .then(
-        (resultadoAdd) => {
-            if(resultadoAdd.length > 0) {
-                res.status(201).json(resultadoAdd);
+        servidoresModel.addServidor(nome, empresa, nome_estado, sigla_estado, maxCpu, minCpu, maxRam, minRam, maxDisco, minDisco, maxRede, minRede)
+            .then(
+                (resultadoAdd) => {
+                    if (resultadoAdd.length > 0) {
+                        res.status(201).json(resultadoAdd);
+                    }
                 }
-            }
-        )
+            )
     }
 }
 
+function listar(req, res) {
+    var id = req.params.idServer
+
+    servidoresModel.listar(id)
+        .then(
+            (resultado) => {
+                if (resultado.length > 0) {
+                    res.json(resultado)
+                }
+            }
+        )
+        .catch((erro) => {
+            console.log(erro)
+            res.status(500).json(erro.sqlMessage);
+        })
+}
+
 module.exports = {
-    addServidor
+    addServidor,
+    listar
 }

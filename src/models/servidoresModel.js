@@ -24,6 +24,15 @@ function addServidor(nome, empresa, nome_estado, sigla_estado, maxCpu, minCpu, m
     });
 }
 
+
+function listar(id) {
+    var sqlInstruction = `SELECT DISTINCT nome_estado, sigla_estado FROM servidor WHERE 
+    fkempresa = ${id} AND nome_estado IS NOT NULL;	`
+
+    return database.executar(sqlInstruction);
+}
+
 module.exports = {
-    addServidor
+    addServidor,
+    listar
 }
