@@ -172,8 +172,14 @@
                             sessionStorage.CARGO_CARGO = json.cargo_cargo;
                             sessionStorage.FOTO = json.foto;
 
+                            let caminho;
+                            if(json.cargo_cargo == "Operador"){
+                              caminho = "serversSup";
+                            } else {
+                              caminho = "servers"
+                            }
                             setTimeout(function () {
-                                window.location.href = './dashboard/servers.html';
+                                window.location.href = `./dashboard/${caminho}.html`;
                             }, 1000);
                         }
                     });

@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../css/dashboard/servers.css">
+    <link rel="stylesheet" href="../../css/style.css">
+    <script src="./script/dash.js"></script>
+    <title>ARGUS | Servidores</title>
+</head>
+
+
+<body>
+    <div id="id_sair">
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-geral" id="div_modal_label"></div>
+    </div>
+
+    <header class="desktopNav" id="navDesktop"></header>
+
+    <header class="headerTop">
+        <div class="geralInfo">
+            <div class="info tooltipInfo">
+                <div class="server">
+                    <img src="../../assets/dashboard/desktop/server.svg" alt="">
+                </div>
+                <div class="serversMonitoring" id="id_servidores_monitorados">
+                </div>
+                <span class="tooltiptextInfo">
+                    Servidores em monitoramento
+                </span>
+            </div>
+            <div class="info">
+                <div class="bell">
+                    <img src="../../assets/dashboard/desktop/bell.svg" alt="">
+                </div>
+                <div class="risk tooltipInfo" id="id_servidores_em_estado_critico">
+                    <p id="qtd_critico"></p>
+                    <span class="tooltiptextInfo">
+                        Servidores em atenção
+                    </span>
+                </div>
+                <div class="atention tooltipInfo" id="id_servidores_em_estado_de_alerta">
+                    <p id="qtd_alerta"></p>
+                    <span class="tooltiptextInfo">
+                        Servidores em alerta
+                    </span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="search">
+        <select id="id_filter" onchange="filtragem_Servidores()">
+            <option value="Nivel_d" selected>Nível (Decrescente)</option>
+            <option value="Nivel_c">Nível (Crescente)</option>
+            <option value="Critico_d">Crítico (Decrescente)</option>
+            <option value="Critico_c">Crítico (Crescente)</option>
+            <option value="Alerta_d">Alerta (Decrescente)</option>
+            <option value="Alerta_c">Alerta (Crescente)</option>
+            <option value="Bom">Bom Estado</option>
+        </select>
+        <input type="search" id="id_pesquisa" placeholder="Pesquisar por um servidor" oninput="filtragem_Servidores()">
+        <button onclick="abrirModal()">Adicionar server</button>
+    </div>
+
+    <div class="container">
+        <div class="serverInfo">
+            <div class="serverIcon tooltipInfo">
+                <img style="width: 2vw;" src="../../assets/dashboard/desktop/tip.svg" alt="Informação sobre os dados">
+                <span class="tooltiptextInfo">
+                    Dados são atualizados a cada 60s
+                </span>
+            </div>
+            <div class="serverName">
+                Servidor
+            </div>
+            <div class="serverStatus">
+                Nível de Risco
+            </div>
+            <div class="serverComponents">
+                Recursos em Risco
+            </div>
+            <div class="serverLocation">
+                Localização
+            </div>
+        </div>
+        <div class="server-list" id="id_server_list">
+        </div>
+    </div>
+    </div>
+</body>
+
+
+</html>
+<script>
+    header("server");
+
+    var nome = null;
+    var nome_estado = null;
+    var sigla_estado = null;
+
+    function botaoLimpar() {
+        nome = ipt_nome.value;
+        nome_estado = ipt_nome_estado.value;
+        sigla_estado = ipt_sigla_estado.value;
+
+        div_modal_label.innerHTML = `<h1>Limite Componentes</h1>
+<div class="modal-label" id="div_modal_label">
+<label for="ipt_nome_cpu">Limite CPU:</label>
+<div class="modal-label-comp">
+<input type="number" name="" id="ipt_maxCPU" placeholder="Digite o limite máximo da CPU">
+<input type="number" name="" id="ipt_minCPU" placeholder="Digite o mínimo da CPU">
+</div>
+</div>
+<div class="modal-label" id="div_modal_label">
+<label for="ipt_nome_ram">Limite RAM:</label>
+<div class="modal-label-comp">
+<input type="number" name="" id="ipt_maxRAM" placeholder="Digite o limite máximo da RAM">
+<input type="number" name="" id="ipt_minRAM" placeholder="Digite o mínimo da RAM">
+</div>
+</div>
+<div class="modal-label" id="div_modal_label">
+<label for="ipt_nome_disco">Limite DISCO:</label>
+<div class="modal-label-comp">
+<input type="number" name="" id="ipt_maxDISCO" placeholder="Digite o limite máximo do DISCO">
+<input type="number" name="" id="ipt_minDISCO" placeholder="Digite o mínimo do DISCO">
+</div>
+</div>
+<div class="modal-label" id="div_modal_label">
+<label for="ipt_nome_rede">Limite REDE:</label>
+<div class="modal-label-comp">
+<input type="number" name="" id="ipt_maxREDE" placeholder="Digite o limite máximo da REDE">
+<input type="number" name="" id="ipt_minREDE" placeholder="Digite o mínimo da REDE">
+</div>
+</div>
+<div class="modal-button">
+<div onclick="fecharModal()">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+<rect width="24" height="24" fill="none" />
+<path fill="#fff"
+d="M6.4 19L5 17.6l5.6-5.6L5 6.4L6.4 5l5.6 5.6L17.6 5L19 6.4L13.4 12l5.6 5.6l-1.4 1.4l-5.6-5.6z" />
+</svg>
+</div>
+<div onclick="addServidor()" id="modal_prosseguir">
+<svg xmlns="http://www.w3.org/2000/svg" width="12" height="24" viewBox="0 0 12 24">
+<rect width="12" height="24" fill="none" />
+<path fill="#fff" fill-rule="evenodd"
+d="M10.157 12.711L4.5 18.368l-1.414-1.414l4.95-4.95l-4.95-4.95L4.5 5.64l5.657 5.657a1 1 0 0 1 0 1.414" />
+</svg>
+</div>
+</div>`;
+    };
+
+    function abrirModal() {
+        let modal = document.getElementById("modal")
+        let conteudo = document.getElementById("div_modal_label")
+        modal.style.display = "flex"
+
+        conteudo.innerHTML = `
+<h1>Adicionar servidor</h1>
+<div class="modal-label">
+<label for="ipt_nome">Nome do Servidor:</label>
+<input type="text" name="" id="ipt_nome" placeholder="Digite o nome do servidor">
+
+<label for="ipt_nome_estado">Nome do Estado:</label>
+<input type="text" name="" id="ipt_nome_estado" placeholder="Digite o nome do estado">
+
+<label for="ipt_sigla_estado">Sigla do Servidor:</label>
+<input type="text" name="" id="ipt_sigla_estado" maxlength="2" placeholder="Digite a sigla do estado">
+</div>
+<div class="modal-button">
+</div>
+<div class="modal-button">
+</div>
+<div class="modal-button">
+<div onclick="fecharModal()">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+<rect width="24" height="24" fill="none" />
+<path fill="#fff"
+d="M6.4 19L5 17.6l5.6-5.6L5 6.4L6.4 5l5.6 5.6L17.6 5L19 6.4L13.4 12l5.6 5.6l-1.4 1.4l-5.6-5.6z" />
+</svg>
+</div>
+<div id="modal_prosseguir" onclick="botaoLimpar()">
+<svg xmlns="http://www.w3.org/2000/svg" width="12" height="24" viewBox="0 0 12 24">
+<rect width="12" height="24" fill="none" />
+<path fill="#fff" fill-rule="evenodd"
+d="M10.157 12.711L4.5 18.368l-1.414-1.414l4.95-4.95l-4.95-4.95L4.5 5.64l5.657 5.657a1 1 0 0 1 0 1.414" />
+</svg>
+</div>
+</div>`
+    }
+
+    function fecharModal() {
+        let modal = document.getElementById("modal")
+        modal.style.display = "none"
+    }
+
+    function addServidor() {
+
+        const maxCPU = ipt_maxCPU.value;
+        const minCPU = ipt_minCPU.value;
+        const maxRAM = ipt_maxRAM.value;
+        const minRAM = ipt_minRAM.value;
+        const maxDISCO = ipt_maxDISCO.value;
+        const minDISCO = ipt_minDISCO.value;
+        const maxREDE = ipt_maxREDE.value;
+        const minREDE = ipt_minREDE.value;
+
+        function validarLimite(max, min, nome) {
+            if (isNaN(max) || isNaN(min)) {
+                alert(`Preencha corretamente os valores de ${nome}.`);
+                return false;
+            }
+            if (max < min) {
+                alert(`O valor máximo de ${nome} não pode ser menor que o mínimo.`);
+                return false;
+            }
+            if (max > 100 || max < 1) {
+                alert(`O valor máximo de ${nome} deve ser entre 1 e 100.`);
+                return false;
+            }
+            if (min < 0) {
+                alert(`O valor mínimo de ${nome} não pode ser menor que 0.`);
+                return false;
+            }
+            if (min > max) {
+                alert(`O valor mínimo de ${nome} não pode ser maior que o máximo.`);
+                return false;
+            }
+            return true;
+        }
+
+        if (
+            !validarLimite(maxCPU, minCPU, "CPU") ||
+            !validarLimite(maxRAM, minRAM, "RAM") ||
+            !validarLimite(maxDISCO, minDISCO, "DISCO") ||
+            !validarLimite(maxREDE, minREDE, "REDE")
+        ) {
+            return;
+        }
+
+        fetch("/servidores/addServidor", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                nomeServer: nome,
+                empresaServer: sessionStorage.EMPRESA_ID,
+                nomeEstadoServer: nome_estado,
+                siglaEstadoServer: sigla_estado,
+                maxCpuServer: maxCPU,
+                minCpuServer: minCPU,
+                maxRamServer: maxRAM,
+                minRamServer: minRAM,
+                maxDiscoServer: maxDISCO,
+                minDiscoServer: minDISCO,
+                maxRedeServer: maxREDE,
+                minRedeServer: minREDE
+            })
+        })
+            .then((resposta) => {
+                if (resposta.ok) {
+                    console.log("Cadastro realizado com sucesso")
+                } else (
+                    console.log("Erro ao cadastrar")
+                )
+            })
+            .catch((erro) => console.error(`#ERRO: ${erro}`))
+    }
+
+    const servers = [
+        { name: "Servidor Geforce Now", nivel: 4, recursos: ["CPU", "RAM"], localizacao: "São Paulo - SP" },
+        { name: "Servidor SPTech", nivel: 3, recursos: ["CPU", "GPU"], localizacao: "São Paulo - SP" },
+        { name: "Servidor BandTec", nivel: 5, recursos: ["CPU", "GPU", "Armazenamento"], localizacao: "São Paulo - SP" },
+        { name: "Servidor Xbox", nivel: 1, recursos: ["GPU"], localizacao: "Rio de Janeiro - RJ" },
+        { name: "Servidor Stadia", nivel: 2, recursos: ["CPU", "RAM"], localizacao: "Belo Horizonte - MG" }
+    ];
+
+    const elMonitored = document.getElementById("id_servidores_monitorados");
+    const elQtdCritico = document.getElementById("qtd_critico");
+    const elQtdAlerta = document.getElementById("qtd_alerta");
+    const elServerList = document.getElementById("id_server_list");
+    elMonitored.textContent = servers.length;
+
+    function getRiskStatusFromLevel(nivel) {
+        const n = Number(nivel);
+        if (n === 1) return "ok";
+        if (n > 1 && n <= 3) return "atention";
+        if (n >= 4) return "danger";
+        return "indisponivel";
+    }
+
+    // Atualiza KPIs
+    function updateKPIs() {
+        let critico = 0;
+        let alerta = 0;
+        for (let i = 0; i < servers.length; i++) {
+            const status = getRiskStatusFromLevel(servers[i].nivel);
+            if (status === "danger") critico++;
+            else if (status === "atention") alerta++;
+        }
+        elQtdCritico.textContent = critico;
+        elQtdAlerta.textContent = alerta;
+    }
+
+    // Cria um servidor como card
+    function gerar_server(idx) {
+        const s = servers[idx];
+        const status = getRiskStatusFromLevel(s.nivel);
+        const recursosText = Array.isArray(s.recursos) ? s.recursos.join(", ") : String(s.recursos);
+
+        elServerList.innerHTML += `
+<div class="server-object">
+<div class="serverIcon tooltipInfo">
+<img class="server-icon-status" src="../../assets/dashboard/desktop/${status}.svg" alt="Status do servidor">
+</div>
+<div class="serverName">${s.name}</div>
+<div class="serverStatus"><progress value="${s.nivel}" max="5"></progress></div>
+<div class="serverComponents">${recursosText}</div>
+<div class="serverLocation">${s.localizacao}</div>
+</div>
+`;
+    }
+
+    // FIltra e ordena os servidores
+    function filtragem_Servidores() {
+        const filtro = document.getElementById("id_filter").value;
+        const pesquisa = document.getElementById("id_pesquisa").value.toLowerCase();
+
+        elServerList.innerHTML = "";
+
+        if (["Nivel_c", "Critico_c", "Alerta_c"].includes(filtro)) {
+            servers.sort((a, b) => Number(a.nivel) - Number(b.nivel));
+        } else if (["Nivel_d", "Critico_d", "Alerta_d"].includes(filtro)) {
+            servers.sort((a, b) => Number(b.nivel) - Number(a.nivel));
+        }
+
+        for (let i = 0; i < servers.length; i++) {
+            const s = servers[i];
+            const status = getRiskStatusFromLevel(s.nivel);
+
+            const passouFiltroEstado =
+                (filtro.startsWith("Critico") && status === "danger") ||
+                (filtro.startsWith("Alerta") && status === "atention") ||
+                (filtro === "Bom" && status === "ok") ||
+                (filtro.startsWith("Nivel"));
+
+            const recursosText = Array.isArray(s.recursos) ? s.recursos.join(", ") : String(s.recursos);
+            const passouFiltroPesquisa =
+                s.name.toLowerCase().includes(pesquisa) ||
+                s.localizacao.toLowerCase().includes(pesquisa) ||
+                recursosText.toLowerCase().includes(pesquisa);
+
+            if (passouFiltroEstado && passouFiltroPesquisa) {
+                gerar_server(i);
+            }
+        }
+    }
+
+    updateKPIs();
+    filtragem_Servidores();
+</script>

@@ -453,6 +453,7 @@ textarea:focus, input:focus {
     width: 100%;
     gap: 1rem;
     flex-wrap: wrap;
+    margin-top: 10px;
 }
 
 .slakk {
@@ -499,6 +500,7 @@ textarea:focus, input:focus {
     font-size: 1vw;
     transition: ease-out .2s;
     width: 100%;
+    height: 50px;
 }
 
 .server-object:hover {

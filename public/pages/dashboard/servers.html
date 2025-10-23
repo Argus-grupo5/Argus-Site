@@ -53,41 +53,12 @@
         </div>
     </header>
 
-    <div class="search">
-        <select id="id_filter" onchange="filtragem_Servidores()">
-            <option value="Nivel_d" selected>Nível (Decrescente)</option>
-            <option value="Nivel_c">Nível (Crescente)</option>
-            <option value="Critico_d">Crítico (Decrescente)</option>
-            <option value="Critico_c">Crítico (Crescente)</option>
-            <option value="Alerta_d">Alerta (Decrescente)</option>
-            <option value="Alerta_c">Alerta (Crescente)</option>
-            <option value="Bom">Bom Estado</option>
-        </select>
-        <input type="search" id="id_pesquisa" placeholder="Pesquisar por um servidor" oninput="filtragem_Servidores()">
+    <div class="search">x    
         <button onclick="abrirModal()">Adicionar server</button>
     </div>
 
     <div class="container">
-        <div class="serverInfo">
-            <div class="serverIcon tooltipInfo">
-                <img style="width: 2vw;" src="../../assets/dashboard/desktop/tip.svg" alt="Informação sobre os dados">
-                <span class="tooltiptextInfo">
-                    Dados são atualizados a cada 60s
-                </span>
-            </div>
-            <div class="serverName">
-                Servidor
-            </div>
-            <div class="serverStatus">
-                Nível de Risco
-            </div>
-            <div class="serverComponents">
-                Recursos em Risco
-            </div>
-            <div class="serverLocation">
-                Localização
-            </div>
-        </div>
+
         <div class="server-list" id="regioes"></div>
     </div>
     </div>
@@ -295,9 +266,19 @@
                     console.log(json)
                     const regioes = document.getElementById("regioes")
                     for (let i = 0; i < json.length; i++) {
+                        var qtdServer = json[i].total_servidores > 1 ? "Servidores" : "Servidor"
+
+                        var risco;
+                        if (i == 0) {
+                            risco = "../../assets/dashboard/desktop/danger.svg"
+                        } else {
+                            risco = "../../assets/dashboard/desktop/ok.svg"
+                        }
                         regioes.innerHTML += `<div class="slakk">
                             <div class="regioes-card" data-sigla="${json[i].sigla_estado}" onclick="listarServidores(this)">
-                                <p>${json[i].nome_estado} - ${json[i].sigla_estado}</p>
+                                <img src="${risco}"></img>
+                                <p>${json[i].nome_estado} - ${json[i].sigla_estado} |
+                                     ${json[i].total_servidores} ${qtdServer}</p>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 15 15"><rect width="15" height="15" fill="none"/><path fill="#fff" d="M7.5 12L0 4h15z"/></svg>
                                 </div>
                                 <div class="server-list" id="id_server_list_${json[i].sigla_estado}">
@@ -312,7 +293,7 @@
         const siglaObjeto = objetoHTML.dataset.sigla
         const id = sessionStorage.EMPRESA_ID
         const filhos = objetoHTML.children
-        filhos[1].style.transform = "rotate(180deg)"
+        filhos[2].style.transform = "rotate(180deg)"
         const divServ = document.getElementById(`id_server_list_${siglaObjeto}`)
         divServ.innerHTML = ""
         objetoHTML.setAttribute('onclick', "fecharServidores(this)")
@@ -327,12 +308,24 @@
                 resposta.json().then((json) => {
                     console.log(json)
                     json.forEach(servidor => {
-                        divServ.innerHTML += `
+                        if (servidor.nome == "serv1") {
+                            var risco = "../../assets/dashboard/desktop/danger.svg"
+                            divServ.innerHTML += `
                          <div class="server-object">
-        <div class="serverName">${servidor.nome}</div>
-        <div class="serverLocation">${servidor.nome_estado}</div>
-      </div>
+                            <div class="serverIcon tooltipInfo">
+                                <img class="server-icon-status" src="${risco}" alt="Status do servidor">
+                            </div>
+                            <div class="serverName">${servidor.nome}</div>
+                            <div class="serverLocation"><p>CPU, RAM, DISCO</p></div>
+                        </div>
                         `
+                        } else {
+                            divServ.innerHTML += `
+                         <div class="server-object">
+                            <div class="serverIcon"></div>
+                            <div class="serverName">${servidor.nome}</div>
+                        </div>
+                        `}
                     })
                 })
             })
@@ -346,7 +339,7 @@
         divServ.innerHTML = ""
         const filhos = objetoHTML.children
         console.log(filhos)
-        filhos[1].style.transform = "rotate(0deg)"
+        filhos[2].style.transform = "rotate(0deg)"
 
         objetoHTML.setAttribute('onclick', "listarServidores(this)")
     }
