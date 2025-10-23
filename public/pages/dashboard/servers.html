@@ -136,6 +136,13 @@
                     <input type="number" name="" id="ipt_minREDE" placeholder="Digite o mínimo da REDE">
                 </div>
             </div>
+            <div class="modal-label" id="div_modal_label">
+                <label for="ipt_nome_gpu">Limite GPU:</label>
+                <div class="modal-label-comp">
+                    <input type="number" name="" id="ipt_maxGPU" placeholder="Digite o limite máximo da GPU">
+                    <input type="number" name="" id="ipt_minGPU" placeholder="Digite o mínimo da GPU">
+                </div>
+            </div>
             <div class="modal-button">
                 <div onclick="fecharModal()">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -208,6 +215,8 @@
         const minDISCO = ipt_minDISCO.value;
         const maxREDE = ipt_maxREDE.value;
         const minREDE = ipt_minREDE.value;
+        const maxGPU = ipt_maxGPU.value;
+        const minGPU = ipt_minGPU.value;
 
         function validarLimite(max, min, nome) {
             if (isNaN(max) || isNaN(min)) {
@@ -237,7 +246,8 @@
             !validarLimite(maxCPU, minCPU, "CPU") ||
             !validarLimite(maxRAM, minRAM, "RAM") ||
             !validarLimite(maxDISCO, minDISCO, "DISCO") ||
-            !validarLimite(maxREDE, minREDE, "REDE")
+            !validarLimite(maxREDE, minREDE, "REDE") ||
+            !validarLimite(maxGPU, minGPU, "GPU")
         ) {
             return;
         }
@@ -257,7 +267,9 @@
                 maxDiscoServer: maxDISCO,
                 minDiscoServer: minDISCO,
                 maxRedeServer: maxREDE,
-                minRedeServer: minREDE
+                minRedeServer: minREDE,
+                maxGpuServer: maxGPU,
+                minGpuServer: minGPU
             })
         })
             .then((resposta) => {

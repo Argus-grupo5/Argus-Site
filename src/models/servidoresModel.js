@@ -1,6 +1,6 @@
 var database = require("../database/config")
 
-function addServidor(nome, empresa, nome_estado, sigla_estado, maxCpu, minCpu, maxRam, minRam, maxDisco, minDisco, maxRede, minRede) {
+function addServidor(nome, empresa, nome_estado, sigla_estado, maxCpu, minCpu, maxRam, minRam, maxDisco, minDisco, maxRede, minRede, maxGpu, minGpu) {
     var sqlInstruction = `INSERT INTO servidor (nome, nome_estado, sigla_estado, fkempresa)
                             VALUES ('${nome}','${nome_estado}','${sigla_estado}', '${empresa}')`;
 
@@ -11,7 +11,8 @@ function addServidor(nome, empresa, nome_estado, sigla_estado, maxCpu, minCpu, m
             { id: 1, max: maxCpu, min: minCpu },
             { id: 2, max: maxRam, min: minRam },
             { id: 3, max: maxDisco, min: minDisco },
-            { id: 4, max: maxRede, min: minRede }
+            { id: 4, max: maxRede, min: minRede },
+            { id: 5, max: maxGpu, min: minGpu}
         ];
 
         const promises = componentes.map(comp => {

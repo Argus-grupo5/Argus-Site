@@ -13,6 +13,8 @@ function addServidor(req, res) {
     var minDisco = req.body.minDiscoServer;
     var maxRede = req.body.maxRedeServer;
     var minRede = req.body.minRedeServer;
+    var maxGpu = req.body.maxGpuServer;
+    var minGpu = req.body.minGpuServer;
 
     if (nome == undefined) {
         res.status(400).send("Seu nome está undefined!");
@@ -29,19 +31,23 @@ function addServidor(req, res) {
     } else if (maxRam == undefined) {
         res.status(400).send("Seu máximo de RAM está indefinido");
     } else if (minRam == undefined) {
-        res.status(400).send("Seu máximo de RAM está indefinido");
+        res.status(400).send("Seu mínimo de RAM está indefinido");
     } else if (maxDisco == undefined) {
         res.status(400).send("Seu máximo de DISCO está indefinido");
     } else if (minDisco == undefined) {
-        res.status(400).send("Seu máximo de DISCO está indefinido");
+        res.status(400).send("Seu mínimo de DISCO está indefinido");
     } else if (maxRede == undefined) {
         res.status(400).send("Seu máximo de REDE está indefinido");
     } else if (minRede == undefined) {
-        res.status(400).send("Seu máximo de REDE está indefinido");
+        res.status(400).send("Seu mínimo de REDE está indefinido");
+    } else if (maxGpu == undefined) {
+        res.status(400).send("Seu máximo de GPU está indefinido!")
+    } else if (minGPU == undefined) {
+        res.status(400).send("Seu mínimo de GPU está indefinido")
     }
     else {
 
-        servidoresModel.addServidor(nome, empresa, nome_estado, sigla_estado, maxCpu, minCpu, maxRam, minRam, maxDisco, minDisco, maxRede, minRede)
+        servidoresModel.addServidor(nome, empresa, nome_estado, sigla_estado, maxCpu, minCpu, maxRam, minRam, maxDisco, minDisco, maxRede, minRede, maxGpu, minGpu)
             .then(
                 (resultadoAdd) => {
                     if (resultadoAdd.length > 0) {
