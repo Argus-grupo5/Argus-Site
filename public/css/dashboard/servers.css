@@ -448,6 +448,19 @@ textarea:focus, input:focus {
     font-size: 1vw;
 }
 
+.server-list {
+    display: flex;
+    width: 100%;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.slakk {
+    width: 49%;
+    transition: width 0.5s;
+}
+
+
 .regioes-card {
     display: flex;
     background-color: #313030;
@@ -459,13 +472,18 @@ textarea:focus, input:focus {
     align-items: center;
     text-align: center;
     font-size: 1.2vw;
-    transition: ease-out .2s;
+    transition: ease-out .2s, transform 0.5s;
     height: 7rem;
+    width: 100%;
     justify-content: space-between;
 }
 
 .regioes-card:hover {
     background-color: #3e3e3e;
+}
+
+.regioes-card svg {
+    transition: transform 0.5s;
 }
 
 .server-object {
@@ -480,6 +498,7 @@ textarea:focus, input:focus {
     text-align: center;
     font-size: 1vw;
     transition: ease-out .2s;
+    width: 100%;
 }
 
 .server-object:hover {

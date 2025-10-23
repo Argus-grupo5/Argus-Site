@@ -288,7 +288,7 @@
                                 <p>${json[i].nome_estado} - ${json[i].sigla_estado}</p>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 15 15"><rect width="15" height="15" fill="none"/><path fill="#fff" d="M7.5 12L0 4h15z"/></svg>
                                 </div>
-                                <div class="server-list" id="id_server_list_${json[i].nome_estado}">
+                                <div class="server-list" id="id_server_list_${json[i].sigla_estado}">
                                 </div>
                         </div>`
                     }
@@ -299,20 +299,23 @@
     function listarServidores(objetoHTML) {
         const siglaObjeto = objetoHTML.dataset.sigla
         const id = sessionStorage.EMPRESA_ID
-        
+        const filhos = objetoHTML.children
+        filhos[1].style.transform = "rotate(180deg)"
+        const divServ = document.getElementById(`id_server_list_${siglaObjeto}`)
+        divServ.innerHTML = ""
+        objetoHTML.setAttribute('onclick', "fecharServidores(this)")
+
         fetch(`/servidores/listarServidores/${id}/${siglaObjeto}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
             }
         })
-        .then(resposta => {
-            resposta.json().then((json) => {
-                console.log(json)
-                json.forEach(servidor => {
-                    const divServ = document.getElementById(`id_server_list_${servidor.nome_estado}`)
-                    
-                    divServ.innerHTML += `
+            .then(resposta => {
+                resposta.json().then((json) => {
+                    console.log(json)
+                    json.forEach(servidor => {
+                        divServ.innerHTML += `
                          <div class="server-object">
         <div class="serverName">${servidor.nome}</div>
         <div class="serverLocation">${servidor.nome_estado}</div>
@@ -322,6 +325,18 @@
                 })
             })
 
+    }
+
+
+    function fecharServidores(objetoHTML) {
+        const siglaObjeto = objetoHTML.dataset.sigla
+        const divServ = document.getElementById(`id_server_list_${siglaObjeto}`)
+        divServ.innerHTML = ""
+        const filhos = objetoHTML.children
+        console.log(filhos)
+        filhos[1].style.transform = "rotate(0deg)"
+
+        objetoHTML.setAttribute('onclick', "listarServidores(this)")
     }
 
     const servers = [
