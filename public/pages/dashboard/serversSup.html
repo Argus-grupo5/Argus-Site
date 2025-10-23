@@ -40,12 +40,6 @@
                 <div class="risk tooltipInfo" id="id_servidores_em_estado_critico">
                     <p id="qtd_critico"></p>
                     <span class="tooltiptextInfo">
-                        Servidores em atenção
-                    </span>
-                </div>
-                <div class="atention tooltipInfo" id="id_servidores_em_estado_de_alerta">
-                    <p id="qtd_alerta"></p>
-                    <span class="tooltiptextInfo">
                         Servidores em alerta
                     </span>
                 </div>
@@ -64,7 +58,6 @@
             <option value="Bom">Bom Estado</option>
         </select>
         <input type="search" id="id_pesquisa" placeholder="Pesquisar por um servidor" oninput="filtragem_Servidores()">
-        <button onclick="abrirModal()">Adicionar server</button>
     </div>
 
     <div class="container">
@@ -102,6 +95,20 @@
     var nome = null;
     var nome_estado = null;
     var sigla_estado = null;
+
+    function listarServidoresTotais(){
+        let id = sessionStorage.EMPRESA_ID  
+        fetch(`/servidores/contarServidores/${id}`, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" }
+        })
+        .then((resposta) => {
+            resposta.json().then((json) => {
+                console.log(json)
+                elMonitored.innerHTML = json[0].totalServers
+            })
+        })
+    }
 
     function botaoLimpar() {
         nome = ipt_nome.value;
@@ -271,8 +278,37 @@ d="M10.157 12.711L4.5 18.368l-1.414-1.414l4.95-4.95l-4.95-4.95L4.5 5.64l5.657 5.
             .catch((erro) => console.error(`#ERRO: ${erro}`))
     }
 
+    function listarServidores() {
+        let id = sessionStorage.EMPRESA_ID
+        fetch(`/servidores/listarServidoresTotais/${id}`, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" }
+        })
+            .then((resposta) => {
+                resposta.json().then((json) => {
+                    for (let i = 0; i < json.length; i++) {
+                        if (i == 0) {
+                            risco = "../../assets/dashboard/desktop/danger.svg"
+                            elServerList.innerHTML = `
+<div class="server-object">
+<div class="serverIcon tooltipInfo">
+<img class="server-icon-status" src="${risco}" alt="Status do servidor">
+</div>
+<div class="serverName">${json[0].nome}</div>
+<div class="serverStatus"><progress value="5" max="5"></progress></div>
+<div class="serverComponents">CPU, RAM, DISCO</div>
+<div class="serverLocation">${json[0].nome_estado}</div>
+</div>
+`;
+                        }
+
+                    }
+                })
+            })
+    }
+
     const servers = [
-        { name: "Servidor Geforce Now", nivel: 4, recursos: ["CPU", "RAM"], localizacao: "São Paulo - SP" },
+        { name: "Servidor Geforce Now", nivel: 4, recursos: ["CPU", "RAM", "DISCO"], localizacao: "São Paulo - SP" },
         { name: "Servidor SPTech", nivel: 3, recursos: ["CPU", "GPU"], localizacao: "São Paulo - SP" },
         { name: "Servidor BandTec", nivel: 5, recursos: ["CPU", "GPU", "Armazenamento"], localizacao: "São Paulo - SP" },
         { name: "Servidor Xbox", nivel: 1, recursos: ["GPU"], localizacao: "Rio de Janeiro - RJ" },
@@ -293,18 +329,6 @@ d="M10.157 12.711L4.5 18.368l-1.414-1.414l4.95-4.95l-4.95-4.95L4.5 5.64l5.657 5.
         return "indisponivel";
     }
 
-    // Atualiza KPIs
-    function updateKPIs() {
-        let critico = 0;
-        let alerta = 0;
-        for (let i = 0; i < servers.length; i++) {
-            const status = getRiskStatusFromLevel(servers[i].nivel);
-            if (status === "danger") critico++;
-            else if (status === "atention") alerta++;
-        }
-        elQtdCritico.textContent = critico;
-        elQtdAlerta.textContent = alerta;
-    }
 
     // Cria um servidor como card
     function gerar_server(idx) {
@@ -360,6 +384,7 @@ d="M10.157 12.711L4.5 18.368l-1.414-1.414l4.95-4.95l-4.95-4.95L4.5 5.64l5.657 5.
         }
     }
 
-    updateKPIs();
     filtragem_Servidores();
+    listarServidores();
+    listarServidoresTotais();
 </script>

@@ -15,4 +15,12 @@ router.get("/listarServidores/:idServer/:siglaServer", function(req, res){
     servidoresController.listarServidores(req, res)
 })
 
+router.get("/listarServidoresTotais/:idServer", function(req, res){
+    servidoresController.listarServidoresTotais(req, res)
+})
+
+router.get("/contarServidores/:idServer", function(req, res){
+    servidoresController.contarServidores(req, res)
+})
+
 module.exports = router;
