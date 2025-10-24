@@ -29,7 +29,8 @@ function header(pag, cargo) {
     caminho = "servers"
   }
   nav = document.getElementById("navDesktop")
-  nav.innerHTML = `
+  if (cargo == "ROOT") {
+    nav.innerHTML = `
       <div class="navButtons">
       <a href="./perfil.html" class="navButton tooltipNav" id="navUser">
         <img src="../../../assets/fotoPerfil/${sessionStorage.FOTO}" alt="" id="FotoNavBar">
@@ -38,7 +39,11 @@ function header(pag, cargo) {
           <div id="userCargo">${sessionStorage.CARGO_CARGO}</div>
         </span>
       </a>
-      <a href="./${caminho}.html" class="navButton tooltipNav" id="navServers">
+      <a href="./servers.html" class="navButton tooltipNav" id="navServers">
+        <img id="imgServidores" src="../../assets/dashboard/desktop/box.svg" alt="Servidores">
+        <span class="tooltiptextNav">Servidores</span>
+      </a>
+      <a href="./serversSup.html" class="navButton tooltipNav" id="navServers">
         <img id="imgServidores" src="../../assets/dashboard/desktop/box.svg" alt="Servidores">
         <span class="tooltiptextNav">Servidores</span>
       </a>
@@ -56,9 +61,59 @@ function header(pag, cargo) {
     <img class="logo" src="../../assets/icon/logoBlack.svg" alt="">
   `
 
-  if (pag == "funcionario") imgFuncionarios.classList.add("selected");
-  else if (pag == "server") imgServidores.classList.add("selected");
-  else if (pag == "dashboard") imgServidores.classList.add("selected")
+  } else if (cargo == "ADM") {
+    nav.innerHTML = `
+      <div class="navButtons">
+      <a href="./perfil.html" class="navButton tooltipNav" id="navUser">
+        <img src="../../../assets/fotoPerfil/${sessionStorage.FOTO}" alt="" id="FotoNavBar">
+        <span class="tooltiptextNav">
+          <div id="userNome">${sessionStorage.USER_NAME}</div>
+          <div id="userCargo">${sessionStorage.CARGO_CARGO}</div>
+        </span>
+      </a>
+
+      <a href="./funcionarios.html" class="navButton tooltipNav" id="navServers">
+        <img id="imgFuncionarios" src="../../assets/dashboard/desktop/employes.svg" alt="Funcionários">
+        <span class="tooltiptextNav">Funcionários</span>
+      </a>
+
+      <div class="navButton tooltipNav" id="navServers" onclick="sair()">
+        <img src="../../assets/dashboard/desktop/logout.svg" alt="Sair">
+        <span class="tooltiptextNav">Sair</span>
+      </div>
+    </div>
+    <img class="logo" src="../../assets/icon/logoBlack.svg" alt="">
+  `
+    if (pag == "funcionario") imgFuncionarios.classList.add("selected");
+    else if (pag == "server") imgServidores.classList.add("selected");
+    else if (pag == "dashboard") imgServidores.classList.add("selected")
+  } else {
+    nav.innerHTML = `
+      <div class="navButtons">
+      <a href="./perfil.html" class="navButton tooltipNav" id="navUser">
+        <img src="../../../assets/fotoPerfil/${sessionStorage.FOTO}" alt="" id="FotoNavBar">
+        <span class="tooltiptextNav">
+          <div id="userNome">${sessionStorage.USER_NAME}</div>
+          <div id="userCargo">${sessionStorage.CARGO_CARGO}</div>
+        </span>
+      </a>
+      <a href="./${caminho}.html" class="navButton tooltipNav" id="navServers">
+        <img id="imgServidores" src="../../assets/dashboard/desktop/box.svg" alt="Servidores">
+        <span class="tooltiptextNav">Servidores</span>
+      </a>
+
+      <div class="navButton tooltipNav" id="navServers" onclick="sair()">
+        <img src="../../assets/dashboard/desktop/logout.svg" alt="Sair">
+        <span class="tooltiptextNav">Sair</span>
+      </div>
+    </div>
+    <img class="logo" src="../../assets/icon/logoBlack.svg" alt="">
+    `
+    if (pag == "funcionario") imgFuncionarios.classList.add("selected");
+    else if (pag == "server") imgServidores.classList.add("selected");
+    else if (pag == "dashboard") imgServidores.classList.add("selected")
+  }
+
 }
 
 function abrir_popup() {

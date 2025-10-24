@@ -42,7 +42,7 @@ function addServidor(req, res) {
         res.status(400).send("Seu mínimo de REDE está indefinido");
     } else if (maxGpu == undefined) {
         res.status(400).send("Seu máximo de GPU está indefinido!")
-    } else if (minGPU == undefined) {
+    } else if (minGpu == undefined) {
         res.status(400).send("Seu mínimo de GPU está indefinido")
     }
     else {
