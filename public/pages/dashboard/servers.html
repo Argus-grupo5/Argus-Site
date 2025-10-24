@@ -349,17 +349,22 @@
             })
         })
             .then((resposta) => {
+                console.log(resposta)
                 if (resposta.ok) {
                     console.log("Cadastro realizado com sucesso")
-                } else (
+                    fecharModal();
+                    listarEstados();
+                } else {
                     console.log("Erro ao cadastrar")
-                )
+                }
             })
             .catch((erro) => console.error(`#ERRO: ${erro}`))
     }
 
     function listarEstados() {
         const id = sessionStorage.EMPRESA_ID;
+        const regioes = document.getElementById("regioes")
+        regioes.innerHTML = ""
         fetch(`/servidores/listar/${id}`, {
             method: 'GET',
             headers: {
@@ -369,7 +374,6 @@
             .then((resposta) => {
                 resposta.json().then(json => {
                     console.log(json)
-                    const regioes = document.getElementById("regioes")
                     for (let i = 0; i < json.length; i++) {
                         var qtdServer = json[i].total_servidores > 1 ? "Servidores" : "Servidor"
 

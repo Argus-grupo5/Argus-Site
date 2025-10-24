@@ -50,11 +50,12 @@ function addServidor(req, res) {
         servidoresModel.addServidor(nome, empresa, nome_estado, sigla_estado, maxCpu, minCpu, maxRam, minRam, maxDisco, minDisco, maxRede, minRede, maxGpu, minGpu)
             .then(
                 (resultadoAdd) => {
-                    if (resultadoAdd.length > 0) {
-                        res.status(201).json(resultadoAdd);
-                    }
+                    res.status(201).json(resultadoAdd);
                 }
-            )
+            ) 
+            .catch((erro) => {
+                res.status(400).json(erro)
+            })
     }
 }
 
