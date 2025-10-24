@@ -82,10 +82,8 @@
                         <option value="Armazenamento">Armazenamento</option>
                         <option value="Latência">Latência</option>
                     </select>
-                    <div class="subtituloGrafico">100</div>
                 </div>
                 <div class="case2">
-                    <div class="especGrafico">RyzenX-9750K UltraBurst</div>
                     <div class="subtituloGrafico" id="respostaEspec">% de utilização</div>
                 </div>
             </div>
@@ -108,32 +106,27 @@
                             <div class="respostaTitulos">266</div>
                         </div>
                     </div>
-                    <div class="titulos3Caixa1">
-                        <div class="box">
-                            <div class="titulosBox">Threads</div>
-                            <div class="respostaTitulos">4072</div>
-                        </div>
-                    </div>
+
                 </div>
                 <div class="caixa2">
                     <div class="caixa2-box">
                         <div class="labelCaixa2">
-                            <div class="label1">Top 5 processos com maior uso de RAM </div>
+                            <div class="label1">5 processos com maior uso de RAM </div>
                         </div>
                         <div class="labelCaixa2">
-                            <div class="label">PID | Cuphead | 40% | 08:19:55:28</div>
+                            <div class="label">PID | Cuphead | 40%</div>
                         </div>
                         <div class="labelCaixa2">
-                            <div class="label">PID | Cuphead | 40% | 08:19:55:28</div>
+                            <div class="label">PID | Cuphead | 40%</div>
                         </div>
                         <div class="labelCaixa2">
-                            <div class="label">PID | Cuphead | 40% | 08:19:55:28</div>
+                            <div class="label">PID | Cuphead | 40%</div>
                         </div>
                         <div class="labelCaixa2">
-                            <div class="label">PID | Cuphead | 40% | 08:19:55:28</div>
+                            <div class="label">PID | Cuphead | 40%</div>
                         </div>
                         <div class="labelCaixa2">
-                            <div class="label">PID | Cuphead | 40% | 08:19:55:28</div>
+                            <div class="label">PID | Cuphead | 40%</div>
                         </div>
                     </div>
                 </div>
@@ -247,7 +240,7 @@
         let chartAtual;
 
         const dadosGraficos = {
-            CPU: [10, 48, 26, 35, 47, 70],
+            CPU: [10, 48, 26, 35, 47, 100],
             Memória: [30, 32, 28, 35, 38, 40],
             GPU: [20, 45, 50, 65, 60, 58],
             Armazenamento: [50, 55, 60, 62, 65, 70],
@@ -267,17 +260,26 @@
                         label: `% Utilização ${tipo}`,
                         data: dadosGraficos[tipo],
                         borderWidth: 1,
-                        borderColor: "#FF6D4D",
-                        backgroundColor: "#FF6D4D",
+                        borderColor: "#FF670A",
+                        backgroundColor: "#FF670A",
                         fill: true,
                         tension: 0.0,
                         pointStyle: false,
+                        
                     }]
                 },
                 options: {
-                    scales: {
-                        y: { beginAtZero: true }
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: 'rgb(254, 255, 245)' // Sets legend label color to red
+                                
+                            }
+                        }
                     }
+                },
+                scales: {
+                    y: { beginAtZero: true }
                 }
             });
         }
