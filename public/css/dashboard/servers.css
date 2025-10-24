@@ -330,6 +330,51 @@ body {
     font-size: 0.7vw;
     color: #201010;
 }
+
+.top-boxes-container {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-bottom: 30px;
+    margin-top: 35px;
+    padding-left: 5vw;
+    padding-right: 1vw;
+}
+
+.info-box {
+    background-color: #ff3333;
+    color: white;
+    padding: 15px 25px;
+    border-radius: 4px;
+    text-align: center;
+    min-width: 250px;
+}
+
+.info-box .label {
+    font-size: 14px;
+    margin-bottom: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.info-box .value {
+    font-size: 48px;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 0;
+    line-height: 1;
+}
+
+.server-box, .component-box {
+    background-color: #ff3333;
+}
+
+.server-box .value, .component-box .value {
+    font-size: 40px;
+    letter-spacing: 1px;
+}
+
 .search{
     display: flex;
     padding-left: 5vw;
@@ -477,6 +522,7 @@ textarea:focus, input:focus {
     height: 7rem;
     width: 100%;
     justify-content: space-between;
+    cursor: pointer;
 }
 
 .regioes-card:hover {
@@ -501,6 +547,7 @@ textarea:focus, input:focus {
     transition: ease-out .2s;
     width: 100%;
     height: 50px;
+    cursor: pointer;
 }
 
 .server-object:hover {
@@ -523,6 +570,77 @@ textarea:focus, input:focus {
 progress::-moz-progress-bar {
   background-color:#FF670A;
 }
+
+.container-boxes-down {
+    display: flex;
+    text-align: center;
+    flex-direction: column;
+    margin-bottom: 30px;
+    margin-top: 35px;
+    padding: 2rem 1vw;
+    background-color: #3f3f3f;
+    margin-left: 5vw;
+    margin-right: 1vw;
+    border-radius: 10px;
+}
+.container-boxes-title {
+    text-align: center;
+    width: 100%;
+}
+
+.container-boxes-title {
+    font-size: 20px;
+}
+
+.boxes-subtitle{
+    font-size: 18px;
+    color: rgb(186, 186, 186);
+}
+
+.container-boxes-comp{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1vw;
+    justify-content: center;
+}
+
+.container-boxes-comp div p{
+    text-align: start;
+}
+
+.box-card {
+    display: flex;
+    width: 29vw;
+    height: 16vh;
+    justify-content: space-around;
+    background-color: #313030;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+.box-card div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    text-align: center;
+    align-items: center;
+}
+.label-box {
+    font-size: 12px;
+    margin-bottom: 10px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+.value-box{
+    font-size: 24px;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 0;
+    line-height: 1;
+    color: #FF670A;
+}
+
 
 .popup_sair {
     display: flex;

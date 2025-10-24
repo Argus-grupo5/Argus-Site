@@ -47,14 +47,108 @@
         </div>
     </header>
 
+    <div class="top-boxes-container">
+
+        <div class="info-box alert-box">
+            <p class="label">Alertas totais (24h)</p>
+            <p class="value">5</p>
+        </div>
+
+        <div class="info-box server-box">
+            <p class="label">Servidor com mais alertas (semana)</p>
+            <p class="value">SERV1</p>
+        </div>
+
+        <div class="info-box component-box">
+            <p class="label">Componente recorrente</p>
+            <p class="value">RAM</p>
+        </div>
+
+    </div>
+
     <div class="search">
         <button onclick="abrirModal()">Adicionar server</button>
     </div>
 
     <div class="container">
-
         <div class="server-list" id="regioes"></div>
     </div>
+
+    <div class="container-boxes-down">
+        <div class="container-boxes-title">
+            <p>Visão por componentes</p>
+            <p class="boxes-subtitle">selecione um servidor</p>
+        </div>
+
+        <div class="container-boxes-comp">
+            <div>
+                <p>CPU</p>
+                <div class="box-card">
+                    <div>
+                        <p class="label-box">Média (24h)</p>
+                        <p class="value-box"  id="media_cpu">-</p>
+                    </div>
+                    <div>
+                        <p class="label-box">Pico (1h)</p>
+                        <p class="value-box"  id="pico_cpu">-</p>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <p>GPU</p>
+                <div class="box-card">
+                    <div>
+                        <p class="label-box">Média (24h)</p>
+                        <p class="value-box" id="media_gpu">-</p>
+                    </div>
+                    <div>
+                        <p class="label-box">Pico (1h)</p>
+                        <p class="value-box" id="pico_gpu">-</p>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <p>RAM</p>
+                <div class="box-card">
+                    <div>
+                        <p class="label-box">Média (24h)</p>
+                        <p class="value-box" id="media_ram">-</p>
+                    </div>
+                    <div>
+                        <p class="label-box">Pico (1h)</p>
+                        <p class="value-box" id="pico_ram">-</p>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <p>DISCO</p>
+                <div class="box-card">
+                    <div>
+                        <p class="label-box">% Total (<span id="data_disco">XXXX-XX-XX</span>)</p>
+                        <p class="value-box" id="media_disco">-</p>
+                    </div>
+                    <div>
+                        <p class="label-box">Taxa de variação (1h)</p>
+                        <p class="value-box" id="pico_disco">-</p>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <p>REDE</p>
+                <div class="box-card">
+                    <div>
+                        <p class="label-box">Média (24h)</p>
+                        <p class="value-box" id="media_rede">-</p>
+                    </div>
+                    <div>
+                        <p class="label-box">Pico (1h)</p>
+                        <p class="value-box" id="pico_rede">-</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     </div>
 </body>
 
@@ -67,18 +161,18 @@
     var nome_estado = null;
     var sigla_estado = null;
 
-    function listarServidoresTotais(){
-        let id = sessionStorage.EMPRESA_ID  
+    function listarServidoresTotais() {
+        let id = sessionStorage.EMPRESA_ID
         fetch(`/servidores/contarServidores/${id}`, {
             method: "GET",
             headers: { "Content-Type": "application/json" }
         })
-        .then((resposta) => {
-            resposta.json().then((json) => {
-                console.log(json)
-                elMonitored.innerHTML = json[0].totalServers
+            .then((resposta) => {
+                resposta.json().then((json) => {
+                    console.log(json)
+                    elMonitored.innerHTML = json[0].totalServers
+                })
             })
-        })
     }
 
     function botaoLimpar() {
@@ -319,7 +413,7 @@
                         if (servidor.nome == "serv1") {
                             var risco = "../../assets/dashboard/desktop/danger.svg"
                             divServ.innerHTML += `
-                         <div class="server-object">
+                         <div class="server-object" onclick="selecionarServ(valoresMockados.Serv1)">
                             <div class="serverIcon tooltipInfo">
                                 <img class="server-icon-status" src="${risco}" alt="Status do servidor">
                             </div>
@@ -351,6 +445,49 @@
 
         objetoHTML.setAttribute('onclick', "listarServidores(this)")
     }
+
+    const valoresMockados = {
+        "Serv1" : {
+            'cpu': ['67.2%', '82.5%'],
+            'gpu': ['72.5%', '94.8%'],
+            'ram': ['71.3%', '83.5%'],
+            'disco': ['81.2%', '0.2%', '2025-10-27'],
+            'rede': ['0.5ms', '1.2ms']
+        }
+    }
+
+    const mediaCpu = document.getElementById("media_cpu")
+    const mediaGPU = document.getElementById("media_gpu")
+    const mediaRam = document.getElementById("media_ram")
+    const mediaDisco = document.getElementById("media_disco")
+    const mediaRede = document.getElementById("media_rede")
+    const picoCpu = document.getElementById("pico_cpu")
+    const picoGPU = document.getElementById("pico_gpu")
+    const picoRam = document.getElementById("pico_ram")
+    const picoDisco = document.getElementById("pico_disco")
+    const picoRede = document.getElementById("pico_rede")
+    const horaDisco = document.getElementById("data_disco")
+
+    function selecionarServ(servidor){
+        console.log(servidor)
+        mediaCpu.innerHTML = servidor.cpu[0]
+        picoCpu.innerHTML = servidor.cpu[1]
+
+        mediaGPU.innerHTML = servidor.gpu[0]
+        picoGPU.innerHTML = servidor.gpu[1]
+
+        mediaRam.innerHTML = servidor.ram[0]
+        picoRam.innerHTML = servidor.ram[1]
+
+        mediaDisco.innerHTML = servidor.disco[0]
+        picoDisco.innerHTML = servidor.disco[1]
+        horaDisco.innerHTML = servidor.disco[2]
+        
+        mediaRede.innerHTML = servidor.rede[0]
+        picoRede.innerHTML = servidor.rede[1]
+    }
+
+
 
     const elMonitored = document.getElementById("id_servidores_monitorados");
     const elQtdCritico = document.getElementById("qtd_critico");
