@@ -108,7 +108,7 @@
   window.onload = () => {
 
     carregarCargoUsuario();
-    header("funcionario")
+    header("funcionario", sessionStorage.CARGO_CARGO);
     online()
   
     listarCargo("id_filter", false, true); 
