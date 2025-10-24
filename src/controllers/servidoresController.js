@@ -91,8 +91,40 @@ function listarServidores(req, res) {
         })
 }
 
+function listarServidoresTotais(req, res) {
+    const id = req.params.idServer
+
+    servidoresModel.listarServidoresTotais(id)
+        .then((resposta) => {
+            if (resposta.length > 0) {
+                res.json(resposta)
+            }
+        })
+        .catch((erro) => {
+            console.log(erro)
+            res.status(500).json(erro.sqlMessage);
+        })
+}
+
+function contarServidores(req, res) {
+    const id = req.params.idServer
+
+    servidoresModel.contarServidores(id)
+        .then((resposta) => {
+            if (resposta.length > 0) {
+                res.json(resposta)
+            }
+        })
+        .catch((erro) => {
+            console.log(erro)
+            res.status(500).json(erro.sqlMessage);
+        })
+}
+
 module.exports = {
     addServidor,
     listar,
-    listarServidores
+    listarServidores,
+    listarServidoresTotais,
+    contarServidores
 }

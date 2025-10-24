@@ -38,40 +38,142 @@
                     <img src="../../assets/dashboard/desktop/bell.svg" alt="">
                 </div>
                 <div class="risk tooltipInfo" id="id_servidores_em_estado_critico">
-                    <p id="qtd_critico"></p>
+                    <p id="qtd_critico">1</p>
                     <span class="tooltiptextInfo">
                         Servidores em atenção
-                    </span>
-                </div>
-                <div class="atention tooltipInfo" id="id_servidores_em_estado_de_alerta">
-                    <p id="qtd_alerta"></p>
-                    <span class="tooltiptextInfo">
-                        Servidores em alerta
                     </span>
                 </div>
             </div>
         </div>
     </header>
 
-    <div class="search">x    
+    <div class="top-boxes-container">
+
+        <div class="info-box alert-box">
+            <p class="label">Alertas totais (24h)</p>
+            <p class="value">5</p>
+        </div>
+
+        <div class="info-box server-box">
+            <p class="label">Servidor com mais alertas (semana)</p>
+            <p class="value">SERV1</p>
+        </div>
+
+        <div class="info-box component-box">
+            <p class="label">Componente recorrente</p>
+            <p class="value">RAM</p>
+        </div>
+
+    </div>
+
+    <div class="search">
         <button onclick="abrirModal()">Adicionar server</button>
     </div>
 
     <div class="container">
-
         <div class="server-list" id="regioes"></div>
     </div>
+
+    <div class="container-boxes-down">
+        <div class="container-boxes-title">
+            <p>Visão por componentes</p>
+            <p class="boxes-subtitle">selecione um servidor</p>
+        </div>
+
+        <div class="container-boxes-comp">
+            <div>
+                <p>CPU</p>
+                <div class="box-card">
+                    <div>
+                        <p class="label-box">Média (24h)</p>
+                        <p class="value-box"  id="media_cpu">-</p>
+                    </div>
+                    <div>
+                        <p class="label-box">Pico (1h)</p>
+                        <p class="value-box"  id="pico_cpu">-</p>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <p>GPU</p>
+                <div class="box-card">
+                    <div>
+                        <p class="label-box">Média (24h)</p>
+                        <p class="value-box" id="media_gpu">-</p>
+                    </div>
+                    <div>
+                        <p class="label-box">Pico (1h)</p>
+                        <p class="value-box" id="pico_gpu">-</p>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <p>RAM</p>
+                <div class="box-card">
+                    <div>
+                        <p class="label-box">Média (24h)</p>
+                        <p class="value-box" id="media_ram">-</p>
+                    </div>
+                    <div>
+                        <p class="label-box">Pico (1h)</p>
+                        <p class="value-box" id="pico_ram">-</p>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <p>DISCO</p>
+                <div class="box-card">
+                    <div>
+                        <p class="label-box">% Total (<span id="data_disco">XXXX-XX-XX</span>)</p>
+                        <p class="value-box" id="media_disco">-</p>
+                    </div>
+                    <div>
+                        <p class="label-box">Taxa de variação (1h)</p>
+                        <p class="value-box" id="pico_disco">-</p>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <p>REDE</p>
+                <div class="box-card">
+                    <div>
+                        <p class="label-box">Média (24h)</p>
+                        <p class="value-box" id="media_rede">-</p>
+                    </div>
+                    <div>
+                        <p class="label-box">Pico (1h)</p>
+                        <p class="value-box" id="pico_rede">-</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     </div>
 </body>
 
 
 </html>
 <script>
-    header("server");
+    header("server", sessionStorage.CARGO_CARGO);
 
     var nome = null;
     var nome_estado = null;
     var sigla_estado = null;
+
+    function listarServidoresTotais() {
+        let id = sessionStorage.EMPRESA_ID
+        fetch(`/servidores/contarServidores/${id}`, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" }
+        })
+            .then((resposta) => {
+                resposta.json().then((json) => {
+                    console.log(json)
+                    elMonitored.innerHTML = json[0].totalServers
+                })
+            })
+    }
 
     function botaoLimpar() {
         nome = ipt_nome.value;
@@ -311,7 +413,7 @@
                         if (servidor.nome == "serv1") {
                             var risco = "../../assets/dashboard/desktop/danger.svg"
                             divServ.innerHTML += `
-                         <div class="server-object">
+                         <div class="server-object" onclick="selecionarServ(valoresMockados.Serv1)">
                             <div class="serverIcon tooltipInfo">
                                 <img class="server-icon-status" src="${risco}" alt="Status do servidor">
                             </div>
@@ -344,96 +446,56 @@
         objetoHTML.setAttribute('onclick', "listarServidores(this)")
     }
 
-    const servers = [
-        { name: "Servidor Geforce Now", nivel: 4, recursos: ["CPU", "RAM"], localizacao: "São Paulo - SP" },
-        { name: "Servidor SPTech", nivel: 3, recursos: ["CPU", "GPU"], localizacao: "São Paulo - SP" },
-        { name: "Servidor BandTec", nivel: 5, recursos: ["CPU", "GPU", "Armazenamento"], localizacao: "São Paulo - SP" },
-        { name: "Servidor Xbox", nivel: 1, recursos: ["GPU"], localizacao: "Rio de Janeiro - RJ" },
-        { name: "Servidor Stadia", nivel: 2, recursos: ["CPU", "RAM"], localizacao: "Belo Horizonte - MG" }
-    ];
+    const valoresMockados = {
+        "Serv1" : {
+            'cpu': ['67.2%', '82.5%'],
+            'gpu': ['72.5%', '94.8%'],
+            'ram': ['71.3%', '83.5%'],
+            'disco': ['81.2%', '0.2%', '2025-10-27'],
+            'rede': ['0.5ms', '1.2ms']
+        }
+    }
+
+    const mediaCpu = document.getElementById("media_cpu")
+    const mediaGPU = document.getElementById("media_gpu")
+    const mediaRam = document.getElementById("media_ram")
+    const mediaDisco = document.getElementById("media_disco")
+    const mediaRede = document.getElementById("media_rede")
+    const picoCpu = document.getElementById("pico_cpu")
+    const picoGPU = document.getElementById("pico_gpu")
+    const picoRam = document.getElementById("pico_ram")
+    const picoDisco = document.getElementById("pico_disco")
+    const picoRede = document.getElementById("pico_rede")
+    const horaDisco = document.getElementById("data_disco")
+
+    function selecionarServ(servidor){
+        console.log(servidor)
+        mediaCpu.innerHTML = servidor.cpu[0]
+        picoCpu.innerHTML = servidor.cpu[1]
+
+        mediaGPU.innerHTML = servidor.gpu[0]
+        picoGPU.innerHTML = servidor.gpu[1]
+
+        mediaRam.innerHTML = servidor.ram[0]
+        picoRam.innerHTML = servidor.ram[1]
+
+        mediaDisco.innerHTML = servidor.disco[0]
+        picoDisco.innerHTML = servidor.disco[1]
+        horaDisco.innerHTML = servidor.disco[2]
+        
+        mediaRede.innerHTML = servidor.rede[0]
+        picoRede.innerHTML = servidor.rede[1]
+    }
+
+
 
     const elMonitored = document.getElementById("id_servidores_monitorados");
     const elQtdCritico = document.getElementById("qtd_critico");
     const elQtdAlerta = document.getElementById("qtd_alerta");
     const elServerList = document.getElementById("id_server_list");
-    elMonitored.textContent = servers.length;
-
-    function getRiskStatusFromLevel(nivel) {
-        const n = Number(nivel);
-        if (n === 1) return "ok";
-        if (n > 1 && n <= 3) return "atention";
-        if (n >= 4) return "danger";
-        return "indisponivel";
-    }
-
-    // Atualiza KPIs 
-    function updateKPIs() {
-        let critico = 0;
-        let alerta = 0;
-        for (let i = 0; i < servers.length; i++) {
-            const status = getRiskStatusFromLevel(servers[i].nivel);
-            if (status === "danger") critico++;
-            else if (status === "atention") alerta++;
-        }
-        elQtdCritico.textContent = critico;
-        elQtdAlerta.textContent = alerta;
-    }
-
-    // Cria um servidor como card
-    function gerar_server(idx) {
-        const s = servers[idx];
-        const status = getRiskStatusFromLevel(s.nivel);
-        const recursosText = Array.isArray(s.recursos) ? s.recursos.join(", ") : String(s.recursos);
-
-        elServerList.innerHTML += `
-                            < div class="server-object" >
-        <div class="serverIcon tooltipInfo">
-          <img class="server-icon-status" src="../../assets/dashboard/desktop/${status}.svg" alt="Status do servidor">
-        </div>
-        <div class="serverName">${s.name}</div>
-        <div class="serverStatus"><progress value="${s.nivel}" max="5"></progress></div>
-        <div class="serverComponents">${recursosText}</div>
-        <div class="serverLocation">${s.localizacao}</div>
-      </div >
-    `;
-    }
-
-    // FIltra e ordena os servidores
-    function filtragem_Servidores() {
-        const filtro = document.getElementById("id_filter").value;
-        const pesquisa = document.getElementById("id_pesquisa").value.toLowerCase();
-
-        elServerList.innerHTML = "";
-
-        if (["Nivel_c", "Critico_c", "Alerta_c"].includes(filtro)) {
-            servers.sort((a, b) => Number(a.nivel) - Number(b.nivel));
-        } else if (["Nivel_d", "Critico_d", "Alerta_d"].includes(filtro)) {
-            servers.sort((a, b) => Number(b.nivel) - Number(a.nivel));
-        }
-
-        for (let i = 0; i < servers.length; i++) {
-            const s = servers[i];
-            const status = getRiskStatusFromLevel(s.nivel);
-
-            const passouFiltroEstado =
-                (filtro.startsWith("Critico") && status === "danger") ||
-                (filtro.startsWith("Alerta") && status === "atention") ||
-                (filtro === "Bom" && status === "ok") ||
-                (filtro.startsWith("Nivel"));
-
-            const recursosText = Array.isArray(s.recursos) ? s.recursos.join(", ") : String(s.recursos);
-            const passouFiltroPesquisa =
-                s.name.toLowerCase().includes(pesquisa) ||
-                s.localizacao.toLowerCase().includes(pesquisa) ||
-                recursosText.toLowerCase().includes(pesquisa);
-
-            if (passouFiltroEstado && passouFiltroPesquisa) {
-                gerar_server(i);
-            }
-        }
-    }
 
     // updateKPIs();
     // filtragem_Servidores();
     listarEstados()
+    listarServidoresTotais();
 </script>

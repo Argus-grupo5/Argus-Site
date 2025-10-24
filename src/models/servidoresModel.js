@@ -42,8 +42,22 @@ function listarServidores(id, siglaEstado){
     return database.executar(sqlInstruction)
 }
 
+function listarServidoresTotais(id) {
+    var sqlInstruction = `SELECT * FROM servidor WHERE fkempresa = ${id};`
+
+    return database.executar(sqlInstruction);
+}
+
+function contarServidores(id){
+    var sqlInstruction = `SELECT count(id) AS totalServers FROM servidor WHERE fkempresa = ${id};`
+
+    return database.executar(sqlInstruction);
+}
+
 module.exports = {
     addServidor,
     listar,
-    listarServidores
+    listarServidores,
+    listarServidoresTotais,
+    contarServidores
 }
