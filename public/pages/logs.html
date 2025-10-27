@@ -13,7 +13,6 @@
 
     <header class="desktopNav">
         <div class="navButtons">
-<<<<<<< HEAD:public/pages/servers.html
             <div class="navButton tooltipNav" id="navUser">
                 <img src="../assets/dashboard/desktop/user.svg" alt="">
                 <span class="tooltiptextNav">
@@ -37,32 +36,6 @@
                 <img src="../assets/dashboard/desktop/headphone.svg" alt="Suporte">
                 <span class="tooltiptextNav">Suporte</span>
             </div>
-=======
-            <a href="servers.html">
-                <div class="navButton tooltipNav" id="navServers">
-                    <img class="selected" src="../assets/dashboard/desktop/box.svg" alt="Servidores">
-                    <span class="tooltiptextNav">Servidores</span>
-                </div>
-            </a>
-            <a href="colaboradores.html">
-                <div class="navButton tooltipNav" id="navServers">
-                    <img src="../assets/dashboard/desktop/employes.svg" alt="Funcionários">
-                    <span class="tooltiptextNav">Funcionários</span>
-                </div>
-            </a>
-            <a href="logs.html">
-                <div class="navButton tooltipNav" id="navServers">
-                    <img src="../assets/dashboard/desktop/logs.svg" alt="Logs">
-                    <span class="tooltiptextNav">Logs</span>
-                </div>
-            </a>
-            <a href="suporte.html">
-                <div class="navButton tooltipNav" id="navServers">
-                    <img src="../assets/dashboard/desktop/headphone.svg" alt="Suporte">
-                    <span class="tooltiptextNav">Suporte</span>
-                </div>
-            </a>
->>>>>>> 7af0c78149e421f8d9eb1f63c988af139fbbccef:public/pages/logs.html
             <div class="navButton tooltipNav" id="navServers" onclick="sair()">
                 <img src="../assets/dashboard/desktop/logout.svg" alt="Sair">
                 <span class="tooltiptextNav">Sair</span>
@@ -178,7 +151,7 @@
     let qtd_servidores_alerta = 0;
     
     for (let i = 0; i < server.length; i++) {
-        if (server[i]   .nivel == 2 || server[i].nivel == 3){
+        if (server[i].nivel == 2 || server[i].nivel == 3){
             qtd_servidores_alerta++;
         } else if  (server[i].nivel > 3){ 
             qtd_servidores_critico++;
