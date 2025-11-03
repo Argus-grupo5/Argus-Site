@@ -109,82 +109,6 @@
     <div id="mapSudeste" style="display:none;"></div>
 
 
-
-    <!-- <div class="container-boxes-down">
-        <div class="container-boxes-title">
-            <p>Visão por componentes</p>
-            <p class="boxes-subtitle">selecione um servidor</p>
-        </div>
-
-        <div class="container-boxes-comp">
-            <div>
-                <p>CPU</p>
-                <div class="box-card">
-                    <div>
-                        <p class="label-box">Média (24h)</p>
-                        <p class="value-box"  id="media_cpu">-</p>
-                    </div>
-                    <div>
-                        <p class="label-box">Pico (1h)</p>
-                        <p class="value-box"  id="pico_cpu">-</p>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <p>GPU</p>
-                <div class="box-card">
-                    <div>
-                        <p class="label-box">Média (24h)</p>
-                        <p class="value-box" id="media_gpu">-</p>
-                    </div>
-                    <div>
-                        <p class="label-box">Pico (1h)</p>
-                        <p class="value-box" id="pico_gpu">-</p>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <p>RAM</p>
-                <div class="box-card">
-                    <div>
-                        <p class="label-box">Média (24h)</p>
-                        <p class="value-box" id="media_ram">-</p>
-                    </div>
-                    <div>
-                        <p class="label-box">Pico (1h)</p>
-                        <p class="value-box" id="pico_ram">-</p>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <p>DISCO</p>
-                <div class="box-card">
-                    <div>
-                        <p class="label-box">% Total (<span id="data_disco">XXXX-XX-XX</span>)</p>
-                        <p class="value-box" id="media_disco">-</p>
-                    </div>
-                    <div>
-                        <p class="label-box">Taxa de variação (1h)</p>
-                        <p class="value-box" id="pico_disco">-</p>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <p>REDE</p>
-                <div class="box-card">
-                    <div>
-                        <p class="label-box">Média (24h)</p>
-                        <p class="value-box" id="media_rede">-</p>
-                    </div>
-                    <div>
-                        <p class="label-box">Pico (1h)</p>
-                        <p class="value-box" id="pico_rede">-</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> -->
-
     </div>
 </body>
 
@@ -194,24 +118,13 @@
 
     header("server", sessionStorage.CARGO_CARGO);
 
-    if (sessionStorage.CARGO_CARGO == "ROOT") {
-        document.getElementById("search").innerHTML = '<button onclick="abrirModal()">Adicionar server</button>'
-    }
-
 
     function fecharModal() {
         let modal = document.getElementById("modal")
         modal.style.display = "none"
     }
 
-
-
-    const elMonitored = document.getElementById("id_servidores_monitorados");
-    const elQtdCritico = document.getElementById("qtd_critico");
-    const elQtdAlerta = document.getElementById("qtd_alerta");
-    const elServerList = document.getElementById("id_server_list");
-
-
+    
     function buscarRegioes() {
 
         let regioes = id_filter.value;
@@ -268,7 +181,18 @@
 
 
                 series.colorScale(anychart.scales.linearColor('#FFFFFF', '#FF670A'));
-                series.hovered().fill('#addd8e');
+                series.hovered().fill('#8c8c8c');
+
+                map.listen('pointClick', function (e) {
+                    map.zoomToFeature(e.point.get('id'));
+                })
+
+                // Disables zoom On Mouse Wheel
+                map.interactivity().zoomOnMouseWheel(false);
+                // Disables zoom on double click
+                map.interactivity().keyboardZoomAndMove(false);
+                // Disables zoom on double click
+                map.interactivity().zoomOnDoubleClick(false);
 
 
                 map.geoData(anychart.maps['brazil']);
@@ -279,6 +203,12 @@
                 map.container('mapBrasil');
 
                 map.background(null);
+
+                var nivelZoom = 1.0;
+                var eixoX = 800;
+                var eixoY = 5;
+
+                map.zoomTo(nivelZoom, eixoX, eixoY);
 
                 map.draw();
             });
@@ -325,7 +255,7 @@
                 map.colorRange().enabled(true);
 
                 map.background(null);
-                
+
                 var nivelZoom = 1.7;
                 var eixoX = 800;
                 var eixoY = 5;
