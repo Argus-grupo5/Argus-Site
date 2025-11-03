@@ -371,15 +371,15 @@
                 function getDataSudeste() {
 
                     return [
-                        { "id": "BR.CE", "value": 50 },
-                        { "id": "BR.PI", "value": 90 },
-                        { "id": "BR.AL", "value": 75 },
-                        { "id": "BR.BA", "value": 60 },
-                        { "id": "BR.MA", "value": 50 },
-                        { "id": "BR.PB", "value": 90 },
-                        { "id": "BR.PE", "value": 75 },
-                        { "id": "BR.RN", "value": 60 },
-                        { "id": "BR.SE", "value": 60 }
+                        { "id": "BR.CE",  "capital": "Fortaleza",  "value": 50 },
+                        { "id": "BR.PI",  "capital": "Teresina",  "value": 90 },
+                        { "id": "BR.AL",  "capital": "Maceió", "value": 75 },
+                        { "id": "BR.BA",  "capital": "Salvador", "value": 60 },
+                        { "id": "BR.MA",  "capital": "São Luís", "value": 50 },
+                        { "id": "BR.PB",  "capital": "João Pessoa", "value": 90 },
+                        { "id": "BR.PE",  "capital": "Recife", "value": 75 },
+                        { "id": "BR.RN",  "capital": "Natal", "value": 60 },
+                        { "id": "BR.SE",  "capital": "Aracaju", "value": 60 }
                     ];
                 }
 
@@ -421,7 +421,7 @@
             mapSudeste.style.display = 'none';
             mapNordeste.style.display = 'none';
 
-            // Nordeste
+            // Centro
 
             anychart.onDocumentReady(function () {
                 var map = anychart.map();
@@ -429,10 +429,10 @@
                 function getDataSudeste() {
 
                     return [
-                        { "id": "BR.GO", "value": 50 },
-                        { "id": "BR.MT", "value": 90 },
-                        { "id": "BR.MS", "value": 75 },
-                        { "id": "BR.DF", "value": 60 }
+                        { "id": "BR.GO",  "capital": "Goiânia", "value": 50 },
+                        { "id": "BR.MT",  "capital": "Cuiabá", "value": 90 },
+                        { "id": "BR.MS",  "capital": "Campo Grande", "value": 75 },
+                        { "id": "BR.DF",  "capital": "Brasilia", "value": 60 }
                     ];
                 }
 
