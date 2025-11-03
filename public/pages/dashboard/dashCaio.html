@@ -139,7 +139,7 @@
         var dataSet = anychart.data.set(
             [{ "id": "BR.GO", "capital": "Goiania", "value": 0 },
             { "id": "BR.SP", "capital": "São Paulo", "value": 37 },
-            { "id": "BR.PE","capital": "Recife", "value": 2 },
+            { "id": "BR.PE", "capital": "Recife", "value": 2 },
             { "id": "BR.AC", "capital": "Rio Branco", "value": 3 },
             { "id": "BR.AM", "capital": "Manaus", "value": 4 },
             { "id": "BR.MA", "capital": "São Luís", "value": 5 },
@@ -230,32 +230,32 @@
 
                 var dataSet = anychart.data.set(
                     [{ "id": "BR.GO", "capital": "Goiania", "value": 0 },
-            { "id": "BR.SP", "capital": "São Paulo", "value": 37 },
-            { "id": "BR.PE","capital": "Recife", "value": 2 },
-            { "id": "BR.AC", "capital": "Rio Branco", "value": 3 },
-            { "id": "BR.AM", "capital": "Manaus", "value": 4 },
-            { "id": "BR.MA", "capital": "São Luís", "value": 5 },
-            { "id": "BR.PA", "capital": "Belém", "value": 6 },
-            { "id": "BR.RO", "capital": "Porto Velho", "value": 7 },
-            { "id": "BR.TO", "capital": "Palmas", "value": 8 },
-            { "id": "BR.DF", "capital": "Brasília", "value": 9 },
-            { "id": "BR.MS", "capital": "Campo Grande", "value": 10 },
-            { "id": "BR.MG", "capital": "Belo Horizonte", "value": 11 },
-            { "id": "BR.MT", "capital": "Cuiabá", "value": 12 },
-            { "id": "BR.RS", "capital": "Porto Alegre", "value": 13 },
-            { "id": "BR.PR", "capital": "Curitiba", "value": 14 },
-            { "id": "BR.SC", "capital": "Florianópolis", "value": 15 },
-            { "id": "BR.CE", "capital": "Fortaleza", "value": 16 },
-            { "id": "BR.PI", "capital": "Teresina", "value": 17 },
-            { "id": "BR.AL", "capital": "Maceió", "value": 18 },
-            { "id": "BR.BA", "capital": "Salvador", "value": 19 },
-            { "id": "BR.ES", "capital": "Vitória", "value": 20 },
-            { "id": "BR.PB", "capital": "João Pessoa", "value": 21 },
-            { "id": "BR.RJ", "capital": "Rio de Janeiro", "value": 22 },
-            { "id": "BR.RN", "capital": "Natal", "value": 23 },
-            { "id": "BR.SE", "capital": "Aracaju", "value": 24 },
-            { "id": "BR.RR", "capital": "Boa Vista", "value": 25 },
-            { "id": "BR.AP", "capital": "Macapá", "value": 26 }]
+                    { "id": "BR.SP", "capital": "São Paulo", "value": 37 },
+                    { "id": "BR.PE", "capital": "Recife", "value": 2 },
+                    { "id": "BR.AC", "capital": "Rio Branco", "value": 3 },
+                    { "id": "BR.AM", "capital": "Manaus", "value": 4 },
+                    { "id": "BR.MA", "capital": "São Luís", "value": 5 },
+                    { "id": "BR.PA", "capital": "Belém", "value": 6 },
+                    { "id": "BR.RO", "capital": "Porto Velho", "value": 7 },
+                    { "id": "BR.TO", "capital": "Palmas", "value": 8 },
+                    { "id": "BR.DF", "capital": "Brasília", "value": 9 },
+                    { "id": "BR.MS", "capital": "Campo Grande", "value": 10 },
+                    { "id": "BR.MG", "capital": "Belo Horizonte", "value": 11 },
+                    { "id": "BR.MT", "capital": "Cuiabá", "value": 12 },
+                    { "id": "BR.RS", "capital": "Porto Alegre", "value": 13 },
+                    { "id": "BR.PR", "capital": "Curitiba", "value": 14 },
+                    { "id": "BR.SC", "capital": "Florianópolis", "value": 15 },
+                    { "id": "BR.CE", "capital": "Fortaleza", "value": 16 },
+                    { "id": "BR.PI", "capital": "Teresina", "value": 17 },
+                    { "id": "BR.AL", "capital": "Maceió", "value": 18 },
+                    { "id": "BR.BA", "capital": "Salvador", "value": 19 },
+                    { "id": "BR.ES", "capital": "Vitória", "value": 20 },
+                    { "id": "BR.PB", "capital": "João Pessoa", "value": 21 },
+                    { "id": "BR.RJ", "capital": "Rio de Janeiro", "value": 22 },
+                    { "id": "BR.RN", "capital": "Natal", "value": 23 },
+                    { "id": "BR.SE", "capital": "Aracaju", "value": 24 },
+                    { "id": "BR.RR", "capital": "Boa Vista", "value": 25 },
+                    { "id": "BR.AP", "capital": "Macapá", "value": 26 }]
                 );
 
                 series = map.choropleth(dataSet);
@@ -265,6 +265,11 @@
                 series.colorScale(anychart.scales.linearColor('#FFFFFF', '#FF670A'));
 
                 series.hovered().fill('#8c8c8c');
+
+                series.tooltip().format(function (e) {
+                    return "Capital: " + e.getData("capital") + "\n" +
+                        "Alertas: " + e.getData("value")
+                });
 
                 map.listen('pointClick', function (e) {
                     map.zoomToFeature(e.point.get('id'));
@@ -311,13 +316,13 @@
                 function getDataSudeste() {
 
                     return [
-                        { "id": "BR.AC",  "capital": "Rio Branco","value": 50 },
-                        { "id": "BR.AP",  "capital": "Macapá", "value": 90 },
-                        { "id": "BR.AM",  "capital": "Manaus", "value": 75 },
-                        { "id": "BR.PA",  "capital": "Belém",  "value": 60 },
-                        { "id": "BR.RO",  "capital": "Porto Velho", "value": 90 },
-                        { "id": "BR.RR",  "capital": "Boa Vista", "value": 75 },
-                        { "id": "BR.TO",  "capital": "Palmas", "value": 60 }
+                        { "id": "BR.AC", "capital": "Rio Branco", "value": 50 },
+                        { "id": "BR.AP", "capital": "Macapá", "value": 90 },
+                        { "id": "BR.AM", "capital": "Manaus", "value": 75 },
+                        { "id": "BR.PA", "capital": "Belém", "value": 60 },
+                        { "id": "BR.RO", "capital": "Porto Velho", "value": 90 },
+                        { "id": "BR.RR", "capital": "Boa Vista", "value": 75 },
+                        { "id": "BR.TO", "capital": "Palmas", "value": 60 }
                     ];
                 }
 
@@ -328,6 +333,11 @@
                 series.geoIdField('id');
                 series.colorScale(anychart.scales.linearColor('#FFFFFF', '#FF670A'));
                 series.hovered().fill('#8c8c8c');
+
+                series.tooltip().format(function (e) {
+                    return "Capital: " + e.getData("capital") + "\n" +
+                        "Alertas: " + e.getData("value")
+                });
 
                 map.listen('pointClick', function (e) {
                     map.zoomToFeature(e.point.get('id'));
@@ -371,15 +381,15 @@
                 function getDataSudeste() {
 
                     return [
-                        { "id": "BR.CE",  "capital": "Fortaleza",  "value": 50 },
-                        { "id": "BR.PI",  "capital": "Teresina",  "value": 90 },
-                        { "id": "BR.AL",  "capital": "Maceió", "value": 75 },
-                        { "id": "BR.BA",  "capital": "Salvador", "value": 60 },
-                        { "id": "BR.MA",  "capital": "São Luís", "value": 50 },
-                        { "id": "BR.PB",  "capital": "João Pessoa", "value": 90 },
-                        { "id": "BR.PE",  "capital": "Recife", "value": 75 },
-                        { "id": "BR.RN",  "capital": "Natal", "value": 60 },
-                        { "id": "BR.SE",  "capital": "Aracaju", "value": 60 }
+                        { "id": "BR.CE", "capital": "Fortaleza", "value": 50 },
+                        { "id": "BR.PI", "capital": "Teresina", "value": 90 },
+                        { "id": "BR.AL", "capital": "Maceió", "value": 75 },
+                        { "id": "BR.BA", "capital": "Salvador", "value": 60 },
+                        { "id": "BR.MA", "capital": "São Luís", "value": 50 },
+                        { "id": "BR.PB", "capital": "João Pessoa", "value": 90 },
+                        { "id": "BR.PE", "capital": "Recife", "value": 75 },
+                        { "id": "BR.RN", "capital": "Natal", "value": 60 },
+                        { "id": "BR.SE", "capital": "Aracaju", "value": 60 }
                     ];
                 }
 
@@ -390,6 +400,11 @@
                 series.geoIdField('id');
                 series.colorScale(anychart.scales.linearColor('#FFFFFF', '#FF670A'));
                 series.hovered().fill('#8c8c8c');
+
+                series.tooltip().format(function (e) {
+                    return "Capital: " + e.getData("capital") + "\n" +
+                        "Alertas: " + e.getData("value")
+                });
 
                 map.geoData(anychart.maps['brazil']);
 
@@ -429,10 +444,10 @@
                 function getDataSudeste() {
 
                     return [
-                        { "id": "BR.GO",  "capital": "Goiânia", "value": 50 },
-                        { "id": "BR.MT",  "capital": "Cuiabá", "value": 90 },
-                        { "id": "BR.MS",  "capital": "Campo Grande", "value": 75 },
-                        { "id": "BR.DF",  "capital": "Brasilia", "value": 60 }
+                        { "id": "BR.GO", "capital": "Goiânia", "value": 50 },
+                        { "id": "BR.MT", "capital": "Cuiabá", "value": 90 },
+                        { "id": "BR.MS", "capital": "Campo Grande", "value": 75 },
+                        { "id": "BR.DF", "capital": "Brasilia", "value": 60 }
                     ];
                 }
 
@@ -443,6 +458,11 @@
                 series.geoIdField('id');
                 series.colorScale(anychart.scales.linearColor('#FFFFFF', '#FF670A'));
                 series.hovered().fill('#8c8c8c');
+
+                series.tooltip().format(function (e) {
+                    return "Capital: " + e.getData("capital") + "\n" +
+                        "Alertas: " + e.getData("value")
+                });
 
                 map.geoData(anychart.maps['brazil']);
 
@@ -483,9 +503,9 @@
                 function getDataSudeste() {
 
                     return [
-                        { "id": "BR.PR", "value": 50 },
-                        { "id": "BR.SC", "value": 90 },
-                        { "id": "BR.RS", "value": 75 }
+                        { "id": "BR.PR", "capital": "Curitiba", "value": 50 },
+                        { "id": "BR.SC", "capital": "Florianópolis", "value": 90 },
+                        { "id": "BR.RS", "capital": "Porto Alegre", "value": 75 }
                     ];
                 }
 
@@ -496,6 +516,11 @@
                 series.geoIdField('id');
                 series.colorScale(anychart.scales.linearColor('#FFFFFF', '#FF670A'));
                 series.hovered().fill('#addd8e');
+
+                series.tooltip().format(function (e) {
+                    return "Capital: " + e.getData("capital") + "\n" +
+                        "Alertas: " + e.getData("value")
+                });
 
                 map.geoData(anychart.maps['brazil']);
 
