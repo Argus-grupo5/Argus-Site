@@ -366,7 +366,7 @@
 
                 series.geoIdField('id');
                 series.colorScale(anychart.scales.linearColor('#FFFFFF', '#FF670A'));
-                series.hovered().fill('#addd8e');
+                series.hovered().fill('#8c8c8c');
 
                 map.geoData(anychart.maps['brazil']);
 
@@ -377,6 +377,12 @@
                 map.colorRange().enabled(true);
 
                 map.background(null);
+
+                var nivelZoom = 2.0;
+                var eixoX = 5000;
+                var eixoY = 200;
+
+                map.zoomTo(nivelZoom, eixoX, eixoY);
 
                 map.container('mapNordeste');
 
