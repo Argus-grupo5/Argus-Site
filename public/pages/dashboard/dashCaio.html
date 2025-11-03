@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../css/dashboard/servers.css">
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.anychart.com/releases/8.13.0/css/anychart-ui.min.css" />
+    <link rel="stylesheet" type="text/css"
+        href="https://cdn.anychart.com/releases/8.13.0/fonts/css/anychart-font.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.15/proj4.js"></script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-base.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-map.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-exports.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-ui.min.js"></script>
+    <script src="https://cdn.anychart.com/geodata/2.2.0/countries/brazil/brazil.js"></script>
+    <script src="https://cdn.anychart.com/releases/8.13.0/js/anychart-ui.min.js"></script>
+
+
+
+    <script src="./script/dash.js"></script>
+    <title>ARGUS | Servidores</title>
+</head>
+
+
+<body>
+    <div id="id_sair">
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-geral" id="div_modal_label"></div>
+    </div>
+
+    <header class="desktopNav" id="navDesktop"></header>
+
+    <header class="headerTop">
+        <div class="geralInfo">
+            <div class="info tooltipInfo">
+                <div class="server">
+                    <img src="../../assets/dashboard/desktop/server.svg" alt="">
+                </div>
+                <div class="serversMonitoring" id="id_servidores_monitorados">
+                </div>
+                <span class="tooltiptextInfo">
+                    Servidores em monitoramento
+                </span>
+            </div>
+            <div class="info">
+                <div class="bell">
+                    <img src="../../assets/dashboard/desktop/bell.svg" alt="">
+                </div>
+                <div class="risk tooltipInfo" id="id_servidores_em_estado_critico">
+                    <p id="qtd_critico">1</p>
+                    <span class="tooltiptextInfo">
+                        Servidores em atenção
+                    </span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="top-boxes-container">
+
+        <div class="info-box alert-box">
+            <p class="label">Região com mais Alertas</p>
+            <p class="value">São Paulo</p>
+        </div>
+
+        <div class="info-box server-box-N-Servidores">
+            <p class="label">Servidores em Alertas (Ultima semana)</p>
+            <p class="value">128/200</p>
+        </div>
+
+        <div class="info-box component-box">
+            <p class="label">Componente c/ mais alertas</p>
+            <p class="value">GPU</p>
+        </div>
+
+        <div class="Select-location">
+            <select id="id_filter">
+                <option value="0" selected>Selecione a Região</option>
+                <option value="1">País Inteiro</option>
+                <option value="2">Norte</option>
+                <option value="3">Nordeste</option>
+                <option value="4">Centro-oeste</option>
+                <option value="5">Sul</option>
+                <option value="6">Sudeste</option>
+            </select>
+        </div>
+
+        <div class="botãoRegioes"> <button onclick="buscarRegioes()">Buscar</button></div>
+
+
+    </div>
+
+    <div class="search" id="search">
+    </div>
+
+    <div class="container">
+        <div class="server-list" id="regioes"></div>
+    </div>
+
+    <div id="mapBrasil"></div>
+    <div id="mapNorte" style="display:none;"></div>
+    <div id="mapNordeste" style="display:none;"></div>
+    <div id="mapCentro" style="display:none;"></div>
+    <div id="mapSul" style="display:none;"></div>
+    <div id="mapSudeste" style="display:none;"></div>
+
+
+
+    <!-- <div class="container-boxes-down">
+        <div class="container-boxes-title">
+            <p>Visão por componentes</p>
+            <p class="boxes-subtitle">selecione um servidor</p>
+        </div>
+
+        <div class="container-boxes-comp">
+            <div>
+                <p>CPU</p>
+                <div class="box-card">
+                    <div>
+                        <p class="label-box">Média (24h)</p>
+                        <p class="value-box"  id="media_cpu">-</p>
+                    </div>
+                    <div>
+                        <p class="label-box">Pico (1h)</p>
+                        <p class="value-box"  id="pico_cpu">-</p>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <p>GPU</p>
+                <div class="box-card">
+                    <div>
+                        <p class="label-box">Média (24h)</p>
+                        <p class="value-box" id="media_gpu">-</p>
+                    </div>
+                    <div>
+                        <p class="label-box">Pico (1h)</p>
+                        <p class="value-box" id="pico_gpu">-</p>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <p>RAM</p>
+                <div class="box-card">
+                    <div>
+                        <p class="label-box">Média (24h)</p>
+                        <p class="value-box" id="media_ram">-</p>
+                    </div>
+                    <div>
+                        <p class="label-box">Pico (1h)</p>
+                        <p class="value-box" id="pico_ram">-</p>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <p>DISCO</p>
+                <div class="box-card">
+                    <div>
+                        <p class="label-box">% Total (<span id="data_disco">XXXX-XX-XX</span>)</p>
+                        <p class="value-box" id="media_disco">-</p>
+                    </div>
+                    <div>
+                        <p class="label-box">Taxa de variação (1h)</p>
+                        <p class="value-box" id="pico_disco">-</p>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <p>REDE</p>
+                <div class="box-card">
+                    <div>
+                        <p class="label-box">Média (24h)</p>
+                        <p class="value-box" id="media_rede">-</p>
+                    </div>
+                    <div>
+                        <p class="label-box">Pico (1h)</p>
+                        <p class="value-box" id="pico_rede">-</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+
+    </div>
+</body>
+
+
+</html>
+<script type="text/javascript">
+
+    header("server", sessionStorage.CARGO_CARGO);
+
+    if (sessionStorage.CARGO_CARGO == "ROOT") {
+        document.getElementById("search").innerHTML = '<button onclick="abrirModal()">Adicionar server</button>'
+    }
+
+
+    function fecharModal() {
+        let modal = document.getElementById("modal")
+        modal.style.display = "none"
+    }
+
+
+
+    const elMonitored = document.getElementById("id_servidores_monitorados");
+    const elQtdCritico = document.getElementById("qtd_critico");
+    const elQtdAlerta = document.getElementById("qtd_alerta");
+    const elServerList = document.getElementById("id_server_list");
+
+
+    function buscarRegioes() {
+
+        let regioes = id_filter.value;
+
+        if (regioes == 1) {
+            anychart.onDocumentReady(function () {
+
+            mapBrasil.style.display = 'block';
+            mapNorte.style.display = 'none';
+            mapCentro.style.display = 'none';
+            mapSul.style.display = 'none';
+            mapSudeste.style.display = 'none';
+            mapNordeste.style.display = 'none';
+
+                var map = anychart.map();
+
+
+                var dataSet = anychart.data.set(
+                    [{ "id": "BR.GO", "value": 0 },
+                    { "id": "BR.SP", "value": 37 },
+                    { "id": "BR.PE", "value": 2 },
+                    { "id": "BR.AC", "value": 3 },
+                    { "id": "BR.AM", "value": 4 },
+                    { "id": "BR.MA", "value": 5 },
+                    { "id": "BR.PA", "value": 6 },
+                    { "id": "BR.RO", "value": 7 },
+                    { "id": "BR.TO", "value": 8 },
+                    { "id": "BR.DF", "value": 9 },
+                    { "id": "BR.MS", "value": 10 },
+                    { "id": "BR.MG", "value": 11 },
+                    { "id": "BR.MT", "value": 12 },
+                    { "id": "BR.RS", "value": 13 },
+                    { "id": "BR.PR", "value": 14 },
+                    { "id": "BR.SC", "value": 15 },
+                    { "id": "BR.CE", "value": 16 },
+                    { "id": "BR.PI", "value": 17 },
+                    { "id": "BR.AL", "value": 18 },
+                    { "id": "BR.BA", "value": 19 },
+                    { "id": "BR.ES", "value": 20 },
+                    { "id": "BR.PB", "value": 21 },
+                    { "id": "BR.RJ", "value": 22 },
+                    { "id": "BR.RN", "value": 23 },
+                    { "id": "BR.SE", "value": 24 },
+                    { "id": "BR.RR", "value": 25 },
+                    { "id": "BR.AP", "value": 26 }]
+                );
+
+
+                series = map.choropleth(dataSet);
+
+
+
+                series.geoIdField('id');
+
+
+                series.colorScale(anychart.scales.linearColor('#FFFFFF', '#FF670A')); 
+                series.hovered().fill('#addd8e');
+
+
+                map.geoData(anychart.maps['brazil']);
+
+                map.colorRange().enabled(true);
+
+
+                map.container('mapBrasil');
+
+                map.background(null);
+
+                map.draw();
+            });
+        } else if (regioes == 2) {
+
+            mapBrasil.style.display = 'none';
+            mapNorte.style.display = 'block';
+            mapCentro.style.display = 'none';
+            mapSul.style.display = 'none';
+            mapSudeste.style.display = 'none';
+            mapNordeste.style.display = 'none';
+            // Norte
+
+            anychart.onDocumentReady(function () {
+                var map = anychart.map();
+
+                function getDataSudeste() {
+
+                    return [
+                        { "id": "BR.AC", "value": 50 },
+                        { "id": "BR.AP", "value": 90 },
+                        { "id": "BR.AM", "value": 75 },
+                        { "id": "BR.PA", "value": 60 },
+                        { "id": "BR.RO", "value": 90 },
+                        { "id": "BR.RR", "value": 75 },
+                        { "id": "BR.TO", "value": 60 }
+                    ];
+                }
+
+                var dataSet = anychart.data.set(getDataSudeste());
+
+                series = map.choropleth(dataSet);
+
+                series.geoIdField('id');
+                series.colorScale(anychart.scales.linearColor('#FFFFFF', '#FF670A'));
+                series.hovered().fill('#addd8e');
+
+                map.geoData(anychart.maps['brazil']);
+
+                map.unboundRegions().enabled(true);
+                map.unboundRegions().fill('none');
+                map.unboundRegions().stroke('none');
+
+                map.colorRange().enabled(true);
+
+                map.background(null);
+
+                map.container('mapNorte');
+
+                map.draw();
+            });
+
+        } else if (regioes == 3) {
+
+            mapBrasil.style.display = 'none';
+            mapNorte.style.display = 'none';
+            mapCentro.style.display = 'none';
+            mapSul.style.display = 'none';
+            mapSudeste.style.display = 'none';
+            mapNordeste.style.display = 'block';
+
+            // Nordeste
+
+            anychart.onDocumentReady(function () {
+                var map = anychart.map();
+
+                function getDataSudeste() {
+
+                    return [
+                        { "id": "BR.CE", "value": 50 },
+                        { "id": "BR.PI", "value": 90 },
+                        { "id": "BR.AL", "value": 75 },
+                        { "id": "BR.BA", "value": 60 },
+                        { "id": "BR.MA", "value": 50 },
+                        { "id": "BR.PB", "value": 90 },
+                        { "id": "BR.PE", "value": 75 },
+                        { "id": "BR.RN", "value": 60 },
+                        { "id": "BR.SE", "value": 60 }
+                    ];
+                }
+
+                var dataSet = anychart.data.set(getDataSudeste());
+
+                series = map.choropleth(dataSet);
+
+                series.geoIdField('id');
+                series.colorScale(anychart.scales.linearColor('#FFFFFF', '#FF670A'));
+                series.hovered().fill('#addd8e');
+
+                map.geoData(anychart.maps['brazil']);
+
+                map.unboundRegions().enabled(true);
+                map.unboundRegions().fill('none');
+                map.unboundRegions().stroke('none');
+
+                map.colorRange().enabled(true);
+
+                map.background(null);
+
+                map.container('mapNordeste');
+
+                map.draw();
+            });
+
+        } else if (regioes == 4) {
+
+            mapBrasil.style.display = 'none';
+            mapNorte.style.display = 'none';
+            mapCentro.style.display = 'block';
+            mapSul.style.display = 'none';
+            mapSudeste.style.display = 'none';
+            mapNordeste.style.display = 'none';
+
+            // Nordeste
+
+            anychart.onDocumentReady(function () {
+                var map = anychart.map();
+
+                function getDataSudeste() {
+
+                    return [
+                        { "id": "BR.GO", "value": 50 },
+                        { "id": "BR.MT", "value": 90 },
+                        { "id": "BR.MS", "value": 75 },
+                        { "id": "BR.DF", "value": 60 }
+                    ];
+                }
+
+                var dataSet = anychart.data.set(getDataSudeste());
+
+                series = map.choropleth(dataSet);
+
+                series.geoIdField('id');
+                series.colorScale(anychart.scales.linearColor('#FFFFFF', '#FF670A'));
+                series.hovered().fill('#addd8e');
+
+                map.geoData(anychart.maps['brazil']);
+
+                map.unboundRegions().enabled(true);
+                map.unboundRegions().fill('none');
+                map.unboundRegions().stroke('none');
+
+                map.colorRange().enabled(true);
+
+                map.background(null);
+
+                map.container('mapCentro');
+
+                map.draw();
+            });
+
+        } else if (regioes == 5) {
+
+            mapBrasil.style.display = 'none';
+            mapNorte.style.display = 'none';
+            mapCentro.style.display = 'none';
+            mapSul.style.display = 'block';
+            mapSudeste.style.display = 'none';
+            mapNordeste.style.display = 'none';
+
+            // Nordeste
+
+            anychart.onDocumentReady(function () {
+                var map = anychart.map();
+
+                function getDataSudeste() {
+
+                    return [
+                        { "id": "BR.PR", "value": 50 },
+                        { "id": "BR.SC", "value": 90 },
+                        { "id": "BR.RS", "value": 75 }
+                    ];
+                }
+
+                var dataSet = anychart.data.set(getDataSudeste());
+
+                series = map.choropleth(dataSet);
+
+                series.geoIdField('id');
+                series.colorScale(anychart.scales.linearColor('#FFFFFF', '#FF670A'));
+                series.hovered().fill('#addd8e');
+
+                map.geoData(anychart.maps['brazil']);
+
+                map.unboundRegions().enabled(true);
+                map.unboundRegions().fill('none');
+                map.unboundRegions().stroke('none');
+
+                map.colorRange().enabled(true);
+
+                map.background(null);
+
+                map.container('mapSul');
+
+                map.draw();
+            });
+
+        } else if (regioes == 6) {
+
+            mapBrasil.style.display = 'none';
+            mapNorte.style.display = 'none';
+            mapCentro.style.display = 'none';
+            mapSul.style.display = 'none';
+            mapSudeste.style.display = 'block';
+            mapNordeste.style.display = 'none';
+
+            // Nordeste
+
+            anychart.onDocumentReady(function () {
+                var map = anychart.map();
+
+                function getDataSudeste() {
+
+                    return [
+                        { "id": "BR.SP", "value": 50 },
+                        { "id": "BR.RJ", "value": 90 },
+                        { "id": "BR.MG", "value": 75 },
+                        { "id": "BR.ES", "value": 60 }
+                    ];
+                }
+
+                var dataSet = anychart.data.set(getDataSudeste());
+
+                series = map.choropleth(dataSet);
+
+                series.geoIdField('id');
+                series.colorScale(anychart.scales.linearColor('#FFFFFF', '#FF670A'));
+                series.hovered().fill('#addd8e');
+
+                map.geoData(anychart.maps['brazil']);
+
+                map.unboundRegions().enabled(true);
+                map.unboundRegions().fill('none');
+                map.unboundRegions().stroke('none');
+
+                map.colorRange().enabled(true);
+
+                map.background(null);
+                
+                var nivelZoom = 3.0; 
+                var eixoY = 1100;
+                var eixoX = 500; 
+
+                map.zoomTo(nivelZoom, eixoY, eixoX);
+
+                map.container('mapSudeste');
+
+                map.draw();
+            });
+
+        }
+    }
+
+</script>
