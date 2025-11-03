@@ -184,11 +184,11 @@
             map.zoomToFeature(e.point.get('id'));
         })
 
-        // Disables zoom On Mouse Wheel
+
         map.interactivity().zoomOnMouseWheel(false);
-        // Disables zoom on double click
+
         map.interactivity().keyboardZoomAndMove(false);
-        // Disables zoom on double click
+
         map.interactivity().zoomOnDoubleClick(false);
 
 
@@ -275,11 +275,11 @@
                     map.zoomToFeature(e.point.get('id'));
                 })
 
-                // Disables zoom On Mouse Wheel
+
                 map.interactivity().zoomOnMouseWheel(false);
-                // Disables zoom on double click
+
                 map.interactivity().keyboardZoomAndMove(false);
-                // Disables zoom on double click
+
                 map.interactivity().zoomOnDoubleClick(false);
 
 
@@ -343,6 +343,13 @@
                     map.zoomToFeature(e.point.get('id'));
                 })
 
+                
+                map.interactivity().zoomOnMouseWheel(false);
+                
+                map.interactivity().keyboardZoomAndMove(false);
+                
+                map.interactivity().zoomOnDoubleClick(false);
+
                 map.geoData(anychart.maps['brazil']);
 
                 map.unboundRegions().enabled(true);
@@ -405,6 +412,16 @@
                     return "Capital: " + e.getData("capital") + "\n" +
                         "Alertas: " + e.getData("value")
                 });
+                
+                map.listen('pointClick', function (e) {
+                    map.zoomToFeature(e.point.get('id'));
+                })
+
+                map.interactivity().zoomOnMouseWheel(false);
+                
+                map.interactivity().keyboardZoomAndMove(false);
+                
+                map.interactivity().zoomOnDoubleClick(false);
 
                 map.geoData(anychart.maps['brazil']);
 
@@ -464,6 +481,16 @@
                         "Alertas: " + e.getData("value")
                 });
 
+                map.listen('pointClick', function (e) {
+                    map.zoomToFeature(e.point.get('id'));
+                })
+
+                map.interactivity().zoomOnMouseWheel(false);
+                
+                map.interactivity().keyboardZoomAndMove(false);
+                
+                map.interactivity().zoomOnDoubleClick(false);
+
                 map.geoData(anychart.maps['brazil']);
 
                 map.unboundRegions().enabled(true);
@@ -522,6 +549,16 @@
                         "Alertas: " + e.getData("value")
                 });
 
+                map.listen('pointClick', function (e) {
+                    map.zoomToFeature(e.point.get('id'));
+                })
+
+                map.interactivity().zoomOnMouseWheel(false);
+                
+                map.interactivity().keyboardZoomAndMove(false);
+                
+                map.interactivity().zoomOnDoubleClick(false);
+
                 map.geoData(anychart.maps['brazil']);
 
                 map.unboundRegions().enabled(true);
@@ -561,9 +598,9 @@
 
                     return [
                         { "id": "BR.SP", "capital": "São Paulo", "value": 50 },
-                        { "id": "BR.RJ", "capital": "Rio de Janeiro",  "value": 90 },
-                        { "id": "BR.MG", "capital": "Belo Horizonte",  "value": 75 },
-                        { "id": "BR.ES", "capital": "Vitória",  "value": 60 }
+                        { "id": "BR.RJ", "capital": "Rio de Janeiro", "value": 90 },
+                        { "id": "BR.MG", "capital": "Belo Horizonte", "value": 75 },
+                        { "id": "BR.ES", "capital": "Vitória", "value": 60 }
                     ];
                 }
 
@@ -579,6 +616,16 @@
                     return "Capital: " + e.getData("capital") + "\n" +
                         "Alertas: " + e.getData("value")
                 });
+
+                map.listen('pointClick', function (e) {
+                    map.zoomToFeature(e.point.get('id'));
+                })
+
+                map.interactivity().zoomOnMouseWheel(false);
+                
+                map.interactivity().keyboardZoomAndMove(false);
+                
+                map.interactivity().zoomOnDoubleClick(false);
 
                 map.geoData(anychart.maps['brazil']);
 
