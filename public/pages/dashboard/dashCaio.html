@@ -258,15 +258,12 @@
             { "id": "BR.AP", "capital": "Macapá", "value": 26 }]
                 );
 
-
                 series = map.choropleth(dataSet);
-
-
 
                 series.geoIdField('id');
 
-
                 series.colorScale(anychart.scales.linearColor('#FFFFFF', '#FF670A'));
+
                 series.hovered().fill('#8c8c8c');
 
                 map.listen('pointClick', function (e) {
@@ -314,13 +311,13 @@
                 function getDataSudeste() {
 
                     return [
-                        { "id": "BR.AC", "value": 50 },
-                        { "id": "BR.AP", "value": 90 },
-                        { "id": "BR.AM", "value": 75 },
-                        { "id": "BR.PA", "value": 60 },
-                        { "id": "BR.RO", "value": 90 },
-                        { "id": "BR.RR", "value": 75 },
-                        { "id": "BR.TO", "value": 60 }
+                        { "id": "BR.AC",  "capital": "Rio Branco","value": 50 },
+                        { "id": "BR.AP",  "capital": "Macapá", "value": 90 },
+                        { "id": "BR.AM",  "capital": "Manaus", "value": 75 },
+                        { "id": "BR.PA",  "capital": "Belém",  "value": 60 },
+                        { "id": "BR.RO",  "capital": "Porto Velho", "value": 90 },
+                        { "id": "BR.RR",  "capital": "Boa Vista", "value": 75 },
+                        { "id": "BR.TO",  "capital": "Palmas", "value": 60 }
                     ];
                 }
 
@@ -331,6 +328,10 @@
                 series.geoIdField('id');
                 series.colorScale(anychart.scales.linearColor('#FFFFFF', '#FF670A'));
                 series.hovered().fill('#8c8c8c');
+
+                map.listen('pointClick', function (e) {
+                    map.zoomToFeature(e.point.get('id'));
+                })
 
                 map.geoData(anychart.maps['brazil']);
 
