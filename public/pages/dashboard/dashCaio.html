@@ -219,12 +219,12 @@
         if (regioes == 1) {
             anychart.onDocumentReady(function () {
 
-            mapBrasil.style.display = 'block';
-            mapNorte.style.display = 'none';
-            mapCentro.style.display = 'none';
-            mapSul.style.display = 'none';
-            mapSudeste.style.display = 'none';
-            mapNordeste.style.display = 'none';
+                mapBrasil.style.display = 'block';
+                mapNorte.style.display = 'none';
+                mapCentro.style.display = 'none';
+                mapSul.style.display = 'none';
+                mapSudeste.style.display = 'none';
+                mapNordeste.style.display = 'none';
 
                 var map = anychart.map();
 
@@ -267,7 +267,7 @@
                 series.geoIdField('id');
 
 
-                series.colorScale(anychart.scales.linearColor('#FFFFFF', '#FF670A')); 
+                series.colorScale(anychart.scales.linearColor('#FFFFFF', '#FF670A'));
                 series.hovered().fill('#addd8e');
 
 
@@ -413,7 +413,7 @@
 
                 series.geoIdField('id');
                 series.colorScale(anychart.scales.linearColor('#FFFFFF', '#FF670A'));
-                series.hovered().fill('#addd8e');
+                series.hovered().fill('#8c8c8c');
 
                 map.geoData(anychart.maps['brazil']);
 
@@ -424,6 +424,13 @@
                 map.colorRange().enabled(true);
 
                 map.background(null);
+
+                var nivelZoom = 2.3;
+                var eixoX = 910;
+                var eixoY = 390;
+
+                map.zoomTo(nivelZoom, eixoX, eixoY);
+
 
                 map.container('mapCentro');
 
@@ -471,11 +478,11 @@
 
                 map.background(null);
 
-                var nivelZoom = 3.1; 
-                var eixoY = 970;
-                var eixoX = 1000; 
+                var nivelZoom = 3.1;
+                var eixoX = 970;
+                var eixoY = 1000;
 
-                map.zoomTo(nivelZoom, eixoY, eixoX);
+                map.zoomTo(nivelZoom, eixoX, eixoY);
 
                 map.container('mapSul');
 
@@ -523,12 +530,12 @@
                 map.colorRange().enabled(true);
 
                 map.background(null);
-                
-                var nivelZoom = 3.0; 
-                var eixoY = 1100;
-                var eixoX = 500; 
 
-                map.zoomTo(nivelZoom, eixoY, eixoX);
+                var nivelZoom = 3.0;
+                var eixoX = 1100;
+                var eixoY = 500;
+
+                map.zoomTo(nivelZoom, eixoX, eixoY);
 
                 map.container('mapSudeste');
 
