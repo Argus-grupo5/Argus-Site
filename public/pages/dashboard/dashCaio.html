@@ -495,7 +495,7 @@
             mapSudeste.style.display = 'none';
             mapNordeste.style.display = 'none';
 
-            // Nordeste
+            // Sul
 
             anychart.onDocumentReady(function () {
                 var map = anychart.map();
@@ -552,7 +552,7 @@
             mapSudeste.style.display = 'block';
             mapNordeste.style.display = 'none';
 
-            // Nordeste
+            // Sudeste
 
             anychart.onDocumentReady(function () {
                 var map = anychart.map();
@@ -560,10 +560,10 @@
                 function getDataSudeste() {
 
                     return [
-                        { "id": "BR.SP", "value": 50 },
-                        { "id": "BR.RJ", "value": 90 },
-                        { "id": "BR.MG", "value": 75 },
-                        { "id": "BR.ES", "value": 60 }
+                        { "id": "BR.SP", "capital": "São Paulo", "value": 50 },
+                        { "id": "BR.RJ", "capital": "Rio de Janeiro",  "value": 90 },
+                        { "id": "BR.MG", "capital": "Belo Horizonte",  "value": 75 },
+                        { "id": "BR.ES", "capital": "Vitória",  "value": 60 }
                     ];
                 }
 
@@ -574,6 +574,11 @@
                 series.geoIdField('id');
                 series.colorScale(anychart.scales.linearColor('#FFFFFF', '#FF670A'));
                 series.hovered().fill('#addd8e');
+
+                series.tooltip().format(function (e) {
+                    return "Capital: " + e.getData("capital") + "\n" +
+                        "Alertas: " + e.getData("value")
+                });
 
                 map.geoData(anychart.maps['brazil']);
 
