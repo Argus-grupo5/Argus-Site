@@ -201,46 +201,42 @@
 
 
   anychart.onDocumentReady(function () {
-    // A função getData() não foi alterada e permanece válida.
 
-    // Criar um conjunto de dados a partir dos dados retornados por getData()
+
     var dataSet = anychart.data.set(getData());
 
-    // Mapeamento dos dados para cada série
-    var firstSeriesData = dataSet.mapAs({ x: 0, value: 1 });  // 18-34
-    var secondSeriesData = dataSet.mapAs({ x: 0, value: 2 }); // 35-49
-    var thirdSeriesData = dataSet.mapAs({ x: 0, value: 3 });  // 50-64
-    var fourthSeriesData = dataSet.mapAs({ x: 0, value: 4 }); // 65+
 
-    // Criar o gráfico de linhas
+    var firstSeriesData = dataSet.mapAs({ x: 0, value: 1 });  // Cpu
+    var secondSeriesData = dataSet.mapAs({ x: 0, value: 2 }); // Gpu
+    var thirdSeriesData = dataSet.mapAs({ x: 0, value: 3 });  // Ram
+    var fourthSeriesData = dataSet.mapAs({ x: 0, value: 4 }); // disco
+
+
     var chart = anychart.line();
 
-    // Configurações gerais do gráfico
-    chart.animation(true);
-    chart.title('Aceitação de relacionamentos do mesmo sexo nos EUA nas últimas 2 décadas'); // Título em português
-    chart.yAxis().title('% de pessoas que aceitam relacionamentos do mesmo sexo'); // Título do eixo Y em português
 
-    // Configuração do crosshair (linhas de foco)
+    chart.animation(true);
+    chart.title('Números de Alertas por cada Componente'); 
+    chart.yAxis().title('Números de Alertas');
+
+
     chart.crosshair().enabled(true).yLabel(false).yStroke(null);
 
-    // --- Configuração das Séries de Dados ---
-
-    // Séries 1: 18-34
     var firstSeries = chart.line(firstSeriesData);
     firstSeries
         .name('CPU')
-        .stroke('2 #f49595') // Espessura de 2 para um visual mais limpo
-        .markers().enabled(true).type('circle').size(4); // Adiciona marcadores circulares
+        .stroke('2 #f49595') 
+        .markers().enabled(true).type('circle').size(4); 
     firstSeries
         .tooltip()
         .format('Total Alertas Cpu: {%value}%');
 
-    // Séries 2: 35-49
-    var secondSeries = chart.line(secondSeriesData);
+
+        var secondSeries = chart.line(secondSeriesData);
     secondSeries
         .name('GPU')
         .stroke('2 #f9eb97')
-        .markers().enabled(true).type('diamond').size(4); // Marcadores em diamante
+        .markers().enabled(true).type('diamond').size(4); 
     secondSeries
         .tooltip()
         .format('Total alertas Gpu: {%value}%');
@@ -389,12 +385,7 @@ anychart.onDocumentReady(function () {
         if (regioes == 1) {
             anychart.onDocumentReady(function () {
 
-                mapBrasil.style.display = 'block';
-                mapNorte.style.display = 'none';
-                mapCentro.style.display = 'none';
-                mapSul.style.display = 'none';
-                mapSudeste.style.display = 'none';
-                mapNordeste.style.display = 'none';
+                mapBrasil.innerHTML = "";
 
                 var map = anychart.map();
 
@@ -500,7 +491,9 @@ anychart.onDocumentReady(function () {
 
                 series.geoIdField('id');
                 series.colorScale(anychart.scales.linearColor('#FFFFFF', '#FF670A'));
-                series.hovered().fill('#8c8c8c');
+                series.hovered().fill('#8c8c8c');map.listen('pointClick', function (e) {
+                    map.zoomToFeature(e.point.get('id'));
+                })
 
                 series.tooltip().format(function (e) {
                     return "Capital: " + e.getData("capital") + "\n" +
@@ -528,9 +521,9 @@ anychart.onDocumentReady(function () {
 
                 map.background(null);
 
-                var nivelZoom = 1.7;
-                var eixoX = 800;
-                var eixoY = 5;
+                var nivelZoom = 1.5;
+                var eixoX = 100;
+                var eixoY = 1;
 
                 map.zoomTo(nivelZoom, eixoX, eixoY);
 
@@ -541,12 +534,7 @@ anychart.onDocumentReady(function () {
 
         } else if (regioes == 3) {
 
-            mapBrasil.style.display = 'none';
-            mapNorte.style.display = 'none';
-            mapCentro.style.display = 'none';
-            mapSul.style.display = 'none';
-            mapSudeste.style.display = 'none';
-            mapNordeste.style.display = 'block';
+            mapBrasil.innerHTML = "";
 
             // Nordeste
 
@@ -602,24 +590,19 @@ anychart.onDocumentReady(function () {
                 map.background(null);
 
                 var nivelZoom = 2.0;
-                var eixoX = 5000;
+                var eixoX = 2000;
                 var eixoY = 200;
 
                 map.zoomTo(nivelZoom, eixoX, eixoY);
 
-                map.container('mapNordeste');
+                map.container('mapBrasil');
 
                 map.draw();
             });
 
         } else if (regioes == 4) {
 
-            mapBrasil.style.display = 'none';
-            mapNorte.style.display = 'none';
-            mapCentro.style.display = 'block';
-            mapSul.style.display = 'none';
-            mapSudeste.style.display = 'none';
-            mapNordeste.style.display = 'none';
+            mapBrasil.innerHTML = "";
 
             // Centro
 
@@ -669,26 +652,21 @@ anychart.onDocumentReady(function () {
 
                 map.background(null);
 
-                var nivelZoom = 2.3;
-                var eixoX = 910;
+                var nivelZoom = 2.0
+                var eixoX = 400;
                 var eixoY = 390;
 
                 map.zoomTo(nivelZoom, eixoX, eixoY);
 
 
-                map.container('mapCentro');
+                map.container('mapBrasil');
 
                 map.draw();
             });
 
         } else if (regioes == 5) {
 
-            mapBrasil.style.display = 'none';
-            mapNorte.style.display = 'none';
-            mapCentro.style.display = 'none';
-            mapSul.style.display = 'block';
-            mapSudeste.style.display = 'none';
-            mapNordeste.style.display = 'none';
+            mapBrasil.innerHTML = "";
 
             // Sul
 
@@ -738,25 +716,19 @@ anychart.onDocumentReady(function () {
                 map.background(null);
 
                 var nivelZoom = 3.1;
-                var eixoX = 970;
+                var eixoX = 470;
                 var eixoY = 1000;
 
                 map.zoomTo(nivelZoom, eixoX, eixoY);
 
-                map.container('mapSul');
+                map.container('mapBrasil');
 
                 map.draw();
             });
 
         } else if (regioes == 6) {
 
-            mapBrasil.style.display = 'none';
-            mapNorte.style.display = 'none';
-            mapCentro.style.display = 'none';
-            mapSul.style.display = 'none';
-            mapSudeste.style.display = 'block';
-            mapNordeste.style.display = 'none';
-
+            mapBrasil.innerHTML = "";
             // Sudeste
 
             anychart.onDocumentReady(function () {
@@ -806,12 +778,12 @@ anychart.onDocumentReady(function () {
                 map.background(null);
 
                 var nivelZoom = 3.0;
-                var eixoX = 1100;
+                var eixoX = 650;
                 var eixoY = 500;
 
                 map.zoomTo(nivelZoom, eixoX, eixoY);
 
-                map.container('mapSudeste');
+                map.container('mapBrasil');
 
                 map.draw();
             });
