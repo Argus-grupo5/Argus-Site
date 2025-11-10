@@ -1,0 +1,20 @@
+services:
+  site:
+    image: caiosousavs/siteargus:latest
+    ports:
+      - "8080:8080"
+    networks:
+      - rede-compose
+    depends_on:
+      - db
+
+  db:
+    image: caiosousavs/argusdb:2.0 
+    ports:
+      - "3307:3306"
+    networks:
+      - rede-compose
+
+networks:
+  rede-compose:
+    driver: bridge

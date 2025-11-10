@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../../css/dashboard/servers.css">
+    <link rel="stylesheet" href="../../css/dashboard/MapaDeCalor.css">
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.anychart.com/releases/8.13.0/css/anychart-ui.min.css" />
     <link rel="stylesheet" type="text/css"
@@ -94,20 +94,16 @@
 
     </div>
 
-    <div class="search" id="search">
+    <div class="containerGraficos">
+        <div class="mapaCalor">
+        <div id="mapBrasil"></div>
+        </div>
+
+        <div class="graficoLinha">
+            <div id="linhaBrasil"></div>
+            <div id="corelacao"></div>
+        </div>
     </div>
-
-    <div class="container">
-        <div class="server-list" id="regioes"></div>
-    </div>
-
-    <div id="mapBrasil"></div>
-    <div id="mapNorte" style="display:none;"></div>
-    <div id="mapNordeste" style="display:none;"></div>
-    <div id="mapCentro" style="display:none;"></div>
-    <div id="mapSul" style="display:none;"></div>
-    <div id="mapSudeste" style="display:none;"></div>
-
 
     </div>
 </body>
@@ -125,13 +121,6 @@
     }
 
     anychart.onDocumentReady(function () {
-
-        mapBrasil.style.display = 'block';
-        mapNorte.style.display = 'none';
-        mapCentro.style.display = 'none';
-        mapSul.style.display = 'none';
-        mapSudeste.style.display = 'none';
-        mapNordeste.style.display = 'none';
 
         var map = anychart.map();
 
@@ -202,13 +191,195 @@
         map.background(null);
 
         var nivelZoom = 1.0;
-        var eixoX = 800;
-        var eixoY = 5;
+        var eixoX = 900;
+        var eixoY = 100;
 
         map.zoomTo(nivelZoom, eixoX, eixoY);
 
         map.draw();
     });
+
+
+  anychart.onDocumentReady(function () {
+    // A função getData() não foi alterada e permanece válida.
+
+    // Criar um conjunto de dados a partir dos dados retornados por getData()
+    var dataSet = anychart.data.set(getData());
+
+    // Mapeamento dos dados para cada série
+    var firstSeriesData = dataSet.mapAs({ x: 0, value: 1 });  // 18-34
+    var secondSeriesData = dataSet.mapAs({ x: 0, value: 2 }); // 35-49
+    var thirdSeriesData = dataSet.mapAs({ x: 0, value: 3 });  // 50-64
+    var fourthSeriesData = dataSet.mapAs({ x: 0, value: 4 }); // 65+
+
+    // Criar o gráfico de linhas
+    var chart = anychart.line();
+
+    // Configurações gerais do gráfico
+    chart.animation(true);
+    chart.title('Aceitação de relacionamentos do mesmo sexo nos EUA nas últimas 2 décadas'); // Título em português
+    chart.yAxis().title('% de pessoas que aceitam relacionamentos do mesmo sexo'); // Título do eixo Y em português
+
+    // Configuração do crosshair (linhas de foco)
+    chart.crosshair().enabled(true).yLabel(false).yStroke(null);
+
+    // --- Configuração das Séries de Dados ---
+
+    // Séries 1: 18-34
+    var firstSeries = chart.line(firstSeriesData);
+    firstSeries
+        .name('CPU')
+        .stroke('2 #f49595') // Espessura de 2 para um visual mais limpo
+        .markers().enabled(true).type('circle').size(4); // Adiciona marcadores circulares
+    firstSeries
+        .tooltip()
+        .format('Total Alertas Cpu: {%value}%');
+
+    // Séries 2: 35-49
+    var secondSeries = chart.line(secondSeriesData);
+    secondSeries
+        .name('GPU')
+        .stroke('2 #f9eb97')
+        .markers().enabled(true).type('diamond').size(4); // Marcadores em diamante
+    secondSeries
+        .tooltip()
+        .format('Total alertas Gpu: {%value}%');
+
+
+    var thirdSeries = chart.line(thirdSeriesData);
+    thirdSeries
+        .name('RAM')
+        .stroke('2 #a8d9f6')
+        .markers().enabled(true).type('square').size(4)
+    thirdSeries
+        .tooltip()
+        .format('Total alertas Ram: {%value}%');
+
+    
+    var fourthSeries = chart.line(fourthSeriesData);
+    fourthSeries
+        .name('DISCO')
+        .stroke('2 #e2bbfd')
+        .markers().enabled(true).type('triangle-down').size(4); 
+    fourthSeries
+        .tooltip()
+        .format('Total alertas Disco: {%value}%');
+
+
+    chart.legend().enabled(true).position('bottom').align('center'); 
+
+    chart.background(null);
+
+    chart.container('linhaBrasil');
+    chart.draw();
+});
+
+function getData() {
+    return [
+        ['1990',45,12.2,10.2,5.2],
+        ['1991',17,17.8,10,4.8],
+        ['1993',26.5,23.8,16.8,6.6],
+        ['1994',28.7,22,17.3,9.1],
+        ['1996',35.7,24,22.6,9.2],
+        ['1998',37.2,24.6,22.4,11.2],
+        ['2000',36.5,26.2,23.7,9.9],
+        ['2002',40,34.4,23.8,16.4],
+        ['2004',33.3,28.8,32.5,14.3],
+        ['2006',40.2,32.1,27.5,15.1],
+        ['2008',49.3,37.2,31.4,17.1],
+        ['2010',51.9,42.5,36.1,28.5],
+        ['2012',53.1,43.8,36,24.6],
+        ['2014',63.7,45.9,44.7,31.3],
+        ['2016',66.3,52,42.3,37.2],
+        ['2018',70.1,57.7,49.2,39]
+    ];
+}
+
+
+// corelação
+
+
+anychart.onDocumentReady(function () {
+    
+
+    function getMarkerData() {
+        return [
+            { x: 2.0, value: 55 },
+            { x: 2.5, value: 60 },
+            { x: 3.0, value: 70 },
+            { x: 3.5, value: 75 },
+            { x: 4.0, value: 90 },
+            { x: 4.5, value: 95 },
+            { x: 5.0, value: 100}
+        ];
+    }
+
+    function getLineData() {
+
+        // Dados para criar a linha de regressão
+        return [
+            { x: 2.0, value: 30 },
+            { x: 5.0, value: 90 }
+        ];
+    }
+
+
+    var chart = anychart.scatter();
+
+    chart.animation(true);
+
+    chart.title('Número de Alertas x Clima da região');
+
+    chart.xScale().minimum(1.5).maximum(5.5).ticks({ interval: 0.5 }); 
+    chart.yScale().minimum(40).maximum(100).ticks({ interval: 10 });
+
+
+    chart.yAxis().title('Número de Alertas');
+    chart
+        .xAxis()
+        .title('Temperatura Da Região(°C)') // titulo eixo x
+        .drawFirstLabel(true) 
+        .drawLastLabel(true); 
+
+
+    chart.interactivity().hoverMode('by-spot').spotRadius(20); 
+    chart.tooltip().displayMode('union');
+
+
+    var marker = chart.marker(getMarkerData());
+    marker.type('circle').size(5).fill('#3a86ff').stroke('1 #fff'); 
+    marker
+        .hovered()
+        .size(8)
+        .fill('#ffc107') 
+        .stroke('2 #333');
+    marker
+        .tooltip()
+        .hAlign('start')
+        .titleFormat(function() {
+            return 'Ocorrência: #' + this.index; 
+        })
+        .format(function () {
+            return (
+                'Tempo de Espera: ' +
+                this.value +
+                ' min\nDuração: ' +
+                this.x +
+                ' min'
+            );
+        });
+
+
+        var lineSeries = chart.line(getLineData());
+    lineSeries.name('Linha de Referência');
+    lineSeries.stroke('2 #ff5a5f'); 
+    lineSeries.markers().enabled(false); 
+
+    chart.background(null);
+
+    chart.container('corelacao');
+    chart.draw();
+});
 
 
     function buscarRegioes() {
@@ -300,14 +471,11 @@
 
                 map.draw();
             });
+
+            
         } else if (regioes == 2) {
 
-            mapBrasil.style.display = 'none';
-            mapNorte.style.display = 'block';
-            mapCentro.style.display = 'none';
-            mapSul.style.display = 'none';
-            mapSudeste.style.display = 'none';
-            mapNordeste.style.display = 'none';
+            mapBrasil.innerHTML = "";
             // Norte
 
             anychart.onDocumentReady(function () {
@@ -343,11 +511,11 @@
                     map.zoomToFeature(e.point.get('id'));
                 })
 
-                
+
                 map.interactivity().zoomOnMouseWheel(false);
-                
+
                 map.interactivity().keyboardZoomAndMove(false);
-                
+
                 map.interactivity().zoomOnDoubleClick(false);
 
                 map.geoData(anychart.maps['brazil']);
@@ -366,7 +534,7 @@
 
                 map.zoomTo(nivelZoom, eixoX, eixoY);
 
-                map.container('mapNorte');
+                map.container('mapBrasil');
 
                 map.draw();
             });
@@ -412,15 +580,15 @@
                     return "Capital: " + e.getData("capital") + "\n" +
                         "Alertas: " + e.getData("value")
                 });
-                
+
                 map.listen('pointClick', function (e) {
                     map.zoomToFeature(e.point.get('id'));
                 })
 
                 map.interactivity().zoomOnMouseWheel(false);
-                
+
                 map.interactivity().keyboardZoomAndMove(false);
-                
+
                 map.interactivity().zoomOnDoubleClick(false);
 
                 map.geoData(anychart.maps['brazil']);
@@ -486,9 +654,9 @@
                 })
 
                 map.interactivity().zoomOnMouseWheel(false);
-                
+
                 map.interactivity().keyboardZoomAndMove(false);
-                
+
                 map.interactivity().zoomOnDoubleClick(false);
 
                 map.geoData(anychart.maps['brazil']);
@@ -554,9 +722,9 @@
                 })
 
                 map.interactivity().zoomOnMouseWheel(false);
-                
+
                 map.interactivity().keyboardZoomAndMove(false);
-                
+
                 map.interactivity().zoomOnDoubleClick(false);
 
                 map.geoData(anychart.maps['brazil']);
@@ -622,9 +790,9 @@
                 })
 
                 map.interactivity().zoomOnMouseWheel(false);
-                
+
                 map.interactivity().keyboardZoomAndMove(false);
-                
+
                 map.interactivity().zoomOnDoubleClick(false);
 
                 map.geoData(anychart.maps['brazil']);
