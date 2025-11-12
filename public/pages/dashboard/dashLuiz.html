@@ -92,9 +92,7 @@ ac_add_style(".anychart-embed-rk3FgKf8{width:600px;height:450px;}");
 })();
 </script>
 <script>
-    
-anychart.onDocumentReady(function () {
-
+  function semana(){
   const hoje = new Date();
   const seteDiasAtras = new Date();
   seteDiasAtras.setDate(hoje.getDate() - 7);
@@ -103,8 +101,25 @@ anychart.onDocumentReady(function () {
   //   const dataItem = new Date(item.data);
   //   return dataItem >= seteDiasAtras && dataItem <= hoje;
   // })
+  }
+  function mes(ano, mes){
 
-  console.log(seteDiasAtras)
+  const hoje = new Date();
+  const umMesAtraz = new Date();
+  const qtdDiasMes = new Date(ano, mes, -1).getDate() + 1;
+
+
+  umMesAtraz.setDate(hoje.getDate() - qtdDiasMes)
+
+  console.log(qtdDiasMes)
+
+  // const dadosRecentes = dados.filter(item => {
+  //   const dataItem = new Date(item.data);
+  //   return dataItem >= seteDiasAtras && dataItem <= hoje;
+  // })
+  }
+    
+anychart.onDocumentReady(function () {
     
     var dataSet = anychart.data.set([
         ['21/12', Math.round((Math.random() * 100)), Math.round((Math.random() * 100)), Math.round((Math.random() * 100)), Math.round((Math.random() * 100))],
