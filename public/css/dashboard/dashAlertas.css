@@ -1,0 +1,56 @@
+.grafic-conteiner{
+    position: relative;
+    left: 8dvw;
+    top:-10vh; 
+    display: flex;
+    width: 80%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+.grafics {
+    position: relative;
+    align-items: center;
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.linha{
+    background-color: #414141;
+    border-radius: 20px;
+    height: 100%;
+    width: 100%;
+}
+
+.barra {
+    width: 90% !important;
+    height: 450px !important;
+    background-color: #414141;
+    border-radius: 20px;
+}
+
+
+
+.grafic1, .grafic2{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.KPI {
+    position: relative;
+    display: flex;
+    top: -1vh;
+    justify-content: center;
+    align-items: center;
+    background-color: #414141;
+    border-radius: 10px;
+    width: 200px;
+    height: 75px;
+    text-align: center;
+    font-weight: 800;
+    font-size: 32px;
+}

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../css/dashboard/dashboard.css">
+    <link rel="stylesheet" href="../../css/dashboard/servers.css">
+    <link rel="stylesheet" href="../../css/dashboard/popup.css">
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/dashboard/dashAlertas.css">
+    <script src="script/dash.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-base.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-exports.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-ui.min.js"></script>   
+
+    <title>ARGUS | Dashboard</title>
+</head>
+
+<body>
+    <div id="id_sair">
+    </div>
+
+    <header class="desktopNav" id="navDesktop"></header>
+    <div class="grafic-conteiner">
+        <div class="grafics">
+            <div class="grafic1">
+                <div class="KPI">
+                    <p class="mensagem"></p>
+                    <p id="componente">CPU</p>
+                </div>
+                <div id="anychart-embed-rk3FgKf8" class="linha">
+                    <div id="anychart-embed-rk3FgKf8" class="anychart-embed anychart-embed-rk3FgKf8">
+
+                        <div id="ac_style_rk3FgKf8" style="display:none;">
+                            html, body, #container {
+                            width: 100%;
+                            height: 100%;
+                            margin: 0;
+                            padding: 0;
+                            border-radius: 20px;
+                            background-color:#414141;
+                        }
+                        </div>
+                    <div id="container"></div>
+                
+                    </div>
+                </div>
+                <p id="ultimoDado">Atualizado há 2 minutos - Última captura: 03/11/2025 14:32</p>
+            </div>
+            <div class="grafic2">
+                <div class="KPI">
+                    <p class="mensagem"></p>
+                    <p id="qtdeAlertas"></p>
+                </div>
+                <canvas class="barra" id="barra"></canvas>
+                <p id="porcentagemDado">+10% Alertas em relação ao mês passado</p>
+            </div>
+        </div>
+    </div>
+</html>
+<!-- Grafico servidores -->
+
+<script>
+        header("dashboard", sessionStorage.CARGO_CARGO);
+
+    // const select = document.getElementById("servers");
+    const serverSpecs = document.querySelector(".serverSpecs");
+
+
+ (function(){
+function ac_add_to_head(el){
+	var head = document.getElementsByTagName('head')[0];
+	head.insertBefore(el,head.firstChild);
+}
+function ac_add_link(url){
+	var el = document.createElement('link');
+	el.rel='stylesheet';el.type='text/css';el.media='all';el.href=url;
+	ac_add_to_head(el);
+}
+function ac_add_style(css){
+	var ac_style = document.createElement('style');
+	if (ac_style.styleSheet) ac_style.styleSheet.cssText = css;
+	else ac_style.appendChild(document.createTextNode(css));
+	ac_add_to_head(ac_style);
+}
+ac_add_link('https://cdn.anychart.com/releases/v8/css/anychart-ui.min.css');
+ac_add_link('https://cdn.anychart.com/releases/v8/fonts/css/anychart-font.min.css');
+ac_add_style(document.getElementById("ac_style_rk3FgKf8").innerHTML);
+ac_add_style(".anychart-embed-rk3FgKf8{width:600px;height:450px;}");
+})();
+</script>
+<script>
+    
+anychart.onDocumentReady(function () {
+
+  const hoje = new Date();
+  const seteDiasAtras = new Date();
+  seteDiasAtras.setDate(hoje.getDate() - 7);
+
+  // const dadosRecentes = dados.filter(item => {
+  //   const dataItem = new Date(item.data);
+  //   return dataItem >= seteDiasAtras && dataItem <= hoje;
+  // })
+
+  console.log(seteDiasAtras)
+    
+    var dataSet = anychart.data.set([
+        ['21/12', Math.round((Math.random() * 100)), Math.round((Math.random() * 100)), Math.round((Math.random() * 100)), Math.round((Math.random() * 100))],
+        ['22/12', Math.round((Math.random() * 100)), Math.round((Math.random() * 100)), Math.round((Math.random() * 100)), Math.round((Math.random() * 100))],
+        ['23/12', Math.round((Math.random() * 100)), Math.round((Math.random() * 100)), Math.round((Math.random() * 100)), Math.round((Math.random() * 100))],
+        ['24/12', Math.round((Math.random() * 100)), Math.round((Math.random() * 100)), Math.round((Math.random() * 100)), Math.round((Math.random() * 100))],
+        ['25/12', Math.round((Math.random() * 100)), Math.round((Math.random() * 100)), Math.round((Math.random() * 100)), Math.round((Math.random() * 100))],
+        ['26/12', Math.round((Math.random() * 100)), Math.round((Math.random() * 100)), Math.round((Math.random() * 100)), Math.round((Math.random() * 100))],
+        ['27/12', Math.round((Math.random() * 100)), Math.round((Math.random() * 100)), Math.round((Math.random() * 100)), Math.round((Math.random() * 100))]
+    ]);
+
+
+    var seriesData_1 = dataSet.mapAs({'x': 0, 'value': 1});
+
+    var seriesData_2 = dataSet.mapAs({'x': 0, 'value': 2});
+
+    var seriesData_3 = dataSet.mapAs({'x': 0, 'value': 3});
+    
+    var seriesData_4 = dataSet.mapAs({'x': 0, 'value': 4});
+
+    var chart = anychart.area();
+
+    chart.background().fill("#414141");
+
+    var background = chart.background();
+
+    background.cornerType("round");
+
+    background.corners(20)
+    
+    chart.animation(true);
+
+    chart.yScale().stackMode('percent');
+
+    chart.crosshair().enabled(true).yLabel().enabled(false);
+    chart.crosshair().enabled(true).xLabel().enabled(false);
+    chart.crosshair().yStroke(null).xStroke('#fff').zIndex(99);
+
+    chart.yAxis(0).labels().format("{%Value}%");
+
+    var setupSeries = function (series, name) {
+        series.stroke('3 #fff 1');
+        series.fill(function () {
+            return this.sourceColor + ' 0.8'
+        });
+        series.name(name);
+        series.markers().zIndex(100);
+        series.clip(false);
+        series.hovered()
+            .stroke('3 #fff 1')
+            .markers().enabled(true).type('circle').size(4).stroke('1.5 #fff');
+
+    };
+
+    var series;
+
+    series = chart.area(seriesData_1);
+    setupSeries(series, 'CPU'); 
+
+    series = chart.area(seriesData_2);
+    setupSeries(series, 'RAM');
+
+    series = chart.area(seriesData_3);
+    setupSeries(series, 'Disco');
+
+    series = chart.area(seriesData_4);
+    setupSeries(series, 'REDE');
+
+    chart.interactivity().hoverMode('by-x');
+    chart.tooltip().displayMode('union');
+
+    chart.legend().enabled(true).fontSize(13).padding([0, 0, 25, 0]);
+
+    chart.container('container');
+
+    chart.draw();
+});
+
+
+var ctx = document.getElementById("barra").getContext('2d')
+
+var data = [[Math.round((Math.random() * 100))],[Math.round((Math.random() * 100))], [Math.round((Math.random() * 100))], 
+[Math.round((Math.random() * 100))], [Math.round((Math.random() * 100))], [Math.round((Math.random() * 100))], [Math.round((Math.random() * 100))]]
+
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['21/12', '22/12', '23/12', '24/12', '25/12', '26/12', '27/12'],
+      datasets: [{
+        label: 'Quantidade de alertas do componente',
+        data: data,
+        borderWidth: 1,
+        backgroundColor: ['#FF670A'],
+        color: ["white"]
+      }
+    ]
+    },
+    options: {
+        indexAxis: 'y',
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+</script>
+
+<!-- KPIs -->
+
+<script>
+  var qtdeAlertasKPI = 0
+
+  for(i = 0;i<data.length;i++){ 
+    for(j=0;j<data[i].length;j++){
+      qtdeAlertasKPI += data[i][j];
+    }
+  }
+
+  console.log(typeof  data[1])
+
+  qtdeAlertas.innerHTML = qtdeAlertasKPI
+
+  let getAlertas = document.getElementById("qtdeAlertas");
+
+  getAlertas.style.color = "red";
+
+
+
+  var porcentagemDeAlertas = qtdeAlertas;
+
+
+</script>
