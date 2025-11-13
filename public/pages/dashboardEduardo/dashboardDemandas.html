@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../css/dashboard/popup.css">
+    <link rel="stylesheet" href="../../css/cssDashEduardo/style.css">
+    <script src="../dashboard/script/dash.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <title>ARGUS | Dashboard</title>
+</head>
+
+<body>
+    <div id="id_sair">
+    </div>
+
+    <header class="desktopNav" id="navDesktop"></header>
+    <header class="headerTop">
+        <div class="geralInfo">
+            <div class="info tooltipInfo">
+                <div class="server">
+                    <img src="../../assets/dashboard/desktop/server.svg" alt="">
+                </div>
+                <div class="serversMonitoring" id="id_servidores_monitorados">
+                </div>
+                <span class="tooltiptextInfo">
+                    Servidores em monitoramento
+                </span>
+            </div>
+            <div class="info">
+                <div class="bell">
+                    <img src="../../assets/dashboard/desktop/bell.svg" alt="">
+                </div>
+                <div class="risk tooltipInfo" id="id_servidores_em_estado_critico">
+                    <p id="qtd_critico"></p>
+                    <span class="tooltiptextInfo">
+                        Servidores em atenção
+                    </span>
+                </div>
+                <div class="atention tooltipInfo" id="id_servidores_em_estado_de_alerta">
+                    <p id="qtd_alerta"></p>
+                    <span class="tooltiptextInfo">
+                        Servidores em alerta
+                    </span>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="container">
+        <div>
+            <H1>Resumo diário</H1>
+            <p>Visão geral - Lançamentos e demandas</p>
+        </div>
+        <div class="resumo">
+            <div class="resumoSituacao">
+                <p><span>[ALERTA: RISCO ALTO] HOJE: XXXXX + LANÇAMENTOS DE JOGOS </span></p>
+            </div>
+            <div class="resumoKPIs">
+                <div class="resumoCardKPI">
+                    <div class="resumoCard">
+                        <p>Jogos lançados</p>
+                        <p class="resumoCardText">-</p>
+                    </div>
+                    <div class="resumoCard">
+                        <p>Jogos lançados</p>
+                        <p class="resumoCardText">-</p>
+                    </div>
+                </div>
+                <div class="resumoCardHour">
+                    <p>Demanda prevista</p>
+                    <p class="titleHour">XX:XXh - XX:XXh</p>
+                    <p class="ccuHour">- CCU</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+<!-- Grafico servidores -->
+
+
+<script>
+        header("dashboard", sessionStorage.CARGO_CARGO);
+</script>
