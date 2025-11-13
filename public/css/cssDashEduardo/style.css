@@ -431,3 +431,38 @@ body {
 .resumoSituacao {
     background-color: #823d00;
 }
+
+/* Listas */
+
+.listsContainer{
+    display: flex;
+    width: 100%;
+}
+
+.listOutside{
+    width: 100%;
+}
+
+.listInside{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #2B2B2B;
+    gap: 1rem;
+}
+
+.listGrid{
+    display: grid;
+    grid-template-columns: 20% 40% 15% 25%;
+    text-align: center;
+    width: 100%;
+    align-items: center;
+}
+
+.listFoto{
+    background-color: #D9D9D9;
+    width: 100px;
+    height: 100px;
+    margin: 0 auto;
+}
