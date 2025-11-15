@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="../../css/dashboard/server-overview.css">
+    <link rel="stylesheet" href="../../css/dashboard/dashFellipe.css">
+    <link rel="stylesheet" href="../../css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Visão Geral - Servidor</title>
+</head>
+<body>
+
+    <!-- Sidebar (modelo dashCaio) -->
+    <nav class="desktopNav" aria-label="Sidebar">
+        <div class="logo">
+            <img src="../../assets/icon/logoMobileBlack.svg" alt="ARGUS Logo">
+        </div>
+
+            <button class="navButton tooltipNav selected" data-label="Alertas">
+                <img src="../../assets/dashboard/desktop/logs.svg" alt="Alertas">
+                <span class="tooltiptextNav">Alertas</span>
+            </button>
+        </div>
+
+        <div class="footerButtons">
+            <button class="navButton logout-btn tooltipNav" data-label="Sair">
+                <img src="../../assets/dashboard/desktop/logout.svg" alt="Sair">
+                <span class="tooltiptextNav">Sair</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main content shifted to the right to leave space for sidebar -->
+    <div class="main-content">
+        <header class="desktopNavHeader" id="navDesktop"></header>
+
+        <div class="server-overview-container">
+            <!-- Header com nome do servidor -->
+            <div class="overview-header">
+                <h2>Visão Geral - Servidor x</h2>
+            </div>
+
+            <div class="metrics-cards">
+                <div class="metric-card cpu-card">
+                    <div class="metric-label">CPU em Uso</div>
+                    <div class="metric-value">43%</div>
+                    <div class="metric-info">4 de 12 cores em uso</div>
+                </div>
+
+                <div class="metric-card memory-card">
+                    <div class="metric-label">Memória em Uso</div>
+                    <div class="metric-value">78%</div>
+                    <div class="metric-info">81.3GB de 1.3GB em uso</div>
+                </div>
+
+                <div class="metric-card gpu-card">
+                    <div class="metric-label">GPU em Uso</div>
+                    <div class="metric-value">100%</div>
+                    <div class="metric-info">9405.20-00 em uso</div>
+                </div>
+
+                <div class="metric-card storage-card">
+                    <div class="metric-label">Disco em Uso</div>
+                    <div class="metric-value">50%</div>
+                    <div class="metric-info">27B de 5.3B em uso</div>
+                </div>
+            </div>
+
+            <div class="charts-section">
+                    <div class="chart-container">
+                        <h4>CPU x GPU</h4>
+                        <canvas id="cpuRamChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h4>Uso do Disco</h4>
+                        <canvas id="diskChart"></canvas>
+                    </div>
+                </div>
+
+            <div class="alerts-and-charts">
+                <div class="alerts-section">
+                    <h3>Alertas e Logs - Data Início / Data Fim</h3>
+                    <div class="alerts-list">
+                        <div class="alert-item">
+                            <span class="alert-type">CPU | Grave</span>
+                            <span class="alert-time">12/10 - 17:00 | 13/10 - 17:00</span>
+                        </div>
+                        <div class="alert-item">
+                            <span class="alert-type">RAM | Grave</span>
+                            <span class="alert-time">12/10 - 17:00 | 13/10 - 17:00</span>
+                        </div>
+                        <div class="alert-item">
+                            <span class="alert-type">DISCO | Grave</span>
+                            <span class="alert-time">12/10 - 17:00 | 13/10 - 17:00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/server-overview.js"></script>
+</body>
+</html>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    // Gráfico CPU x RAM
+    const ctxCpuRam = document.getElementById('cpuRamChart').getContext('2d');
+    new Chart(ctxCpuRam, {
+        type: 'bar',
+        data: {
+            labels: ['12:00', '12:05', '12:10', '12:15', '12:20', '12:25'],
+            datasets: [
+                {
+                    label: 'CPU %',
+                    data: [35, 42, 38, 50, 45, 55],
+                    backgroundColor: '#43d33f',
+                    borderRadius: 4
+                },
+                {
+                    label: 'GPU %',
+                    data: [45, 50, 48, 60, 55, 65],
+                    backgroundColor: '#ff3131',
+                    borderRadius: 4
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    labels: {
+                        color: '#a8a8a8'
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100,
+                    ticks: {
+                        color: '#a8a8a8'
+                    },
+                    grid: {
+                        color: '#3a3a3a'
+                    }
+                },
+                x: {
+                    ticks: {
+                        color: '#a8a8a8'
+                    },
+                    grid: {
+                        display: false
+                    }
+                }
+            }
+        }
+    });
+
+    // Gráfico Uso do Disco
+    const ctxDisk = document.getElementById('diskChart').getContext('2d');
+    new Chart(ctxDisk, {
+        type: 'line',
+        data: {
+            labels: ['12:00', '12:05', '12:10', '12:15', '12:20', '12:25'],
+            datasets: [{
+                label: 'Disco %',
+                data: [45, 48, 50, 52, 55, 58],
+                borderColor: '#50d050',
+                backgroundColor: 'rgba(80, 208, 80, 0.1)',
+                borderWidth: 2,
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    labels: {
+                        color: '#a8a8a8'
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100,
+                    ticks: {
+                        color: '#a8a8a8'
+                    },
+                    grid: {
+                        color: '#3a3a3a'
+                    }
+                },
+                x: {
+                    ticks: {
+                        color: '#a8a8a8'
+                    },
+                    grid: {
+                        display: false
+                    }
+                }
+            }
+        }
+    });
+});
+</script>
