@@ -99,6 +99,30 @@ ac_add_style(".anychart-embed-rk3FgKf8{width:600px;height:450px;}");
 })();
 </script>
 <script>
+  function fetchDailyData(filename) {
+    const hoje = new Date();
+    const uniqueUrl = `${filename}?t=${hoje.getDate()}`;
+
+    fetch(uniqueUrl)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erro ao carregar o arquivo JSON: ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+          
+            console.log("Dados atualizados:", data);
+            
+        })
+        .catch(error => {
+            console.error("Falha ao buscar os dados:", error);
+        });
+}
+
+
+// fetchDailyData('data.json');
+
   function semana(){
   const hoje = new Date();
   const seteDiasAtras = new Date();
