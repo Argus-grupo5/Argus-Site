@@ -147,14 +147,8 @@ body{
     border-radius:8px;
     padding:1.5rem;
     text-align:center;
-    border-left:4px solid #FF670A;
     transition:transform .3s ease,
     box-shadow .3s ease;
-}
-
-.metric-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(255, 103, 10, 0.2);
 }
 
 .metric-value {
@@ -188,7 +182,8 @@ body{
 .alerts-and-charts {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 2rem;
+    gap: 1.5rem;
+    align-items: start;
 }
 
 .alerts-section {
@@ -196,7 +191,19 @@ body{
     border-radius: 8px;
     padding: 1.5rem;
     width: 100%;
+    max-width: 100%;
+    align-self: start;
+    grid-column: 1 / -1;
 }
+
+.alerts-header {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1rem;
+}
+
 
 .alerts-tabs {
     display: flex;
@@ -262,6 +269,7 @@ body{
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1.5rem;
+    margin-bottom: 1.5rem
 }
 
 .chart-container {
