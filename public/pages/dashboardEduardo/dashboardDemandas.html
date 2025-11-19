@@ -77,42 +77,44 @@
         </div>
         <div class="listsContainer">
             <div class="listOutside">
-                <div>
+                <div class="listHeader">
                     <p>Lançamentos do dia</p>
                     <p>XX-XX-XX</p>
                 </div>
                 <div class="listInside">
-                    <div class="listGrid">
+                    <div class="listGridHeader">
                         <div>Foto</div>
                         <div>Nome</div>
                         <div>Pontuação</div>
                         <div>CCU Previsto</div>
                     </div>
-                    <div class="listGrid">
-                        <div class="listFoto"></div>
-                        <div>XXXX</div>
-                        <div>YYY</div>
-                        <div>ZZZZZZ</div>
+                    <div class="listItem" id="listLanc">
+                        <div class="card">
+                            <div class="listFoto"></div>
+                            <div class="listNome">XXXX</div>
+                            <div class="listPontuacao">YYY</div>
+                            <div class="listCCU">ZZZZZZ</div>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="listOutside">
-                <div>
+                <div class="listHeader">
                     <p>Jogos mais jogados</p>
-                    <p>????</p>
+                    <p>?????</p>
                 </div>
                 <div class="listInside">
-                    <div class="listGrid">
+                    <div class="listGridHeader_one">
                         <div>Foto</div>
                         <div>Nome</div>
-                        <div>Pontuação</div>
                         <div>CCU Previsto</div>
                     </div>
-                    <div class="listGrid">
-                        <div class="listFoto"></div>
-                        <div>XXXX</div>
-                        <div>YYY</div>
-                        <div>ZZZZZZ</div>
+                    <div class="listItem" id="top10">
+                        <div class="card_one">
+                            <div class="listFoto"></div>
+                            <div class="listNome">XXXX</div>
+                            <div class="listCCU">ZZZZZZ</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -121,9 +123,80 @@
 </body>
 
 </html>
-<!-- Grafico servidores -->
 
 
 <script>
-        header("dashboard", sessionStorage.CARGO_CARGO);
+    header("dashboard", sessionStorage.CARGO_CARGO);
+
+    function formatarHoje() {
+        var diaDeHoje = new Date();
+        var ano = diaDeHoje.getFullYear();
+        var mes = diaDeHoje.getMonth() + 1;
+        var dia = diaDeHoje.getDate();
+
+        var dataFormatada = `${ano}-${mes}-${dia}`
+        return dataFormatada;
+    }
+    var diaDeHoje = formatarHoje();
+
+    function buscarLancamentos(chave, diaAtual) {
+        var listLanc = document.getElementById("listLanc")
+
+        fetch(`/s3Route/dados/${chave}`, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((content) => {
+            content.json().then((json) => {
+                if (json.jogosLancados.length > 0) {
+                    listLanc.innerHTML = "";
+                }
+                json.jogosLancados.forEach(jogos => {
+                    console.log(jogos)
+                    listLanc.innerHTML += `<div class="card">
+                         <div class="bgLayer" style="background-image: url(${jogos.background_image})"></div>
+                                    <div class="blurLayer"></div>
+                                    <div class="listFoto"><img src="${jogos.background_image}"></img></div>
+                                    <div class="listNome">${jogos.name}</div>
+                                    <div class="listCCU">${jogos.ccu}</div>
+                                </div>`
+                })
+            })
+        })
+    }
+
+    function buscarTop10(chave, diaAtual) {
+        var top10 = document.getElementById("top10")
+        fetch(`/s3Route/dados/${chave}`, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((content) => {
+            content.json().then((json) => {
+                console.log(json)
+                if (json.jogosSteam.length > 0) {
+                    top10.innerHTML = "";
+                }
+                json.jogosSteam.forEach(jogos => {
+                    console.log(jogos)
+                    top10.innerHTML += `<div class="card_one">
+                                    <div class="bgLayer" style="background-image: url(${jogos.image})"></div>
+                                    <div class="blurLayer"></div>
+                                    <div class="listFoto_One"> <img src="${jogos.image}"></img></div>
+                                    <div class="listNome">${jogos.name}</div>
+                                    <div class="listCCU">${jogos.peak_in_game}</div>
+                                </div>`
+                })
+            })
+        })
+    }
+
+    var lancKey = `eduardo/Empresa%20Data%202/lancamentos_${diaDeHoje}.json`
+    var steamKey = `eduardo/Empresa%20Data%202/steam_${diaDeHoje}.json`
+    buscarLancamentos(lancKey, diaDeHoje);
+    buscarTop10(steamKey, diaDeHoje);
+
+
 </script>
