@@ -1,19 +1,93 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../css/dashboard/dashboard.css">
     <link rel="stylesheet" href="../../css/dashboard/servers.css">
     <link rel="stylesheet" href="../../css/dashboard/popup.css">
     <link rel="stylesheet" href="../../css/style.css">
-    <script src="script/dash.js"></script>
+    <title>Dashboard do Suporte Técnico - Jira</title>
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <title>Document</title>
+    <style>
+
+        h1 {
+            font-size: 26px;
+            margin-bottom: 20px;
+        }
+
+        .kpis {
+            display: flex;
+            margin-left: 10px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            padding: 20px;
+            border-radius: 10px;
+            width: 230px;
+            margin-left: 100px;
+            margin-right: 20px;
+            margin-top: 20px;
+            box-shadow: 0 0 10px #000;
+            background-color: #362f2f;
+        }
+
+        .titulo {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #b5b5b5;
+        }
+
+        .valor {
+            font-size: 36px;
+            font-weight: bold;
+            justify-self: center;
+        }
+
+        /* Gráfico */
+        .grafico-container {
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            margin-left: 100px;
+            margin-right: 20px;
+            background-color: #362f2f
+        }
+
+        /* Tabela */
+
+        .tabela_dash{
+            margin-left: 100px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #362f2f;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #2c2f36;
+        }
+
+        th {
+            background: #242830;
+            text-align: left;
+        }
+
+        tr:hover {
+            background: #242830;
+        }
+    </style>
 </head>
+
 <body>
-     <div id="id_sair">
+
+<div id="id_sair">
     </div>
 
     <header class="desktopNav" id="navDesktop"></header>
@@ -48,5 +122,136 @@
                 </div>
             </div>
         </div>
+    </header>
+
+<!-- KPIs -->
+<div class="kpis">
+    <div class="card">
+        <div class="titulo">Total de Chamados</div>
+        <div class="valor" id="totalChamados">0</div>
+    </div>
+
+    <div class="card">
+        <div class="titulo">Chamados Abertos</div>
+        <div class="valor" id="chamadosAbertos">0</div>
+    </div>
+
+    <div class="card">
+        <div class="titulo">Chamados Fechados</div>
+        <div class="valor" id="chamadosFechados">0</div>
+    </div>
+
+    <div class="card">
+        <div class="titulo">Alta Prioridade</div>
+        <div class="valor" id="prioAlta">0</div>
+    </div>
+
+    <div class="card">
+        <div class="titulo">Média Prioridade</div>
+        <div class="valor" id="prioMedia">0</div>
+    </div>
+
+    <div class="card">
+        <div class="titulo">Baixa Prioridade</div>
+        <div class="valor" id="prioBaixa">0</div>
+    </div>
+</div>
+
+<!-- Gráfico -->
+<div class="grafico-container">
+    <h2>Distribuição de Chamados por Prioridade</h2>
+    <canvas id="graficoJira" height="120"></canvas>
+</div>
+
+<!-- Tabela -->
+<div class="tabela_dash">
+<h2>Últimos Chamados</h2>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Resumo</th>
+            <th>Status</th>
+            <th>Prioridade</th>
+        </tr>
+    </thead>
+    <tbody id="tabelaChamados">
+        <!-- Dados virão via JS -->
+    </tbody>
+</table>
+</div>
+
+<script>
+    let chart = null;
+
+    async function carregarDadosJira() {
+        try {
+            const resp = await fetch("http://localhost:3000/jira-dashboard/resumo");
+            const dados = await resp.json();
+
+            // KPIs
+            document.getElementById("totalChamados").textContent = dados.total;
+            document.getElementById("chamadosAbertos").textContent = dados.abertas;
+            document.getElementById("chamadosFechados").textContent = dados.fechadas;
+
+            document.getElementById("prioAlta").textContent = dados.prioridade.high;
+            document.getElementById("prioMedia").textContent = dados.prioridade.medium;
+            document.getElementById("prioBaixa").textContent = dados.prioridade.low;
+
+            atualizarGrafico(dados);
+
+            carregarTabela();
+        } catch (error) {
+            console.error("Erro ao carregar dados do Jira:", error);
+        }
+    }
+
+    async function carregarTabela() {
+        const resp = await fetch("http://localhost:3000/jira-dashboard/resumo"); 
+        const dados = await resp.json();
+
+        const tabela = document.getElementById("tabelaChamados");
+        tabela.innerHTML = "";
+
+        dados.ultimosChamados?.forEach(chamado => {
+            tabela.innerHTML += `
+                <tr>
+                    <td>${chamado.key}</td>
+                    <td>${chamado.summary}</td>
+                    <td>${chamado.status}</td>
+                    <td>${chamado.priority}</td>
+                </tr>
+            `;
+        });
+    }
+
+    function atualizarGrafico(dados) {
+        const ctx = document.getElementById("graficoJira");
+
+        if (chart) {
+            chart.destroy();
+        }
+
+        chart = new Chart(ctx, {
+            type: "bar",
+            data: {
+                labels: ["Alta", "Média", "Baixa"],
+                datasets: [{
+                    label: "Chamados",
+                    data: [
+                        dados.prioridade.high,
+                        dados.prioridade.medium,
+                        dados.prioridade.low
+                    ]
+                }]
+            }
+        });
+    }
+
+    carregarDadosJira();
+    setInterval(carregarDadosJira, 30000); // Atualização automática
+
+</script>
+
 </body>
 </html>
