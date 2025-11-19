@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="../../css/dashboard/server-overview.css">
     <link rel="stylesheet" href="../../css/dashboard/dashFellipe.css">
     <link rel="stylesheet" href="../../css/style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <title>Visão Geral - Servidor</title>
 </head>
+
 <body>
 
     <nav class="desktopNav" aria-label="Sidebar">
@@ -16,11 +18,10 @@
             <img src="../../assets/icon/logoMobileBlack.svg" alt="ARGUS Logo">
         </div>
 
-            <button class="navButton tooltipNav selected" data-label="Alertas">
-                <img src="../../assets/dashboard/desktop/logs.svg" alt="Alertas">
-                <span class="tooltiptextNav">Alertas</span>
-            </button>
-        </div>
+        <button class="navButton tooltipNav selected" data-label="Alertas" id="alerts-btn">
+            <img src="../../assets/dashboard/desktop/logs.svg" alt="Alertas">
+            <span class="tooltiptextNav">Alertas</span>
+        </button>
 
         <div class="footerButtons">
             <button class="navButton logout-btn tooltipNav" data-label="Sair">
@@ -29,6 +30,47 @@
             </button>
         </div>
     </nav>
+
+    <div id="alerts-filter-modal" class="modal-filter">
+        <div class="modal-content-filter">
+            <span class="close-btn-filter">&times;</span>
+            <h3>Filtrar Alertas</h3>
+
+            <div class="filter-group">
+                <h4>Mês</h4>
+                <div class="filter-options" id="month-options">
+                    <button class="filter-option" data-filter="month" data-value="01">Jan</button>
+                    <button class="filter-option" data-filter="month" data-value="02">Fev</button>
+                    <button class="filter-option" data-filter="month" data-value="03">Mar</button>
+                    <button class="filter-option" data-filter="month" data-value="04">Abr</button>
+                    <button class="filter-option" data-filter="month" data-value="05">Mai</button>
+                    <button class="filter-option" data-filter="month" data-value="06">Jun</button>
+                    <button class="filter-option" data-filter="month" data-value="07">Jul</button>
+                    <button class="filter-option" data-filter="month" data-value="08">Ago</button>
+                    <button class="filter-option" data-filter="month" data-value="09">Set</button>
+                    <button class="filter-option" data-filter="month" data-value="10">Out</button>
+                    <button class="filter-option" data-filter="month" data-value="11">Nov</button>
+                    <button class="filter-option" data-filter="month" data-value="12">Dez</button>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <h4>Componente de Hardware</h4>
+                <div class="filter-options" id="component-options">
+                    <button class="filter-option" data-filter="component" data-value="CPU">CPU</button>
+                    <button class="filter-option" data-filter="component" data-value="RAM">RAM</button>
+                    <button class="filter-option" data-filter="component" data-value="DISCO">DISCO</button>
+                    <button class="filter-option" data-filter="component" data-value="GPU">GPU</button>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button id="apply-filters-btn" class="action-btn primary">Aplicar Filtros</button>
+                <button id="clear-filters-btn" class="action-btn secondary">Limpar Filtros</button>
+            </div>
+        </div>
+    </div>
+
 
     <div class="main-content">
         <header class="desktopNavHeader" id="navDesktop"></header>
@@ -65,32 +107,36 @@
             </div>
 
             <div class="charts-section">
-                    <div class="chart-container">
-                        <h4>CPU x GPU</h4>
-                        <canvas id="cpuRamChart"></canvas>
-                    </div>
-                    <div class="chart-container">
-                        <h4>DISCO X RAM</h4>
-                        <canvas id="diskChart"></canvas>
-                    </div>
+                <div class="chart-container">
+                    <h4>CPU x GPU</h4>
+                    <canvas id="cpuRamChart"></canvas>
                 </div>
+                <div class="chart-container">
+                    <h4>DISCO X RAM</h4>
+                    <canvas id="diskChart"></canvas>
+                </div>
+            </div>
 
-            <div class="alerts-and-charts">
-                <div class="alerts-section">
-                    <h3>Alertas e Logs - Data Início / Data Fim</h3>
-                    <div class="alerts-list">
-                        <div class="alert-item">
-                            <span class="alert-type">CPU | Grave</span>
-                            <span class="alert-time">12/10 - 17:00 | 13/10 - 17:00</span>
-                        </div>
-                        <div class="alert-item">
-                            <span class="alert-type">RAM | Grave</span>
-                            <span class="alert-time">12/10 - 17:00 | 13/10 - 17:00</span>
-                        </div>
-                        <div class="alert-item">
-                            <span class="alert-type">DISCO | Grave</span>
-                            <span class="alert-time">12/10 - 17:00 | 13/10 - 17:00</span>
-                        </div>
+            <div class="alerts-section">
+                <div class="alerts-header-with-filter">
+                    <span id="filter-status">Filtro: **Todos**</span>
+                    <h3>Alertas e Logs</h3>
+                    <button id="filter-alerts-btn" class="action-btn secondary filter-btn-trigger">
+                        Filtrar
+                    </button>
+                </div>
+                <div class="alerts-list">
+                    <div class="alert-item">
+                        <span class="alert-type">CPU | Grave</span>
+                        <span class="alert-time">12/10 - 17:00 | 13/10 - 17:00</span>
+                    </div>
+                    <div class="alert-item">
+                        <span class="alert-type">RAM | Grave</span>
+                        <span class="alert-time">12/10 - 17:00 | 13/10 - 17:00</span>
+                    </div>
+                    <div class="alert-item">
+                        <span class="alert-type">DISCO | Grave</span>
+                        <span class="alert-time">12/10 - 17:00 | 13/10 - 17:00</span>
                     </div>
                 </div>
             </div>
@@ -99,120 +145,239 @@
 
     <script src="../../js/server-overview.js"></script>
 </body>
+
 </html>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-    // Gráfico CPU x RAM
-    const ctxCpuRam = document.getElementById('cpuRamChart').getContext('2d');
-    new Chart(ctxCpuRam, {
-        type: 'bar',
-        data: {
-            labels: ['12:00', '12:05', '12:10', '12:15', '12:20', '12:25'],
-            datasets: [
-                {
-                    label: 'CPU %',
-                    data: [35, 42, 38, 50, 45, 55],
-                    backgroundColor: '#43d33f',
-                    borderRadius: 4
-                },
-                {
-                    label: 'GPU %',
-                    data: [45, 50, 48, 60, 55, 65],
-                    backgroundColor: '#ff3131',
-                    borderRadius: 4
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: true,
-            plugins: {
-                legend: {
-                    labels: {
-                        color: '#a8a8a8'
-                    }
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    max: 100,
-                    ticks: {
-                        color: '#a8a8a8'
-                    },
-                    grid: {
-                        color: '#3a3a3a'
-                    }
-                },
-                x: {
-                    ticks: {
-                        color: '#a8a8a8'
-                    },
-                    grid: {
-                        display: false
-                    }
-                }
-            }
+
+    document.addEventListener('DOMContentLoaded', function () {
+
+    const filterTriggerBtn = document.getElementById('filter-alerts-btn');
+    const modal = document.getElementById('alerts-filter-modal');
+    const closeBtn = document.querySelector('.close-btn-filter');
+    const filterOptions = document.querySelectorAll('.filter-option');
+    const applyBtn = document.getElementById('apply-filters-btn');
+    const clearBtn = document.getElementById('clear-filters-btn');
+    const filterStatusSpan = document.getElementById('filter-status');
+    const alertItems = document.querySelectorAll('.alert-item');
+
+    let selectedFilters = {
+        month: null,
+        component: null
+    };
+
+    const MONTH_NAMES = {
+        '01': 'Jan',
+        '02': 'Fev',
+        '03': 'Mar',
+        '04': 'Abr', 
+        '05': 'Mai',
+        '06': 'Jun',
+        '07': 'Jul',
+        '08': 'Ago', 
+        '09': 'Set',
+        '10': 'Out',
+        '11': 'Nov',
+        '12': 'Dez'
+    };
+
+    function applyFilterSimulation() {
+        let statusText = 'Filtro: ';
+        let filtersActive = false;
+        
+        if (selectedFilters.month || selectedFilters.component) {
+            filtersActive = true;
+            const monthName = selectedFilters.month ? MONTH_NAMES[selectedFilters.month] : 'Qualquer Mês';
+            const componentName = selectedFilters.component || 'Todo Componente';
+            statusText += `**${componentName}** em **${monthName}**`;
+        } else {
+            statusText += '**Todos**';
         }
+ 
+        filterStatusSpan.innerHTML = statusText; 
+
+        alertItems.forEach(item => {
+            const itemComponent = item.getAttribute('data-component');
+            const itemMonth = item.getAttribute('data-month');
+            
+            const componentMatch = !selectedFilters.component || (itemComponent === selectedFilters.component);
+            const monthMatch = !selectedFilters.month || (itemMonth === selectedFilters.month);
+
+            if (componentMatch && monthMatch) {
+                item.style.display = 'flex';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+        
+        modal.style.display = 'none';
+        console.log('Filtros Aplicados (Simulação):', selectedFilters);
+    }
+
+    if (filterTriggerBtn) {
+        filterTriggerBtn.onclick = function() {
+            modal.style.display = 'block';
+        }
+    }
+
+    if (closeBtn) {
+        closeBtn.onclick = function() {
+            modal.style.display = 'none';
+        }
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    }
+
+    filterOptions.forEach(option => {
+        option.addEventListener('click', function() {
+            const filterType = this.getAttribute('data-filter');
+            const filterValue = this.getAttribute('data-value');
+
+            if (this.classList.contains('selected-filter')) {
+                this.classList.remove('selected-filter');
+                selectedFilters[filterType] = null;
+            } else {
+                document.querySelectorAll(`.filter-option[data-filter="${filterType}"]`).forEach(btn => {
+                    btn.classList.remove('selected-filter');
+                });
+                this.classList.add('selected-filter');
+                selectedFilters[filterType] = filterValue;
+            }
+        });
     });
 
-    // Gráfico Uso do Disco
-    const ctxDisk = document.getElementById('diskChart').getContext('2d');
-    new Chart(ctxDisk, {
-        type: 'line',
-        data: {
-            labels: ['12:00', '12:05', '12:10', '12:15', '12:20', '12:25'],
-            datasets: [{
-                label: 'Disco %',
-                data: [45, 48, 50, 52, 55, 58],
-                borderColor: '#50d050',
-                backgroundColor: 'rgba(80, 208, 80, 0.1)',
-                borderWidth: 2,
-                fill: true,
-                tension: 0.4
-            },
-            {
-                label: 'Ram %',
-                data: [50, 62, 46, 57, 75, 48],
-                borderColor: '#D4D4D4',
-                backgroundColor: 'rgba(60, 108, 60, 0.1)',
-                borderWidth: 2,
-                fill: true,
-                tension: 0.4
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: true,
-            plugins: {
-                legend: {
-                    labels: {
-                        color: '#a8a8a8'
-                    }
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    max: 100,
-                    ticks: {
-                        color: '#a8a8a8'
+    applyBtn.onclick = function() {
+        applyFilterSimulation();
+    }
+
+    clearBtn.onclick = function() {
+        filterOptions.forEach(option => {
+            option.classList.remove('selected-filter');
+        });
+        selectedFilters = {
+            month: null,
+            component: null
+        };
+        applyFilterSimulation();
+    }
+});
+
+    document.addEventListener('DOMContentLoaded', function () {
+        
+        const ctxCpuRam = document.getElementById('cpuRamChart').getContext('2d');
+        new Chart(ctxCpuRam, {
+            type: 'bar',
+            data: {
+                labels: ['00:00', '06:00', '12:00', '18:00', '24:00'],
+                datasets: [
+                    {
+                        label: 'CPU %',
+                        data: [35, 42, 38, 50, 45, 55],
+                        backgroundColor: '#43d33f',
+                        borderRadius: 4
                     },
-                    grid: {
-                        color: '#3a3a3a'
+                    {
+                        label: 'GPU %',
+                        data: [45, 50, 48, 60, 55, 65],
+                        backgroundColor: '#ff3131',
+                        borderRadius: 4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#a8a8a8'
+                        }
                     }
                 },
-                x: {
-                    ticks: {
-                        color: '#a8a8a8'
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            color: '#a8a8a8'
+                        },
+                        grid: {
+                            color: '#3a3a3a'
+                        }
                     },
-                    grid: {
-                        display: false
+                    x: {
+                        ticks: {
+                            color: '#a8a8a8'
+                        },
+                        grid: {
+                            display: false
+                        }
                     }
                 }
             }
-        }
+        });
+
+        // Gráfico Disco x Ram
+        const ctxDisk = document.getElementById('diskChart').getContext('2d');
+        new Chart(ctxDisk, {
+            type: 'line',
+            data: {
+                labels: ['00:00', '06:00', '12:00', '18:00', '24:00'],
+                datasets: [{
+                    label: 'Disco %',
+                    data: [45, 48, 50, 52, 55, 58],
+                    borderColor: '#50d050',
+                    backgroundColor: 'rgba(80, 208, 80, 0.1)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4
+                },
+                {
+                    label: 'Ram %',
+                    data: [50, 62, 46, 57, 75, 48],
+                    borderColor: '#D4D4D4',
+                    backgroundColor: 'rgba(60, 108, 60, 0.1)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#a8a8a8'
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            color: '#a8a8a8'
+                        },
+                        grid: {
+                            color: '#3a3a3a'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: '#a8a8a8'
+                        },
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
     });
-});
+    
 </script>

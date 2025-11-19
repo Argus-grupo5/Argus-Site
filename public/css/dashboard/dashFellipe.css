@@ -201,7 +201,7 @@ body{
   gap: 1rem;
   align-items: center;
   justify-content: space-between;
-  max-width: 1rem;
+
 }
 
 
@@ -300,4 +300,200 @@ body{
 @media (max-width:768px){
   .desktopNav{ width:50px; }
   .main-content{ margin-left:50px; width:calc(100% - 50px); padding:.8rem; }
+}
+
+/* Estilos para o Modal de Filtro de Alertas */
+.modal-filter {
+    display: none; /* Escondido por padrão */
+    position: fixed;
+    z-index: 2000; /* Alto z-index para sobrepor tudo */
+    left: 4vw; /* Alinhar após a nav lateral */
+    top: 0;
+    width: 100%;
+    height: 100%;
+    align-items: center; /* Centraliza verticalmente */
+    justify-content: center; /* Centraliza horizontalmente */
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4); /* Fundo semi-transparente */
+}
+
+.modal-filter[style*="display: block"] {
+    display: flex !important;
+}
+
+.modal-content-filter {
+    background-color: #2a2a2a;
+    margin: 5% auto; /* Centralizado verticalmente */
+    padding: 2rem;
+    border: 1px solid #444;
+    width: 90%; 
+    max-width: 500px; /* Largura ideal para o modal */
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    position: relative;
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.modal-content-filter h3 {
+    color: #ffffff;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    border-bottom: 2px solid #ff670a;
+    padding-bottom: 0.5rem;
+}
+
+.close-btn-filter {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    line-height: 1;
+    position: absolute;
+    top: 15px;
+    right: 20px;
+}
+
+.close-btn-filter:hover,
+.close-btn-filter:focus {
+    color: #ff670a;
+    text-decoration: none;
+}
+
+.filter-group {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px dashed #3a3a3a;
+}
+
+.filter-group:last-child {
+    border-bottom: none;
+}
+
+.filter-group h4 {
+    color: #ff670a;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.filter-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.filter-option {
+    background-color: #3a3a3a;
+    border: 1px solid #4a4a4a;
+    color: #a8a8a8;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.filter-option:hover {
+    background-color: #ff670a;
+    border-color: #ff670a;
+    color: #ffffff;
+}
+
+.filter-option.selected-filter {
+    background-color: #43d33f; /* Cor de destaque para seleção */
+    border-color: #43d33f;
+    color: #ffffff;
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.action-btn {
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.action-btn.primary {
+    background-color: #ff670a;
+    color: #ffffff;
+}
+
+.action-btn.primary:hover {
+    background-color: #e55a00;
+}
+
+.action-btn.secondary {
+    background-color: #3a3a3a;
+    color: #ffffff;
+}
+
+.action-btn.secondary:hover {
+    background-color: #4a4a4a;
+}
+
+.alerts-header-with-filter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #3a3a3a;
+    width: 100%;
+    gap: 1rem;
+}
+
+.alerts-header-with-filter h3 {
+    flex: 1;
+    text-align: center;
+    margin: 0;
+    font-size: 1.2rem;
+    color: #ffffff;
+}
+
+#filter-status {
+    font-size: 0.9rem;
+    color: #a8a8a8;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.filter-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.filter-btn-trigger {
+    background-color: #ff670a;
+    color: #ffffff;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+    border: none;
+    font-weight: 600;
+}
+
+.filter-btn-trigger:hover {
+    background-color: #e55a00;
 }
