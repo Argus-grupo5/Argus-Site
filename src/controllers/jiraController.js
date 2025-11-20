@@ -1,27 +1,31 @@
-import axios from "axios";
+const axios = require("axios");
 
-export async function getResumoJira(req, res) {
+async function getResumoJira(req, res) {
     try {
         const email = process.env.JIRA_EMAIL;
         const token = process.env.JIRA_TOKEN;
 
         const auth = Buffer.from(`${email}:${token}`).toString('base64');
 
-        const resposta = await axios.get(
-            "https://sua-org.atlassian.net/rest/api/3/search?jql=project=SUPORTE",
+        const resposta = await axios.post(
+            "https://sptech-team-cppjq4lc.atlassian.net/rest/api/3/search/jql",
+            {
+                jql: "project = AA",
+                maxResults: 50
+            },
             {
                 headers: {
                     "Authorization": `Basic ${auth}`,
-                    "Accept": "application/json"
+                    "Accept": "application/json",
+                    "Content-Type": "application/json"
                 }
             }
         );
 
         const issues = resposta.data.issues;
 
-        // Processamento para a dashboard
-        const aberto = issues.filter(i => i.fields.status.name !== "Done").length;
-        const fechado = issues.filter(i => i.fields.status.name === "Done").length;
+        const abertas = issues.filter(i => i.fields.status.name !== "Done").length;
+        const fechadas = issues.filter(i => i.fields.status.name === "Done").length;
 
         const prioridade = {
             high: issues.filter(i => i.fields.priority?.name === "High").length,
@@ -29,9 +33,12 @@ export async function getResumoJira(req, res) {
             low: issues.filter(i => i.fields.priority?.name === "Low").length
         };
 
+        const total = issues.length;
+
         res.json({
-            abertos: aberto,
-            fechados: fechado,
+            total,
+            abertas,
+            fechadas,
             prioridades: prioridade
         });
 
@@ -40,3 +47,4 @@ export async function getResumoJira(req, res) {
         res.status(500).json({ erro: "Falha ao consultar Jira" });
     }
 }
+module.exports = { getResumoJira };
