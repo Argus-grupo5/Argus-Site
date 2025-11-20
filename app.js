@@ -7,6 +7,9 @@ var caminho_env = ambiente_processo === 'producao' ? '.env' : '.env.dev';
 
 require("dotenv").config({ path: caminho_env });
 
+console.log("JIRA_EMAIL carregado:", process.env.JIRA_EMAIL);
+console.log("JIRA_TOKEN carregado:", process.env.JIRA_TOKEN);
+
 var express = require("express");
 var cors = require("cors");
 var path = require("path");
@@ -19,6 +22,7 @@ var indexRouter = require("./src/routes/index");
 var usuarioRouter = require("./src/routes/usuarios");
 var empresasRouter = require("./src/routes/empresas");
 var servidoresRouter = require("./src/routes/servidores")
+var jiraRouter = require("./src/routes/jira") 
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -30,6 +34,7 @@ app.use("/", indexRouter);
 app.use("/usuarios", usuarioRouter);
 app.use("/empresas", empresasRouter);
 app.use("/servidores", servidoresRouter);
+app.use("/jira", jiraRouter);
 
 app.listen(PORTA_APP, function () {
     console.log(`
