@@ -1,8 +1,8 @@
-import express from "express";
-import { getResumoJira } from "./jiraController.js";
+const express = require("express");
+const { getResumoJira } = require("../controllers/jiraController.js");
 
 const router = express.Router();
 
 router.get("/resumo", getResumoJira);
 
-export default router;
+module.exports = router;
