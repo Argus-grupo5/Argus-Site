@@ -62,7 +62,7 @@
                 <div class="resumoCardKPI">
                     <div class="resumoCard">
                         <p>Variação de Demanda (vs. ontem)</p>
-                        <p class="resumoCardText">-</p>
+                        <p class="resumoCardText"><span id="variacao"></span> %</p>
                     </div>
                     <div class="resumoCard">
                         <p>Utilização da capacidade total</p>
@@ -165,7 +165,6 @@
             }
         }).then((content) => {
             content.json().then((json) => {
-                console.log(json)
                 var ccu = json[json.length - 1].CCU
                 document.getElementById("titleCCU").innerHTML = Number(ccu).toFixed();
 
@@ -177,6 +176,7 @@
                 document.getElementById("capacidadePerc").innerHTML = percCap
                 buscarDados(json)
                 plotarGrafico();
+                document.getElementById("variacao").innerHTML = calcularVariacao(data)
             })
         })
     }
@@ -236,12 +236,18 @@
         for (let i = 0; i < json.length; i++) {
             data.push(json[i].CCU)
             if (json[i].CCUReal == "null") {
-                dataReal.push(0)
+                dataReal.push(350000)
             } else {
                 dataReal.push(json[i].CCUReal)
             }
             dias.push(json[i].dataAtual)
         }
+    }
+
+    function calcularVariacao(data) {
+        var demanda = ((data[data.length - 1] - data[data.length - 2]) /
+         data[data.length - 2]) * 100
+        return demanda.toFixed(2)
     }
 
     var lancKey = `eduardo/Empresa%20Data%202/lancamentos_${diaDeHoje}.json`
@@ -258,28 +264,26 @@
             series: [{
                 name: "CCU Previsto",
                 data: data,
-                stroke: {
-                    dashArray: 4
-                }
             },
             {
                 name: "CCU Real",
                 data: dataReal
             }],
-            colors: ['#FF670A', 'f8995e'],
+            colors: ['#FF670A', '#f8995e'],
+            stroke: {
+                width: 3,
+                curve: 'smooth',
+                dashArray: [5, 0]
+            },
             chart: {
                 height: 350,
-                width: 600,
+                width: 500,
                 type: 'line',
                 background: '#2b2b2b',
                 zoom: { enabled: false }
             },
             dataLabels: {
                 enabled: false
-            },
-            stroke: {
-                curve: 'smooth',
-                width: 3
             },
             title: {
                 text: 'Demanda prevista X Demanda real',
