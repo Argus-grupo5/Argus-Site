@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../../css/cssDashEduardo/style.css">
     <script src="../dashboard/script/dash.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
     <title>ARGUS | Dashboard</title>
 </head>
@@ -65,7 +66,7 @@
                     </div>
                     <div class="resumoCard">
                         <p>Utilização da capacidade total</p>
-                        <p class="resumoCardText">-</p>
+                        <p class="resumoCardText"><span id="capacidadePerc"></span> %</p>
                     </div>
                 </div>
                 <div class="resumoCardHour">
@@ -74,6 +75,9 @@
                     <p class="ccuHour"><span id="titleCCU"></span> CCU</p>
                 </div>
             </div>
+        </div>
+        <div class="graficos">
+            <div id="chart"></div>
         </div>
         <div class="listsContainer">
             <div class="listOutside">
@@ -123,6 +127,9 @@
 <script>
     header("dashboard", sessionStorage.CARGO_CARGO);
 
+    var data = [];
+    var dataReal = [];
+    var dias = [];
 
     function formatarHoje() {
         var diaDeHoje = new Date();
@@ -135,7 +142,7 @@
     }
     var diaDeHoje = formatarHoje();
 
-    function buscarHorario(chave){
+    function buscarHorario(chave) {
         fetch(`/s3Route/dados/${chave}`, {
             method: "GET",
             headers: {
@@ -156,11 +163,20 @@
             headers: {
                 'Content-Type': 'application/json'
             }
-        }).then((content)=> {
-            content.json().then((json)=>{
-            console.log(json)
-                var ccu = json[json.length-1].CCU
+        }).then((content) => {
+            content.json().then((json) => {
+                console.log(json)
+                var ccu = json[json.length - 1].CCU
                 document.getElementById("titleCCU").innerHTML = Number(ccu).toFixed();
+
+                var capacidade = json[json.length - 1].capacidadeTotal
+                var percCap = (ccu * 100) / capacidade
+                if (percCap > 100) {
+                    percCap = 100
+                }
+                document.getElementById("capacidadePerc").innerHTML = percCap
+                buscarDados(json)
+                plotarGrafico();
             })
         })
     }
@@ -216,6 +232,18 @@
         })
     }
 
+    function buscarDados(json) {
+        for (let i = 0; i < json.length; i++) {
+            data.push(json[i].CCU)
+            if (json[i].CCUReal == "null") {
+                dataReal.push(0)
+            } else {
+                dataReal.push(json[i].CCUReal)
+            }
+            dias.push(json[i].dataAtual)
+        }
+    }
+
     var lancKey = `eduardo/Empresa%20Data%202/lancamentos_${diaDeHoje}.json`
     var steamKey = `eduardo/Empresa%20Data%202/steam_${diaDeHoje}.json`
     var diaKey = `infoDia/data_${diaDeHoje}.json`
@@ -224,5 +252,97 @@
     buscarLancamentos(lancKey, diaDeHoje);
     buscarTop10(steamKey, diaDeHoje);
     buscarCCU(ccuKey)
+
+    function plotarGrafico() {
+        var options = {
+            series: [{
+                name: "CCU Previsto",
+                data: data,
+                stroke: {
+                    dashArray: 4
+                }
+            },
+            {
+                name: "CCU Real",
+                data: dataReal
+            }],
+            colors: ['#FF670A', 'f8995e'],
+            chart: {
+                height: 350,
+                width: 600,
+                type: 'line',
+                background: '#2b2b2b',
+                zoom: { enabled: false }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                curve: 'smooth',
+                width: 3
+            },
+            title: {
+                text: 'Demanda prevista X Demanda real',
+                align: 'left',
+                style: {
+                    color: '#FF670A'
+                }
+            },
+            grid: {
+                borderColor: "#4b4b4b",
+                row: {
+                    colors: ['#3b3b3b', 'transparent'],
+                    opacity: 0.3
+                }
+            },
+            xaxis: {
+                categories: dias,
+                labels: {
+                    style: { colors: '#bdc3c7' }
+                }
+            },
+            yaxis: {
+                labels: {
+                    style: { colors: '#bdc3c7' }
+                }
+            },
+            markers: {
+                size: 5,
+                colors: ['#FF670A', '#f8995e'],
+                strokeColors: ['#000000', '#000000'],
+                strokeWidth: 2
+            },
+            tooltip: {
+                theme: 'dark',
+                style: {
+                    fontSize: '14px',
+                    color: '#f39c12'
+                },
+                marker: {
+                    fillColors: ['#FF670A', '#f8995e']
+                }
+            },
+            legend: {
+                show: true,
+                position: 'bottom',
+                horizontalAlign: 'center',
+                labels: {
+                    colors: ['#FF670A', '#f8995e'],
+                    useSeriesColors: false
+                },
+                markers: {
+                    width: 12,
+                    height: 12,
+                    strokeWidth: 2,
+                    strokeColor: '#000',
+                    fillColors: ['#FF670A', '#f8995e'],
+                }
+            }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#chart"), options);
+        chart.render();
+    }
+
 
 </script>
