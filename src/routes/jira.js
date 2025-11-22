@@ -1,8 +1,7 @@
 const express = require("express");
-const { getResumoJira } = require("../controllers/jiraController.js");
-
 const router = express.Router();
+const jiraController = require("../controllers/jiraController");
 
-router.get("/resumo", getResumoJira);
+router.get("/getResumoJira", jiraController.getResumoJira);
 
 module.exports = router;
