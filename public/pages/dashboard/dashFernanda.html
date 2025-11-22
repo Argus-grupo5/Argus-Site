@@ -10,77 +10,69 @@
     <title>Dashboard do Suporte Técnico - Jira</title>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 </head>
 
 <body>
 
-<div id="id_sair">
-    </div>
+<div id="id_sair"></div>
 
-    <header class="desktopNav" id="navDesktop"></header>
+<header class="desktopNav" id="navDesktop"></header>
 
-    <header class="headerTop">
-        <div class="geralInfo">
-            <div class="info tooltipInfo">
-                <div class="server">
-                    <img src="../../assets/dashboard/desktop/server.svg" alt="">
-                </div>
-                <div class="serversMonitoring" id="id_servidores_monitorados">
-                </div>
-                <span class="tooltiptextInfo">
-                    Servidores em monitoramento
-                </span>
+<header class="headerTop">
+    <div class="geralInfo">
+        <div class="info tooltipInfo">
+            <div class="server">
+                <img src="../../assets/dashboard/desktop/server.svg" alt="">
             </div>
-            <div class="info">
-                <div class="bell">
-                    <img src="../../assets/dashboard/desktop/bell.svg" alt="">
-                </div>
-                <div class="risk tooltipInfo" id="id_servidores_em_estado_critico">
-                    <p id="qtd_critico"></p>
-                    <span class="tooltiptextInfo">
-                        Servidores em atenção
-                    </span>
-                </div>
-                <div class="atention tooltipInfo" id="id_servidores_em_estado_de_alerta">
-                    <p id="qtd_alerta"></p>
-                    <span class="tooltiptextInfo">
-                        Servidores em alerta
-                    </span>
-                </div>
+            <div class="serversMonitoring" id="id_servidores_monitorados"></div>
+            <span class="tooltiptextInfo">Servidores em monitoramento</span>
+        </div>
+        <div class="info">
+            <div class="bell">
+                <img src="../../assets/dashboard/desktop/bell.svg" alt="">
+            </div>
+            <div class="risk tooltipInfo" id="id_servidores_em_estado_critico">
+                <p id="qtd_critico"></p>
+                <span class="tooltiptextInfo">Servidores em atenção</span>
+            </div>
+            <div class="atention tooltipInfo" id="id_servidores_em_estado_de_alerta">
+                <p id="qtd_alerta"></p>
+                <span class="tooltiptextInfo">Servidores em alerta</span>
             </div>
         </div>
-    </header>
+    </div>
+</header>
 
+<!-- KPIs -->
 <div class="kpis">
     <div class="card">
         <div class="titulo">Total de Chamados</div>
-        <div class="valor" id="totalChamados">0</div>
+        <div class="valor" id="totalChamados"></div>
     </div>
 
     <div class="card">
         <div class="titulo">Chamados Abertos</div>
-        <div class="valor" id="chamadosAbertos">0</div>
+        <div class="valor" id="chamadosAbertos"></div>
     </div>
 
     <div class="card">
         <div class="titulo">Chamados Fechados</div>
-        <div class="valor" id="chamadosFechados">0</div>
+        <div class="valor" id="chamadosFechados"></div>
     </div>
 
     <div class="card">
         <div class="titulo">Alta Prioridade</div>
-        <div class="valor" id="prioAlta">0</div>
+        <div class="valor" id="prioAlta"></div>
     </div>
 
     <div class="card">
         <div class="titulo">Média Prioridade</div>
-        <div class="valor" id="prioMedia">0</div>
+        <div class="valor" id="prioMedia"></div>
     </div>
 
     <div class="card">
         <div class="titulo">Baixa Prioridade</div>
-        <div class="valor" id="prioBaixa">0</div>
+        <div class="valor" id="prioBaixa"></div>
     </div>
 </div>
 
@@ -89,62 +81,75 @@
     <canvas id="graficoJira" height="120"></canvas>
 </div>
 
-<!-- Tabela -->
 <div class="tabela_dash">
-<h2>Últimos Chamados</h2>
-<table>
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Resumo</th>
-            <th>Status</th>
-            <th>Prioridade</th>
-        </tr>
-    </thead>
-    <tbody id="tabelaChamados">
-    </tbody>
-</table>
+    <h2>Últimos Chamados</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Título</th>
+                <th>Responsável</th>
+                <th>Prioridade</th>
+                <th>Status</th>
+                <th>Data de Criação</th>
+                <th>Data de Resolução</th>
+            </tr>
+        </thead>
+        <tbody id="tabelaChamados">
+        </tbody>
+    </table>
 </div>
 
 <script>
-    let chart = null;
 
-    async function carregarDadosJira() {
+    async function carregarDadosJira(params) {
+        const email_jira = "luiz.hsouza@sptech.school";
+        const token_jira = "ATATT3xFfGF08peCbzHDW7NphdJZSbDE73t0jK9txkqai4zucwrE2PQFfmpkoD-GbPoZKzxrFYk51KYdU4IqErcyxUOpBVTP7-JNY56aOmW2ugAKchMZ_47RFtaj5M6JAGPi64A5aQjbJzsQAe5DauvRlZ-zOHVdVhPiEftcuwCEAQR3EHCafgk=D75C1533";
+        const dominio_jira = "https://sptech-team-cppjq4lc.atlassian.net";
+        const auth = btoa(`${email_jira}:${token_jira}`);
         try {
-            const resp = await fetch("http://localhost:3333/jira-dashboard/resumo");
-            const dados = await resp.json();
+            const resp = await fetch("/jira/getResumoJira");
+            const dado = await resp.json();
+           
+        if (!dado.issues) {
+            console.error('Nenhum chamado retornado:', dado);
+            return; 
+        }
 
-            // KPIs
-            document.getElementById("totalChamados").textContent = dados.total;
-            document.getElementById("chamadosAbertos").textContent = dados.abertas;
-            document.getElementById("chamadosFechados").textContent = dados.fechadas;
+            const chamados=[]
+            dado.issues.forEach(chamado =>{
+                const campo=chamado.fields
+                chamados.push({
+                    id: chamado.id,
+                    titulo: chamado.summary,
+                    responsavel: chamado.assignee,
+                    prioridade: chamado.priority,
+                    status: chamado.status,
+                    data_criacao: chamado.created,
+                    data_resolucao: chamado.resolutiondate
+                    })
+            });
 
-            document.getElementById("prioAlta").textContent = dados.prioridades.high;
-            document.getElementById("prioMedia").textContent = dados.prioridades.medium;
-            document.getElementById("prioBaixa").textContent = dados.prioridades.low;
+            console.log(chamados)
 
-            atualizarGrafico(dados);
-
-            carregarTabela();
         } catch (error) {
             console.error("Erro ao carregar dados do Jira:", error);
         }
     }
 
-    async function carregarTabela() {
-        const resp = await fetch("http://localhost:3333/jira-dashboard/resumo"); 
-        const dados = await resp.json();
+    carregarDadosJira()
 
+    function carregarTabela(chamados = []) {
         const tabela = document.getElementById("tabelaChamados");
         tabela.innerHTML = "";
 
-        dados.ultimosChamados?.forEach(chamado => {
+        chamados.forEach(chamado => {
             tabela.innerHTML += `
                 <tr>
-                    <td>${chamado.key}</td>
-                    <td>${chamado.summary}</td>
-                    <td>${chamado.status}</td>
-                    <td>${chamado.priority}</td>
+                    <td>${chamado.key || "-"}</td>
+                    <td>${chamado.summary || "-"}</td>
+                    <td>${chamado.status || "-"}</td>
+                    <td>${chamado.priority || "-"}</td>
                 </tr>
             `;
         });
@@ -167,15 +172,25 @@
                         dados.prioridades.high,
                         dados.prioridades.medium,
                         dados.prioridades.low
-                    ]
+                    ],
+                    backgroundColor: ["#FF4C4C", "#FFA500", "#4CAF50"] // cores para melhor visualização
                 }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: { enabled: true }
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
             }
         });
     }
 
     carregarDadosJira();
-    setInterval(carregarDadosJira, 30000); 
-
+    setInterval(carregarDadosJira, 30000);
 </script>
 
 </body>
