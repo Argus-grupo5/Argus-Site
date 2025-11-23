@@ -598,4 +598,6 @@ position: relative;
 
 .graficos {
     margin: 5rem 0rem;
+    display: flex;
+    gap: 1rem;
 }

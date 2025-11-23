@@ -78,6 +78,7 @@
         </div>
         <div class="graficos">
             <div id="chart"></div>
+            <div id="chart2"></div>
         </div>
         <div class="listsContainer">
             <div class="listOutside">
@@ -130,6 +131,9 @@
     var data = [];
     var dataReal = [];
     var dias = [];
+    var mediaCpu = [];
+    var utilizacaoPerc = [];
+    var capacidade;
 
     function formatarHoje() {
         var diaDeHoje = new Date();
@@ -168,7 +172,7 @@
                 var ccu = json[json.length - 1].CCU
                 document.getElementById("titleCCU").innerHTML = Number(ccu).toFixed();
 
-                var capacidade = json[json.length - 1].capacidadeTotal
+                capacidade = json[json.length - 1].capacidadeTotal
                 var percCap = (ccu * 100) / capacidade
                 if (percCap > 100) {
                     percCap = 100
@@ -232,21 +236,46 @@
         })
     }
 
+    function buscarMediaCpu(chave) {
+        fetch(`/s3Route/dados/${chave}`, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((content) => {
+            content.json().then((json) => {
+                buscarDados(json)
+                console.log(mediaCpu)
+                plotarGrafico2();
+            })
+        })
+    }
+
     function buscarDados(json) {
         for (let i = 0; i < json.length; i++) {
-            data.push(json[i].CCU)
-            if (json[i].CCUReal == "null") {
-                dataReal.push(350000)
-            } else {
-                dataReal.push(json[i].CCUReal)
+            if (json[i].CCU != undefined) {
+                data.push(json[i].CCU)
+                var percCap = (Number(json[i].CCUReal) * 100) / capacidade
+                if (percCap > 100) {
+                    percCap = 100
+                }
+                console.log(percCap)
+                utilizacaoPerc.push(percCap)
+                if (json[i].CCUReal == "null") {
+                    continue;
+                } else {
+                    dataReal.push(json[i].CCUReal)
+                }
+                dias.push(json[i].dataAtual)
+            } else if (json[i].mediaCPU != undefined) {
+                mediaCpu.push(json[i].mediaCPU)
             }
-            dias.push(json[i].dataAtual)
         }
     }
 
     function calcularVariacao(data) {
         var demanda = ((data[data.length - 1] - data[data.length - 2]) /
-         data[data.length - 2]) * 100
+            data[data.length - 2]) * 100
         return demanda.toFixed(2)
     }
 
@@ -254,10 +283,12 @@
     var steamKey = `eduardo/Empresa%20Data%202/steam_${diaDeHoje}.json`
     var diaKey = `infoDia/data_${diaDeHoje}.json`
     var ccuKey = `eduardo/Empresa%20Data%202/ccu.csv`
+    var cpuKey = `eduardo/Empresa%20Tech%201/mediaCpu.csv`
     buscarHorario(diaKey);
     buscarLancamentos(lancKey, diaDeHoje);
     buscarTop10(steamKey, diaDeHoje);
     buscarCCU(ccuKey)
+    buscarMediaCpu(cpuKey)
 
     function plotarGrafico() {
         var options = {
@@ -277,7 +308,7 @@
             },
             chart: {
                 height: 350,
-                width: 500,
+                width: 555,
                 type: 'line',
                 background: '#2b2b2b',
                 zoom: { enabled: false }
@@ -345,6 +376,93 @@
         };
 
         var chart = new ApexCharts(document.querySelector("#chart"), options);
+        chart.render();
+    }
+
+    function plotarGrafico2() {
+        var options = {
+            series: [
+                {
+                    name: "Média de CPU",
+                    data: mediaCpu,
+                },
+                {
+                    name: "Média de GPU",
+                    data: utilizacaoPerc,
+                }
+            ],
+            colors: ['#FF670A', '#f8995e'],
+            chart: {
+                height: 350,
+                width: 555,
+                type: 'bar',
+                background: '#2b2b2b',
+                zoom: { enabled: false }
+            },
+            plotOptions: {
+                bar: {
+                    horizontal: false,
+                    borderRadius: 4,
+                    columnWidth: '50%',
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            title: {
+                text: 'Demanda prevista X Demanda real',
+                align: 'left',
+                style: {
+                    color: '#FF670A'
+                }
+            },
+            grid: {
+                borderColor: "#4b4b4b",
+                row: {
+                    colors: ['#3b3b3b', 'transparent'],
+                    opacity: 0.3
+                }
+            },
+            xaxis: {
+                categories: dias,
+                labels: {
+                    style: { colors: '#bdc3c7' }
+                }
+            },
+            yaxis: {
+                labels: {
+                    style: { colors: '#bdc3c7' }
+                }
+            },
+            tooltip: {
+                theme: 'dark',
+                style: {
+                    fontSize: '14px',
+                    color: '#f39c12'
+                },
+                marker: {
+                    fillColors: ['#FF670A', '#f8995e']
+                }
+            },
+            legend: {
+                show: true,
+                position: 'bottom',
+                horizontalAlign: 'center',
+                labels: {
+                    colors: ['#FF670A', '#f8995e'],
+                    useSeriesColors: false
+                },
+                markers: {
+                    width: 12,
+                    height: 12,
+                    strokeWidth: 2,
+                    strokeColor: '#000',
+                    fillColors: ['#FF670A', '#f8995e']
+                }
+            }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#chart2"), options);
         chart.render();
     }
 
