@@ -55,18 +55,18 @@
             <p>Visão geral - Lançamentos e demandas</p>
         </div>
         <div class="resumo">
-            <div class="resumoSituacao">
+            <!-- <div class="resumoSituacao">
                 <p><span>[ALERTA: RISCO ALTO] HOJE: XXXXX + LANÇAMENTOS DE JOGOS </span></p>
-            </div>
+            </div> -->
             <div class="resumoKPIs">
                 <div class="resumoCardKPI">
                     <div class="resumoCard">
                         <p>Variação de Demanda (vs. ontem)</p>
-                        <p class="resumoCardText"><span id="variacao"></span> %</p>
+                        <p class="resumoCardText"><span id="variacao" class="span"></span> %</p>
                     </div>
                     <div class="resumoCard">
-                        <p>Utilização da capacidade total</p>
-                        <p class="resumoCardText"><span id="capacidadePerc"></span> %</p>
+                        <p>Ocupação da Plataforma</p>
+                        <p class="resumoCardText"><span id="capacidadePerc" class="span"></span> %</p>
                     </div>
                 </div>
                 <div class="resumoCardHour">
@@ -176,6 +176,11 @@
                 var percCap = (ccu * 100) / capacidade
                 if (percCap > 100) {
                     percCap = 100
+                    document.getElementById("capacidadePerc").classList.add("vermelho")
+                } else if(percCap >= 75){
+                    document.getElementById("capacidadePerc").classList.add("amarelo")
+                } else {
+                    document.getElementById("capacidadePerc").classList.add("verde")
                 }
                 document.getElementById("capacidadePerc").innerHTML = percCap
                 buscarDados(json)
@@ -279,11 +284,14 @@
         return demanda.toFixed(2)
     }
 
-    var lancKey = `eduardo/Empresa%20Data%202/lancamentos_${diaDeHoje}.json`
-    var steamKey = `eduardo/Empresa%20Data%202/steam_${diaDeHoje}.json`
+    var empresa = sessionStorage.EMPRESA_NOME_FANTASIA;
+    empresa = empresa.replace(" ", "%20")
+
+    var lancKey = `eduardo/${empresa}/lancamentos_${diaDeHoje}.json`
+    var steamKey = `eduardo/${empresa}/steam_${diaDeHoje}.json`
     var diaKey = `infoDia/data_${diaDeHoje}.json`
-    var ccuKey = `eduardo/Empresa%20Data%202/ccu.csv`
-    var cpuKey = `eduardo/Empresa%20Tech%201/mediaCpu.csv`
+    var ccuKey = `eduardo/${empresa}/ccu.csv`
+    var cpuKey = `eduardo/${empresa}/mediaCpu.csv`
     buscarHorario(diaKey);
     buscarLancamentos(lancKey, diaDeHoje);
     buscarTop10(steamKey, diaDeHoje);
@@ -387,7 +395,7 @@
                     data: mediaCpu,
                 },
                 {
-                    name: "Média de GPU",
+                    name: "Utilização da capacidade de jogadores",
                     data: utilizacaoPerc,
                 }
             ],
@@ -410,7 +418,7 @@
                 enabled: false
             },
             title: {
-                text: 'Demanda prevista X Demanda real',
+                text: 'Média de CPU X Porcentagem de utilização da capacidade máxima',
                 align: 'left',
                 style: {
                     color: '#FF670A'
