@@ -392,9 +392,11 @@ body {
     display: flex;
     width: auto;
     gap: 2rem;
+    align-items: center;
 }
 
 .resumoCard {
+    position: relative;
     width: 15rem;
     height: 6rem;
     background-color: #3f3f3f;
@@ -621,3 +623,62 @@ position: relative;
 .verde {
     color: rgb(109, 255, 79);
 }
+.azul {
+    color: rgb(97, 186, 209);
+}
+.cinza {
+    color: gainsboro;
+}
+
+.infoIcon {
+    position: absolute;
+    bottom: 0px;
+    right: 8px;
+    cursor: pointer;
+}
+
+.infoIcon svg {
+    width: 18px;
+    opacity: 0.7;
+    transition: 0.2s;
+}
+.infoIcon svg:hover {
+    opacity: 1;
+}
+
+.caixaDemanda {
+    visibility: hidden;
+    width: 180px;
+    background-color: #2b2b2b;
+    color: #fff;
+    text-align: left;
+    border-radius: 5px 0px 5px 5px;
+    padding: 10px;
+    position: absolute;
+    z-index: 10;
+    top: 25px;
+    right: 0;
+    opacity: 0;
+    transition: opacity 0.2s;
+    font-size: 12px;
+    border: 1px solid #555;
+}
+
+.infoIcon:hover .caixaDemanda {
+    visibility: visible;
+    opacity: 1;
+}
+
+.legenda {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    margin-right: 6px;
+}
+
+.legenda.verde { background-color: rgb(109, 255, 79); }
+.legenda.amarelo { background-color: rgb(255, 149, 0); }
+.legenda.vermelho { background-color: rgb(255, 81, 0); }
+.legenda.cinza { background-color: gainsboro; }
+.legenda.azul { background-color: rgb(97, 186, 209); }

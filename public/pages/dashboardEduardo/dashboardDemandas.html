@@ -53,6 +53,7 @@
         <div>
             <H1>Resumo diário</H1>
             <p>Visão geral - Lançamentos e demandas</p>
+            <p>Última atualização: <span></span></p>
         </div>
         <div class="resumo">
             <!-- <div class="resumoSituacao">
@@ -63,10 +64,34 @@
                     <div class="resumoCard">
                         <p>Variação de Demanda (vs. ontem)</p>
                         <p class="resumoCardText"><span id="variacao" class="span"></span> %</p>
+                        <div class="infoIcon tooltipInfo">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                <path fill="currentColor"
+                                    d="M11 17h2v-6h-2zm1-8q.425 0 .713-.288T13 8t-.288-.712T12 7t-.712.288T11 8t.288.713T12 9m0 13q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22" />
+                            </svg>
+                            <span class="caixaDemanda">
+                                <b>Legenda:</b><br>
+                                <span class="legenda azul"></span> Redução de demanda<br>
+                                <span class="legenda cinza"></span> Permanência de demanda<br>
+                                <span class="legenda verde"></span> Aumento de demanda<br>
+                            </span>
+                        </div>
                     </div>
                     <div class="resumoCard">
                         <p>Ocupação da Plataforma</p>
                         <p class="resumoCardText"><span id="capacidadePerc" class="span"></span> %</p>
+                        <div class="infoIcon infoLegenda">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                <path fill="currentColor"
+                                    d="M11 17h2v-6h-2zm1-8q.425 0 .713-.288T13 8t-.288-.712T12 7t-.712.288T11 8t.288.713T12 9m0 13q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22" />
+                            </svg>
+                            <span class="caixaDemanda">
+                                <b>Legenda:</b><br>
+                                <span class="legenda verde"></span> Baixa ocupação<br>
+                                <span class="legenda amarelo"></span> Ocupação moderada<br>
+                                <span class="legenda vermelho"></span> Acima da capacidade<br>
+                            </span>
+                        </div>
                     </div>
                 </div>
                 <div class="resumoCardHour">
@@ -176,8 +201,9 @@
                 var percCap = (ccu * 100) / capacidade
                 if (percCap > 100) {
                     percCap = 100
+                } else if (percCap >= 85) {
                     document.getElementById("capacidadePerc").classList.add("vermelho")
-                } else if (percCap >= 75) {
+                } else if (percCap >= 65) {
                     document.getElementById("capacidadePerc").classList.add("amarelo")
                 } else {
                     document.getElementById("capacidadePerc").classList.add("verde")
@@ -186,6 +212,14 @@
                 buscarDados(json)
                 plotarGrafico();
                 document.getElementById("variacao").innerHTML = calcularVariacao(data)
+
+                if (calcularVariacao(data) > 0) {
+                    document.getElementById("variacao").classList.add("vermelho")
+                } else if (calcularVariacao(data) == 0) {
+                    document.getElementById("variacao").classList.add("cinza")
+                } else {
+                    document.getElementById("variacao").classList.add("azul")
+                }
             })
         })
     }
