@@ -101,7 +101,7 @@
             <div class="listOutside">
                 <div class="listHeader">
                     <p>Jogos mais jogados</p>
-                    <p>?????</p>
+                    <p>Hoje</p>
                 </div>
                 <div class="listInside">
                     <div class="listGridHeader_one">
@@ -131,7 +131,7 @@
     var data = [];
     var dataReal = [];
     var dias = [];
-    var mediaCpu = [];
+    var mediaGpu = [];
     var utilizacaoPerc = [];
     var capacidade;
 
@@ -177,12 +177,12 @@
                 if (percCap > 100) {
                     percCap = 100
                     document.getElementById("capacidadePerc").classList.add("vermelho")
-                } else if(percCap >= 75){
+                } else if (percCap >= 75) {
                     document.getElementById("capacidadePerc").classList.add("amarelo")
                 } else {
                     document.getElementById("capacidadePerc").classList.add("verde")
                 }
-                document.getElementById("capacidadePerc").innerHTML = percCap
+                document.getElementById("capacidadePerc").innerHTML = percCap.toFixed(2)
                 buscarDados(json)
                 plotarGrafico();
                 document.getElementById("variacao").innerHTML = calcularVariacao(data)
@@ -250,7 +250,7 @@
         }).then((content) => {
             content.json().then((json) => {
                 buscarDados(json)
-                console.log(mediaCpu)
+                console.log(mediaGpu)
                 plotarGrafico2();
             })
         })
@@ -265,15 +265,15 @@
                     percCap = 100
                 }
                 console.log(percCap)
-                utilizacaoPerc.push(percCap)
+                utilizacaoPerc.push(percCap.toFixed(2))
                 if (json[i].CCUReal == "null") {
                     continue;
                 } else {
                     dataReal.push(json[i].CCUReal)
                 }
                 dias.push(json[i].dataAtual)
-            } else if (json[i].mediaCPU != undefined) {
-                mediaCpu.push(json[i].mediaCPU)
+            } else if (json[i].mediaGPU != undefined) {
+                mediaGpu.push(Number(json[i].mediaGPU).toFixed(2))
             }
         }
     }
@@ -300,14 +300,16 @@
 
     function plotarGrafico() {
         var options = {
-            series: [{
-                name: "CCU Previsto",
-                data: data,
-            },
-            {
-                name: "CCU Real",
-                data: dataReal
-            }],
+            series: [
+                {
+                    name: "CCU Previsto",
+                    data: data,
+                },
+                {
+                    name: "CCU Real",
+                    data: dataReal
+                }
+            ],
             colors: ['#FF670A', '#f8995e'],
             stroke: {
                 width: 3,
@@ -321,16 +323,41 @@
                 background: '#2b2b2b',
                 zoom: { enabled: false }
             },
-            dataLabels: {
-                enabled: false
+
+            annotations: {
+                yaxis: [
+                    {
+                        y: capacidade,
+                        borderColor: '#ff0000',
+                        label: {
+                            text: 'Capacidade Máxima',
+                            style: {
+                                background: '#ff0000',
+                                color: '#fff'
+                            }
+                        }
+                    }
+                ],
+                shapes: [
+                    {
+                        type: 'rect',
+                        x: 0,
+                        y: capacidade,
+                        x2: dias.length - 1,
+                        y2: capacidade * 1.15,
+                        fillColor: 'rgba(255, 0, 0, 0.12)',
+                    }
+                ]
             },
+
+            dataLabels: { enabled: false },
+
             title: {
                 text: 'Demanda prevista X Demanda real',
                 align: 'left',
-                style: {
-                    color: '#FF670A'
-                }
+                style: { color: '#FF670A' }
             },
+
             grid: {
                 borderColor: "#4b4b4b",
                 row: {
@@ -338,23 +365,23 @@
                     opacity: 0.3
                 }
             },
+
             xaxis: {
                 categories: dias,
-                labels: {
-                    style: { colors: '#bdc3c7' }
-                }
+                labels: { style: { colors: '#bdc3c7' } }
             },
+
             yaxis: {
-                labels: {
-                    style: { colors: '#bdc3c7' }
-                }
+                labels: { style: { colors: '#bdc3c7' } }
             },
+
             markers: {
                 size: 5,
                 colors: ['#FF670A', '#f8995e'],
                 strokeColors: ['#000000', '#000000'],
                 strokeWidth: 2
             },
+
             tooltip: {
                 theme: 'dark',
                 style: {
@@ -365,6 +392,7 @@
                     fillColors: ['#FF670A', '#f8995e']
                 }
             },
+
             legend: {
                 show: true,
                 position: 'bottom',
@@ -378,7 +406,7 @@
                     height: 12,
                     strokeWidth: 2,
                     strokeColor: '#000',
-                    fillColors: ['#FF670A', '#f8995e'],
+                    fillColors: ['#FF670A', '#f8995e']
                 }
             }
         };
@@ -387,12 +415,14 @@
         chart.render();
     }
 
+
     function plotarGrafico2() {
+        console.log(utilizacaoPerc)
         var options = {
             series: [
                 {
-                    name: "Média de CPU",
-                    data: mediaCpu,
+                    name: "Média de GPU",
+                    data: mediaGpu,
                 },
                 {
                     name: "Utilização da capacidade de jogadores",
@@ -418,7 +448,7 @@
                 enabled: false
             },
             title: {
-                text: 'Média de CPU X Porcentagem de utilização da capacidade máxima',
+                text: 'Média de GPU X Porcentagem de utilização da capacidade máxima',
                 align: 'left',
                 style: {
                     color: '#FF670A'
