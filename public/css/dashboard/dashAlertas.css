@@ -74,14 +74,25 @@ select:active {
 .KPI {
     position: relative;
     display: flex;
+    flex-direction: column;
     top: -1vh;
     justify-content: center;
     align-items: center;
     background-color: #414141;
     border-radius: 10px;
-    width: 200px;
-    height: 75px;
+    width: 14vw;
+    height: 11vh;
     text-align: center;
     font-weight: 800;
     font-size: 32px;
+    transition: 0.3s ease-in-out;
+}
+
+.KPI:hover {
+    
+}
+
+.mensagem {
+    font-size: 18px;
+    font-weight: 400;
 }

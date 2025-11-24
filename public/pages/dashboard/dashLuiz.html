@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -14,7 +14,7 @@
     <script src="https://cdn.anychart.com/releases/v8/js/anychart-base.min.js"></script>
     <script src="https://cdn.anychart.com/releases/v8/js/anychart-exports.min.js"></script>
     <script src="https://cdn.anychart.com/releases/v8/js/anychart-ui.min.js"></script>   
-    <script src="script/s3connection.js"></script>
+    <script type="module" src="script/s3connection.js"></script>
 
     <title>ARGUS | Dashboard</title>
 </head>
@@ -28,7 +28,7 @@
         <div class="grafics">
             <div class="grafic1">
                 <div class="KPI">
-                    <p class="mensagem"></p>
+                    <p class="mensagem">Componente com mais alertas</p>
                     <p id="componente">CPU</p>
                 </div>
                 <div id="anychart-embed-rk3FgKf8" class="linha">
@@ -52,7 +52,7 @@
             </div>
             <div class="grafic2">
                 <div class="KPI">
-                    <p class="mensagem"></p>
+                    <p class="mensagem">Quantidade de alertas</p>
                     <p id="qtdeAlertas"></p>
                 </div>
                 <canvas class="barra" id="barra"></canvas>
@@ -192,11 +192,8 @@ anychart.onDocumentReady(function () {
 
 
     var seriesData_1 = dataSet.mapAs({'x': 0, 'value': 1});
-
     var seriesData_2 = dataSet.mapAs({'x': 0, 'value': 2});
-
     var seriesData_3 = dataSet.mapAs({'x': 0, 'value': 3});
-    
     var seriesData_4 = dataSet.mapAs({'x': 0, 'value': 4});
 
     var chart = anychart.area();
@@ -204,14 +201,11 @@ anychart.onDocumentReady(function () {
     chart.background().fill("#414141");
 
     var background = chart.background();
-
     background.cornerType("round");
-
     background.corners(20)
-    
     chart.animation(true);
 
-    chart.yScale().stackMode('percent');
+    chart.yScale().stackMode('value');
 
     chart.crosshair().enabled(true).yLabel().enabled(false);
     chart.crosshair().enabled(true).xLabel().enabled(false);
