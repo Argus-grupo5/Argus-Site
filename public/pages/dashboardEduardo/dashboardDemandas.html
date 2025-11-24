@@ -52,8 +52,10 @@
     <div class="container">
         <div>
             <H1>Resumo diário</H1>
-            <p>Visão geral - Lançamentos e demandas</p>
-            <p>Última atualização: <span></span></p>
+            <div class="headerSub">
+                <p>Visão geral - Lançamentos e demandas</p>
+                <p>Última atualização: <span id="attAtual"></span> atrás</p>
+            </div>
         </div>
         <div class="resumo">
             <!-- <div class="resumoSituacao">
@@ -62,7 +64,7 @@
             <div class="resumoKPIs">
                 <div class="resumoCardKPI">
                     <div class="resumoCard">
-                        <p>Variação de Demanda (vs. ontem)</p>
+                        <p class="resumoCardText1">Variação de Demanda (vs. ontem)</p>
                         <p class="resumoCardText"><span id="variacao" class="span"></span> %</p>
                         <div class="infoIcon tooltipInfo">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -78,7 +80,7 @@
                         </div>
                     </div>
                     <div class="resumoCard">
-                        <p>Ocupação da Plataforma</p>
+                        <p class="resumoCardText1">Ocupação da Plataforma</p>
                         <p class="resumoCardText"><span id="capacidadePerc" class="span"></span> %</p>
                         <div class="infoIcon infoLegenda">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -103,7 +105,21 @@
         </div>
         <div class="graficos">
             <div id="chart"></div>
-            <div id="chart2"></div>
+            <div class="graficosDown">
+                <div id="chart2"></div>
+                <div class="kpi-container-vertical">
+                    <div class="kpi-card-vertical">
+                        <span class="kpi-title">Pico Previsto x Real</span>
+                        <span class="kpi-value" id="kpi-pico">+12%</span>
+                    </div>
+
+                    <div class="kpi-card-vertical">
+                        <span class="kpi-title">Pico Semanal</span>
+                        <span class="kpi-value" id="kpi-semanal">18%</span>
+                    </div>
+                </div>
+
+            </div>
         </div>
         <div class="listsContainer">
             <div class="listOutside">
@@ -194,6 +210,7 @@
             }
         }).then((content) => {
             content.json().then((json) => {
+                console.log(json)
                 var ccu = json[json.length - 1].CCU
                 document.getElementById("titleCCU").innerHTML = Number(ccu).toFixed();
 
@@ -352,7 +369,7 @@
             },
             chart: {
                 height: 350,
-                width: 555,
+                width: '100%',
                 type: 'line',
                 background: '#2b2b2b',
                 zoom: { enabled: false }
@@ -459,14 +476,14 @@
                     data: mediaGpu,
                 },
                 {
-                    name: "Utilização da capacidade de jogadores",
+                    name: "Ocupação da plataforma",
                     data: utilizacaoPerc,
                 }
             ],
             colors: ['#FF670A', '#f8995e'],
             chart: {
                 height: 350,
-                width: 555,
+                width: 520,
                 type: 'bar',
                 background: '#2b2b2b',
                 zoom: { enabled: false }
@@ -482,7 +499,7 @@
                 enabled: false
             },
             title: {
-                text: 'Média de GPU X Porcentagem de utilização da capacidade máxima',
+                text: 'Média de GPU X Ocupação da plataforma',
                 align: 'left',
                 style: {
                     color: '#FF670A'
@@ -538,5 +555,32 @@
         chart.render();
     }
 
+    function buscarUmaSemana(json){
+        let diaAtual = new Date()
+        let umaSemana = new Date(diaAtual.getDate() - 7);
+        let ccuReaisSemanal = []
+        json.forEach((dados) => {
+            if(dados.dataAtual >= umaSemana && dados.dataAtual <= diaAtual) {
+                ccuReaisSemanal.push(dados.CCUReal)
+            } 
+        })
+        let pico;
+        ccuReaisSemanal.forEach((valor) => {
+            if(valor != "null" && valor > pico) {
+                pico = valor
+            }
+        })
+        return pico;
+    }
+
+    function tempoAtt() {
+        let dataHora = new Date()
+        let attAtual = (dataHora.getHours() - 6 + 24) % 24
+        let attMin = dataHora.getMinutes()
+        document.getElementById("attAtual").innerHTML = `${attAtual}h ${attMin}min`
+    }
+
+    tempoAtt()
+    setTimeout(tempoAtt, 60000)
 
 </script>
