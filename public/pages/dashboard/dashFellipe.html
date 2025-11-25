@@ -93,6 +93,11 @@
 
             <div class="metrics-cards">
                 <div class="metric-card cpu-card">
+                    <div class="metric-tooltip"> LEGENDA:<br>
+                        0% - 70% 🟩<br>
+                        71% - 80% 🟨<br>
+                        81% - 100% 🟥</div>
+
                     <div class="metric-label">CPU em Uso</div>
                     <div class="metric-info">No último dia (24h)</div>
                     <div class="metric-value">43%</div>
@@ -100,31 +105,50 @@
                 </div>
 
                 <div class="metric-card memory-card">
-                    <div class="metric-label">Memória em Uso</div>
+                    <div class="metric-tooltip">LEGENDA:<br>
+                        0% - 65% 🟩<br>
+                        66% - 75% 🟨<br>
+                        76% - 100% 🟥</div>
+
+                    <div class="metric-label">MEMÓRIA em Uso</div>
                     <div class="metric-info">No último dia (24h)</div>
                     <div class="metric-value">78%</div>
                     <div class="metric-info">81.3GB de 1.3GB em uso</div>
                 </div>
 
                 <div class="metric-card gpu-card">
+                    <div class="metric-tooltip">LEGENDA:<br>
+                        0% - 90% 🟩<br>
+                        91% - 95% 🟨<br>
+                        96% - 100% 🟥</div>
+
                     <div class="metric-label">GPU em Uso</div>
                     <div class="metric-info">No último dia (24h)</div>
-                    <div class="metric-value">100%</div>
-                    <div class="metric-info">9405.20-00 em uso</div>
+                    <div class="metric-value">78%</div>
+                    <div class="metric-info">81.3GB de 1.3GB em uso</div>
                 </div>
 
                 <div class="metric-card storage-card">
-                    <div class="metric-label">Disco em Uso</div>
+                    <div class="metric-tooltip">LEGENDA:<br>
+                        0% - 80% 🟩<br>
+                        81% - 85% 🟨<br>
+                        86% - 100% 🟥</div>
+                    <div class="metric-label">DISCO em Uso</div>
                     <div class="metric-info">No último dia (24h)</div>
-                    <div class="metric-value">50%</div>
-                    <div class="metric-info">27B de 5.3B em uso</div>
+                    <div class="metric-value">78%</div>
+                    <div class="metric-info">81.3GB de 1.3GB em uso</div>
                 </div>
 
                 <div class="metric-card latency-card">
-                    <div class="metric-label">Rede em Uso</div>
+                    <div class="metric-tooltip">LEGENDA:<br>
+                        0ms - 10ms 🟩<br>
+                        11ms - 20ms 🟨<br>
+                        21ms - 1000ms 🟥</div>
+
+                    <div class="metric-label">LATÊNCIA em Uso</div>
                     <div class="metric-info">No último dia (24h)</div>
-                    <div class="metric-value">1%</div>
-                    <div class="metric-info">1ms de 15</div>
+                    <div class="metric-value">78%</div>
+                    <div class="metric-info">81.3GB de 1.3GB em uso</div>
                 </div>
             </div>
 
@@ -139,7 +163,7 @@
                 </div>
             </div>
 
-            <div class="alerts-section">
+            <!-- <div class="alerts-section">
                 <div class="alerts-header-with-filter">
                     <span id="filter-status">Filtro: **Todos**</span>
                     <h3>Alertas e Logs</h3>
@@ -161,51 +185,54 @@
                         <span class="alert-time">12/10 - 17:00 | 13/10 - 17:00</span>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 
     <script src="../../js/server-overview.js"></script>
     <script>
-    let dadosOriginais = [];
+        let dadosOriginais = [];
 
-    function atualizarDashboard(dados) {
-        const n = (arr, key) => arr.map(i => parseFloat(i[key])).filter(x => !isNaN(x));
-        const set = (sel, val) => { const el=document.querySelector(sel); if(el) el.textContent=val; };
+        function atualizarDashboard(dados) {
+            const n = (arr, key) => arr.map(i => parseFloat(i[key])).filter(x => !isNaN(x));
+            const set = (sel, val) => { const el = document.querySelector(sel); if (el) el.textContent = val; };
 
-        set(".cpu-card .metric-value", (n(dados,"cpu").reduce((a,b)=>a+b)/dados.length).toFixed(1)+"%");
-        set(".memory-card .metric-value", (n(dados,"ram").reduce((a,b)=>a+b)/dados.length).toFixed(1)+"%");
-        set(".gpu-card .metric-value", (n(dados,"uso % GPU").reduce((a,b)=>a+b)/dados.length).toFixed(1)+"%");
-        set(".storage-card .metric-value", (n(dados,"disco").reduce((a,b)=>a+b)/dados.length).toFixed(1)+"%");
-        set(".latency-card .metric-value", (n(dados,"rede (ms)").reduce((a,b)=>a+b)/dados.length).toFixed(3)+" ms");
+            set(".cpu-card .metric-value", (n(dados, "cpu").reduce((a, b) => a + b) / dados.length).toFixed(1) + "%");
+            set(".memory-card .metric-value", (n(dados, "ram").reduce((a, b) => a + b) / dados.length).toFixed(1) + "%");
+            set(".gpu-card .metric-value", (n(dados, "uso % GPU").reduce((a, b) => a + b) / dados.length).toFixed(1) + "%");
+            set(".storage-card .metric-value", (n(dados, "disco").reduce((a, b) => a + b) / dados.length).toFixed(1) + "%");
+            set(".latency-card .metric-value", (n(dados, "rede (ms)").reduce((a, b) => a + b) / dados.length).toFixed(1) + " ms");
 
-        const faixas = agruparPorFaixaHoraria(dados);
-        const labels = Object.keys(faixas);
+            const faixas = agruparPorFaixaHoraria(dados);
+            const labels = Object.keys(faixas);
 
-        cpuRamChart.data.labels = labels;
-        cpuRamChart.data.datasets[0].data = labels.map(f=>faixas[f].cpu);
-        cpuRamChart.data.datasets[1].data = labels.map(f=>faixas[f].gpu);
-        cpuRamChart.update();
+            cpuRamChart.data.labels = labels;
+            cpuRamChart.data.datasets[0].data = labels.map(f => faixas[f].cpu);
+            cpuRamChart.data.datasets[1].data = labels.map(f => faixas[f].gpu);
+            cpuRamChart.update();
 
-        diskChart.data.labels = labels;
-        diskChart.data.datasets[0].data = labels.map(f=>faixas[f].disco);
-        diskChart.data.datasets[1].data = labels.map(f=>faixas[f].ram);
-        diskChart.update();
-    }
+            diskChart.data.labels = labels;
+            diskChart.data.datasets[0].data = labels.map(f => faixas[f].disco);
+            diskChart.data.datasets[1].data = labels.map(f => faixas[f].ram);
+            diskChart.update();
+        }
 
-    document.getElementById("applyRegionFilter").addEventListener("click", () => {
-        const region = document.getElementById("regionSelect").value;
-        if (!region) { alert("Selecione uma região!"); return; }
+        document.getElementById("applyRegionFilter").addEventListener("click", () => {
+            const regiao = document.getElementById("regionSelect").value;
+            if (!regiao) {
+                alert("Selecione uma região!");
+                return;
+            }
 
-        const filtrados = dadosOriginais.filter(item => {
-            const regiaoItem = item.usuario.slice(-2).toLowerCase();
-            return regiaoItem === region;
+            const filtrados = dadosOriginais.filter(item => {
+                const valorRegiao = item.usuario.slice(-2).toLowerCase();
+                return valorRegiao === regiao;
+            });
+
+            if (filtrados.length === 0) { alert("Nenhum dado encontrado."); return; }
+
+            atualizarDashboard(filtrados);
         });
-
-        if (filtrados.length === 0) { alert("Nenhum dado encontrado."); return; }
-
-        atualizarDashboard(filtrados);
-    });
     </script>
 </body>
 
@@ -228,7 +255,7 @@
             if (hora < 6) faixa = "00:00";
             else if (hora < 12) faixa = "06:00";
             else if (hora < 18) faixa = "12:00";
-            else faixa = "18:00";
+            else if (hora < 23) faixa = "18:00";
 
             faixas[faixa].cpu += parseFloat(item.cpu) || 0;
             faixas[faixa].gpu += parseFloat(item["uso % GPU"]) || 0;
@@ -250,12 +277,22 @@
         return faixas;
     }
 
+    function aplicarCor(elemento, valor, ranges) {
+        elemento.classList.remove("green", "yellow", "red");
+
+        if (valor >= ranges.red.min && valor <= ranges.red.max) {
+            elemento.classList.add("red");
+        } else if (valor >= ranges.yellow.min && valor <= ranges.yellow.max) {
+            elemento.classList.add("yellow");
+        } else {
+            elemento.classList.add("green");
+        }
+    }
+
     fetch("https://bucket-client-f.s3.amazonaws.com/dados-client.json")
         .then(response => response.json())
         .then(data => {
-            console.log("Dados recebidos:", data);
 
-            // Função para converter valores numéricos do JSON
             const valorNumerico = (array, key) =>
                 array
                     .map(item => parseFloat(item[key]))
@@ -264,32 +301,62 @@
             const valorCpu = valorNumerico(data, "cpu");
             const mediaCpu = valorCpu.reduce((a, b) => a + b, 0) / valorCpu.length;
 
-            document.querySelector(".cpu-card .metric-value").textContent =
-                mediaCpu.toFixed(1) + "%";
+            const cpuEl = document.querySelector(".cpu-card .metric-value");
+            cpuEl.textContent = mediaCpu.toFixed(1) + "%";
+
+            aplicarCor(cpuEl, mediaCpu, {
+                green: { min: 0, max: 70 },
+                yellow: { min: 71, max: 80 },
+                red: { min: 81, max: 100 }
+            });
 
             const valorRam = valorNumerico(data, "ram");
             const mediaRam = valorRam.reduce((a, b) => a + b, 0) / valorRam.length;
 
-            document.querySelector(".memory-card .metric-value").textContent =
-                mediaRam.toFixed(1) + "%";
+            const ramEl = document.querySelector(".memory-card .metric-value");
+            ramEl.textContent = mediaRam.toFixed(1) + "%";
+
+            aplicarCor(ramEl, mediaRam, {
+                green: { min: 0, max: 65 },
+                yellow: { min: 66, max: 75 },
+                red: { min: 76, max: 100 }
+            });
 
             const valorDisco = valorNumerico(data, "disco");
             const mediaDisco = valorDisco.reduce((a, b) => a + b, 0) / valorDisco.length;
 
-            document.querySelector(".storage-card .metric-value").textContent =
-                mediaDisco.toFixed(1) + "%";
+            const discoEl = document.querySelector(".storage-card .metric-value");
+            discoEl.textContent = mediaDisco.toFixed(1) + "%";
+
+            aplicarCor(discoEl, mediaDisco, {
+                green: { min: 0, max: 80 },
+                yellow: { min: 81, max: 85 },
+                red: { min: 86, max: 100 }
+            });
 
             const valorGpu = valorNumerico(data, "uso % GPU");
             const mediaGpu = valorGpu.reduce((a, b) => a + b, 0) / valorGpu.length;
 
-            document.querySelector(".gpu-card .metric-value").textContent =
-                mediaGpu.toFixed(1) + "%";
+            const gpuEl = document.querySelector(".gpu-card .metric-value");
+            gpuEl.textContent = mediaGpu.toFixed(1) + "%";
+
+            aplicarCor(gpuEl, mediaGpu, {
+                green: { min: 0, max: 90 },
+                yellow: { min: 91, max: 95 },
+                red: { min: 96, max: 100 }
+            });
 
             const valorLatencia = valorNumerico(data, "rede (ms)");
             const latenciaMedia = valorLatencia.reduce((a, b) => a + b, 0) / valorLatencia.length;
 
-            document.querySelector(".latency-card .metric-value").textContent =
-                latenciaMedia.toFixed(3) + " ms";
+            const redeEl = document.querySelector(".latency-card .metric-value");
+            redeEl.textContent = latenciaMedia.toFixed(1) + " ms";
+
+            aplicarCor(redeEl, latenciaMedia, {
+                green: { min: 0, max: 10 },
+                yellow: { min: 11, max: 19 },
+                red: { min: 20, max: 9999 }
+            });
 
             const faixas = agruparPorFaixaHoraria(data);
 
@@ -393,120 +460,120 @@
         })
         .catch(err => console.error("Erro ao carregar JSON:", err));
 
-    document.addEventListener('DOMContentLoaded', function () {
+    // document.addEventListener('DOMContentLoaded', function () {
 
-        const filterTriggerBtn = document.getElementById('filter-alerts-btn');
-        const modal = document.getElementById('alerts-filter-modal');
-        const closeBtn = document.querySelector('.close-btn-filter');
-        const filterOptions = document.querySelectorAll('.filter-option');
-        const applyBtn = document.getElementById('apply-filters-btn');
-        const clearBtn = document.getElementById('clear-filters-btn');
-        const filterStatusSpan = document.getElementById('filter-status');
-        const alertItems = document.querySelectorAll('.alert-item');
+    //     const filterTriggerBtn = document.getElementById('filter-alerts-btn');
+    //     const modal = document.getElementById('alerts-filter-modal');
+    //     const closeBtn = document.querySelector('.close-btn-filter');
+    //     const filterOptions = document.querySelectorAll('.filter-option');
+    //     const applyBtn = document.getElementById('apply-filters-btn');
+    //     const clearBtn = document.getElementById('clear-filters-btn');
+    //     const filterStatusSpan = document.getElementById('filter-status');
+    //     const alertItems = document.querySelectorAll('.alert-item');
 
-        let selectedFilters = {
-            month: null,
-            component: null
-        };
+    //     let selectedFilters = {
+    //         month: null,
+    //         component: null
+    //     };
 
-        const MONTH_NAMES = {
-            '01': 'Jan',
-            '02': 'Fev',
-            '03': 'Mar',
-            '04': 'Abr',
-            '05': 'Mai',
-            '06': 'Jun',
-            '07': 'Jul',
-            '08': 'Ago',
-            '09': 'Set',
-            '10': 'Out',
-            '11': 'Nov',
-            '12': 'Dez'
-        };
+    //     const MONTH_NAMES = {
+    //         '01': 'Jan',
+    //         '02': 'Fev',
+    //         '03': 'Mar',
+    //         '04': 'Abr',
+    //         '05': 'Mai',
+    //         '06': 'Jun',
+    //         '07': 'Jul',
+    //         '08': 'Ago',
+    //         '09': 'Set',
+    //         '10': 'Out',
+    //         '11': 'Nov',
+    //         '12': 'Dez'
+    //     };
 
-        function applyFilterSimulation() {
-            let statusText = 'Filtro: ';
-            let filtersActive = false;
+    //     function applyFilterSimulation() {
+    //         let statusText = 'Filtro: ';
+    //         let filtersActive = false;
 
-            if (selectedFilters.month || selectedFilters.component) {
-                filtersActive = true;
-                const monthName = selectedFilters.month ? MONTH_NAMES[selectedFilters.month] : 'Qualquer Mês';
-                const componentName = selectedFilters.component || 'Todo Componente';
-                statusText += `**${componentName}** em **${monthName}**`;
-            } else {
-                statusText += '**Todos**';
-            }
+    //         if (selectedFilters.month || selectedFilters.component) {
+    //             filtersActive = true;
+    //             const monthName = selectedFilters.month ? MONTH_NAMES[selectedFilters.month] : 'Qualquer Mês';
+    //             const componentName = selectedFilters.component || 'Todo Componente';
+    //             statusText += `**${componentName}** em **${monthName}**`;
+    //         } else {
+    //             statusText += '**Todos**';
+    //         }
 
-            filterStatusSpan.innerHTML = statusText;
+    //         filterStatusSpan.innerHTML = statusText;
 
-            alertItems.forEach(item => {
-                const itemComponent = item.getAttribute('data-component');
-                const itemMonth = item.getAttribute('data-month');
+    //         alertItems.forEach(item => {
+    //             const itemComponent = item.getAttribute('data-component');
+    //             const itemMonth = item.getAttribute('data-month');
 
-                const componentMatch = !selectedFilters.component || (itemComponent === selectedFilters.component);
-                const monthMatch = !selectedFilters.month || (itemMonth === selectedFilters.month);
+    //             const componentMatch = !selectedFilters.component || (itemComponent === selectedFilters.component);
+    //             const monthMatch = !selectedFilters.month || (itemMonth === selectedFilters.month);
 
-                if (componentMatch && monthMatch) {
-                    item.style.display = 'flex';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
+    //             if (componentMatch && monthMatch) {
+    //                 item.style.display = 'flex';
+    //             } else {
+    //                 item.style.display = 'none';
+    //             }
+    //         });
 
-            modal.style.display = 'none';
-            console.log('Filtros Aplicados (Simulação):', selectedFilters);
-        }
+    //         modal.style.display = 'none';
+    //         console.log('Filtros Aplicados (Simulação):', selectedFilters);
+    //     }
 
-        if (filterTriggerBtn) {
-            filterTriggerBtn.onclick = function () {
-                modal.style.display = 'block';
-            }
-        }
+    //     if (filterTriggerBtn) {
+    //         filterTriggerBtn.onclick = function () {
+    //             modal.style.display = 'block';
+    //         }
+    //     }
 
-        if (closeBtn) {
-            closeBtn.onclick = function () {
-                modal.style.display = 'none';
-            }
-        }
+    //     if (closeBtn) {
+    //         closeBtn.onclick = function () {
+    //             modal.style.display = 'none';
+    //         }
+    //     }
 
-        window.onclick = function (event) {
-            if (event.target == modal) {
-                modal.style.display = 'none';
-            }
-        }
+    //     window.onclick = function (event) {
+    //         if (event.target == modal) {
+    //             modal.style.display = 'none';
+    //         }
+    //     }
 
-        filterOptions.forEach(option => {
-            option.addEventListener('click', function () {
-                const filterType = this.getAttribute('data-filter');
-                const filterValue = this.getAttribute('data-value');
+    //     filterOptions.forEach(option => {
+    //         option.addEventListener('click', function () {
+    //             const filterType = this.getAttribute('data-filter');
+    //             const filterValue = this.getAttribute('data-value');
 
-                if (this.classList.contains('selected-filter')) {
-                    this.classList.remove('selected-filter');
-                    selectedFilters[filterType] = null;
-                } else {
-                    document.querySelectorAll(`.filter-option[data-filter="${filterType}"]`).forEach(btn => {
-                        btn.classList.remove('selected-filter');
-                    });
-                    this.classList.add('selected-filter');
-                    selectedFilters[filterType] = filterValue;
-                }
-            });
-        });
+    //             if (this.classList.contains('selected-filter')) {
+    //                 this.classList.remove('selected-filter');
+    //                 selectedFilters[filterType] = null;
+    //             } else {
+    //                 document.querySelectorAll(`.filter-option[data-filter="${filterType}"]`).forEach(btn => {
+    //                     btn.classList.remove('selected-filter');
+    //                 });
+    //                 this.classList.add('selected-filter');
+    //                 selectedFilters[filterType] = filterValue;
+    //             }
+    //         });
+    //     });
 
-        applyBtn.onclick = function () {
-            applyFilterSimulation();
-        }
+    //     applyBtn.onclick = function () {
+    //         applyFilterSimulation();
+    //     }
 
-        clearBtn.onclick = function () {
-            filterOptions.forEach(option => {
-                option.classList.remove('selected-filter');
-            });
-            selectedFilters = {
-                month: null,
-                component: null
-            };
-            applyFilterSimulation();
-        }
-    });
+    //     clearBtn.onclick = function () {
+    //         filterOptions.forEach(option => {
+    //             option.classList.remove('selected-filter');
+    //         });
+    //         selectedFilters = {
+    //             month: null,
+    //             component: null
+    //         };
+    //         applyFilterSimulation();
+    //     }
+    // });
 
 </script>
