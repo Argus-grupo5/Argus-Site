@@ -10,6 +10,8 @@
     <title>Dashboard do Suporte Técnico - Jira</title>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-matrix@1.2.0/dist/chartjs-chart-matrix.min.js"></script>
+
 </head>
 
 <body>
@@ -17,31 +19,6 @@
 <div id="id_sair"></div>
 
 <header class="desktopNav" id="navDesktop"></header>
-
-<header class="headerTop">
-    <div class="geralInfo">
-        <div class="info tooltipInfo">
-            <div class="server">
-                <img src="../../assets/dashboard/desktop/server.svg" alt="">
-            </div>
-            <div class="serversMonitoring" id="id_servidores_monitorados"></div>
-            <span class="tooltiptextInfo">Servidores em monitoramento</span>
-        </div>
-        <div class="info">
-            <div class="bell">
-                <img src="../../assets/dashboard/desktop/bell.svg" alt="">
-            </div>
-            <div class="risk tooltipInfo" id="id_servidores_em_estado_critico">
-                <p id="qtd_critico"></p>
-                <span class="tooltiptextInfo">Servidores em atenção</span>
-            </div>
-            <div class="atention tooltipInfo" id="id_servidores_em_estado_de_alerta">
-                <p id="qtd_alerta"></p>
-                <span class="tooltiptextInfo">Servidores em alerta</span>
-            </div>
-        </div>
-    </div>
-</header>
 
 <!-- KPIs -->
 <div class="kpis">
@@ -57,33 +34,43 @@
 
     <div class="card">
         <div class="titulo">Chamados Fechados</div>
-        <div class="valor" id="chamadosFechados"></div>
+        <div class="valor" id="chamadosFechados" style="color: green;"></div>
     </div>
 
     <div class="card">
-        <div class="titulo">Alta Prioridade</div>
-        <div class="valor" id="prioAlta"></div>
+        <div class="titulo">Servidores Críticos</div>
+        <div class="valor" id="critico" style="color: #FF4C4C;"></div>
     </div>
 
     <div class="card">
-        <div class="titulo">Média Prioridade</div>
-        <div class="valor" id="prioMedia"></div>
+        <div class="titulo">Servidores em Alerta</div>
+        <div class="valor" id="alerta" style="color: #FFA500;"></div>
     </div>
 
-    <div class="card">
-        <div class="titulo">Baixa Prioridade</div>
-        <div class="valor" id="prioBaixa"></div>
-    </div>
 </div>
 
-<div class="grafico-container">
-    <h2>Distribuição de Chamados por Prioridade</h2>
-    <canvas id="graficoJira" height="120"></canvas>
+<div class="linha-graficos">
+    <div class="grafico-container">
+        <h2>Distribuição de Chamados por Prioridade</h2>
+        <canvas id="graficoJira" height="120"></canvas>
+    </div>
+
+    <div class="grafico-container">
+        <h2>Tempo Médio de SLA (horas)</h2>
+        <canvas id="graficoTempo" height="120"></canvas>
+    </div>
+
+    <div class="grafico-container">
+    <h2>Volume de Chamados por Hora do Dia</h2>
+    <canvas id="graficoLinhaChamados" height="120"></canvas>
+    </div>
+
 </div>
+
 
 <div class="tabela_dash">
     <h2>Últimos Chamados</h2>
-    <table>
+    <table border="1" width="100%">
         <thead>
             <tr>
                 <th>ID</th>
@@ -101,10 +88,43 @@
 </div>
 
 <script>
+    let chart = null;
+    let chartTempo = null;
+
+    function formatarData(iso) {
+        if (!iso) return "-";
+        return new Date(iso).toLocaleDateString("pt-BR", {
+            day: "2-digit",
+            month: "2-digit", 
+            year: "numeric"
+        });
+    }
+
+    function formatarHora(iso) {
+        if (!iso) return "-";
+        return new Date(iso).toLocaleTimeString("pt-BR", {
+            hour: "2-digit", 
+            minute: "2-digit", 
+            second: "2-digit"
+        });
+    }
+
+    function formatarDataHora(iso) {
+        if (!iso) return "-";
+        return `${formatarData(iso)} ${formatarHora(iso)}`;
+    }
+
+    function diferencaHoras(inicio, fim) {
+        if (!inicio || !fim) return null;
+        const ini = new Date(inicio);
+        const fn = new Date(fim);
+        const diffMs = fn - ini;
+        return diffMs / (1000 * 60 * 60); // horas
+    }
 
     async function carregarDadosJira(params) {
         const email_jira = "luiz.hsouza@sptech.school";
-        const token_jira = "ATATT3xFfGF08peCbzHDW7NphdJZSbDE73t0jK9txkqai4zucwrE2PQFfmpkoD-GbPoZKzxrFYk51KYdU4IqErcyxUOpBVTP7-JNY56aOmW2ugAKchMZ_47RFtaj5M6JAGPi64A5aQjbJzsQAe5DauvRlZ-zOHVdVhPiEftcuwCEAQR3EHCafgk=D75C1533";
+        const token_jira = "";
         const dominio_jira = "https://sptech-team-cppjq4lc.atlassian.net";
         const auth = btoa(`${email_jira}:${token_jira}`);
         try {
@@ -121,67 +141,117 @@
                 const campo=chamado.fields
                 chamados.push({
                     id: chamado.id,
-                    titulo: chamado.summary,
-                    responsavel: chamado.assignee,
-                    prioridade: chamado.priority,
-                    status: chamado.status,
-                    data_criacao: chamado.created,
-                    data_resolucao: chamado.resolutiondate
+                    titulo: chamado.fields.summary,
+                    responsavel: chamado.fields.assignee ? campo.assignee.displayName : "Sem responsável",
+                    prioridade: chamado.fields.priority.name ? campo.priority.name : "Sem prioridade",
+                    status: chamado.fields.status.name ? campo.status.name : "Sem status",
+                    data_criacao: formatarDataHora(chamado.fields.created),
+                    data_resolucao: formatarDataHora(chamado.fields.resolutiondate),
+                    created: chamado.fields.created ? chamado.fields.created : null,
+                    resolved: chamado.fields.resolutiondate ? chamado.fields.resolutiondate : null,
                     })
             });
 
             console.log(chamados)
 
-        } catch (error) {
+            document.getElementById("totalChamados").innerText = chamados.length;
+            document.getElementById("chamadosAbertos").innerText = chamados.filter(c => c.status !== "Concluído").length;
+            document.getElementById("chamadosFechados").innerText = chamados.filter(c => c.status === "Concluído").length;
+
+            const alerta = chamados.filter(c => c.prioridade === "High").length;
+            const critico = chamados.filter(c => c.prioridade === "Highest").length;
+
+            document.getElementById("critico").innerText = critico;
+            document.getElementById("alerta").innerText = alerta;
+
+            atualizarGrafico({
+            critico: critico,
+            alerta: alerta
+        });
+        
+         preencherTabela(chamados);
+
+         gerarGraficoTempo(chamados);
+
+         gerarGraficoLinha(chamados);
+        
+         
+        }
+
+         catch (error) {
             console.error("Erro ao carregar dados do Jira:", error);
         }
     }
 
-    carregarDadosJira()
+    function atualizarGrafico(prioridades) {
+    const ctx = document.getElementById("graficoJira");
 
-    function carregarTabela(chamados = []) {
-        const tabela = document.getElementById("tabelaChamados");
-        tabela.innerHTML = "";
-
-        chamados.forEach(chamado => {
-            tabela.innerHTML += `
-                <tr>
-                    <td>${chamado.key || "-"}</td>
-                    <td>${chamado.summary || "-"}</td>
-                    <td>${chamado.status || "-"}</td>
-                    <td>${chamado.priority || "-"}</td>
-                </tr>
-            `;
-        });
+    if (chart) {
+        chart.destroy();
     }
 
-    function atualizarGrafico(dados) {
-        const ctx = document.getElementById("graficoJira");
-
-        if (chart) {
-            chart.destroy();
+    chart = new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: ["Críticos", "Alerta"],
+            datasets: [{
+                label: "Chamados",
+                data: [
+                    prioridades.critico,
+                    prioridades.alerta
+                ],
+                backgroundColor: ["#FF4C4C", "#FFA500"]
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                y: { beginAtZero: true }
+            }
         }
+    });
+}
 
-        chart = new Chart(ctx, {
-            type: "bar",
+function gerarGraficoTempo(chamados) {
+
+        const concluidos = chamados.filter(c => c.resolved);
+
+        const porDia = {};
+
+        concluidos.forEach(c => {
+            const dia = formatarData(c.resolved);
+            const horas = diferencaHoras(c.created, c.resolved);
+
+            if (!porDia[dia]) porDia[dia] = [];
+            porDia[dia].push(horas);
+        });
+
+        const labels = Object.keys(porDia);
+        const medias = labels.map(dia => {
+            const arr = porDia[dia];
+            return arr.reduce((a, b) => a + b, 0) / arr.length;
+        });
+
+        const ctx = document.getElementById("graficoTempo");
+
+        if (chartTempo) chartTempo.destroy();
+
+        chartTempo = new Chart(ctx, {
+            type: "line",
             data: {
-                labels: ["Alta", "Média", "Baixa"],
+                labels,
                 datasets: [{
-                    label: "Chamados",
-                    data: [
-                        dados.prioridades.high,
-                        dados.prioridades.medium,
-                        dados.prioridades.low
-                    ],
-                    backgroundColor: ["#FF4C4C", "#FFA500", "#4CAF50"] // cores para melhor visualização
+                    label: "Tempo médio (h)",
+                    data: medias,
+                    borderColor: "#00BFFF",
+                    tension: 0.3
                 }]
             },
             options: {
                 responsive: true,
-                plugins: {
-                    legend: { display: false },
-                    tooltip: { enabled: true }
-                },
                 scales: {
                     y: { beginAtZero: true }
                 }
@@ -189,6 +259,106 @@
         });
     }
 
+function preencherTabela(chamados) {
+    const tabela = document.getElementById("tabelaChamados");
+    tabela.innerHTML = ""; 
+
+    // 1. Definir ordem de prioridade
+    const ordemPrioridade = {
+        "Highest": 1,
+        "High": 2,
+        "Medium": 3,
+        "Low": 4,
+        "Lowest": 5
+    };
+
+    chamados.sort((a, b) => {
+    const pa = ordemPrioridade[a.prioridade] || 999;
+    const pb = ordemPrioridade[b.prioridade] || 999;
+
+    if (pa !== pb) return pa - pb;
+
+    if (!a.created && !b.created) return 0;
+    if (!a.created) return 1;
+    if (!b.created) return -1;
+
+    return new Date(a.created) - new Date(b.created);
+    });
+
+    chamados.forEach(ch => {
+        const linha = `
+            <tr>
+                <td>${ch.id}</td>
+                <td>${ch.titulo || "-"}</td>
+                <td>${ch.responsavel || "-"}</td>
+                <td>${ch.prioridade || "-"}</td>
+                <td>${ch.status || "-"}</td>
+                <td>${ch.data_criacao || "-"}</td>
+                <td>${ch.data_resolucao}</td>
+            </tr>
+        `;
+        tabela.innerHTML += linha;
+    });
+}
+
+function gerarGraficoLinha(chamados) {
+    const horas = Array.from({ length: 24 }, (_, i) => i);
+    const volumeHora = {};
+
+    horas.forEach(h => volumeHora[h] = 0);
+
+    chamados.forEach(c => {
+        if (!c.created) return;
+        const hora = new Date(c.created).getHours();
+        volumeHora[hora]++;
+    });
+
+    const labels = horas.map(h => `${h}h`);
+    const valores = horas.map(h => volumeHora[h]);
+
+    const canvas = document.getElementById("graficoLinhaChamados");
+
+    // Se já existir gráfico, destrói
+    if (window.lineChart) {
+        window.lineChart.destroy();
+    }
+
+    window.lineChart = new Chart(canvas, {
+        type: "line",
+        data: {
+            labels: labels,
+            datasets: [{
+                label: "Chamados criados por hora",
+                data: valores,
+                fill: false,
+                borderColor: "rgb(0, 150, 255)",
+                tension: 0.3,
+                pointRadius: 4,
+                pointBackgroundColor: "rgb(0, 150, 255)"
+            }]
+        },
+        options: {
+            scales: {
+                x: {
+                    ticks: {
+                        maxRotation: 0,
+                        minRotation: 0
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 10
+                    }
+                }
+            }
+        }
+    });
+}
+
+    setTimeout(() => {
+        location.reload()
+    }, 60000)
     carregarDadosJira();
     setInterval(carregarDadosJira, 30000);
 </script>
