@@ -497,6 +497,13 @@ width: 100%; /* Antes estava fixo no JS */
     width: 100%;
 }
 
+.kpi-container-horizontal {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
 .kpi-card-vertical {
     background: #2b2b2b;
     padding: 20px 24px;
@@ -506,6 +513,8 @@ width: 100%; /* Antes estava fixo no JS */
     display: flex;
     flex-direction: column;
     transition: transform 0.15s ease, box-shadow 0.15s ease;
+    flex: 1;
+    min-width: 220px;
 }
 
 .kpi-card-vertical:hover {
@@ -525,6 +534,9 @@ width: 100%; /* Antes estava fixo no JS */
     color: #fff;
 }
 
+.kpi-container-vertical > .kpi-card-vertical {
+    max-width: 300px;
+}
 
 #chart2 {
     padding: 18px;

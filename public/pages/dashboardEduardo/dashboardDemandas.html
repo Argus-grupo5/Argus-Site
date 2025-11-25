@@ -108,14 +108,20 @@
             <div class="graficosDown">
                 <div id="chart2"></div>
                 <div class="kpi-container-vertical">
-                    <div class="kpi-card-vertical">
-                        <span class="kpi-title">Pico Previsto x Real</span>
-                        <span class="kpi-value" id="kpi-pico">+12%</span>
+                    <div class="kpi-container-horizontal">
+                        <div class="kpi-card-vertical">
+                            <span class="kpi-title">Diferença Previsto x Real</span>
+                            <p><span class="kpi-value" id="kpi-ccu"></span>%</p>
+                            <span class="kpi-value" id="kpi-ccu-num"></span>
+                        </div>
+                        <div class="kpi-card-vertical">
+                            <span class="kpi-title">Pico Semanal de CCU</span>
+                            <p><span class="kpi-value" id="kpi-semanal"></span>CCU</p>
+                        </div>
                     </div>
-
                     <div class="kpi-card-vertical">
-                        <span class="kpi-title">Pico Semanal</span>
-                        <span class="kpi-value" id="kpi-semanal">18%</span>
+                        <span class="kpi-title">Pico Semanal de GPU</span>
+                        <p><span class="kpi-value" id="kpi-gpu"></span>%</p>
                     </div>
                 </div>
 
@@ -169,12 +175,18 @@
 <script>
     header("dashboard", sessionStorage.CARGO_CARGO);
 
+    
     var data = [];
     var dataReal = [];
     var dias = [];
     var mediaGpu = [];
     var utilizacaoPerc = [];
     var capacidade;
+    
+    var ccuDic = {
+        ccuPrev: data,
+        ccuReal: dataReal
+    }
 
     function formatarHoje() {
         var diaDeHoje = new Date();
@@ -210,7 +222,6 @@
             }
         }).then((content) => {
             content.json().then((json) => {
-                console.log(json)
                 var ccu = json[json.length - 1].CCU
                 document.getElementById("titleCCU").innerHTML = Number(ccu).toFixed();
 
@@ -237,6 +248,10 @@
                 } else {
                     document.getElementById("variacao").classList.add("azul")
                 }
+
+                document.getElementById("kpi-semanal").innerHTML = buscarUmaSemana(json)
+
+                ccuXreal();
             })
         })
     }
@@ -301,8 +316,9 @@
         }).then((content) => {
             content.json().then((json) => {
                 buscarDados(json)
-                console.log(mediaGpu)
                 plotarGrafico2();
+                buscarUmaSemanaGpu()
+
             })
         })
     }
@@ -315,7 +331,6 @@
                 if (percCap > 100) {
                     percCap = 100
                 }
-                console.log(percCap)
                 utilizacaoPerc.push(percCap.toFixed(2))
                 if (json[i].CCUReal == "null") {
                     continue;
@@ -468,7 +483,6 @@
 
 
     function plotarGrafico2() {
-        console.log(utilizacaoPerc)
         var options = {
             series: [
                 {
@@ -555,22 +569,58 @@
         chart.render();
     }
 
-    function buscarUmaSemana(json){
+    function buscarUmaSemana(json) {
         let diaAtual = new Date()
-        let umaSemana = new Date(diaAtual.getDate() - 7);
+        let umaSemana = new Date(diaAtual.getTime() - 7 * 24 * 60 * 60 * 1000);
         let ccuReaisSemanal = []
         json.forEach((dados) => {
-            if(dados.dataAtual >= umaSemana && dados.dataAtual <= diaAtual) {
-                ccuReaisSemanal.push(dados.CCUReal)
-            } 
+            const data = new Date(dados.dataAtual);
+            const valor = Number(dados.CCUReal);
+            if (data >= umaSemana && data <= diaAtual) {
+                ccuReaisSemanal.push(valor)
+            }
         })
-        let pico;
+        let pico = 0;
         ccuReaisSemanal.forEach((valor) => {
-            if(valor != "null" && valor > pico) {
+            if (!isNaN(valor) && valor > pico) {
                 pico = valor
             }
         })
         return pico;
+    }
+
+    function buscarUmaSemanaGpu() {
+        let gpuSemanal = []
+        let j = mediaGpu.length - 1
+        for (let i = 0; i < 7; i++) {
+            if (j < 0) break;
+            gpuSemanal.push(mediaGpu[j])
+            j--
+        }
+        let pico = 0;
+        gpuSemanal.forEach((valor) => {
+            if (!isNaN(valor) && valor > pico) {
+                pico = valor
+            }
+        })
+        document.getElementById("kpi-gpu").innerHTML = pico
+    }
+
+    function ccuXreal() {
+        let ontemIndex = ccuDic.ccuPrev.length - 2;
+        if (ontemIndex < 0) return;
+
+        let ccuPrev = ccuDic.ccuPrev[ontemIndex];
+        let ccuReal = ccuDic.ccuReal[ontemIndex];
+
+        let diferenca = 0;
+        if (!isNaN(ccuPrev) && !isNaN(ccuReal)) {
+            diferenca = ((ccuReal - ccuPrev) / ccuPrev * 100).toFixed(2)
+            diferencaJ = ccuReal - ccuPrev
+        }
+        console.log(diferenca)
+        document.getElementById("kpi-ccu").innerHTML = diferenca;
+        document.getElementById("kpi-ccu-num").innerHTML = diferencaJ;
     }
 
     function tempoAtt() {
