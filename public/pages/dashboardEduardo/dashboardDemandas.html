@@ -108,20 +108,30 @@
             <div class="graficosDown">
                 <div id="chart2"></div>
                 <div class="kpi-container-vertical">
-                    <div class="kpi-container-horizontal">
-                        <div class="kpi-card-vertical">
-                            <span class="kpi-title">Diferença Previsto x Real</span>
-                            <p><span class="kpi-value" id="kpi-ccu"></span>%</p>
-                            <span class="kpi-value" id="kpi-ccu-num"></span>
-                        </div>
-                        <div class="kpi-card-vertical">
-                            <span class="kpi-title">Pico Semanal de CCU</span>
-                            <p><span class="kpi-value" id="kpi-semanal"></span>CCU</p>
-                        </div>
+                    <div class="kpi-card-vertical">
+                        <span class="kpi-title">Pico Semanal de CCU</span>
+                        <p><span class="kpi-value" id="kpi-semanal"></span>CCU</p>
                     </div>
                     <div class="kpi-card-vertical">
                         <span class="kpi-title">Pico Semanal de GPU</span>
                         <p><span class="kpi-value" id="kpi-gpu"></span>%</p>
+                    </div>
+                    <div class="kpi-card-vertical">
+                        <span class="kpi-title">Diferença Previsto x Real</span>
+                        <p id="kpi-phrase"><span class="kpi-value" id="kpi-ccu"></span>%</p>
+                        <p id="kpi-phrase2" class="kpi-phrase">(<span class="kpi-value kpi-phrase"
+                                id="kpi-ccu-num"></span>CCU)</p>
+                        <div class="infoIcon tooltipInfo">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                <path fill="currentColor"
+                                    d="M11 17h2v-6h-2zm1-8q.425 0 .713-.288T13 8t-.288-.712T12 7t-.712.288T11 8t.288.713T12 9m0 13q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22" />
+                            </svg>
+                            <span class="caixaDemanda">
+                                <b>Legenda:</b><br>
+                                <span class="legenda azul"></span> Diferença > 10%<br>
+                                <span class="legenda verde"></span> Diferença < 10%<br>
+                            </span>
+                        </div>
                     </div>
                 </div>
 
@@ -175,14 +185,14 @@
 <script>
     header("dashboard", sessionStorage.CARGO_CARGO);
 
-    
+
     var data = [];
     var dataReal = [];
     var dias = [];
     var mediaGpu = [];
     var utilizacaoPerc = [];
     var capacidade;
-    
+
     var ccuDic = {
         ccuPrev: data,
         ccuReal: dataReal
@@ -376,7 +386,7 @@
                     data: dataReal
                 }
             ],
-            colors: ['#FF670A', '#f8995e'],
+            colors: ['#FF670A', '#FFD166'],
             stroke: {
                 width: 3,
                 curve: 'smooth',
@@ -443,7 +453,7 @@
 
             markers: {
                 size: 5,
-                colors: ['#FF670A', '#f8995e'],
+                colors: ['#FF670A', '#FFD166'],
                 strokeColors: ['#000000', '#000000'],
                 strokeWidth: 2
             },
@@ -455,7 +465,7 @@
                     color: '#f39c12'
                 },
                 marker: {
-                    fillColors: ['#FF670A', '#f8995e']
+                    fillColors: ['#FF670A', '#FFD166']
                 }
             },
 
@@ -464,7 +474,7 @@
                 position: 'bottom',
                 horizontalAlign: 'center',
                 labels: {
-                    colors: ['#FF670A', '#f8995e'],
+                    colors: ['#FF670A', '#fff'],
                     useSeriesColors: false
                 },
                 markers: {
@@ -472,7 +482,7 @@
                     height: 12,
                     strokeWidth: 2,
                     strokeColor: '#000',
-                    fillColors: ['#FF670A', '#f8995e']
+                    fillColors: ['#FF670A', '#FFD166']
                 }
             }
         };
@@ -494,7 +504,7 @@
                     data: utilizacaoPerc,
                 }
             ],
-            colors: ['#FF670A', '#f8995e'],
+            colors: ['#FF670A', '#FFD166'],
             chart: {
                 height: 350,
                 width: 520,
@@ -544,7 +554,7 @@
                     color: '#f39c12'
                 },
                 marker: {
-                    fillColors: ['#FF670A', '#f8995e']
+                    fillColors: ['#FF670A', '#FFD166']
                 }
             },
             legend: {
@@ -552,7 +562,7 @@
                 position: 'bottom',
                 horizontalAlign: 'center',
                 labels: {
-                    colors: ['#FF670A', '#f8995e'],
+                    colors: ['#FF670A', '#fff'],
                     useSeriesColors: false
                 },
                 markers: {
@@ -560,7 +570,7 @@
                     height: 12,
                     strokeWidth: 2,
                     strokeColor: '#000',
-                    fillColors: ['#FF670A', '#f8995e']
+                    fillColors: ['#FF670A', '#FFD166']
                 }
             }
         };
@@ -621,6 +631,18 @@
         console.log(diferenca)
         document.getElementById("kpi-ccu").innerHTML = diferenca;
         document.getElementById("kpi-ccu-num").innerHTML = diferencaJ;
+
+        if (diferenca > 10 || diferenca < -10) {
+            document.getElementById("kpi-ccu").classList.add("vermelho")
+            document.getElementById("kpi-phrase").classList.add("vermelho")
+            document.getElementById("kpi-phrase2").classList.add("vermelho")
+            document.getElementById("kpi-ccu-num").classList.add("vermelho")
+        } else {
+            document.getElementById("kpi-ccu").classList.add("verde")
+            document.getElementById("kpi-phrase").classList.add("verde")
+            document.getElementById("kpi-phrase2").classList.add("verde")
+            document.getElementById("kpi-ccu-num").classList.add("verde")
+        }
     }
 
     function tempoAtt() {
