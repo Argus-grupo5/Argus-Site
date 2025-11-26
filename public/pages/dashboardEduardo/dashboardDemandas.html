@@ -109,7 +109,7 @@
                 <div id="chart2"></div>
                 <div class="kpi-container-vertical">
                     <div class="kpi-card-vertical">
-                        <span class="kpi-title">Pico Semanal de CCU</span>
+                        <span class="kpi-title">Pico Semanal de CCU real</span>
                         <p><span class="kpi-value" id="kpi-semanal"></span>CCU</p>
                     </div>
                     <div class="kpi-card-vertical">
@@ -239,6 +239,7 @@
                 var percCap = (ccu * 100) / capacidade
                 if (percCap > 100) {
                     percCap = 100
+                    document.getElementById("capacidadePerc").classList.add("vermelho")
                 } else if (percCap >= 85) {
                     document.getElementById("capacidadePerc").classList.add("vermelho")
                 } else if (percCap >= 65) {
@@ -363,11 +364,11 @@
     var empresa = sessionStorage.EMPRESA_NOME_FANTASIA;
     empresa = empresa.replace(" ", "%20")
 
-    var lancKey = `eduardo/${empresa}/lancamentos_${diaDeHoje}.json`
-    var steamKey = `eduardo/${empresa}/steam_${diaDeHoje}.json`
+    var lancKey = `infra/${empresa}/lancamentos/lancamentos_${diaDeHoje}.json`
+    var steamKey = `infra/${empresa}/jogos/steam_${diaDeHoje}.json`
     var diaKey = `infoDia/data_${diaDeHoje}.json`
-    var ccuKey = `eduardo/${empresa}/ccu.csv`
-    var cpuKey = `eduardo/${empresa}/mediaCpu.csv`
+    var ccuKey = `infra/${empresa}/ccu.csv`
+    var cpuKey = `infra/${empresa}/mediaCpu.csv`
     buscarHorario(diaKey);
     buscarLancamentos(lancKey, diaDeHoje);
     buscarTop10(steamKey, diaDeHoje);
@@ -375,15 +376,19 @@
     buscarMediaCpu(cpuKey)
 
     function plotarGrafico() {
+        var data7 = data.slice(-7);
+        var dataReal7 = dataReal.slice(-7);
+        var dias7 = dias.slice(-7);
+
         var options = {
             series: [
                 {
                     name: "CCU Previsto",
-                    data: data,
+                    data: data7
                 },
                 {
                     name: "CCU Real",
-                    data: dataReal
+                    data: dataReal7
                 }
             ],
             colors: ['#FF670A', '#FFD166'],
@@ -419,7 +424,7 @@
                         type: 'rect',
                         x: 0,
                         y: capacidade,
-                        x2: dias.length - 1,
+                        x2: dias7.length - 1,
                         y2: capacidade * 1.15,
                         fillColor: 'rgba(255, 0, 0, 0.12)',
                     }
@@ -443,7 +448,7 @@
             },
 
             xaxis: {
-                categories: dias,
+                categories: dias7,
                 labels: { style: { colors: '#bdc3c7' } }
             },
 
@@ -632,7 +637,7 @@
         document.getElementById("kpi-ccu").innerHTML = diferenca;
         document.getElementById("kpi-ccu-num").innerHTML = diferencaJ;
 
-        if (diferenca > 10 || diferenca < -10) {
+        if (diferenca > 15 || diferenca < -15) {
             document.getElementById("kpi-ccu").classList.add("vermelho")
             document.getElementById("kpi-phrase").classList.add("vermelho")
             document.getElementById("kpi-phrase2").classList.add("vermelho")
