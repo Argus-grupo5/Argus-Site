@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="../../css/dashboard/dashFellipe.css">
     <link rel="stylesheet" href="../../css/style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <title>Visão Geral - Servidor</title>
+    <title>Visão Direta - Servidor Xbox-Br</title>
 </head>
 
 <body>
@@ -98,7 +98,7 @@
                         71% - 80% 🟨<br>
                         81% - 100% 🟥</div>
 
-                    <div class="metric-label">CPU em Uso</div>
+                    <div class="metric-label">Pico CPU</div>
                     <div class="metric-info">No último dia (24h)</div>
                     <div class="metric-value">43%</div>
                     <div class="metric-info">4 de 12 cores em uso</div>
@@ -110,7 +110,7 @@
                         66% - 75% 🟨<br>
                         76% - 100% 🟥</div>
 
-                    <div class="metric-label">MEMÓRIA em Uso</div>
+                    <div class="metric-label">Pico MEMÓRIA</div>
                     <div class="metric-info">No último dia (24h)</div>
                     <div class="metric-value">78%</div>
                     <div class="metric-info">81.3GB de 1.3GB em uso</div>
@@ -122,7 +122,7 @@
                         91% - 95% 🟨<br>
                         96% - 100% 🟥</div>
 
-                    <div class="metric-label">GPU em Uso</div>
+                    <div class="metric-label">Pico GPU</div>
                     <div class="metric-info">No último dia (24h)</div>
                     <div class="metric-value">78%</div>
                     <div class="metric-info">81.3GB de 1.3GB em uso</div>
@@ -133,7 +133,7 @@
                         0% - 80% 🟩<br>
                         81% - 85% 🟨<br>
                         86% - 100% 🟥</div>
-                    <div class="metric-label">DISCO em Uso</div>
+                    <div class="metric-label">Pico DISCO</div>
                     <div class="metric-info">No último dia (24h)</div>
                     <div class="metric-value">78%</div>
                     <div class="metric-info">81.3GB de 1.3GB em uso</div>
@@ -145,7 +145,7 @@
                         11ms - 20ms 🟨<br>
                         21ms - 1000ms 🟥</div>
 
-                    <div class="metric-label">LATÊNCIA em Uso</div>
+                    <div class="metric-label">Pico LATÊNCIA</div>
                     <div class="metric-info">No último dia (24h)</div>
                     <div class="metric-value">78%</div>
                     <div class="metric-info">81.3GB de 1.3GB em uso</div>
@@ -162,30 +162,6 @@
                     <canvas id="diskChart"></canvas>
                 </div>
             </div>
-
-            <!-- <div class="alerts-section">
-                <div class="alerts-header-with-filter">
-                    <span id="filter-status">Filtro: **Todos**</span>
-                    <h3>Alertas e Logs</h3>
-                    <button id="filter-alerts-btn" class="action-btn secondary filter-btn-trigger">
-                        Filtrar
-                    </button>
-                </div>
-                <div class="alerts-list">
-                    <div class="alert-item">
-                        <span class="alert-type">CPU | Grave</span>
-                        <span class="alert-time">12/10 - 17:00 | 13/10 - 17:00</span>
-                    </div>
-                    <div class="alert-item">
-                        <span class="alert-type">RAM | Grave</span>
-                        <span class="alert-time">12/10 - 17:00 | 13/10 - 17:00</span>
-                    </div>
-                    <div class="alert-item">
-                        <span class="alert-type">DISCO | Grave</span>
-                        <span class="alert-time">12/10 - 17:00 | 13/10 - 17:00</span>
-                    </div>
-                </div>
-            </div> -->
         </div>
     </div>
 
@@ -240,6 +216,7 @@
 
 <script>
 
+
     function agruparPorFaixaHoraria(data) {
         const faixas = {
             "00:00": { cpu: 0, gpu: 0, disco: 0, ram: 0, count: 0 },
@@ -248,19 +225,40 @@
             "18:00": { cpu: 0, gpu: 0, disco: 0, ram: 0, count: 0 }
         };
 
-        data.forEach(item => {
-            const hora = new Date(item.timestamp).getHours();
+        data.forEach((item, idx) => {
+            if (!item) {
+                console.warn("agruparPorFaixaHoraria: item undefined/null at index", idx);
+                return;
+            }
+
+            const ts = item.timestamp || item.time || item.data || item.date;
+            if (!ts) {
+                console.warn("agruparPorFaixaHoraria: missing timestamp for item", idx, item);
+                return;
+            }
+
+            const hora = new Date(ts).getHours();
+            if (isNaN(hora)) {
+                console.warn("agruparPorFaixaHoraria: invalid timestamp for item", idx, ts);
+                return;
+            }
 
             let faixa = "";
             if (hora < 6) faixa = "00:00";
             else if (hora < 12) faixa = "06:00";
             else if (hora < 18) faixa = "12:00";
-            else if (hora < 23) faixa = "18:00";
+            else faixa = "18:00";
 
-            faixas[faixa].cpu += parseFloat(item.cpu) || 0;
-            faixas[faixa].gpu += parseFloat(item["uso % GPU"]) || 0;
-            faixas[faixa].disco += parseFloat(item.disco) || 0;
-            faixas[faixa].ram += parseFloat(item.ram) || 0;
+            const cpuVal = parseFloat(item.cpu ?? item.CPU ?? item['Cpu']) ;
+            const gpuVal = parseFloat(item['uso % GPU'] ?? item.gpu ?? item['GPU']);
+            const discoVal = parseFloat(item.disco ?? item.Disco ?? item['DISCO']);
+            const ramVal = parseFloat(item.ram ?? item.RAM ?? item['Ram']);
+
+            if (!isNaN(cpuVal)) faixas[faixa].cpu += cpuVal;
+            if (!isNaN(gpuVal)) faixas[faixa].gpu += gpuVal;
+            if (!isNaN(discoVal)) faixas[faixa].disco += discoVal;
+            if (!isNaN(ramVal)) faixas[faixa].ram += ramVal;
+
             faixas[faixa].count++;
         });
 
@@ -289,10 +287,15 @@
         }
     }
 
-    fetch("https://bucket-client-f.s3.amazonaws.com/dados-client.json")
+    fetch("https://argus-bucket-client.s3.us-east-1.amazonaws.com/infra/dados_diretos/dados-client.json")
         .then(response => response.json())
         .then(data => {
 
+            dadosOriginais = Array.isArray(data) ? data : (data && data.items) ? data.items : [];
+            if (dadosOriginais.length > 0) {
+                console.log("sample item keys:", Object.keys(dadosOriginais[0]));
+            }
+            
             const valorNumerico = (array, key) =>
                 array
                     .map(item => parseFloat(item[key]))
@@ -370,7 +373,7 @@
             // grafico
             const ctxCpuRam = document.getElementById('cpuRamChart').getContext('2d');
 
-            new Chart(ctxCpuRam, {
+            cpuRamChart = new Chart(ctxCpuRam, {
                 type: 'bar',
                 data: {
                     labels: labels,
@@ -412,7 +415,7 @@
 
             const ctxDisk = document.getElementById('diskChart').getContext('2d');
 
-            new Chart(ctxDisk, {
+            diskChart = new Chart(ctxDisk, {
                 type: 'line',
                 data: {
                     labels: labels,
@@ -459,121 +462,5 @@
             });
         })
         .catch(err => console.error("Erro ao carregar JSON:", err));
-
-    // document.addEventListener('DOMContentLoaded', function () {
-
-    //     const filterTriggerBtn = document.getElementById('filter-alerts-btn');
-    //     const modal = document.getElementById('alerts-filter-modal');
-    //     const closeBtn = document.querySelector('.close-btn-filter');
-    //     const filterOptions = document.querySelectorAll('.filter-option');
-    //     const applyBtn = document.getElementById('apply-filters-btn');
-    //     const clearBtn = document.getElementById('clear-filters-btn');
-    //     const filterStatusSpan = document.getElementById('filter-status');
-    //     const alertItems = document.querySelectorAll('.alert-item');
-
-    //     let selectedFilters = {
-    //         month: null,
-    //         component: null
-    //     };
-
-    //     const MONTH_NAMES = {
-    //         '01': 'Jan',
-    //         '02': 'Fev',
-    //         '03': 'Mar',
-    //         '04': 'Abr',
-    //         '05': 'Mai',
-    //         '06': 'Jun',
-    //         '07': 'Jul',
-    //         '08': 'Ago',
-    //         '09': 'Set',
-    //         '10': 'Out',
-    //         '11': 'Nov',
-    //         '12': 'Dez'
-    //     };
-
-    //     function applyFilterSimulation() {
-    //         let statusText = 'Filtro: ';
-    //         let filtersActive = false;
-
-    //         if (selectedFilters.month || selectedFilters.component) {
-    //             filtersActive = true;
-    //             const monthName = selectedFilters.month ? MONTH_NAMES[selectedFilters.month] : 'Qualquer Mês';
-    //             const componentName = selectedFilters.component || 'Todo Componente';
-    //             statusText += `**${componentName}** em **${monthName}**`;
-    //         } else {
-    //             statusText += '**Todos**';
-    //         }
-
-    //         filterStatusSpan.innerHTML = statusText;
-
-    //         alertItems.forEach(item => {
-    //             const itemComponent = item.getAttribute('data-component');
-    //             const itemMonth = item.getAttribute('data-month');
-
-    //             const componentMatch = !selectedFilters.component || (itemComponent === selectedFilters.component);
-    //             const monthMatch = !selectedFilters.month || (itemMonth === selectedFilters.month);
-
-    //             if (componentMatch && monthMatch) {
-    //                 item.style.display = 'flex';
-    //             } else {
-    //                 item.style.display = 'none';
-    //             }
-    //         });
-
-    //         modal.style.display = 'none';
-    //         console.log('Filtros Aplicados (Simulação):', selectedFilters);
-    //     }
-
-    //     if (filterTriggerBtn) {
-    //         filterTriggerBtn.onclick = function () {
-    //             modal.style.display = 'block';
-    //         }
-    //     }
-
-    //     if (closeBtn) {
-    //         closeBtn.onclick = function () {
-    //             modal.style.display = 'none';
-    //         }
-    //     }
-
-    //     window.onclick = function (event) {
-    //         if (event.target == modal) {
-    //             modal.style.display = 'none';
-    //         }
-    //     }
-
-    //     filterOptions.forEach(option => {
-    //         option.addEventListener('click', function () {
-    //             const filterType = this.getAttribute('data-filter');
-    //             const filterValue = this.getAttribute('data-value');
-
-    //             if (this.classList.contains('selected-filter')) {
-    //                 this.classList.remove('selected-filter');
-    //                 selectedFilters[filterType] = null;
-    //             } else {
-    //                 document.querySelectorAll(`.filter-option[data-filter="${filterType}"]`).forEach(btn => {
-    //                     btn.classList.remove('selected-filter');
-    //                 });
-    //                 this.classList.add('selected-filter');
-    //                 selectedFilters[filterType] = filterValue;
-    //             }
-    //         });
-    //     });
-
-    //     applyBtn.onclick = function () {
-    //         applyFilterSimulation();
-    //     }
-
-    //     clearBtn.onclick = function () {
-    //         filterOptions.forEach(option => {
-    //             option.classList.remove('selected-filter');
-    //         });
-    //         selectedFilters = {
-    //             month: null,
-    //             component: null
-    //         };
-    //         applyFilterSimulation();
-    //     }
-    // });
 
 </script>
