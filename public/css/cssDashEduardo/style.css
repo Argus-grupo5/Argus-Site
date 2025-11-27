@@ -1,0 +1,832 @@
+/* CSS */
+@import url('https://fonts.googleapis.com/css2?family=Cairo:slnt,wght@-11..11,200..1000&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Cairo", sans-serif;
+}
+
+body {
+    background-color: #1a1a1a;
+    color: white;
+}
+
+/* Navbar */
+
+.desktopNav {
+    position: fixed;
+    background-color: #FF670A;
+    width: 4vw;
+    height: 100%;
+
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    transition: .4s;
+}
+
+.desktopNav:hover {
+    z-index: 999;
+}
+
+.desktopNav img {
+    width: 70%;
+    height: auto;
+    transition: 0.3s ease;
+    border-radius: 8px;
+    padding: 0.3vw;
+}
+
+.desktopNav .navButtons img:hover {
+    cursor: pointer;
+    width: 90%;
+    background-color: #ffa794;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.desktopNav .logo {
+    margin-bottom: 1.5vw;
+    width: 90%;
+    height: auto;
+}
+
+
+.desktopNav .navButtons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2vw;
+    margin-top: 1vw;
+}
+
+.desktopNav .navButtons .navButton {
+    display: flex;
+    justify-content: center;
+}
+
+.selected {
+    padding: 0.5vw;
+    background: linear-gradient(to bottom, #FF0000, #FF670A);
+    border-radius: 8px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.tooltipNav {
+    position: relative;
+    display: inline-block;
+}
+
+
+.tooltipNav .tooltiptextNav {
+    visibility: hidden;
+
+    position: absolute;
+    top: +0.5vw;
+    left: 125%;
+    z-index: 999;
+
+
+    width: 0px;
+    padding: 0px 1vw;
+    border-radius: 5px;
+
+    background-color: #FF670A;
+
+    color: #ffffff;
+    text-align: center;
+    font-size: 0px;
+}
+
+.tooltipNav:hover .tooltiptextNav {
+    visibility: visible;
+    width: 12vw;
+    font-size: 1vw;
+    transition: .4s ease;
+}
+
+.headerTop {
+    padding-left: 5vw;
+    padding-right: 3vw;
+    width: 100%;
+    padding-top: 0.8vw;
+    flex-direction: row;
+    align-items: start;
+    gap: 20px;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.headerTop img {
+    width: 100%;
+}
+
+/* Modal */
+.modal {
+    height: fit-content;
+    min-height: 70vh;
+    width: 40vw;
+    background-color: #FF670A;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 100;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px;
+}
+
+.modal-geral {
+    width: 80%;
+    margin: auto;
+    height: 70%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+}
+
+.modal-label {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: center;
+    text-align: start;
+    margin-bottom: 10px;
+}
+
+.modal-label input {
+    border: none;
+    height: 20%;
+    border-radius: 5px;
+    background-color: #ff9f64;
+    padding: 5px;
+}
+
+.modal-label-comp {
+    display: flex;
+    gap: 10px;
+    height: 100%;
+    justify-content: center;
+}
+
+.modal-label-comp input {
+    border: none;
+    height: 100%;
+    width: 100%;
+    border-radius: 5px;
+    background-color: #ff9f64;
+    padding: 5px;
+}
+
+.modal-button {
+    display: flex;
+    width: 100%;
+    gap: 10px;
+    justify-content: center;
+}
+
+.modal-button div {
+    background-color: black;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s;
+}
+
+.modal-button div:hover {
+    cursor: pointer;
+    background-color: #313030;
+}
+
+.modal-button svg {
+    color: white;
+}
+
+/* Alerts */
+.geralInfo {
+    margin-left: 1vw;
+    display: flex;
+    gap: 1vw;
+    padding-top: 10px;
+}
+
+.user {
+    display: flex;
+}
+
+.user:hover {
+    cursor: pointer;
+    display: flex;
+}
+
+.user img {
+    width: 2.8vw;
+    border-radius: 40px;
+}
+
+.headerTop .info {
+    display: flex;
+}
+
+.headerTop .info .bell {
+    width: 3.0vw;
+    background-color: #313030;
+    border-radius: 5px 0px 0px 5px;
+    padding: 0.4vw 0.8vw 0.4vw 0.8vw;
+    display: flex;
+}
+
+.headerTop .info .risk {
+    width: 2.5vw;
+    background-color: #ff3131;
+    border-radius: 0px 0px 0px 0px;
+    padding: 0.4vw 0.8vw 0.4vw 0.8vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1vw;
+}
+
+.headerTop .info .atention {
+    width: 2.5vw;
+    background-color: #ffba31;
+    border-radius: 0px 5px 5px 0px;
+    padding: 0.4vw 0.8vw 0.4vw 0.8vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1vw;
+}
+
+.headerTop .info .server {
+    width: 3.0vw;
+    background-color: #313030;
+    border-radius: 5px 0px 0px 5px;
+    padding: 0.4vw 0.8vw 0.4vw 0.8vw;
+    display: flex;
+}
+
+.headerTop .info .serversMonitoring {
+    width: 2.5vw;
+    background-color: #4B4343;
+    border-radius: 0px 5px 5px 0px;
+    padding: 0.4vw 0.8vw 0.4vw 0.8vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1vw;
+}
+
+
+.tooltipInfo {
+    position: relative;
+    display: inline-block;
+}
+
+
+.tooltipInfo .tooltiptextInfo {
+    visibility: hidden;
+
+    position: absolute;
+    top: +3vw;
+    z-index: 1;
+
+
+    width: 0px;
+    padding: 0px 1vw;
+    border-radius: 5px;
+
+    background-color: #000000;
+
+    color: #ffffff;
+    text-align: center;
+    font-size: 0px;
+}
+
+.tooltipInfo:hover .tooltiptextInfo {
+    visibility: visible;
+    min-width: 15vw;
+    font-size: 0.9vw;
+    transition: .3s ease;
+}
+
+
+.userInfo {
+    padding-left: 0.5vw;
+}
+
+#userNome {
+    font-size: 1vw;
+}
+
+#userCargo {
+    font-size: 0.7vw;
+    color: #201010;
+}
+
+.top-boxes-container {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-bottom: 30px;
+    margin-top: 35px;
+    padding-left: 5vw;
+    padding-right: 1vw;
+}
+
+.info-box {
+    background-color: #ff3333;
+    color: white;
+    padding: 15px 25px;
+    border-radius: 4px;
+    text-align: center;
+    min-width: 250px;
+}
+
+.info-box .label {
+    font-size: 14px;
+    margin-bottom: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.info-box .value {
+    font-size: 48px;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 0;
+    line-height: 1;
+}
+
+.container {
+    margin-left: 6vw;
+    margin-right: 1.5vw;
+}
+
+.headerSub{
+    font-size: 14px;
+    color: #bfc7cc;
+    line-height: 1.8;
+}
+.headerSub p{
+    margin-bottom: 0.5rem;
+}
+
+.resumo {
+    background-color: #2b2b2b;
+    height: min-content;
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    gap: 18px;
+    border-radius: 14px;
+}
+
+.resumoKPIs {
+    display: flex;
+    gap: 20px;
+    align-items: center
+}
+
+.resumoCardKPI {
+    display: flex;
+    width: auto;
+    gap: 2rem;
+    align-items: center;
+}
+
+.resumoCard {
+    position: relative;
+    width: 18rem;
+    min-height: 78px;
+    background-color: #3f3f3f;
+    border-radius: 12px;
+    text-align: center;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+}
+
+.resumoCardText1 {
+    margin: 0;
+    color: #bfc7cc;
+    font-weight: 600
+}
+
+.resumoCardText {
+    color: #fff;
+    font-size: 1.6rem;
+    font-weight: 800;
+}
+
+.resumoCardHour {
+    width: 100%;
+    display: flex;
+    text-align: center;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    gap: 8px;
+    padding: 12px;
+    border-radius: 12px;
+    background-color: #3f3f3f;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+}
+
+.titleHour {
+    font-size: 2rem;
+    font-weight: 900;
+    color: #ff9f64;
+}
+
+.ccuHour {
+    color: black;
+    padding: 10px 10px;
+    background-color: #FF670A;
+    width: 8rem;
+    margin: 0 auto;
+    border-radius: 10px;
+    position: relative;
+}
+
+.resumoSituacao {
+    background-color: #823d00;
+}
+
+.graficos {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin: 28px 0;
+    align-items: flex-start
+}
+
+#chart {
+width: 100%; /* Antes estava fixo no JS */
+    max-width: 100%; /* Garante que não ultrapasse a tela */
+    padding: 18px;
+    border-radius: 12px;
+    background-color: #3f3f3f;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+}
+
+.graficosDown {
+    display: flex;
+    gap: 20px;
+    margin: 28px 0;
+    align-items: center;
+    width: 100%;
+}
+
+.kpi-container-vertical {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin: 25px 0;
+    width: 100%;
+    text-align: center;
+    margin: 0 auto;
+    align-items: center;
+}
+
+.kpi-card-vertical {
+    background: #2b2b2b;
+    padding: 20px 24px;
+    border-radius: 14px;
+    border: 1px solid #3e3e3e;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.35);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    flex: 1;
+    min-width: 220px;
+    text-align: center;
+    justify-content: center;
+    height: 150px;
+    position: relative;
+}
+
+.kpi-card-vertical:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 22px rgba(0,0,0,0.45);
+}
+
+.kpi-title {
+    font-size: 0.95rem;
+    color: #b5b5b5;
+    margin-bottom: 6px;
+}
+
+.kpi-value {
+    font-size: 1.9rem;
+    font-weight: bold;
+    color: #fff;
+}
+
+.kpi-phrase  {
+    font-size: 18px;
+}
+
+#chart2 {
+    padding: 18px;
+    border-radius: 12px;
+    background-color: #3f3f3f;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+}
+
+.listsContainer {
+    display: flex;
+    width: 100%;
+    gap: 1rem;
+}
+
+.listOutside {
+    width: 100%;
+    margin-bottom: 2rem;
+}
+
+.listHeader {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    font-weight: 400;
+    color: #bfc7cc;
+}
+
+.listInside {
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+    background-color: #2B2B2B;
+    height: 30rem;
+    overflow-y: scroll;
+}
+
+.listGridHeader {
+    display: grid;
+    grid-template-columns: 25% 35% 15% 25%;
+    text-align: center;
+    font-weight: 500;
+    background-color: #3f3f3f;
+    padding: 0.5rem 0;
+    border-radius: 5px;
+}
+
+.listGridHeader_one {
+    display: grid;
+    grid-template-columns: 40% 40% 20%;
+    text-align: center;
+    font-weight: 500;
+    background-color: #3f3f3f;
+    padding: 0.5rem 0;
+    border-radius: 5px;
+}
+
+.listItem {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.card {
+    position: relative;
+    display: grid;
+    grid-template-columns: 25% 35% 15% 25%;
+    background-color: #404040;
+    text-align: center;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    overflow: hidden;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+}
+
+.card:hover {
+    background-color: #555555;
+}
+
+.card_one {
+    position: relative;
+    display: grid;
+    grid-template-columns: 40% 40% 20%;
+    text-align: center;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+}
+
+.bgLayer {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    z-index: 0;
+}
+
+.blurLayer {
+    position: absolute;
+    inset: 0;
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    background: rgba(0, 0, 0, 0.65);
+    z-index: 1;
+    pointer-events: none;
+}
+
+.card_one:hover {
+    background-color: #555555;
+}
+
+.listFoto {
+    background-color: #D9D9D9;
+    width: 100px;
+    height: 100px;
+    margin: 0 auto;
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+    z-index: 2;
+}
+
+.listFoto_One {
+    background-color: #D9D9D9;
+    width: 150px;
+    height: 100px;
+    margin: 0 auto;
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+    z-index: 2;
+}
+
+.listFoto_One img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    z-index: 2;
+}
+
+.listFoto img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    z-index: 2;
+}
+
+.listNome,
+.listPontuacao,
+.listCCU {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+    font-weight: bold;
+}
+
+::-webkit-scrollbar {
+    width: .2vw;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: .2vw;
+    background: linear-gradient(180deg, #FF6D4D 0%, #ff0f46 100%);
+}
+
+.span {
+    font-size: 30px;
+    font-weight: 600;
+}
+
+#titleCCU {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.vermelho {
+    color: rgb(255, 81, 0);
+}
+
+.amarelo {
+    color: rgb(255, 149, 0);
+}
+
+.verde {
+    color: rgb(109, 255, 79);
+}
+
+.azul {
+    color: rgb(97, 186, 209);
+}
+
+.cinza {
+    color: gainsboro;
+}
+
+.infoIcon {
+    position: absolute;
+    bottom: 0px;
+    right: 8px;
+    cursor: pointer;
+}
+
+.infoIcon svg {
+    width: 18px;
+    opacity: 0.7;
+    transition: 0.2s;
+}
+
+.infoIcon svg:hover {
+    opacity: 1;
+}
+
+.caixaDemanda {
+    visibility: hidden;
+    width: 180px;
+    background-color: #2b2b2b;
+    color: #fff;
+    text-align: left;
+    border-radius: 5px 0px 5px 5px;
+    padding: 10px;
+    position: absolute;
+    z-index: 1000;
+    top: 25px;
+    right: 0;
+    opacity: 0;
+    transition: opacity 0.2s;
+    font-size: 12px;
+    border: 1px solid #555;
+}
+
+.infoIcon:hover .caixaDemanda {
+    visibility: visible;
+    opacity: 1;
+}
+
+.legenda {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    margin-right: 6px;
+}
+
+.legenda.verde {
+    background-color: rgb(109, 255, 79);
+}
+
+.legenda.amarelo {
+    background-color: rgb(255, 149, 0);
+}
+
+.legenda.vermelho {
+    background-color: rgb(255, 81, 0);
+}
+
+.legenda.cinza {
+    background-color: gainsboro;
+}
+
+.legenda.azul {
+    background-color: rgb(97, 186, 209);
+}
+
+.kpi-phrase.vermelho {
+    color: rgb(255, 128, 70);
+}
+.kpi-phrase.verde {
+    color: rgb(141, 255, 119);
+}
+
+select {
+    background-color: #362f2f;
+    border: none;
+    width: 8vw;
+    color: white;
+    border-radius: 10px;
+    padding: 2px;
+}
+
+select option {
+    color: white;
+}
