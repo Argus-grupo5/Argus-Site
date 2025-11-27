@@ -178,7 +178,7 @@
         var diaDeHoje = new Date();
         var ano = diaDeHoje.getFullYear();
         var mes = diaDeHoje.getMonth() + 1;
-        var dia = diaDeHoje.getDate() - 1;
+        var dia = diaDeHoje.getDate();
 
         var dataFormatada = `${ano}-${mes}-${dia}`
         return dataFormatada;
@@ -188,6 +188,17 @@
         var ano = diaDeHoje.getFullYear();
         var mes = diaDeHoje.getMonth() + 1;
         var dia = diaDeHoje.getDate() + 7;
+        var diaSemana = diaDeHoje.getDay()
+
+        var dataFormatada = `${ano}-${mes}-${dia}`
+        return dataFormatada;
+    }
+    function formatarInicioSemana() {
+        var diaDeHoje = new Date();
+        var ano = diaDeHoje.getFullYear();
+        var mes = diaDeHoje.getMonth() + 1;
+        var diaSemana = diaDeHoje.getDay()
+        var dia = diaDeHoje.getDate() - diaSemana;
 
         var dataFormatada = `${ano}-${mes}-${dia}`
         return dataFormatada;
@@ -269,7 +280,7 @@
                     if (dataJogo == formatarHoje()) {
                         lancamentosDiarios.push(jogos)
                     }
-                    if (dataJogo >= formatarHoje() && dataJogo <= formatarSemana()) {
+                    if (dataJogo >= formatarInicioSemana() && dataJogo <= formatarSemana()) {
                         lancamentosSemanais.push(jogos)
                     }
                     lancamentosMensais.push(jogos)

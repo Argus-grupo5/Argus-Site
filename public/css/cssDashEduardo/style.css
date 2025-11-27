@@ -816,3 +816,16 @@ width: 100%; /* Antes estava fixo no JS */
 .kpi-phrase.verde {
     color: rgb(141, 255, 119);
 }
+
+select {
+    background-color: #362f2f;
+    border: none;
+    width: 8vw;
+    color: white;
+    border-radius: 10px;
+    padding: 2px;
+}
+
+select option {
+    color: white;
+}
