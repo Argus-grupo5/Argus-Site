@@ -165,6 +165,9 @@
     var mediaGpu = [];
     var utilizacaoPerc = [];
     var capacidade;
+    var lancamentosDiarios = [];
+    var lancamentosSemanais = [];
+    var lancamentosMensais = [];
 
     var ccuDic = {
         ccuPrev: data,
@@ -175,7 +178,7 @@
         var diaDeHoje = new Date();
         var ano = diaDeHoje.getFullYear();
         var mes = diaDeHoje.getMonth() + 1;
-        var dia = diaDeHoje.getDate();
+        var dia = diaDeHoje.getDate() - 1;
 
         var dataFormatada = `${ano}-${mes}-${dia}`
         return dataFormatada;
@@ -248,12 +251,7 @@
         })
     }
 
-    function selectLanc() {
-        const valor = document.getElementById("selectLanc").value;
-        buscarLancamentos(lancKey, diaDeHoje, valor)
-    }
-
-    function buscarLancamentos(chave, diaAtual, valor) {
+    function buscarLancamentos(chave, diaAtual) {
         var listLanc = document.getElementById("listLanc")
 
         fetch(`/s3Route/dados/${chave}`, {
@@ -267,41 +265,17 @@
                     listLanc.innerHTML = "";
                 }
                 json.jogosLancados.forEach(jogos => {
-                    console.log(jogos)
                     dataJogo = `${jogos.released[0]}-${jogos.released[1]}-${jogos.released[2]}`
-                    if (valor == 1) {
-                        if (dataJogo == formatarHoje()) {
-                            listLanc.innerHTML += `<div class="card">
-                             <div class="bgLayer" style="background-image: url(${jogos.background_image})"></div>
-                                        <div class="blurLayer"></div>
-                                        <div class="listFoto"><img src="${jogos.background_image}"></img></div>
-                                        <div class="listNome">${jogos.name}</div>
-                                        <div class="listNome">${jogos.pontuacao.toFixed(2)}</div>
-                                        <div class="listCCU">${jogos.ccu}</div>
-                                    </div>`
-                        }
-                    } else if (valor == 2) {
-                        if (dataJogo >= formatarHoje() && dataJogo <= formatarSemana()) {
-                            listLanc.innerHTML += `<div class="card">
-                             <div class="bgLayer" style="background-image: url(${jogos.background_image})"></div>
-                                        <div class="blurLayer"></div>
-                                        <div class="listFoto"><img src="${jogos.background_image}"></img></div>
-                                        <div class="listNome">${jogos.name}</div>
-                                        <div class="listNome">${jogos.pontuacao.toFixed(2)}</div>
-                                        <div class="listCCU">${jogos.ccu}</div>
-                                    </div>`
-                        }
-                    } else {
-                        listLanc.innerHTML += `<div class="card">
-                             <div class="bgLayer" style="background-image: url(${jogos.background_image})"></div>
-                                        <div class="blurLayer"></div>
-                                        <div class="listFoto"><img src="${jogos.background_image}"></img></div>
-                                        <div class="listNome">${jogos.name}</div>
-                                        <div class="listNome">${jogos.pontuacao.toFixed(2)}</div>
-                                        <div class="listCCU">${jogos.ccu}</div>
-                                    </div>`
+                    if (dataJogo == formatarHoje()) {
+                        lancamentosDiarios.push(jogos)
                     }
+                    if (dataJogo >= formatarHoje() && dataJogo <= formatarSemana()) {
+                        lancamentosSemanais.push(jogos)
+                    }
+                    lancamentosMensais.push(jogos)
                 })
+                const valor = document.getElementById("selectLanc").value;
+                plotarJogos(valor)
             })
         })
     }
@@ -382,9 +356,8 @@
     var diaKey = `infoDia/data_${diaDeHoje}.json`
     var ccuKey = `infra/${empresa}/ccu.csv`
     var cpuKey = `infra/${empresa}/mediaCpu.csv`
-    var valorIniSel = document.getElementById("selectLanc").selected = true;
     buscarHorario(diaKey);
-    buscarLancamentos(lancKey, diaDeHoje, valorIniSel);
+    buscarLancamentos(lancKey, diaDeHoje);
     buscarTop10(steamKey, diaDeHoje);
     buscarCCU(ccuKey)
     buscarMediaCpu(cpuKey)
@@ -670,6 +643,55 @@
         let attMin = dataHora.getMinutes()
         document.getElementById("attAtual").innerHTML = `${attAtual}h ${attMin}min`
     }
+
+    function selectLanc() {
+        const valor = document.getElementById("selectLanc").value;
+        plotarJogos(valor)
+    }
+
+    function plotarJogos(valor) {
+        valor = Number(valor)
+        var listLanc = document.getElementById("listLanc")
+
+        listLanc.innerHTML = ""
+
+        if (valor == 1) {
+            lancamentosDiarios.forEach((jogos) => {
+                console.log(jogos)
+                listLanc.innerHTML += `<div class="card">
+                             <div class="bgLayer" style="background-image: url(${jogos.background_image})"></div>
+                                        <div class="blurLayer"></div>
+                                        <div class="listFoto"><img src="${jogos.background_image}"></img></div>
+                                        <div class="listNome">${jogos.name}</div>
+                                        <div class="listNome">${jogos.pontuacao.toFixed(2)}</div>
+                                        <div class="listCCU">${jogos.ccu}</div>
+                                    </div>`
+            })
+        } else if (valor == 2) {
+            lancamentosSemanais.forEach((jogos) => {
+                listLanc.innerHTML += `<div class="card">
+                             <div class="bgLayer" style="background-image: url(${jogos.background_image})"></div>
+                                        <div class="blurLayer"></div>
+                                        <div class="listFoto"><img src="${jogos.background_image}"></img></div>
+                                        <div class="listNome">${jogos.name}</div>
+                                        <div class="listNome">${jogos.pontuacao.toFixed(2)}</div>
+                                        <div class="listCCU">${jogos.ccu}</div>
+                                    </div>`
+            })
+        } else {
+            lancamentosMensais.forEach((jogos) => {
+                listLanc.innerHTML += `<div class="card">
+                             <div class="bgLayer" style="background-image: url(${jogos.background_image})"></div>
+                                        <div class="blurLayer"></div>
+                                        <div class="listFoto"><img src="${jogos.background_image}"></img></div>
+                                        <div class="listNome">${jogos.name}</div>
+                                        <div class="listNome">${jogos.pontuacao.toFixed(2)}</div>
+                                        <div class="listCCU">${jogos.ccu}</div>
+                                    </div>`
+            })
+        }
+    }
+
 
     tempoAtt()
     setTimeout(tempoAtt, 60000)
