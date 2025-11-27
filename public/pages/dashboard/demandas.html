@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../css/dashboard/popup.css">
     <link rel="stylesheet" href="../../css/cssDashEduardo/style.css">
-    <script src="../dashboard/script/dash.js"></script>
+    <script src="script/dash.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
@@ -109,8 +109,12 @@
         <div class="listsContainer">
             <div class="listOutside">
                 <div class="listHeader">
-                    <p>Lançamentos do dia</p>
-                    <p id="diaAtual">XX-XX-XX</p>
+                    <p>Próximos lançamentos</p>
+                    <select name="" id="selectLanc" onchange="selectLanc()">
+                        <option value="1" id="" selected>Diário</option>
+                        <option value="2" id="">Semanal</option>
+                        <option value="3" id="">Mensal</option>
+                    </select>
                 </div>
                 <div class="listInside">
                     <div class="listGridHeader">
@@ -176,6 +180,15 @@
         var dataFormatada = `${ano}-${mes}-${dia}`
         return dataFormatada;
     }
+    function formatarSemana() {
+        var diaDeHoje = new Date();
+        var ano = diaDeHoje.getFullYear();
+        var mes = diaDeHoje.getMonth() + 1;
+        var dia = diaDeHoje.getDate() + 7;
+
+        var dataFormatada = `${ano}-${mes}-${dia}`
+        return dataFormatada;
+    }
     var diaDeHoje = formatarHoje();
 
     function buscarHorario(chave) {
@@ -191,7 +204,6 @@
         })
     }
 
-    document.getElementById("diaAtual").innerHTML = diaDeHoje
 
     function buscarCCU(chave) {
         fetch(`/s3Route/dados/${chave}`, {
@@ -235,7 +247,13 @@
             })
         })
     }
-    function buscarLancamentos(chave, diaAtual) {
+
+    function selectLanc() {
+        const valor = document.getElementById("selectLanc").value;
+        buscarLancamentos(lancKey, diaDeHoje, valor)
+    }
+
+    function buscarLancamentos(chave, diaAtual, valor) {
         var listLanc = document.getElementById("listLanc")
 
         fetch(`/s3Route/dados/${chave}`, {
@@ -249,14 +267,40 @@
                     listLanc.innerHTML = "";
                 }
                 json.jogosLancados.forEach(jogos => {
-                    listLanc.innerHTML += `<div class="card">
-                         <div class="bgLayer" style="background-image: url(${jogos.background_image})"></div>
-                                    <div class="blurLayer"></div>
-                                    <div class="listFoto"><img src="${jogos.background_image}"></img></div>
-                                    <div class="listNome">${jogos.name}</div>
-                                    <div class="listNome">${jogos.pontuacao.toFixed(2)}</div>
-                                    <div class="listCCU">${jogos.ccu}</div>
-                                </div>`
+                    console.log(jogos)
+                    dataJogo = `${jogos.released[0]}-${jogos.released[1]}-${jogos.released[2]}`
+                    if (valor == 1) {
+                        if (dataJogo == formatarHoje()) {
+                            listLanc.innerHTML += `<div class="card">
+                             <div class="bgLayer" style="background-image: url(${jogos.background_image})"></div>
+                                        <div class="blurLayer"></div>
+                                        <div class="listFoto"><img src="${jogos.background_image}"></img></div>
+                                        <div class="listNome">${jogos.name}</div>
+                                        <div class="listNome">${jogos.pontuacao.toFixed(2)}</div>
+                                        <div class="listCCU">${jogos.ccu}</div>
+                                    </div>`
+                        }
+                    } else if (valor == 2) {
+                        if (dataJogo >= formatarHoje() && dataJogo <= formatarSemana()) {
+                            listLanc.innerHTML += `<div class="card">
+                             <div class="bgLayer" style="background-image: url(${jogos.background_image})"></div>
+                                        <div class="blurLayer"></div>
+                                        <div class="listFoto"><img src="${jogos.background_image}"></img></div>
+                                        <div class="listNome">${jogos.name}</div>
+                                        <div class="listNome">${jogos.pontuacao.toFixed(2)}</div>
+                                        <div class="listCCU">${jogos.ccu}</div>
+                                    </div>`
+                        }
+                    } else {
+                        listLanc.innerHTML += `<div class="card">
+                             <div class="bgLayer" style="background-image: url(${jogos.background_image})"></div>
+                                        <div class="blurLayer"></div>
+                                        <div class="listFoto"><img src="${jogos.background_image}"></img></div>
+                                        <div class="listNome">${jogos.name}</div>
+                                        <div class="listNome">${jogos.pontuacao.toFixed(2)}</div>
+                                        <div class="listCCU">${jogos.ccu}</div>
+                                    </div>`
+                    }
                 })
             })
         })
@@ -333,13 +377,14 @@
     var empresa = sessionStorage.EMPRESA_NOME_FANTASIA;
     empresa = empresa.replace(" ", "%20")
 
-    var lancKey = `infra/${empresa}/lancamentos/lancamentos_${diaDeHoje}.json`
+    var lancKey = `infra/${empresa}/lancamentos/${new Date().getFullYear()}/lancamentos_${new Date().getMonth() + 1}.json`
     var steamKey = `infra/${empresa}/jogos/steam_${diaDeHoje}.json`
     var diaKey = `infoDia/data_${diaDeHoje}.json`
     var ccuKey = `infra/${empresa}/ccu.csv`
     var cpuKey = `infra/${empresa}/mediaCpu.csv`
+    var valorIniSel = document.getElementById("selectLanc").selected = true;
     buscarHorario(diaKey);
-    buscarLancamentos(lancKey, diaDeHoje);
+    buscarLancamentos(lancKey, diaDeHoje, valorIniSel);
     buscarTop10(steamKey, diaDeHoje);
     buscarCCU(ccuKey)
     buscarMediaCpu(cpuKey)

@@ -47,6 +47,10 @@ function header(pag, cargo) {
         <img id="imgServidores" src="../../assets/dashboard/desktop/box.svg" alt="Servidores">
         <span class="tooltiptextNav">Servidores</span>
       </a>
+      <a href="./demandas.html" class="navButton tooltipNav" id="navServers">
+        <img id="imgServidores" src="../../assets/dashboard/desktop/graph.svg" alt="Servidores">
+        <span class="tooltiptextNav">Servidores</span>
+      </a>
 
       <a href="./funcionarios.html" class="navButton tooltipNav" id="navServers">
         <img id="imgFuncionarios" src="../../assets/dashboard/desktop/employes.svg" alt="Funcionários">
@@ -97,11 +101,10 @@ function header(pag, cargo) {
           <div id="userCargo">${sessionStorage.CARGO_CARGO}</div>
         </span>
       </a>
-      <a href="./${caminho}.html" class="navButton tooltipNav" id="navServers">
-        <img id="imgServidores" src="../../assets/dashboard/desktop/box.svg" alt="Servidores">
+      <a href="./demandas.html" class="navButton tooltipNav" id="navServers">
+        <img id="imgServidores" src="../../assets/dashboard/desktop/graph.svg" alt="Servidores">
         <span class="tooltiptextNav">Servidores</span>
       </a>
-
       <div class="navButton tooltipNav" id="navServers" onclick="sair()">
         <img src="../../assets/dashboard/desktop/logout.svg" alt="Sair">
         <span class="tooltiptextNav">Sair</span>
