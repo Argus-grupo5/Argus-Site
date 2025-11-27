@@ -459,6 +459,7 @@ body {
     width: 8rem;
     margin: 0 auto;
     border-radius: 10px;
+    position: relative;
 }
 
 .resumoSituacao {

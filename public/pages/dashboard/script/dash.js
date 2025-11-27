@@ -24,7 +24,7 @@ function header(pag, cargo) {
   console.log(cargo)
   let caminho;
   if (cargo == "Operador") {
-    caminho = "serversSup";
+    caminho = "dashFellipe";
   } else {
     caminho = "servers"
   }
@@ -43,8 +43,8 @@ function header(pag, cargo) {
         <img id="imgServidores" src="../../assets/dashboard/desktop/box.svg" alt="Servidores">
         <span class="tooltiptextNav">Servidores</span>
       </a>
-      <a href="./serversSup.html" class="navButton tooltipNav" id="navServers">
-        <img id="imgServidores" src="../../assets/dashboard/desktop/box.svg" alt="Servidores">
+      <a href="./dashFellipe.html" class="navButton tooltipNav" id="navServers">
+        <img id="imgServidores" src="../../assets/dashboard/desktop/target.svg" alt="Servidores">
         <span class="tooltiptextNav">Servidores</span>
       </a>
       <a href="./demandas.html" class="navButton tooltipNav" id="navServers">

@@ -7,24 +7,18 @@
     <link rel="stylesheet" href="../../css/dashboard/server-overview.css">
     <link rel="stylesheet" href="../../css/dashboard/dashFellipe.css">
     <link rel="stylesheet" href="../../css/style.css">
+    <script src="script/dash.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <title>Visão Direta - Servidor Xbox-Br</title>
 </head>
 
 <body>
 
-    <nav class="desktopNav" aria-label="Sidebar">
-        <div class="logo">
-            <img src="../../assets/icon/logoMobileBlack.svg" alt="ARGUS Logo">
-        </div>
+    <div id="id_sair">
+    </div>
 
-        <div class="footerButtons">
-            <button class="navButton logout-btn tooltipNav" data-label="Sair">
-                <img src="../../assets/dashboard/desktop/logout.svg" alt="Sair">
-                <span class="tooltiptextNav">Sair</span>
-            </button>
-        </div>
-    </nav>
+    <header class="desktopNav" id="navDesktop"></header>
 
     <div id="alerts-filter-modal" class="modal-filter">
         <div class="modal-content-filter">
@@ -74,7 +68,7 @@
             <div class="overview-header">
                 <h2>Visão Geral - Servidor <br>
                     XBOX-CLOUD-BR</h2>
-                    <!-- colocar a ultima atualização -->
+                <!-- colocar a ultima atualização -->
             </div>
 
             <div class="region-filter-bar">
@@ -169,7 +163,7 @@
                     <canvas id="diskChart"></canvas>
                 </div>
             </div>
-           
+
             <!-- mini card -->
             <div class="mini-cards">
                 <div class="mini-card" id="peak-cpu">
@@ -203,6 +197,8 @@
 
     <script src="../../js/server-overview.js"></script>
     <script>
+            header("dashboard", sessionStorage.CARGO_CARGO);
+
         let dadosOriginais = [];
 
         function atualizarDashboard(dados) {
@@ -295,7 +291,7 @@
             else if (hora < 18) faixa = "12:00";
             else faixa = "18:00";
 
-            const cpuVal = parseFloat(item.cpu ?? item.CPU ?? item['Cpu']) ;
+            const cpuVal = parseFloat(item.cpu ?? item.CPU ?? item['Cpu']);
             const gpuVal = parseFloat(item['uso % GPU'] ?? item.gpu ?? item['GPU']);
             const discoVal = parseFloat(item.disco ?? item.Disco ?? item['DISCO']);
             const ramVal = parseFloat(item.ram ?? item.RAM ?? item['Ram']);
@@ -341,7 +337,7 @@
             if (dadosOriginais.length > 0) {
                 console.log("sample item keys:", Object.keys(dadosOriginais[0]));
             }
-            
+
             const valorNumerico = (array, key) =>
                 array
                     .map(item => parseFloat(item[key]))
@@ -508,31 +504,31 @@
             });
 
             // calcular picos (valor máximo e horário) por componente
-            function getField(item, keys){
-                for(const k of keys){
+            function getField(item, keys) {
+                for (const k of keys) {
                     if (item[k] !== undefined) return item[k];
                 }
                 return undefined;
             }
 
-            function computePeaks(arr){
+            function computePeaks(arr) {
                 const pico = {
-                    cpu: {value: -Infinity, ts: null},
-                    ram: {value: -Infinity, ts: null},
-                    disco: {value: -Infinity, ts: null},
-                    gpu: {value: -Infinity, ts: null},
-                    rede: {value: -Infinity, ts: null}
+                    cpu: { value: -Infinity, ts: null },
+                    ram: { value: -Infinity, ts: null },
+                    disco: { value: -Infinity, ts: null },
+                    gpu: { value: -Infinity, ts: null },
+                    rede: { value: -Infinity, ts: null }
                 };
 
                 arr.forEach(item => {
                     if (!item) return;
                     const ts = item.timestamp || item.time || item.data || item.date || null;
 
-                    const vCpu = parseFloat(getField(item,['cpu','CPU','Cpu']));
-                    const vRam = parseFloat(getField(item,['ram','RAM','Ram']));
-                    const vDisco = parseFloat(getField(item,['disco','DISCO','Disco']));
-                    const vGpu = parseFloat(getField(item,['uso % GPU','uso % gpu','GPU','gpu']));
-                    const vRede = parseFloat(getField(item,['rede (ms)','rede','Rede','network','network_ms']));
+                    const vCpu = parseFloat(getField(item, ['cpu', 'CPU', 'Cpu']));
+                    const vRam = parseFloat(getField(item, ['ram', 'RAM', 'Ram']));
+                    const vDisco = parseFloat(getField(item, ['disco', 'DISCO', 'Disco']));
+                    const vGpu = parseFloat(getField(item, ['uso % GPU', 'uso % gpu', 'GPU', 'gpu']));
+                    const vRede = parseFloat(getField(item, ['rede (ms)', 'rede', 'Rede', 'network', 'network_ms']));
 
                     if (!isNaN(vCpu) && vCpu > pico.cpu.value) { pico.cpu.value = vCpu; pico.cpu.ts = ts; }
                     if (!isNaN(vRam) && vRam > pico.ram.value) { pico.ram.value = vRam; pico.ram.ts = ts; }
@@ -542,12 +538,13 @@
                 });
 
                 Object.keys(pico).forEach(k => {
-                    if (pico[k].value===-Infinity) pico[k] = {value:null, ts:null}; });
+                    if (pico[k].value === -Infinity) pico[k] = { value: null, ts: null };
+                });
                 return pico;
             }
 
-            function fmtTime(ts){
-                if(!ts) return '--:--';
+            function fmtTime(ts) {
+                if (!ts) return '--:--';
                 const d = new Date(ts);
                 if (isNaN(d)) return '--:--';
 
@@ -563,11 +560,11 @@
             }
 
             // popular mini-cards
-            const peaks = computePeaks(dadosOriginais.length?dadosOriginais:data);
-            const setPeak = (id, value, ts, unit)=>{
+            const peaks = computePeaks(dadosOriginais.length ? dadosOriginais : data);
+            const setPeak = (id, value, ts, unit) => {
                 const el = document.getElementById(id);
-                if(!el) return;
-                el.querySelector('.mini-value').textContent = (value===null? '--' : (unit==='ms'? value.toFixed(0)+' ms' : value.toFixed(1)+'%'));
+                if (!el) return;
+                el.querySelector('.mini-value').textContent = (value === null ? '--' : (unit === 'ms' ? value.toFixed(0) + ' ms' : value.toFixed(1) + '%'));
                 el.querySelector('.mini-time').textContent = fmtTime(ts);
             }
 
