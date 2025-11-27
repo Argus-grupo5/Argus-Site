@@ -290,7 +290,7 @@ d="M10.157 12.711L4.5 18.368l-1.414-1.414l4.95-4.95l-4.95-4.95L4.5 5.64l5.657 5.
                         if (i == 0) {
                             risco = "../../assets/dashboard/desktop/danger.svg"
                             elServerList.innerHTML = `
-<div class="server-object" onclick="window.location.href='dashboard.html'">
+<div class="server-object" onclick="window.location.href='dashLuiz.html'">
 <div class="serverIcon tooltipInfo">
 <img class="server-icon-status" src="${risco}" alt="Status do servidor">
 </div>
@@ -382,6 +382,14 @@ d="M10.157 12.711L4.5 18.368l-1.414-1.414l4.95-4.95l-4.95-4.95L4.5 5.64l5.657 5.
                 gerar_server(i);
             }
         }
+    }
+
+    function clicarServidor(nomeServidor){
+        localStorage.setItem("servidorSelecionado", nomeServidor)
+
+        console.log("servidor salvo: ", nomeServidor)
+
+        window.location.href("dashLuiz.html")
     }
 
     filtragem_Servidores();

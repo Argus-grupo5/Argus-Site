@@ -1,13 +1,13 @@
 .grafic-conteiner{
     position: relative;
     left: 8dvw;
-    top:-10vh; 
+    top:-5vh; 
     display: flex;
     width: 80%;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100%;
+    height: 90%;
 }
 .grafics {
     position: relative;
@@ -24,9 +24,12 @@
     width: 100%;
 }
 
-.barra {
-    width: 90% !important;
-    height: 450px !important;
+.barra, #graficoArea {
+    width: 600px;
+    height: 450px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background-color: #414141;
     border-radius: 20px;
 }
@@ -35,7 +38,7 @@
     display: flex;
     justify-content: center;
     position: relative;
-    bottom: 51vh;
+    bottom: 62vh;
     left: 34vw;
 
     width: 10vw;
@@ -93,6 +96,28 @@ select:active {
 }
 
 .mensagem {
-    font-size: 18px;
+    margin: 0;
+    font-size: 14px;
     font-weight: 400;
+}
+
+.nome {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 15vh;
+}
+
+.nomeServer {
+    display: flex;
+    position: relative;
+    top: 2vh;
+    background-color: #414141;
+    border-radius: 20px;
+    width: 80%;
+    height: 15vh;
+    font-weight: 800;
+    font-size: 48px;
+    justify-content: center;
+    align-items: center;
 }
