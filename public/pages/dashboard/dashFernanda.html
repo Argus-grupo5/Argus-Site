@@ -67,9 +67,9 @@
 
 </div>
 
+<h2>Últimos Chamados</h2>
 
 <div class="tabela_dash">
-    <h2>Últimos Chamados</h2>
     <table border="1" width="100%">
         <thead>
             <tr>
@@ -158,8 +158,9 @@
             document.getElementById("chamadosAbertos").innerText = chamados.filter(c => c.status !== "Concluído").length;
             document.getElementById("chamadosFechados").innerText = chamados.filter(c => c.status === "Concluído").length;
 
-            const alerta = chamados.filter(c => c.prioridade === "High").length;
-            const critico = chamados.filter(c => c.prioridade === "Highest").length;
+            const alerta = chamados.filter(c => c.prioridade === "High" && c.status !== "Concluído").length;
+            const critico = chamados.filter(c => c.prioridade === "Highest" && c.status !== "Concluído").length;
+
 
             document.getElementById("critico").innerText = critico;
             document.getElementById("alerta").innerText = alerta;
@@ -263,7 +264,8 @@ function preencherTabela(chamados) {
     const tabela = document.getElementById("tabelaChamados");
     tabela.innerHTML = ""; 
 
-    // 1. Definir ordem de prioridade
+    const concluidoStatus = ["done", "concluído", "concluido", "finalizado", "resolved"];
+
     const ordemPrioridade = {
         "Highest": 1,
         "High": 2,
@@ -285,7 +287,19 @@ function preencherTabela(chamados) {
     return new Date(a.created) - new Date(b.created);
     });
 
+    const abertos = [];
+    const concluidos = [];
+
     chamados.forEach(ch => {
+        const st = ch.status?.toLowerCase() || "";
+        if (concluidoStatus.includes(st)) {
+            concluidos.push(ch);
+        } else {
+            abertos.push(ch);
+        }
+    });
+
+     [...abertos, ...concluidos].forEach(ch => {
         const linha = `
             <tr>
                 <td>${ch.id}</td>
@@ -358,7 +372,7 @@ function gerarGraficoLinha(chamados) {
 
     setTimeout(() => {
         location.reload()
-    }, 60000)
+    }, 180000)
     carregarDadosJira();
     setInterval(carregarDadosJira, 30000);
 </script>
