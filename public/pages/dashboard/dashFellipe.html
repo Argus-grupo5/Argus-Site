@@ -72,7 +72,9 @@
 
         <div class="server-overview-container">
             <div class="overview-header">
-                <h2>Visão Geral - Servidor </h2>
+                <h2>Visão Geral - Servidor <br>
+                    XBOX-CLOUD-BR</h2>
+                    <!-- colocar a ultima atualização -->
             </div>
 
             <div class="region-filter-bar">
@@ -93,59 +95,64 @@
 
             <div class="metrics-cards">
                 <div class="metric-card cpu-card">
+                    <span class="info-icon" title="Legenda">i</span>
                     <div class="metric-tooltip"> LEGENDA:<br>
                         0% - 70% 🟩<br>
                         71% - 80% 🟨<br>
                         81% - 100% 🟥</div>
 
-                    <div class="metric-label">Pico CPU</div>
+                    <div class="metric-label">CPU em Uso</div>
                     <div class="metric-info">No último dia (24h)</div>
                     <div class="metric-value">43%</div>
                     <div class="metric-info">4 de 12 cores em uso</div>
                 </div>
 
                 <div class="metric-card memory-card">
+                    <span class="info-icon" title="Legenda">i</span>
                     <div class="metric-tooltip">LEGENDA:<br>
                         0% - 65% 🟩<br>
                         66% - 75% 🟨<br>
                         76% - 100% 🟥</div>
 
-                    <div class="metric-label">Pico MEMÓRIA</div>
+                    <div class="metric-label">MEMÓRIA em Uso</div>
                     <div class="metric-info">No último dia (24h)</div>
                     <div class="metric-value">78%</div>
                     <div class="metric-info">81.3GB de 1.3GB em uso</div>
                 </div>
 
                 <div class="metric-card gpu-card">
+                    <span class="info-icon" title="Legenda">i</span>
                     <div class="metric-tooltip">LEGENDA:<br>
                         0% - 90% 🟩<br>
                         91% - 95% 🟨<br>
                         96% - 100% 🟥</div>
 
-                    <div class="metric-label">Pico GPU</div>
+                    <div class="metric-label">GPU em Uso</div>
                     <div class="metric-info">No último dia (24h)</div>
                     <div class="metric-value">78%</div>
                     <div class="metric-info">81.3GB de 1.3GB em uso</div>
                 </div>
 
                 <div class="metric-card storage-card">
+                    <span class="info-icon" title="Legenda">i</span>
                     <div class="metric-tooltip">LEGENDA:<br>
                         0% - 80% 🟩<br>
                         81% - 85% 🟨<br>
                         86% - 100% 🟥</div>
-                    <div class="metric-label">Pico DISCO</div>
+                    <div class="metric-label">DISCO em Uso</div>
                     <div class="metric-info">No último dia (24h)</div>
                     <div class="metric-value">78%</div>
                     <div class="metric-info">81.3GB de 1.3GB em uso</div>
                 </div>
 
                 <div class="metric-card latency-card">
+                    <span class="info-icon" title="Legenda">i</span>
                     <div class="metric-tooltip">LEGENDA:<br>
                         0ms - 10ms 🟩<br>
                         11ms - 20ms 🟨<br>
                         21ms - 1000ms 🟥</div>
 
-                    <div class="metric-label">Pico LATÊNCIA</div>
+                    <div class="metric-label">LATÊNCIA em Uso</div>
                     <div class="metric-info">No último dia (24h)</div>
                     <div class="metric-value">78%</div>
                     <div class="metric-info">81.3GB de 1.3GB em uso</div>
@@ -160,6 +167,35 @@
                 <div class="chart-container">
                     <h4>DISCO X RAM</h4>
                     <canvas id="diskChart"></canvas>
+                </div>
+            </div>
+           
+            <!-- mini card -->
+            <div class="mini-cards">
+                <div class="mini-card" id="peak-cpu">
+                    <div class="mini-label">PICO CPU</div>
+                    <div class="mini-value">--%</div>
+                    <div class="mini-time">--:--</div>
+                </div>
+                <div class="mini-card" id="peak-ram">
+                    <div class="mini-label">PICO RAM</div>
+                    <div class="mini-value">--%</div>
+                    <div class="mini-time">--:--</div>
+                </div>
+                <div class="mini-card" id="peak-disco">
+                    <div class="mini-label">PICO DISCO</div>
+                    <div class="mini-value">--%</div>
+                    <div class="mini-time">--:--</div>
+                </div>
+                <div class="mini-card" id="peak-gpu">
+                    <div class="mini-label">PICO GPU</div>
+                    <div class="mini-value">--%</div>
+                    <div class="mini-time">--:--</div>
+                </div>
+                <div class="mini-card" id="peak-rede">
+                    <div class="mini-label">PICO REDE</div>
+                    <div class="mini-value">-- ms</div>
+                    <div class="mini-time">--:--</div>
                 </div>
             </div>
         </div>
@@ -208,6 +244,16 @@
             if (filtrados.length === 0) { alert("Nenhum dado encontrado."); return; }
 
             atualizarDashboard(filtrados);
+
+            // Mini-cards de pico
+            if (typeof window.computePeaks === 'function' && typeof window.setPeak === 'function') {
+                const peaksFiltered = window.computePeaks(filtrados);
+                window.setPeak('peak-cpu', peaksFiltered.cpu.value, peaksFiltered.cpu.ts);
+                window.setPeak('peak-ram', peaksFiltered.ram.value, peaksFiltered.ram.ts);
+                window.setPeak('peak-disco', peaksFiltered.disco.value, peaksFiltered.disco.ts);
+                window.setPeak('peak-gpu', peaksFiltered.gpu.value, peaksFiltered.gpu.ts);
+                window.setPeak('peak-rede', peaksFiltered.rede.value, peaksFiltered.rede.ts, 'ms');
+            }
         });
     </script>
 </body>
@@ -381,13 +427,13 @@
                         {
                             label: 'CPU %',
                             data: cpuFaixa,
-                            backgroundColor: '#43d33f',
+                            backgroundColor: '#ff670a',
                             borderRadius: 4
                         },
                         {
                             label: 'GPU %',
                             data: gpuFaixa,
-                            backgroundColor: '#ff3131',
+                            backgroundColor: '#6b6b6b',
                             borderRadius: 4
                         }
                     ]
@@ -423,8 +469,8 @@
                         {
                             label: 'Disco %',
                             data: discoFaixa,
-                            borderColor: '#50d050',
-                            backgroundColor: 'rgba(80, 208, 80, 0.1)',
+                            borderColor: '#ff670a',
+                            backgroundColor: 'rgba(255, 103, 10, 0.12)',
                             borderWidth: 2,
                             fill: true,
                             tension: 0.4
@@ -432,8 +478,8 @@
                         {
                             label: 'RAM %',
                             data: ramFaixa,
-                            borderColor: '#D4D4D4',
-                            backgroundColor: 'rgba(60, 108, 60, 0.1)',
+                            borderColor: '#6b6b6b',
+                            backgroundColor: 'rgba(107, 107, 107, 0.14)',
                             borderWidth: 2,
                             fill: true,
                             tension: 0.4
@@ -460,6 +506,80 @@
                     }
                 }
             });
+
+            // calcular picos (valor máximo e horário) por componente
+            function getField(item, keys){
+                for(const k of keys){
+                    if (item[k] !== undefined) return item[k];
+                }
+                return undefined;
+            }
+
+            function computePeaks(arr){
+                const pico = {
+                    cpu: {value: -Infinity, ts: null},
+                    ram: {value: -Infinity, ts: null},
+                    disco: {value: -Infinity, ts: null},
+                    gpu: {value: -Infinity, ts: null},
+                    rede: {value: -Infinity, ts: null}
+                };
+
+                arr.forEach(item => {
+                    if (!item) return;
+                    const ts = item.timestamp || item.time || item.data || item.date || null;
+
+                    const vCpu = parseFloat(getField(item,['cpu','CPU','Cpu']));
+                    const vRam = parseFloat(getField(item,['ram','RAM','Ram']));
+                    const vDisco = parseFloat(getField(item,['disco','DISCO','Disco']));
+                    const vGpu = parseFloat(getField(item,['uso % GPU','uso % gpu','GPU','gpu']));
+                    const vRede = parseFloat(getField(item,['rede (ms)','rede','Rede','network','network_ms']));
+
+                    if (!isNaN(vCpu) && vCpu > pico.cpu.value) { pico.cpu.value = vCpu; pico.cpu.ts = ts; }
+                    if (!isNaN(vRam) && vRam > pico.ram.value) { pico.ram.value = vRam; pico.ram.ts = ts; }
+                    if (!isNaN(vDisco) && vDisco > pico.disco.value) { pico.disco.value = vDisco; pico.disco.ts = ts; }
+                    if (!isNaN(vGpu) && vGpu > pico.gpu.value) { pico.gpu.value = vGpu; pico.gpu.ts = ts; }
+                    if (!isNaN(vRede) && vRede > pico.rede.value) { pico.rede.value = vRede; pico.rede.ts = ts; }
+                });
+
+                Object.keys(pico).forEach(k => {
+                    if (pico[k].value===-Infinity) pico[k] = {value:null, ts:null}; });
+                return pico;
+            }
+
+            function fmtTime(ts){
+                if(!ts) return '--:--';
+                const d = new Date(ts);
+                if (isNaN(d)) return '--:--';
+
+                // arredondamento
+                let h = d.getHours();
+                const m = d.getMinutes();
+                if (m > 30) {
+                    h = (h + 1) % 24;
+                }
+
+                const hh = String(h).padStart(2, '0');
+                return hh + ':00';
+            }
+
+            // popular mini-cards
+            const peaks = computePeaks(dadosOriginais.length?dadosOriginais:data);
+            const setPeak = (id, value, ts, unit)=>{
+                const el = document.getElementById(id);
+                if(!el) return;
+                el.querySelector('.mini-value').textContent = (value===null? '--' : (unit==='ms'? value.toFixed(0)+' ms' : value.toFixed(1)+'%'));
+                el.querySelector('.mini-time').textContent = fmtTime(ts);
+            }
+
+            setPeak('peak-cpu', peaks.cpu.value, peaks.cpu.ts);
+            setPeak('peak-ram', peaks.ram.value, peaks.ram.ts);
+            setPeak('peak-disco', peaks.disco.value, peaks.disco.ts);
+            setPeak('peak-gpu', peaks.gpu.value, peaks.gpu.ts);
+            setPeak('peak-rede', peaks.rede.value, peaks.rede.ts, 'ms');
+
+            window.computePeaks = computePeaks;
+            window.setPeak = setPeak;
+            window.fmtTime = fmtTime;
         })
         .catch(err => console.error("Erro ao carregar JSON:", err));
 
