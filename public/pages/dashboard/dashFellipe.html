@@ -233,8 +233,11 @@
             }
 
             const filtrados = dadosOriginais.filter(item => {
-                const valorRegiao = item.usuario.slice(-4).toLowerCase();
+
+                const partes = item.usuario.split('-');
+                const valorRegiao = partes.length >= 4 ? partes[3].toLowerCase() : '';
                 return valorRegiao === regiao;
+
             });
 
             if (filtrados.length === 0) { alert("Nenhum dado encontrado."); return; }
@@ -269,19 +272,19 @@
 
         data.forEach((item, idx) => {
             if (!item) {
-                console.warn("agruparPorFaixaHoraria: item undefined/null at index", idx);
+                console.warn("agruparPorFaixaHoraria: item undefined/null no index", idx);
                 return;
             }
 
             const ts = item.timestamp || item.time || item.data || item.date;
             if (!ts) {
-                console.warn("agruparPorFaixaHoraria: missing timestamp for item", idx, item);
+                console.warn("agruparPorFaixaHoraria: está faltando horário no index", idx, item);
                 return;
             }
 
             const hora = new Date(ts).getHours();
             if (isNaN(hora)) {
-                console.warn("agruparPorFaixaHoraria: invalid timestamp for item", idx, ts);
+                console.warn("agruparPorFaixaHoraria: horário inválido no index", idx, ts);
                 return;
             }
 
@@ -334,7 +337,7 @@
         .then(data => {
             console.log(data)
 
-            dadosOriginais = Array.isArray(data) ? data : (data && data.items) ? data.items : [];
+            dadosOriginais = Array.isArray(data) ? data : (data && data.data) ? data.data : [];
             if (dadosOriginais.length > 0) {
                 console.log("sample item keys:", Object.keys(dadosOriginais[0]));
             }
@@ -344,7 +347,7 @@
                     .map(item => parseFloat(item[key]))
                     .filter(v => !isNaN(v));
 
-            const valorCpu = valorNumerico(data, "cpu");
+            const valorCpu = valorNumerico(dadosOriginais, "cpu");
             const mediaCpu = valorCpu.reduce((a, b) => a + b, 0) / valorCpu.length;
 
             const cpuEl = document.querySelector(".cpu-card .metric-value");
@@ -356,7 +359,7 @@
                 red: { min: 81, max: 100 }
             });
 
-            const valorRam = valorNumerico(data, "ram");
+            const valorRam = valorNumerico(dadosOriginais, "ram");
             const mediaRam = valorRam.reduce((a, b) => a + b, 0) / valorRam.length;
 
             const ramEl = document.querySelector(".memory-card .metric-value");
@@ -368,7 +371,7 @@
                 red: { min: 76, max: 100 }
             });
 
-            const valorDisco = valorNumerico(data, "disco");
+            const valorDisco = valorNumerico(dadosOriginais, "disco");
             const mediaDisco = valorDisco.reduce((a, b) => a + b, 0) / valorDisco.length;
 
             const discoEl = document.querySelector(".storage-card .metric-value");
@@ -380,7 +383,7 @@
                 red: { min: 86, max: 100 }
             });
 
-            const valorGpu = valorNumerico(data, "uso % GPU");
+            const valorGpu = valorNumerico(dadosOriginais, "uso % GPU");
             const mediaGpu = valorGpu.reduce((a, b) => a + b, 0) / valorGpu.length;
 
             const gpuEl = document.querySelector(".gpu-card .metric-value");
@@ -392,7 +395,7 @@
                 red: { min: 96, max: 100 }
             });
 
-            const valorLatencia = valorNumerico(data, "rede (ms)");
+            const valorLatencia = valorNumerico(dadosOriginais, "rede (ms)");
             const latenciaMedia = valorLatencia.reduce((a, b) => a + b, 0) / valorLatencia.length;
 
             const redeEl = document.querySelector(".latency-card .metric-value");
@@ -404,7 +407,7 @@
                 red: { min: 20, max: 9999 }
             });
 
-            const faixas = agruparPorFaixaHoraria(data);
+            const faixas = agruparPorFaixaHoraria(dadosOriginais);
 
             const labels = Object.keys(faixas);
 
@@ -565,7 +568,7 @@
             const setPeak = (id, value, ts, unit) => {
                 const el = document.getElementById(id);
                 if (!el) return;
-                el.querySelector('.mini-value').textContent = (value === null ? '--' : (unit === 'ms' ? value.toFixed(0) + ' ms' : value.toFixed(1) + '%'));
+                el.querySelector('.mini-value').textContent = (value === null ? '--' : (unit === 'ms' ? value.toFixed(1) + ' ms' : value.toFixed(1) + '%'));
                 el.querySelector('.mini-time').textContent = fmtTime(ts);
             }
 
