@@ -1,13 +1,13 @@
 .grafic-conteiner{
     position: relative;
-    left: 8dvw;
-    top:-5vh; 
+    left: 10dvw;
+    top:1vh; 
     display: flex;
     width: 80%;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 90%;
+    height: 80%;
 }
 .grafics {
     position: relative;
@@ -120,4 +120,32 @@ select:active {
     font-size: 48px;
     justify-content: center;
     align-items: center;
+}
+
+.sair {
+    width: 100%;
+    display: flex;
+    justify-content: end;
+    position: relative;
+    transform: translateY(1vh);
+    right: 1vw;
+}
+#sair {
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #414141;
+    width: 30px;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+}
+
+#sair:hover{
+    height: 30px;
+    width: 40px;
+}
+
+#sair:active {
+    background-color: #41414186;
 }

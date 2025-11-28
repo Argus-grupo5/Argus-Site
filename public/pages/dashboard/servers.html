@@ -47,107 +47,12 @@
         </div>
     </header>
 
-    <div class="top-boxes-container">
-
-        <div class="info-box alert-box">
-            <p class="label">Alertas totais (24h)</p>
-            <p class="value">5</p>
-        </div>
-
-        <div class="info-box server-box">
-            <p class="label">Servidor com mais alertas (semana)</p>
-            <p class="value">SERV1</p>
-        </div>
-
-        <div class="info-box component-box">
-            <p class="label">Componente recorrente</p>
-            <p class="value">RAM</p>
-        </div>
-
-    </div>
-
     <div class="search" id="search">
     </div>
 
     <div class="container">
         <div class="server-list" id="regioes"></div>
     </div>
-
-    <div class="container-boxes-down">
-        <div class="container-boxes-title">
-            <p>Visão por componentes</p>
-            <p class="boxes-subtitle">selecione um servidor</p>
-        </div>
-
-        <div class="container-boxes-comp">
-            <div>
-                <p>CPU</p>
-                <div class="box-card">
-                    <div>
-                        <p class="label-box">Média (24h)</p>
-                        <p class="value-box"  id="media_cpu">-</p>
-                    </div>
-                    <div>
-                        <p class="label-box">Pico (1h)</p>
-                        <p class="value-box"  id="pico_cpu">-</p>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <p>GPU</p>
-                <div class="box-card">
-                    <div>
-                        <p class="label-box">Média (24h)</p>
-                        <p class="value-box" id="media_gpu">-</p>
-                    </div>
-                    <div>
-                        <p class="label-box">Pico (1h)</p>
-                        <p class="value-box" id="pico_gpu">-</p>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <p>RAM</p>
-                <div class="box-card">
-                    <div>
-                        <p class="label-box">Média (24h)</p>
-                        <p class="value-box" id="media_ram">-</p>
-                    </div>
-                    <div>
-                        <p class="label-box">Pico (1h)</p>
-                        <p class="value-box" id="pico_ram">-</p>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <p>DISCO</p>
-                <div class="box-card">
-                    <div>
-                        <p class="label-box">% Total (<span id="data_disco">XXXX-XX-XX</span>)</p>
-                        <p class="value-box" id="media_disco">-</p>
-                    </div>
-                    <div>
-                        <p class="label-box">Taxa de variação (1h)</p>
-                        <p class="value-box" id="pico_disco">-</p>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <p>REDE</p>
-                <div class="box-card">
-                    <div>
-                        <p class="label-box">Média (24h)</p>
-                        <p class="value-box" id="media_rede">-</p>
-                    </div>
-                    <div>
-                        <p class="label-box">Pico (1h)</p>
-                        <p class="value-box" id="pico_rede">-</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     </div>
 </body>
 
@@ -217,6 +122,12 @@
                 <div class="modal-label-comp">
                     <input type="number" name="" id="ipt_maxGPU" placeholder="Digite o limite máximo da GPU">
                     <input type="number" name="" id="ipt_minGPU" placeholder="Digite o mínimo da GPU">
+                </div>
+            </div>
+            <div class="modal-label" id="div_modal_label">
+                <label for="ipt_nome_gpu">Limite de alertas:</label>
+                <div class="modal-label-comp">
+                    <input type="number" name="" id="ipt_qtdAlerta" placeholder="Digite o limite máximo da quantidade de alertas">
                 </div>
             </div>
             <div class="modal-button">
@@ -293,6 +204,7 @@
         const minREDE = ipt_minREDE.value;
         const maxGPU = ipt_maxGPU.value;
         const minGPU = ipt_minGPU.value;
+        const qtdAlerta = ipt_qtdAlerta.value;
 
         function validarLimite(max, min, nome) {
             if (isNaN(max) || isNaN(min)) {
@@ -345,7 +257,8 @@
                 maxRedeServer: maxREDE,
                 minRedeServer: minREDE,
                 maxGpuServer: maxGPU,
-                minGpuServer: minGPU
+                minGpuServer: minGPU,
+                qtdAlerta: qtdAlerta
             })
         })
             .then((resposta) => {
@@ -398,49 +311,58 @@
             })
     }
 
-    function listarServidores(objetoHTML) {
-        const siglaObjeto = objetoHTML.dataset.sigla
-        const id = sessionStorage.EMPRESA_ID
-        const filhos = objetoHTML.children
-        filhos[2].style.transform = "rotate(180deg)"
-        const divServ = document.getElementById(`id_server_list_${siglaObjeto}`)
-        divServ.innerHTML = ""
-        objetoHTML.setAttribute('onclick', "fecharServidores(this)")
+    const servidoresS3 = []
+    const semanal = []
+    const data = []
 
-        fetch(`/servidores/listarServidores/${id}/${siglaObjeto}`, {
+async function listarServidores(objetoHTML) {
+    const siglaObjeto = objetoHTML.dataset.sigla;
+    const id = sessionStorage.EMPRESA_ID;
+    const filhos = objetoHTML.children;
+    filhos[2].style.transform = "rotate(180deg)";
+    const divServ = document.getElementById(`id_server_list_${siglaObjeto}`);
+    divServ.innerHTML = "";
+    objetoHTML.setAttribute('onclick', "fecharServidores(this)");
+
+    try {
+        const resposta = await fetch(`/servidores/listarServidores/${id}/${siglaObjeto}`, {
             method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-            .then(resposta => {
-                resposta.json().then((json) => {
-                    console.log(json)
-                    json.forEach(servidor => {
-                        if (servidor.nome == "serv1") {
-                            var risco = "../../assets/dashboard/desktop/danger.svg"
-                            divServ.innerHTML += `
-                         <div class="server-object" onclick="selecionarServ(valoresMockados.Serv1)">
-                            <div class="serverIcon tooltipInfo">
-                                <img class="server-icon-status" src="${risco}" alt="Status do servidor">
-                            </div>
-                            <div class="serverName">${servidor.nome}</div>
-                            <div class="serverLocation"><p>CPU, RAM, DISCO</p></div>
-                        </div>
-                        `
-                        } else {
-                            divServ.innerHTML += `
-                         <div class="server-object">
-                            <div class="serverIcon"></div>
-                            <div class="serverName">${servidor.nome}</div>
-                        </div>
-                        `}
-                    })
-                })
-            })
+            headers: { 'Content-Type': 'application/json' }
+        });
 
+        const json = await resposta.json();
+        console.log('Servidores:', json);
+
+        servidoresS3.length = 0;
+
+        json.forEach(servidor => {
+            servidoresS3.push(servidor.nome);
+            const riscoInicial = servidor.nome === "serv1" 
+                ? "../../assets/dashboard/desktop/danger.svg" 
+                : "../../assets/dashboard/desktop/ok.svg";
+
+            divServ.innerHTML += `
+                <div class="server-object" data-servidor="${servidor.nome}" id="servidor-${servidor.nome}" onclick="clicarServidor('${servidor.nome}')">
+                    <div class="serverIcon tooltipInfo">
+                        <img class="server-icon-status" src="${riscoInicial}" alt="Status" data-servidor="${servidor.nome}">
+                    </div>
+                    <div class="serverName">${servidor.nome}</div>
+                    <div class="serverLocation"><p>CPU, RAM, DISCO</p></div>
+                </div>
+            `;
+        });
+
+        for (let i = 0; i < servidoresS3.length; i++) {
+            console.log('Buscando dados para:', servidoresS3[i]);
+            await semana(servidoresS3[i]);
+        }
+
+        calcularTotalGeralPorServidor(semanal);
+
+    } catch (err) {
+        console.error('Erro no fetch:', err);
     }
-
+}
 
     function fecharServidores(objetoHTML) {
         const siglaObjeto = objetoHTML.dataset.sigla
@@ -452,54 +374,112 @@
 
         objetoHTML.setAttribute('onclick', "listarServidores(this)")
     }
+      function clicarServidor(nomeServidor){
+    localStorage.setItem("servidorSelecionado", nomeServidor);
 
-    const valoresMockados = {
-        "Serv1" : {
-            'cpu': ['67.2%', '82.5%'],
-            'gpu': ['72.5%', '94.8%'],
-            'ram': ['71.3%', '83.5%'],
-            'disco': ['81.2%', '0.2%', '2025-10-27'],
-            'rede': ['0.5ms', '1.2ms']
+    console.log("servidor salvo: ", nomeServidor);
+
+    window.location.href = "dashLuiz.html";
+}   
+const totais = {};
+
+function atualizarStatusRegiao() {
+    const regiaoSP = document.querySelector('.regioes-card[data-regiao="SP"] .regiao-icon-status');
+    
+    if (!regiaoSP) return;
+
+    let regiaoCritica = false;
+
+    Object.keys(totais).forEach(servidorNome => {
+        const total = totais[servidorNome].total;
+
+        if (servidorNome.includes('sp-') || servidorNome === 'eduardo') {
+            if (total > 50) {
+                regiaoCritica = true;
+            }
         }
+    });
+
+    regiaoSP.src = regiaoCritica
+        ? '../../assets/dashboard/desktop/danger.svg'
+        : '../../assets/dashboard/desktop/ok.svg';
+}
+document.addEventListener('DOMContentLoaded', async function () {
+    const cardSP = document.querySelector('.regioes-card[data-regiao="SP"]');
+    if (cardSP) {
+        await listarServidores(cardSP);
     }
+});
 
-    const mediaCpu = document.getElementById("media_cpu")
-    const mediaGPU = document.getElementById("media_gpu")
-    const mediaRam = document.getElementById("media_ram")
-    const mediaDisco = document.getElementById("media_disco")
-    const mediaRede = document.getElementById("media_rede")
-    const picoCpu = document.getElementById("pico_cpu")
-    const picoGPU = document.getElementById("pico_gpu")
-    const picoRam = document.getElementById("pico_ram")
-    const picoDisco = document.getElementById("pico_disco")
-    const picoRede = document.getElementById("pico_rede")
-    const horaDisco = document.getElementById("data_disco")
 
-    function selecionarServ(servidor){
-        console.log(servidor)
-        mediaCpu.innerHTML = servidor.cpu[0]
-        picoCpu.innerHTML = servidor.cpu[1]
-
-        mediaGPU.innerHTML = servidor.gpu[0]
-        picoGPU.innerHTML = servidor.gpu[1]
-
-        mediaRam.innerHTML = servidor.ram[0]
-        picoRam.innerHTML = servidor.ram[1]
-
-        mediaDisco.innerHTML = servidor.disco[0]
-        picoDisco.innerHTML = servidor.disco[1]
-        horaDisco.innerHTML = servidor.disco[2]
+function calcularTotalGeralPorServidor(dados) {
+    Object.keys(totais).forEach(key => delete totais[key]);
+    
+    dados.forEach(item => {
+        const servidor = item.Identificador;
         
-        mediaRede.innerHTML = servidor.rede[0]
-        picoRede.innerHTML = servidor.rede[1]
+        if (!totais[servidor]) {
+            totais[servidor] = { total: 0 };
+        }
+
+        const cpu   = Number(item.CPU)   || 0;
+        const ram   = Number(item.Ram)   || 0;
+        const disco = Number(item.Disco) || 0;
+        const gpu   = Number(item.GPU)   || 0;
+        
+        totais[servidor].total += (cpu + ram + disco + gpu);
+    });
+
+
+    Object.keys(totais).forEach(servidorNome => {
+        const total = totais[servidorNome].total;
+        console.log(`${servidorNome}: ${total} alertas totais`);
+        
+        const imgStatus = document.querySelector(
+            `[data-servidor="${servidorNome}"] .server-icon-status`
+        );
+        
+        if (imgStatus) {
+            imgStatus.src = total > 50
+                ? '../../assets/dashboard/desktop/danger.svg'
+                : '../../assets/dashboard/desktop/ok.svg';
+        }
+    });
+
+    atualizarStatusRegiao();
+
+    semanal.length = 0;
+}
+
+  async function semana(nomeServidor) {
+    const hoje = new Date();
+    let dias = 7;
+
+    for (let i = 7; i >= 1; i--) {
+      const key = `${nomeServidor}-${hoje.getDate() - i}-${hoje.getMonth() + 1}-${hoje.getFullYear()}.json`;
+
+      try {
+        const res = await fetch(`https://s3-bucket-client-1.s3.us-east-1.amazonaws.com/${key}`);
+
+        if (!res.ok) {
+          console.log("Arquivo não encontrado:", key);
+          continue;
+        }
+
+        const data = await res.json();
+        semanal.push(data);
+        console.log(semanal)
+
+      } catch (err) {
+        console.error("Erro ao fazer fetch:", err);
+      }
     }
 
+    console.log("Todos os dados carregados:", semanal);
+    console.log("Primeiro JSON:", semanal[0]);
 
+  } 
 
-    const elMonitored = document.getElementById("id_servidores_monitorados");
-    const elQtdCritico = document.getElementById("qtd_critico");
-    const elQtdAlerta = document.getElementById("qtd_alerta");
-    const elServerList = document.getElementById("id_server_list");
 
     // updateKPIs();
     // filtragem_Servidores();
