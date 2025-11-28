@@ -15,6 +15,7 @@ function addServidor(req, res) {
     var minRede = req.body.minRedeServer;
     var maxGpu = req.body.maxGpuServer;
     var minGpu = req.body.minGpuServer;
+    var qtdAlerta = req.body.qtdAlerta;
 
     if (nome == undefined) {
         res.status(400).send("Seu nome está undefined!");
@@ -47,7 +48,7 @@ function addServidor(req, res) {
     }
     else {
 
-        servidoresModel.addServidor(nome, empresa, nome_estado, sigla_estado, maxCpu, minCpu, maxRam, minRam, maxDisco, minDisco, maxRede, minRede, maxGpu, minGpu)
+        servidoresModel.addServidor(nome, empresa, nome_estado, sigla_estado, maxCpu, minCpu, maxRam, minRam, maxDisco, minDisco, maxRede, minRede, maxGpu, minGpu, qtdAlerta)
             .then(
                 (resultadoAdd) => {
                     res.status(201).json(resultadoAdd);
@@ -91,7 +92,24 @@ function listarServidores(req, res) {
             res.status(500).json(erro.sqlMessage);
         })
 }
+function limiteAlertas(req, res) {
+    const servidorSelecionado = req.params.nomeServidor;
+    console.log('limiteAlertas - servidor:', servidorSelecionado);
 
+    servidoresModel.limiteAlertas(servidorSelecionado)
+        .then((resposta) => {
+            console.log('Resposta model:', resposta);
+            if (resposta.length > 0) {
+                res.json(resposta);
+            } else {
+                res.status(204).send();
+            }
+        })
+        .catch((erro) => {
+            console.log('Erro model:', erro);
+            res.status(500).json({ erro: erro.sqlMessage || erro.message });
+        });
+}
 function listarServidoresTotais(req, res) {
     const id = req.params.idServer
 
@@ -127,5 +145,6 @@ module.exports = {
     listar,
     listarServidores,
     listarServidoresTotais,
-    contarServidores
+    contarServidores,
+    limiteAlertas
 }
