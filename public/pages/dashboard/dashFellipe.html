@@ -233,7 +233,7 @@
             }
 
             const filtrados = dadosOriginais.filter(item => {
-                const valorRegiao = item.usuario.slice(-2).toLowerCase();
+                const valorRegiao = item.usuario.slice(-4).toLowerCase();
                 return valorRegiao === regiao;
             });
 
@@ -332,6 +332,7 @@
     fetch("https://argus-bucket-client.s3.us-east-1.amazonaws.com/infra/dados_diretos/dados-client.json")
         .then(response => response.json())
         .then(data => {
+            console.log(data)
 
             dadosOriginais = Array.isArray(data) ? data : (data && data.items) ? data.items : [];
             if (dadosOriginais.length > 0) {
