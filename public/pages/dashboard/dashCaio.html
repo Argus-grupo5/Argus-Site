@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../css/dashboard/MapaDeCalor.css">
     <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/dashboard/dashboard.css">
+    <link rel="stylesheet" href="../../css/dashboard/servers.css">
+    <link rel="stylesheet" href="../../css/dashboard/popup.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.anychart.com/releases/8.13.0/css/anychart-ui.min.css" />
     <link rel="stylesheet" type="text/css"
         href="https://cdn.anychart.com/releases/8.13.0/fonts/css/anychart-font.min.css" />
@@ -16,11 +19,10 @@
     <script src="https://cdn.anychart.com/releases/v8/js/anychart-ui.min.js"></script>
     <script src="https://cdn.anychart.com/geodata/2.2.0/countries/brazil/brazil.js"></script>
     <script src="https://cdn.anychart.com/releases/8.13.0/js/anychart-ui.min.js"></script>
-
-
-
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="./script/dash.js"></script>
-    <title>ARGUS | Servidores</title>
+
+    <title>ARGUS | Visão Servidores</title>
 </head>
 
 
@@ -32,7 +34,36 @@
         <div class="modal-geral" id="div_modal_label"></div>
     </div>
 
-    <header class="desktopNav" id="navDesktop"></header>
+    <header class="desktopNav" id="navDesktop">
+        <div class="navButtons">
+            <a href="./perfil.html" class="navButton tooltipNav" id="navUser">
+                <img src="../../../assets/fotoPerfil/${sessionStorage.FOTO}" alt="" id="FotoNavBar">
+                <span class="tooltiptextNav">
+                    <div id="userNome"></div>
+                    <div id="userCargo"></div>
+                </span>
+            </a>
+            <a href="./dashCaio.html" class="navButton tooltipNav" id="navServers">
+                <img id="imgServidores" src="../../assets/dashboard/desktop/box.svg" alt="Servidores">
+                <span class="tooltiptextNav">Servidores</span>
+            </a>
+            <a href="./serversSup.html" class="navButton tooltipNav" id="navServers">
+                <img id="imgServidores" src="../../assets/dashboard/desktop/box.svg" alt="Servidores">
+                <span class="tooltiptextNav">Servidores</span>
+            </a>
+
+            <a href="./funcionarios.html" class="navButton tooltipNav" id="navServers">
+                <img id="imgFuncionarios" src="../../assets/dashboard/desktop/employes.svg" alt="Funcionários">
+                <span class="tooltiptextNav">Funcionários</span>
+            </a>
+
+            <div class="navButton tooltipNav" id="navServers" onclick="sair()">
+                <img src="../../assets/dashboard/desktop/logout.svg" alt="Sair">
+                <span class="tooltiptextNav">Sair</span>
+            </div>
+        </div>
+        <img class="logo" src="../../assets/icon/logoBlack.svg" alt="">
+    </header>
 
     <header class="headerTop">
         <div class="geralInfo">
@@ -40,41 +71,30 @@
                 <div class="server">
                     <img src="../../assets/dashboard/desktop/server.svg" alt="">
                 </div>
-                <div class="serversMonitoring" id="id_servidores_monitorados">
-                </div>
-                <span class="tooltiptextInfo">
-                    Servidores em monitoramento
-                </span>
-            </div>
-            <div class="info">
-                <div class="bell">
-                    <img src="../../assets/dashboard/desktop/bell.svg" alt="">
-                </div>
-                <div class="risk tooltipInfo" id="id_servidores_em_estado_critico">
-                    <p id="qtd_critico">1</p>
-                    <span class="tooltiptextInfo">
-                        Servidores em atenção
-                    </span>
-                </div>
             </div>
         </div>
     </header>
 
     <div class="top-boxes-container">
 
-        <div class="info-box alert-box">
+        <div class="info-box">
+            <div class="metric-tooltip">
+                0% - 80% 🟩<br>
+                81% - 85% 🟨<br>
+                86% - 100% 🟥
+            </div>
             <p class="label">Região com mais Alertas</p>
-            <p class="value">São Paulo</p>
+            <p id="estado" class="value"></p>
         </div>
 
         <div class="info-box server-box-N-Servidores">
             <p class="label">Servidores em Alertas (Ultima semana)</p>
-            <p class="value">128/200</p>
+            <p id="numeroServidores" class="value"></p>
         </div>
 
         <div class="info-box component-box">
             <p class="label">Componente c/ mais alertas</p>
-            <p class="value">GPU</p>
+            <p id="ComponenteAlerta" class="value"></p>
         </div>
 
         <div class="Select-location">
@@ -96,12 +116,39 @@
 
     <div class="containerGraficos">
         <div class="mapaCalor">
-        <div id="mapBrasil"></div>
+            <div id="mapBrasil"></div>
         </div>
 
-        <div class="graficoLinha">
+        <div class="graficoLinha" id="card-grafico">
+            <h2 class="titulo-grafico">Total de alertas por Componente</h2>
+            <div id="myChart"></div>
             <div id="linhaBrasil"></div>
-            <div id="corelacao"></div>
+
+
+            <div class="lista-jogos">
+
+                <div class="legenda">
+                    <div class="legenda-foto">Jogos Mais Jogados nos Servidores</div>
+                </div>
+
+                <div id="backJogoI" class="linha-jogo">
+                    <img id="ftJogoI" class="jogo-foto" />
+                    <div id="jogoIdiv" class="jogo-nome"></div>
+                </div>
+
+                <div id="backJogoII" class="linha-jogo">
+                    <img id="ftJogoII" class="jogo-foto" />
+                    <div id="jogoIIdiv" class="jogo-nome"></div>
+                </div>
+                <div id="backJogoIII" class="linha-jogo">
+                    <img id="ftJogoIII" class="jogo-foto" />
+                    <div id="jogoIIIdiv" div class="jogo-nome"></div>
+                </div>
+
+            </div>
+
+
+
         </div>
     </div>
 
@@ -112,13 +159,389 @@
 </html>
 <script type="text/javascript">
 
-    header("server", sessionStorage.CARGO_CARGO);
+
+    // Fetch do Imagem dos Jogos 
+
+    function loadGameImage(appid, nomeDiv) {
+        const url = `https://cdn.cloudflare.steamstatic.com/steam/apps/${appid}/header.jpg`;
+        const img = document.getElementById(nomeDiv);
+
+        img.onerror = () => {
+            img.src = "img/notfound.png";
+        };
+
+        img.src = url;
+        img.style.display = "block";
+    }
+
+    // Fetch do Imagem dos Jogos 
+
+    function loadImageBackground(appid, nomeDiv) {
+        const div = document.getElementById(nomeDiv);
+
+        if (!div) {
+            console.error("Div não encontrada:", nomeDiv);
+            return;
+        }
+
+        const testeURL = fotoJogo[appid]
+
+        const tester = new Image();
+        tester.onload = () => {
+            div.style.backgroundImage = `url('${testeURL}')`;
+            div.style.backgroundSize = 'cover';
+            div.style.backgroundPosition = 'center';
+            div.style.backgroundRepeat = 'no-repeat';
+        };
+        tester.onerror = () => {
+            div.style.backgroundImage = "url('img/notfound.png')";
+        };
+
+        tester.src = testeURL;
+    }
+
+    // Fetch do bucket 
+
+    async function semana(estado, prefix) {
+
+        const hoje = new Date();
+        let dias = 7;
+        dados = []
+
+        for (let i = 7; i >= 1; i--) {
+            const key = `DashCalor/${estado}/xbox-cloud-br-${prefix}-Client-${hoje.getDate() - i}-${hoje.getMonth() + 1}-${hoje.getFullYear()}.json`;
+
+            try {
+                const res = await fetch(`https://s3-client-argus-14h25m.s3.amazonaws.com/${key}`);
+
+                if (!res.ok) {
+                    console.log("Arquivo não encontrado:", key);
+                    continue;
+                }
+
+                const data = await res.json();
+                dados.push(data);
+
+
+            } catch (err) {
+                console.error("Erro ao fazer fetch:", err);
+            }
+        }
+        return dados;
+    }
+
+
+    const nomesJogos = {
+        730: "Counter-Strike 2",
+        570: "Dota 2",
+        578080: "PUBG: BATTLEGROUNDS",
+        1808500: "ARC Raiders",
+        3564740: "Where Winds Meet",
+        1172470: "Apex Legends",
+        271590: "Grand Theft Auto V Legacy",
+        238960: "Path of Exile",
+        252490: "Rust",
+        3240220: "Grand Theft Auto V Enhanced",
+        1086940: "Baldur's Gate 3",
+        3167020: "Escape from Duckov",
+        3405690: "EA SPORTS FC 26",
+        2300320: "Farming Simulator 25",
+        394360: "Hearts of Iron IV",
+        2799860: "NAZUMA ELEVEN: Victory Road",
+        1174180: "Red Dead Redemption 2",
+        359550: "Tom Clancy's Rainbow Six Siege X",
+        3527290: "PEAK"
+    };
+
+    const fotoJogo = {
+        730: "https://s2-ge.glbimg.com/9kR2h8-YaW-X8VClXrv07I7lHKU=/0x0:1920x1080/984x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_bc8228b6673f488aa253bbcb03c80ec5/internal_photos/bs/2023/D/Y/0rilB6T0ChOJROjiUHgg/cs2.jpg",
+        570: "https://wallpapers.com/images/hd/best-dota-2-background-nhp25octk9bz29bt.jpg",
+        578080: "data:image/jpeg;base64,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",
+        1808500: "https://static.swiatgraczy.pl/images/news/o/1ca6cbd74cf35a42910f84621186fbcead736655.jpg",
+        3564740: "https://images.wallpapersden.com/image/download/where-winds-meet-2022-hd_bWpta2aUmZqaraWkpJRnamtlrWZlbWU.jpg",
+        1172470: "https://4kwallpapers.com/images/wallpapers/apex-legends-3440x1440-15263.jpg",
+        271590: "https://wallpapers.com/images/hd/gta-5-pictures-a13v9zf0xizyife4.jpg",
+        238960: "data:image/jpeg;base64,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",
+        252490: "https://ccdn.g-portal.com/rust_header_cover_xl_97bba48f49.webp",
+        3240220: "https://www.dexerto.com/cdn-cgi/image/width=3840,quality=60,format=auto/https://editors.dexerto.com/wp-content/uploads/2022/03/15/gta-5-next-gen-update.jpg",
+        1086940: "https://images3.alphacoders.com/134/1341034.png",
+        3167020: "https://cdn1.epicgames.com/spt-assets/b48333b95b8744949229259f9f4917ea/escape-from-duckov-1qjld.png",
+        3405690: "data:image/jpeg;base64,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",
+        2300320: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkpPnSfryi2ZL9acrqESqeI0QEZc5k9twybg&s",
+        394360: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjrMC6rXmft9GVwQAGf6uvjswzZrRZC4Dw9Q&s",
+        2799860: "https://cdn2.steamgriddb.com/hero/7661cd26e8742b6ed95f0a3486d46801.jpg",
+        1174180: "https://images7.alphacoders.com/749/749807.png",
+        359550: "https://images.g2a.com/470x276/1x1x0/tom-clancys-rainbow-six-siege-siege-x-pack-pc-ubisoft-key-global-i10000511301001/e8cca9fad151476a8fe31356",
+        3527290: "https://cdn.keyplay.com.br/products/1580730519453266/peak_main_image_1761768195.jpg"
+    };
 
 
     function fecharModal() {
         let modal = document.getElementById("modal")
         modal.style.display = "none"
     }
+
+
+    servidores = 0;
+    emAlerta = 0;
+
+    respostaAm = await semana('AM', 'am');
+    respostaPa = await semana('PA', 'pa');
+    respostaSp = await semana('SP', 'sp');
+    respostaRj = await semana('RJ', 'rj');
+    respostaPe = await semana('PE', 'pe');
+    respostaMg = await semana('MG', 'mg');
+    respostaDf = await semana('DF', 'df');
+    respostaRs = await semana('RS', 'rs');
+    respostaBa = await semana('BA', 'ba');
+
+    tamanhoAM = respostaAm.length; tamanhoSp = respostaSp.length; tamanhoBa = respostaAm.length; tamanhoSp = respostaSp.length;
+    tamanhoPa = respostaPa.length; tamanhoRj = respostaRj.length; tamanhoP = respostaPa.length; tamanhoRj = respostaRj.length;
+
+    if (tamanhoAM > 0) {
+        servidores += 1;
+    }
+    if (tamanhoPa > 0) {
+        servidores += 1;
+    }
+
+    cpuAm = []
+    gpuAm = []
+    ramAm = []
+    discoAm = []
+    redeAm = []
+    data = []
+    cpuPa = []
+    gpuPa = []
+    ramPa = []
+    discoPa = []
+    redePa = []
+
+    for (i = tamanhoAM - 1; i >= 0; i--) {
+        cpuAm.push(respostaAm[i].TotalCpu)
+        gpuAm.push(respostaAm[i].TotalGpu)
+        ramAm.push(respostaAm[i].TotalRam)
+        discoAm.push(respostaAm[i].TotalDisco)
+        redeAm.push(respostaAm[i].TotalRede)
+        data.push(respostaAm[i].Data)
+
+        cpuPa.push(respostaPa[i].TotalCpu)
+        gpuPa.push(respostaPa[i].TotalGpu)
+        ramPa.push(respostaPa[i].TotalRam)
+        discoPa.push(respostaPa[i].TotalDisco)
+        redePa.push(respostaPa[i].TotalRede)
+    }
+
+
+
+
+    cpu = []
+    gpu = []
+    ram = []
+    disco = []
+    rede = []
+    valorAm = 0;
+    valorPa = 0;
+    for (i = 0; i < respostaAm.length; i++) {
+        valorPa += cpuPa[i] + gpuPa[i] + ramPa[i] + redePa[i] + discoPa[i];
+        valorAm += cpuAm[i] + gpuAm[i] + ramAm[i] + redeAm[i] + discoAm[i];
+    }
+
+    for (i = tamanhoPa - 1; i >= 0; i--) {
+        cpu.push(cpuPa[i] + cpuAm[i])
+        gpu.push(gpuPa[i] + gpuAm[i])
+        ram.push(ramPa[i] + ramAm[i])
+        rede.push(redePa[i] + redeAm[i])
+        disco.push(discoPa[i] + discoAm[i])
+    }
+
+    jogoI = respostaPa[tamanhoPa - 1].PrimeiroJogo
+    jogoII = respostaPa[tamanhoPa - 1].SegundoJogo
+    jogoIII = respostaPa[tamanhoPa - 1].TerceiroJogo
+
+    const nomeJogo = nomesJogos[jogoI] || "Jogo Desconhecido";
+    document.getElementById("jogoIdiv").innerText = nomeJogo;
+    const nomeJogoII = nomesJogos[jogoII] || "Jogo Desconhecido";
+    document.getElementById("jogoIIdiv").innerText = nomeJogoII;
+    const nomeJogoIII = nomesJogos[jogoIII] || "Jogo Desconhecido";
+    document.getElementById("jogoIIIdiv").innerText = nomeJogoIII;
+
+    console.log(respostaPa);
+
+
+    if (valorAm > valorPa) {
+        estado.innerHTML = "Amazonas"
+    } else {
+        estado.innerHTML = "Pará"
+    }
+    if (cpuAm != null || gpuAm != null || ramAm != null || discoAm != null || redeAm != null) {
+        emAlerta += 1;
+    } if (cpuPa != null || gpuPa != null || ramPa != null || discoPa != null || redePa != null) {
+        emAlerta += 1;
+    }
+
+    const somaCpu = cpuAm.reduce((total, num) => total + num, 0) + cpuPa.reduce((total, num) => total + num, 0);
+    const somaGpu = gpuAm.reduce((total, num) => total + num, 0) + gpuPa.reduce((total, num) => total + num, 0);
+    const somaRam = ramAm.reduce((total, num) => total + num, 0) + ramPa.reduce((total, num) => total + num, 0);
+    const somaDisco = discoAm.reduce((total, num) => total + num, 0) + discoPa.reduce((total, num) => total + num, 0);
+    const somaRede = redeAm.reduce((total, num) => total + num, 0) + redePa.reduce((total, num) => total + num, 0);
+
+
+
+    const componentes = {
+        somaCpu,
+        somaDisco,
+        somaGpu,
+        somaRam,
+        somaRede
+    };
+    console.log(componentes)
+
+    const maiorValor = Math.max(...Object.values(componentes));
+
+    const maiorComponente = Object.keys(componentes).find(
+        chave => componentes[chave] === maiorValor
+    );
+    const nomeComponente =
+        maiorComponente === "somaCpu" ? "CPU"
+            : maiorComponente === "somaDisco" ? "DISCO"
+                : maiorComponente === "somaGpu" ? "GPU"
+                    : maiorComponente === "somaRam" ? "RAM"
+                        : maiorComponente === "somaRede" ? "REDE"
+                            : "Desconhecido";
+
+    ComponenteAlerta.innerHTML = `${nomeComponente}<span style="font-size: 25px;">/${maiorValor}</span>`;
+
+    numeroServidores.innerHTML = `${emAlerta}/${servidores}`;
+    if (servidores == null || emAlerta == null) {
+        alert(`Dados do Servidor não encontrado!
+                <br>Entre em contato com o suporte`)
+    } else if ((servidores * 0.01) > emAlerta) {
+        document.querySelector('.server-box-N-Servidores').style.background = '#2cbe00';
+        console.log("Entrei no if verde");
+
+    } else if (servidores * 0.70 >= emAlerta) {
+        document.querySelector('.server-box-N-Servidores').style.background = '#ff3333';
+    } else {
+        document.querySelector('.server-box-N-Servidores').style.background = '#ff3333';
+    }
+
+
+
+
+    var options = {
+        series: [
+            {
+                name: "CPU",
+                data: cpu.reverse()
+            },
+            {
+                name: "GPU",
+                data: gpu.reverse()
+            },
+            {
+                name: "RAM",
+                data: ram.reverse()
+            },
+            {
+                name: "DISCO",
+                data: disco.reverse()
+            },
+            {
+                name: "REDE",
+                data: rede.reverse()
+            }
+        ],
+        chart: {
+            height: 250,
+            type: 'line',
+            background: 'transparent',
+            dropShadow: {
+                enabled: true,
+                color: '#ffffff',
+                top: 18,
+                left: 7,
+                blur: 10,
+                opacity: 0.3
+            },
+            zoom: { enabled: false },
+            toolbar: { show: false }
+        },
+        colors: ['#00D4AA', '#FF6B6B', '#FFD700', '#00BFFF', '#00B4BF'],
+        dataLabels: {
+            enabled: true,
+            style: {
+                colors: ['#00000'],
+                fontSize: '10px',
+                fontWeight: 'bold'
+            }
+        },
+        stroke: {
+            curve: 'smooth',
+            width: 3
+        },
+        grid: {
+            borderColor: '#404040',
+            strokeDashArray: 3,
+            row: {
+                colors: ['#1a1a1a', 'transparent'],
+                opacity: 0.3
+            }
+        },
+        markers: {
+            size: 1,
+            strokeColors: ['#00D4AA', '#FF6B6B', '#FFD700', '#00BFFF'],
+            strokeWidth: 2,
+            offsetX: 10
+        },
+        xaxis: {
+            categories: data.reverse(),
+            title: {
+                text: 'Month',
+                style: {
+                    color: '#cccccc'
+                },
+
+            },
+            labels: {
+                style: {
+                    colors: '#cccccc'
+                }
+            }
+        },
+        yaxis: {
+            title: {
+                text: 'Temperature',
+                style: {
+                    color: '#cccccc'
+                }
+            },
+            labels: {
+                style: {
+                    colors: '#cccccc'
+                },
+
+            }
+        },
+
+        legend: {
+            position: 'bottom',
+            horizontalAlign: 'right',
+            floating: true,
+            offsetY: 10,
+            offsetX: -5,
+            fontSize: '9px',
+            labels: {
+                colors: '#ffffff'
+            }
+        },
+        theme: {
+            mode: 'dark'
+        }
+    };
+    var chart = new ApexCharts(document.querySelector("#linhaBrasil"), options);
+    chart.render();
+
 
     anychart.onDocumentReady(function () {
 
@@ -200,185 +623,36 @@
     });
 
 
-  anychart.onDocumentReady(function () {
+    loadGameImage(jogoI, "ftJogoI");
+    loadGameImage(jogoII, "ftJogoII");
+    loadGameImage(jogoIII, "ftJogoIII");
 
+    loadImageBackground(jogoI, "backJogoI")
+    loadImageBackground(jogoII, "backJogoII")
+    loadImageBackground(jogoIII, "backJogoIII")
 
-    var dataSet = anychart.data.set(getData());
-
-
-    var firstSeriesData = dataSet.mapAs({ x: 0, value: 1 });  // Cpu
-    var secondSeriesData = dataSet.mapAs({ x: 0, value: 2 }); // Gpu
-    var thirdSeriesData = dataSet.mapAs({ x: 0, value: 3 });  // Ram
-    var fourthSeriesData = dataSet.mapAs({ x: 0, value: 4 }); // disco
-
-
-    var chart = anychart.line();
-
-
-    chart.animation(true);
-    chart.title('Números de Alertas por cada Componente'); 
-    chart.yAxis().title('Números de Alertas');
-
-
-    chart.crosshair().enabled(true).yLabel(false).yStroke(null);
-
-    var firstSeries = chart.line(firstSeriesData);
-    firstSeries
-        .name('CPU')
-        .stroke('2 #f49595') 
-        .markers().enabled(true).type('circle').size(4); 
-    firstSeries
-        .tooltip()
-        .format('Total Alertas Cpu: {%value}%');
-
-
-        var secondSeries = chart.line(secondSeriesData);
-    secondSeries
-        .name('GPU')
-        .stroke('2 #f9eb97')
-        .markers().enabled(true).type('diamond').size(4); 
-    secondSeries
-        .tooltip()
-        .format('Total alertas Gpu: {%value}%');
-
-
-    var thirdSeries = chart.line(thirdSeriesData);
-    thirdSeries
-        .name('RAM')
-        .stroke('2 #a8d9f6')
-        .markers().enabled(true).type('square').size(4)
-    thirdSeries
-        .tooltip()
-        .format('Total alertas Ram: {%value}%');
-
-    
-    var fourthSeries = chart.line(fourthSeriesData);
-    fourthSeries
-        .name('DISCO')
-        .stroke('2 #e2bbfd')
-        .markers().enabled(true).type('triangle-down').size(4); 
-    fourthSeries
-        .tooltip()
-        .format('Total alertas Disco: {%value}%');
-
-
-    chart.legend().enabled(true).position('bottom').align('center'); 
-
-    chart.background(null);
-
-    chart.container('linhaBrasil');
-    chart.draw();
-});
-
-function getData() {
-    return [
-        ['1990',45,12.2,10.2,5.2],
-        ['1991',17,17.8,10,4.8],
-        ['1993',26.5,23.8,16.8,6.6],
-        ['1994',28.7,22,17.3,9.1],
-        ['1996',35.7,24,22.6,9.2],
-        ['1998',37.2,24.6,22.4,11.2],
-        ['2000',36.5,26.2,23.7,9.9],
-        ['2002',40,34.4,23.8,16.4],
-        ['2004',33.3,28.8,32.5,14.3],
-        ['2006',40.2,32.1,27.5,15.1],
-        ['2008',49.3,37.2,31.4,17.1],
-        ['2010',51.9,42.5,36.1,28.5],
-        ['2012',53.1,43.8,36,24.6],
-        ['2014',63.7,45.9,44.7,31.3],
-        ['2016',66.3,52,42.3,37.2],
-        ['2018',70.1,57.7,49.2,39]
-    ];
-}
-
-
-// corelação
-
-
-anychart.onDocumentReady(function () {
-    
-
-    function getMarkerData() {
+    function getData() {
         return [
-            { x: 2.0, value: 55 },
-            { x: 2.5, value: 60 },
-            { x: 3.0, value: 70 },
-            { x: 3.5, value: 75 },
-            { x: 4.0, value: 90 },
-            { x: 4.5, value: 95 },
-            { x: 5.0, value: 100}
+            ['1990', 45, 12.2, 10.2, 5.2],
+            ['1991', 17, 17.8, 10, 4.8],
+            ['1993', 26.5, 23.8, 16.8, 6.6],
+            ['1994', 28.7, 22, 17.3, 9.1],
+            ['1996', 35.7, 24, 22.6, 9.2],
+            ['1998', 37.2, 24.6, 22.4, 11.2],
+            ['2000', 36.5, 26.2, 23.7, 9.9],
+            ['2002', 40, 34.4, 23.8, 16.4],
+            ['2004', 33.3, 28.8, 32.5, 14.3],
+            ['2006', 40.2, 32.1, 27.5, 15.1],
+            ['2008', 49.3, 37.2, 31.4, 17.1],
+            ['2010', 51.9, 42.5, 36.1, 28.5],
+            ['2012', 53.1, 43.8, 36, 24.6],
+            ['2014', 63.7, 45.9, 44.7, 31.3],
+            ['2016', 66.3, 52, 42.3, 37.2],
+            ['2018', 70.1, 57.7, 49.2, 39]
         ];
     }
 
-    function getLineData() {
-
-        // Dados para criar a linha de regressão
-        return [
-            { x: 2.0, value: 30 },
-            { x: 5.0, value: 90 }
-        ];
-    }
-
-
-    var chart = anychart.scatter();
-
-    chart.animation(true);
-
-    chart.title('Número de Alertas x Clima da região');
-
-    chart.xScale().minimum(1.5).maximum(5.5).ticks({ interval: 0.5 }); 
-    chart.yScale().minimum(40).maximum(100).ticks({ interval: 10 });
-
-
-    chart.yAxis().title('Número de Alertas');
-    chart
-        .xAxis()
-        .title('Temperatura Da Região(°C)') // titulo eixo x
-        .drawFirstLabel(true) 
-        .drawLastLabel(true); 
-
-
-    chart.interactivity().hoverMode('by-spot').spotRadius(20); 
-    chart.tooltip().displayMode('union');
-
-
-    var marker = chart.marker(getMarkerData());
-    marker.type('circle').size(5).fill('#3a86ff').stroke('1 #fff'); 
-    marker
-        .hovered()
-        .size(8)
-        .fill('#ffc107') 
-        .stroke('2 #333');
-    marker
-        .tooltip()
-        .hAlign('start')
-        .titleFormat(function() {
-            return 'Ocorrência: #' + this.index; 
-        })
-        .format(function () {
-            return (
-                'Tempo de Espera: ' +
-                this.value +
-                ' min\nDuração: ' +
-                this.x +
-                ' min'
-            );
-        });
-
-
-        var lineSeries = chart.line(getLineData());
-    lineSeries.name('Linha de Referência');
-    lineSeries.stroke('2 #ff5a5f'); 
-    lineSeries.markers().enabled(false); 
-
-    chart.background(null);
-
-    chart.container('corelacao');
-    chart.draw();
-});
-
-
-    function buscarRegioes() {
+    async function buscarRegioes() {
 
         let regioes = id_filter.value;
 
@@ -386,6 +660,7 @@ anychart.onDocumentReady(function () {
             anychart.onDocumentReady(function () {
 
                 mapBrasil.innerHTML = "";
+
 
                 var map = anychart.map();
 
@@ -463,11 +738,278 @@ anychart.onDocumentReady(function () {
                 map.draw();
             });
 
-            
-        } else if (regioes == 2) {
+
+        }
+        else if (regioes == 2) {
+
+            // Norte
 
             mapBrasil.innerHTML = "";
-            // Norte
+            linhaBrasil.innerHTML = "";
+            ftJogoI.innerHTML = ""
+            ftJogoI.innerHTML = ""
+            ftJogoI.innerHTML = ""
+            jogoIdiv.innerHTML = ""
+            jogoIIdiv.innerHTML = ""
+            jogoIIIdiv.innerHTML = ""
+
+            servidores = 0;
+            emAlerta = 0;
+
+            respostaAm = await semana('AM', 'am');
+            respostaPa = await semana('PA', 'pa');
+
+
+            console.log("TEste dentro do if vei", respostaAm)
+
+            console.log("CPU TESTE" + respostaAm[0].TotalCpu)
+
+            tamanhoAM = respostaAm.length
+            tamanhoPa = respostaPa.length
+
+            if (tamanhoAM > 0) {
+                servidores += 1;
+            }
+            if (tamanhoPa > 0) {
+                servidores += 1;
+            }
+
+            cpuAm = []
+            gpuAm = []
+            ramAm = []
+            discoAm = []
+            redeAm = []
+            data = []
+            cpuPa = []
+            gpuPa = []
+            ramPa = []
+            discoPa = []
+            redePa = []
+
+            for (i = tamanhoAM - 1; i >= 0; i--) {
+                cpuAm.push(respostaAm[i].TotalCpu)
+                gpuAm.push(respostaAm[i].TotalGpu)
+                ramAm.push(respostaAm[i].TotalRam)
+                discoAm.push(respostaAm[i].TotalDisco)
+                redeAm.push(respostaAm[i].TotalRede)
+                data.push(respostaAm[i].Data)
+
+                cpuPa.push(respostaPa[i].TotalCpu)
+                gpuPa.push(respostaPa[i].TotalGpu)
+                ramPa.push(respostaPa[i].TotalRam)
+                discoPa.push(respostaPa[i].TotalDisco)
+                redePa.push(respostaPa[i].TotalRede)
+            }
+
+
+
+
+            cpu = []
+            gpu = []
+            ram = []
+            disco = []
+            rede = []
+            valorAm = 0;
+            valorPa = 0;
+            for (i = 0; i < respostaAm.length; i++) {
+                valorPa += cpuPa[i] + gpuPa[i] + ramPa[i] + redePa[i] + discoPa[i];
+                valorAm += cpuAm[i] + gpuAm[i] + ramAm[i] + redeAm[i] + discoAm[i];
+            }
+
+            for (i = tamanhoPa - 1; i >= 0; i--) {
+                cpu.push(cpuPa[i] + cpuAm[i])
+                gpu.push(gpuPa[i] + gpuAm[i])
+                ram.push(ramPa[i] + ramAm[i])
+                rede.push(redePa[i] + redeAm[i])
+                disco.push(discoPa[i] + discoAm[i])
+            }
+
+            jogoI = respostaPa[tamanhoPa - 1].PrimeiroJogo
+            jogoII = respostaPa[tamanhoPa - 1].SegundoJogo
+            jogoIII = respostaPa[tamanhoPa - 1].TerceiroJogo
+
+            const nomeJogo = nomesJogos[jogoI] || "Jogo Desconhecido";
+            document.getElementById("jogoIdiv").innerText = nomeJogo;
+            const nomeJogoII = nomesJogos[jogoII] || "Jogo Desconhecido";
+            document.getElementById("jogoIIdiv").innerText = nomeJogoII;
+            const nomeJogoIII = nomesJogos[jogoIII] || "Jogo Desconhecido";
+            document.getElementById("jogoIIIdiv").innerText = nomeJogoIII;
+
+            console.log(respostaPa);
+
+
+            if (valorAm > valorPa) {
+                estado.innerHTML = "Amazonas"
+            } else {
+                estado.innerHTML = "Pará"
+            }
+            if (cpuAm != null || gpuAm != null || ramAm != null || discoAm != null || redeAm != null) {
+                emAlerta += 1;
+            } if (cpuPa != null || gpuPa != null || ramPa != null || discoPa != null || redePa != null) {
+                emAlerta += 1;
+            }
+
+            const somaCpu = cpuAm.reduce((total, num) => total + num, 0) + cpuPa.reduce((total, num) => total + num, 0);
+            const somaGpu = gpuAm.reduce((total, num) => total + num, 0) + gpuPa.reduce((total, num) => total + num, 0);
+            const somaRam = ramAm.reduce((total, num) => total + num, 0) + ramPa.reduce((total, num) => total + num, 0);
+            const somaDisco = discoAm.reduce((total, num) => total + num, 0) + discoPa.reduce((total, num) => total + num, 0);
+            const somaRede = redeAm.reduce((total, num) => total + num, 0) + redePa.reduce((total, num) => total + num, 0);
+
+
+
+            const componentes = {
+                somaCpu,
+                somaDisco,
+                somaGpu,
+                somaRam,
+                somaRede
+            };
+            console.log(componentes)
+
+            const maiorValor = Math.max(...Object.values(componentes));
+
+            const maiorComponente = Object.keys(componentes).find(
+                chave => componentes[chave] === maiorValor
+            );
+            const nomeComponente =
+                maiorComponente === "somaCpu" ? "CPU"
+                    : maiorComponente === "somaDisco" ? "DISCO"
+                        : maiorComponente === "somaGpu" ? "GPU"
+                            : maiorComponente === "somaRam" ? "RAM"
+                                : maiorComponente === "somaRede" ? "REDE"
+                                    : "Desconhecido";
+
+            ComponenteAlerta.innerHTML = `${nomeComponente}<span style="font-size: 25px;">/${maiorValor}</span>`;
+
+            numeroServidores.innerHTML = `${emAlerta}/${servidores}`;
+            if (servidores == null || emAlerta == null) {
+                alert(`Dados do Servidor não encontrado!
+                <br>Entre em contato com o suporte`)
+            } else if ((servidores * 0.01) > emAlerta) {
+                document.querySelector('.server-box-N-Servidores').style.background = '#2cbe00';
+                console.log("Entrei no if verde");
+
+            } else if (servidores * 0.70 >= emAlerta) {
+                document.querySelector('.server-box-N-Servidores').style.background = '#ff3333';
+            } else {
+                document.querySelector('.server-box-N-Servidores').style.background = '#ff3333';
+            }
+
+
+
+
+            var options = {
+                series: [
+                    {
+                        name: "CPU",
+                        data: cpu.reverse()
+                    },
+                    {
+                        name: "GPU",
+                        data: gpu.reverse()
+                    },
+                    {
+                        name: "RAM",
+                        data: ram.reverse()
+                    },
+                    {
+                        name: "DISCO",
+                        data: disco.reverse()
+                    },
+                    {
+                        name: "REDE",
+                        data: rede.reverse()
+                    }
+                ],
+                chart: {
+                    height: 250,
+                    type: 'line',
+                    background: 'transparent',
+                    dropShadow: {
+                        enabled: true,
+                        color: '#ffffff',
+                        top: 18,
+                        left: 7,
+                        blur: 10,
+                        opacity: 0.3
+                    },
+                    zoom: { enabled: false },
+                    toolbar: { show: false }
+                },
+                colors: ['#00D4AA', '#FF6B6B', '#FFD700', '#00BFFF', '#00B4BF'],
+                dataLabels: {
+                    enabled: true,
+                    style: {
+                        colors: ['#00000'],
+                        fontSize: '10px',
+                        fontWeight: 'bold'
+                    }
+                },
+                stroke: {
+                    curve: 'smooth',
+                    width: 3
+                },
+                grid: {
+                    borderColor: '#404040',
+                    strokeDashArray: 3,
+                    row: {
+                        colors: ['#1a1a1a', 'transparent'],
+                        opacity: 0.3
+                    }
+                },
+                markers: {
+                    size: 1,
+                    strokeColors: ['#00D4AA', '#FF6B6B', '#FFD700', '#00BFFF'],
+                    strokeWidth: 2,
+                    offsetX: 10
+                },
+                xaxis: {
+                    categories: data.reverse(),
+                    title: {
+                        text: 'Month',
+                        style: {
+                            color: '#cccccc'
+                        },
+
+                    },
+                    labels: {
+                        style: {
+                            colors: '#cccccc'
+                        }
+                    }
+                },
+                yaxis: {
+                    title: {
+                        text: 'Temperature',
+                        style: {
+                            color: '#cccccc'
+                        }
+                    },
+                    labels: {
+                        style: {
+                            colors: '#cccccc'
+                        },
+
+                    }
+                },
+
+                legend: {
+                    position: 'bottom',
+                    horizontalAlign: 'right',
+                    floating: true,
+                    offsetY: 10,
+                    offsetX: -5,
+                    fontSize: '9px',
+                    labels: {
+                        colors: '#ffffff'
+                    }
+                },
+                theme: {
+                    mode: 'dark'
+                }
+            };
+            var chart = new ApexCharts(document.querySelector("#linhaBrasil"), options);
+            chart.render();
 
             anychart.onDocumentReady(function () {
                 var map = anychart.map();
@@ -477,8 +1019,8 @@ anychart.onDocumentReady(function () {
                     return [
                         { "id": "BR.AC", "capital": "Rio Branco", "value": 50 },
                         { "id": "BR.AP", "capital": "Macapá", "value": 90 },
-                        { "id": "BR.AM", "capital": "Manaus", "value": 75 },
-                        { "id": "BR.PA", "capital": "Belém", "value": 60 },
+                        { "id": "BR.AM", "capital": "Manaus", "value": valorAm },
+                        { "id": "BR.PA", "capital": "Belém", "value": valorPa },
                         { "id": "BR.RO", "capital": "Porto Velho", "value": 90 },
                         { "id": "BR.RR", "capital": "Boa Vista", "value": 75 },
                         { "id": "BR.TO", "capital": "Palmas", "value": 60 }
@@ -491,7 +1033,7 @@ anychart.onDocumentReady(function () {
 
                 series.geoIdField('id');
                 series.colorScale(anychart.scales.linearColor('#FFFFFF', '#FF670A'));
-                series.hovered().fill('#8c8c8c');map.listen('pointClick', function (e) {
+                series.hovered().fill('#8c8c8c'); map.listen('pointClick', function (e) {
                     map.zoomToFeature(e.point.get('id'));
                 })
 
@@ -499,17 +1041,6 @@ anychart.onDocumentReady(function () {
                     return "Capital: " + e.getData("capital") + "\n" +
                         "Alertas: " + e.getData("value")
                 });
-
-                map.listen('pointClick', function (e) {
-                    map.zoomToFeature(e.point.get('id'));
-                })
-
-
-                map.interactivity().zoomOnMouseWheel(false);
-
-                map.interactivity().keyboardZoomAndMove(false);
-
-                map.interactivity().zoomOnDoubleClick(false);
 
                 map.geoData(anychart.maps['brazil']);
 
@@ -532,11 +1063,287 @@ anychart.onDocumentReady(function () {
                 map.draw();
             });
 
-        } else if (regioes == 3) {
 
-            mapBrasil.innerHTML = "";
+            loadGameImage(jogoI, "ftJogoI");
+            loadGameImage(jogoII, "ftJogoII");
+            loadGameImage(jogoIII, "ftJogoIII");
+
+            loadImageBackground(jogoI, "backJogoI")
+            loadImageBackground(jogoII, "backJogoII")
+            loadImageBackground(jogoIII, "backJogoIII")
+
+
+
+        }
+        else if (regioes == 3) {
 
             // Nordeste
+
+            mapBrasil.innerHTML = "";
+            linhaBrasil.innerHTML = "";
+            ftJogoI.innerHTML = ""
+            ftJogoII.innerHTML = ""
+            ftJogoIII.innerHTML = ""
+            jogoIdiv.innerHTML = ""
+            jogoIIdiv.innerHTML = ""
+            jogoIIIdiv.innerHTML = ""
+            servidores = 0;
+            emAlerta = 0;
+
+            respostaBa = await semana('BA', 'ba');
+            respostaPe = await semana('PE', 'pe');
+
+
+            // console.log("Teste dentro do if vei", respostaSp)
+
+            // console.log("CPU TESTE" + respostaSp[0].TotalCpu)
+
+            tamanhoBa = respostaBa.length
+            tamanhoPe = respostaPe.length
+
+            if (tamanhoBa > 0) {
+                servidores += 1;
+            }
+            if (tamanhoPe > 0) {
+                servidores += 1;
+            }
+
+            cpuBa = []
+            gpuBa = []
+            ramBa = []
+            discoBa = []
+            redeBa = []
+            data = []
+            cpuPe = []
+            gpuPe = []
+            ramPe = []
+            discoPe = []
+            redePe = []
+
+            for (i = tamanhoBa - 1; i >= 0; i--) {
+                cpuBa.push(respostaBa[i].TotalCpu)
+                gpuBa.push(respostaBa[i].TotalGpu)
+                ramBa.push(respostaBa[i].TotalRam)
+                discoBa.push(respostaBa[i].TotalDisco)
+                redeBa.push(respostaBa[i].TotalRede)
+                data.push(respostaBa[i].Data)
+
+                cpuPe.push(respostaPe[i].TotalCpu)
+                gpuPe.push(respostaPe[i].TotalGpu)
+                ramPe.push(respostaPe[i].TotalRam)
+                discoPe.push(respostaPe[i].TotalDisco)
+                redePe.push(respostaPe[i].TotalRede)
+            }
+
+
+
+
+            cpu = []
+            gpu = []
+            ram = []
+            disco = []
+            rede = []
+            valorBa = 0;
+            valorPe = 0;
+            for (i = 0; i < respostaBa.length; i++) {
+                valorPe += cpuPe[i] + gpuPe[i] + ramPe[i] + redePe[i] + discoPe[i];
+                valorBa += cpuBa[i] + gpuBa[i] + ramBa[i] + redeBa[i] + discoBa[i];
+            }
+
+            for (i = tamanhoPe - 1; i >= 0; i--) {
+                cpu.push(cpuPe[i] + cpuBa[i])
+                gpu.push(gpuPe[i] + gpuBa[i])
+                ram.push(ramPe[i] + ramBa[i])
+                rede.push(redePe[i] + redeBa[i])
+                disco.push(discoPe[i] + discoBa[i])
+            }
+
+
+            jogoI = respostaPe[tamanhoPe - 1].PrimeiroJogo
+            jogoII = respostaPe[tamanhoPe - 1].SegundoJogo
+            jogoIII = respostaPe[tamanhoPe - 1].TerceiroJogo;
+
+            const nomeJogo = nomesJogos[jogoI] || "Jogo Desconhecido";
+            document.getElementById("jogoIdiv").innerText = nomeJogo;
+            const nomeJogoII = nomesJogos[jogoII] || "Jogo Desconhecido";
+            document.getElementById("jogoIIdiv").innerText = nomeJogoII;
+            const nomeJogoIII = nomesJogos[jogoIII] || "Jogo Desconhecido";
+            document.getElementById("jogoIIIdiv").innerText = nomeJogoIII;
+            console.log(respostaPe);
+
+
+            if (valorPe > valorBa) {
+                estado.innerHTML = "Pernambuco"
+            } else {
+                estado.innerHTML = "Bahia"
+            }
+            if (cpuBa != null || gpuBa != null || ramBa != null || discoBa != null || redeBa != null) {
+                emAlerta += 1;
+            } if (cpuPe != null || gpuPe != null || ramPe != null || discoPe != null || redePe != null) {
+                emAlerta += 1;
+            }
+
+            const somaCpu = cpuBa.reduce((total, num) => total + num, 0) + cpuPe.reduce((total, num) => total + num, 0);
+            const somaGpu = gpuBa.reduce((total, num) => total + num, 0) + gpuPe.reduce((total, num) => total + num, 0);
+            const somaRam = ramBa.reduce((total, num) => total + num, 0) + ramPe.reduce((total, num) => total + num, 0);
+            const somaDisco = discoBa.reduce((total, num) => total + num, 0) + discoPe.reduce((total, num) => total + num, 0);
+            const somaRede = redeBa.reduce((total, num) => total + num, 0) + redePe.reduce((total, num) => total + num, 0);
+
+
+
+            const componentes = {
+                somaCpu,
+                somaDisco,
+                somaGpu,
+                somaRam,
+                somaRede
+            };
+
+            const maiorValor = Math.max(...Object.values(componentes));
+
+            const maiorComponente = Object.keys(componentes).find(
+                chave => componentes[chave] === maiorValor
+            );
+            const nomeComponente =
+                maiorComponente === "somaCpu" ? "CPU"
+                    : maiorComponente === "somaDisco" ? "DISCO"
+                        : maiorComponente === "somaGpu" ? "GPU"
+                            : maiorComponente === "somaRam" ? "RAM"
+                                : maiorComponente === "somaRede" ? "REDE"
+                                    : "Desconhecido";
+
+            ComponenteAlerta.innerHTML = `${nomeComponente}<span style="font-size: 25px;">/${maiorValor}</span>`;
+
+            numeroServidores.innerHTML = `${emAlerta}/${servidores}`;
+            if (servidores == null || emAlerta == null) {
+                alert(`Dados do Servidor não encontrado!
+                <br>Entre em contato com o suporte`)
+            } else if ((servidores * 0.01) > emAlerta) {
+                document.querySelector('.server-box-N-Servidores').style.background = '#2cbe00';
+                console.log("Entrei no if verde");
+
+            } else if (servidores * 0.70 >= emAlerta) {
+                document.querySelector('.server-box-N-Servidores').style.background = '#ff3333';
+            } else {
+                document.querySelector('.server-box-N-Servidores').style.background = '#ff3333';
+            }
+
+
+
+
+            var options = {
+                series: [
+                    {
+                        name: "CPU",
+                        data: cpu.reverse()
+                    },
+                    {
+                        name: "GPU",
+                        data: gpu.reverse()
+                    },
+                    {
+                        name: "RAM",
+                        data: ram.reverse()
+                    },
+                    {
+                        name: "DISCO",
+                        data: disco.reverse()
+                    },
+                    {
+                        name: "REDE",
+                        data: rede.reverse()
+                    }
+                ],
+                chart: {
+                    height: 250,
+                    type: 'line',
+                    background: 'transparent',
+                    dropShadow: {
+                        enabled: true,
+                        color: '#ffffff',
+                        top: 18,
+                        left: 7,
+                        blur: 10,
+                        opacity: 0.3
+                    },
+                    zoom: { enabled: false },
+                    toolbar: { show: false }
+                },
+                colors: ['#00D4AA', '#FF6B6B', '#FFD700', '#00BFFF', '#00B4BF'],
+                dataLabels: {
+                    enabled: true,
+                    style: {
+                        colors: ['#00000'],
+                        fontSize: '10px',
+                        fontWeight: 'bold'
+                    }
+                },
+                stroke: {
+                    curve: 'smooth',
+                    width: 3
+                },
+                grid: {
+                    borderColor: '#404040',
+                    strokeDashArray: 3,
+                    row: {
+                        colors: ['#1a1a1a', 'transparent'],
+                        opacity: 0.3
+                    }
+                },
+                markers: {
+                    size: 1,
+                    strokeColors: ['#00D4AA', '#FF6B6B', '#FFD700', '#00BFFF'],
+                    strokeWidth: 2,
+                    offsetX: 10
+                },
+                xaxis: {
+                    categories: data.reverse(),
+                    title: {
+                        text: 'Month',
+                        style: {
+                            color: '#cccccc'
+                        },
+
+                    },
+                    labels: {
+                        style: {
+                            colors: '#cccccc'
+                        }
+                    }
+                },
+                yaxis: {
+                    title: {
+                        text: 'Temperature',
+                        style: {
+                            color: '#cccccc'
+                        }
+                    },
+                    labels: {
+                        style: {
+                            colors: '#cccccc'
+                        },
+
+                    }
+                },
+
+                legend: {
+                    position: 'bottom',
+                    horizontalAlign: 'right',
+                    floating: true,
+                    offsetY: 10,
+                    offsetX: -5,
+                    fontSize: '9px',
+                    labels: {
+                        colors: '#ffffff'
+                    }
+                },
+                theme: {
+                    mode: 'dark'
+                }
+            };
+            var chart = new ApexCharts(document.querySelector("#linhaBrasil"), options);
+            chart.render();
+
 
             anychart.onDocumentReady(function () {
                 var map = anychart.map();
@@ -544,15 +1351,15 @@ anychart.onDocumentReady(function () {
                 function getDataSudeste() {
 
                     return [
-                        { "id": "BR.CE", "capital": "Fortaleza", "value": 50 },
-                        { "id": "BR.PI", "capital": "Teresina", "value": 90 },
-                        { "id": "BR.AL", "capital": "Maceió", "value": 75 },
-                        { "id": "BR.BA", "capital": "Salvador", "value": 60 },
-                        { "id": "BR.MA", "capital": "São Luís", "value": 50 },
-                        { "id": "BR.PB", "capital": "João Pessoa", "value": 90 },
-                        { "id": "BR.PE", "capital": "Recife", "value": 75 },
-                        { "id": "BR.RN", "capital": "Natal", "value": 60 },
-                        { "id": "BR.SE", "capital": "Aracaju", "value": 60 }
+                        { "id": "BR.CE", "capital": "Fortaleza", "value": "Sem servidor" },
+                        { "id": "BR.PI", "capital": "Teresina", "value": "Sem servidor" },
+                        { "id": "BR.AL", "capital": "Maceió", "value": "Sem servidor" },
+                        { "id": "BR.BA", "capital": "Salvador", "value": valorBa },
+                        { "id": "BR.MA", "capital": "São Luís", "value": "Sem servidor" },
+                        { "id": "BR.PB", "capital": "João Pessoa", "value": "Sem servidor" },
+                        { "id": "BR.PE", "capital": "Recife", "value": valorPe },
+                        { "id": "BR.RN", "capital": "Natal", "value": "Sem servidor" },
+                        { "id": "BR.SE", "capital": "Aracaju", "value": "Sem servidor" }
                     ];
                 }
 
@@ -600,11 +1407,233 @@ anychart.onDocumentReady(function () {
                 map.draw();
             });
 
-        } else if (regioes == 4) {
+        }
+        else if (regioes == 4) {
+
+            // Centro 
 
             mapBrasil.innerHTML = "";
+            linhaBrasil.innerHTML = "";
+            ftJogoI.innerHTML = ""
+            ftJogoI.innerHTML = ""
+            ftJogoI.innerHTML = ""
+            jogoIdiv.innerHTML = ""
+            jogoIIdiv.innerHTML = ""
+            jogoIIIdiv.innerHTML = ""
+            servidores = 0;
+            emAlerta = 0;
 
-            // Centro
+            respostaDf = await semana('DF', 'df');
+
+            tamanhoDf = respostaDf.length
+
+            if (tamanhoDf > 0) {
+                servidores += 1;
+            }
+
+            cpuDf = []
+            gpuDf = []
+            ramDf = []
+            discoDf = []
+            redeDf = []
+            data = []
+
+            for (i = tamanhoDf - 1; i >= 0; i--) {
+                cpuDf.push(respostaDf[i].TotalCpu)
+                gpuDf.push(respostaDf[i].TotalGpu)
+                ramDf.push(respostaDf[i].TotalRam)
+                discoDf.push(respostaDf[i].TotalDisco)
+                redeDf.push(respostaDf[i].TotalRede)
+                data.push(respostaDf[i].Data)
+            }
+
+            valorDf = 0;
+
+            for (i = 0; i < respostaDf.length; i++) {
+                valorDf += cpuDf[i] + gpuDf[i] + ramDf[i] + redeDf[i] + discoDf[i];
+            }
+
+
+            jogoI = respostaDf[tamanhoDf - 1].PrimeiroJogo
+            jogoII = respostaDf[tamanhoDf - 1].SegundoJogo
+            jogoIII = respostaDf[tamanhoDf - 1].TerceiroJogo;
+
+            const nomeJogo = nomesJogos[jogoI] || "Jogo Desconhecido";
+            document.getElementById("jogoIdiv").innerText = nomeJogo;
+            const nomeJogoII = nomesJogos[jogoII] || "Jogo Desconhecido";
+            document.getElementById("jogoIIdiv").innerText = nomeJogoII;
+            const nomeJogoIII = nomesJogos[jogoIII] || "Jogo Desconhecido";
+            document.getElementById("jogoIIIdiv").innerText = nomeJogoIII;
+            console.log(respostaDf);
+
+            estado.innerHTML = "Distrito Federal"
+
+            if (cpuDf != null || gpuDf != null || ramDf != null || discoDf != null || redeDf != null) {
+                emAlerta += 1;
+            }
+
+            const somaCpu = cpuDf.reduce((total, num) => total + num, 0);
+            const somaGpu = gpuDf.reduce((total, num) => total + num, 0);
+            const somaRam = ramDf.reduce((total, num) => total + num, 0);
+            const somaDisco = discoDf.reduce((total, num) => total + num, 0);
+            const somaRede = redeDf.reduce((total, num) => total + num, 0);
+
+
+
+            const componentes = {
+                somaCpu,
+                somaDisco,
+                somaGpu,
+                somaRam,
+                somaRede
+            };
+
+            const maiorValor = Math.max(...Object.values(componentes));
+
+            const maiorComponente = Object.keys(componentes).find(
+                chave => componentes[chave] === maiorValor
+            );
+            const nomeComponente =
+                maiorComponente === "somaCpu" ? "CPU"
+                    : maiorComponente === "somaDisco" ? "DISCO"
+                        : maiorComponente === "somaGpu" ? "GPU"
+                            : maiorComponente === "somaRam" ? "RAM"
+                                : maiorComponente === "somaRede" ? "REDE"
+                                    : "Desconhecido";
+
+            ComponenteAlerta.innerHTML = `${nomeComponente}<span style="font-size: 25px;">/${maiorValor}</span>`;
+
+            numeroServidores.innerHTML = `${emAlerta}/${servidores}`;
+            if (servidores == null || emAlerta == null) {
+                alert(`Dados do Servidor não encontrado!
+                <br>Entre em contato com o suporte`)
+            } else if ((servidores * 0.01) > emAlerta) {
+                document.querySelector('.server-box-N-Servidores').style.background = '#2cbe00';
+                console.log("Entrei no if verde");
+
+            } else if (servidores * 0.70 >= emAlerta) {
+                document.querySelector('.server-box-N-Servidores').style.background = '#ff3333';
+            } else {
+                document.querySelector('.server-box-N-Servidores').style.background = '#ff3333';
+            }
+
+
+
+
+            var options = {
+                series: [
+                    {
+                        name: "CPU",
+                        data: cpuDf.reverse()
+                    },
+                    {
+                        name: "GPU",
+                        data: gpuDf.reverse()
+                    },
+                    {
+                        name: "RAM",
+                        data: ramDf.reverse()
+                    },
+                    {
+                        name: "DISCO",
+                        data: discoDf.reverse()
+                    },
+                    {
+                        name: "REDE",
+                        data: redeDf.reverse()
+                    }
+                ],
+                chart: {
+                    height: 250,
+                    type: 'line',
+                    background: 'transparent',
+                    dropShadow: {
+                        enabled: true,
+                        color: '#ffffff',
+                        top: 18,
+                        left: 7,
+                        blur: 10,
+                        opacity: 0.3
+                    },
+                    zoom: { enabled: false },
+                    toolbar: { show: false }
+                },
+                colors: ['#00D4AA', '#FF6B6B', '#FFD700', '#00BFFF', '#00B4BF'],
+                dataLabels: {
+                    enabled: true,
+                    style: {
+                        colors: ['#00000'],
+                        fontSize: '10px',
+                        fontWeight: 'bold'
+                    }
+                },
+                stroke: {
+                    curve: 'smooth',
+                    width: 3
+                },
+                grid: {
+                    borderColor: '#404040',
+                    strokeDashArray: 3,
+                    row: {
+                        colors: ['#1a1a1a', 'transparent'],
+                        opacity: 0.3
+                    }
+                },
+                markers: {
+                    size: 1,
+                    strokeColors: ['#00D4AA', '#FF6B6B', '#FFD700', '#00BFFF'],
+                    strokeWidth: 2,
+                    offsetX: 10
+                },
+                xaxis: {
+                    categories: data.reverse(),
+                    title: {
+                        text: 'Month',
+                        style: {
+                            color: '#cccccc'
+                        },
+
+                    },
+                    labels: {
+                        style: {
+                            colors: '#cccccc'
+                        }
+                    }
+                },
+                yaxis: {
+                    title: {
+                        text: 'Temperature',
+                        style: {
+                            color: '#cccccc'
+                        }
+                    },
+                    labels: {
+                        style: {
+                            colors: '#cccccc'
+                        },
+
+                    }
+                },
+
+                legend: {
+                    position: 'bottom',
+                    horizontalAlign: 'right',
+                    floating: true,
+                    offsetY: 10,
+                    offsetX: -5,
+                    fontSize: '9px',
+                    labels: {
+                        colors: '#ffffff'
+                    }
+                },
+                theme: {
+                    mode: 'dark'
+                }
+            };
+            var chart = new ApexCharts(document.querySelector("#linhaBrasil"), options);
+            chart.render();
+
+
 
             anychart.onDocumentReady(function () {
                 var map = anychart.map();
@@ -612,10 +1641,10 @@ anychart.onDocumentReady(function () {
                 function getDataSudeste() {
 
                     return [
-                        { "id": "BR.GO", "capital": "Goiânia", "value": 50 },
-                        { "id": "BR.MT", "capital": "Cuiabá", "value": 90 },
-                        { "id": "BR.MS", "capital": "Campo Grande", "value": 75 },
-                        { "id": "BR.DF", "capital": "Brasilia", "value": 60 }
+                        { "id": "BR.GO", "capital": "Goiânia", "value": "Sem servidor" },
+                        { "id": "BR.MT", "capital": "Cuiabá", "value": "Sem servidor" },
+                        { "id": "BR.MS", "capital": "Campo Grande", "value": "Sem servidor" },
+                        { "id": "BR.DF", "capital": "Brasilia", "value": valorDf }
                     ];
                 }
 
@@ -664,11 +1693,232 @@ anychart.onDocumentReady(function () {
                 map.draw();
             });
 
-        } else if (regioes == 5) {
-
-            mapBrasil.innerHTML = "";
+        }
+        else if (regioes == 5) {
 
             // Sul
+
+            mapBrasil.innerHTML = "";
+            linhaBrasil.innerHTML = "";
+            ftJogoI.innerHTML = ""
+            ftJogoI.innerHTML = ""
+            ftJogoI.innerHTML = ""
+            jogoIdiv.innerHTML = ""
+            jogoIIdiv.innerHTML = ""
+            jogoIIIdiv.innerHTML = ""
+            servidores = 0;
+            emAlerta = 0;
+
+            respostaRs = await semana('RS', 'rs');
+
+            tamanhoRs = respostaRs.length
+
+            if (tamanhoRs > 0) {
+                servidores += 1;
+            }
+
+            cpuRs = []
+            gpuRs = []
+            ramRs = []
+            discoRs = []
+            redeRs = []
+            data = []
+
+            for (i = tamanhoRs - 1; i >= 0; i--) {
+                cpuRs.push(respostaRs[i].TotalCpu)
+                gpuRs.push(respostaRs[i].TotalGpu)
+                ramRs.push(respostaRs[i].TotalRam)
+                discoRs.push(respostaRs[i].TotalDisco)
+                redeRs.push(respostaRs[i].TotalRede)
+                data.push(respostaRs[i].Data)
+            }
+
+            valorRs = 0;
+
+            for (i = 0; i < respostaRs.length; i++) {
+                valorRs += cpuRs[i] + gpuRs[i] + ramRs[i] + redeRs[i] + discoRs[i];
+            }
+
+
+            jogoI = respostaRs[tamanhoRs - 1].PrimeiroJogo
+            jogoII = respostaRs[tamanhoRs - 1].SegundoJogo
+            jogoIII = respostaRs[tamanhoRs - 1].TerceiroJogo;
+
+            const nomeJogo = nomesJogos[jogoI] || "Jogo Desconhecido";
+            document.getElementById("jogoIdiv").innerText = nomeJogo;
+            const nomeJogoII = nomesJogos[jogoII] || "Jogo Desconhecido";
+            document.getElementById("jogoIIdiv").innerText = nomeJogoII;
+            const nomeJogoIII = nomesJogos[jogoIII] || "Jogo Desconhecido";
+            document.getElementById("jogoIIIdiv").innerText = nomeJogoIII;
+            console.log(respostaRs);
+
+            estado.innerHTML = "Rio Grande Do Sul"
+
+            if (cpuRs != null || gpuRs != null || ramRs != null || discoRs != null || redeRs != null) {
+                emAlerta += 1;
+            }
+
+            const somaCpu = cpuRs.reduce((total, num) => total + num, 0);
+            const somaGpu = gpuRs.reduce((total, num) => total + num, 0);
+            const somaRam = ramRs.reduce((total, num) => total + num, 0);
+            const somaDisco = discoRs.reduce((total, num) => total + num, 0);
+            const somaRede = redeRs.reduce((total, num) => total + num, 0);
+
+
+
+            const componentes = {
+                somaCpu,
+                somaDisco,
+                somaGpu,
+                somaRam,
+                somaRede
+            };
+
+            const maiorValor = Math.max(...Object.values(componentes));
+
+            const maiorComponente = Object.keys(componentes).find(
+                chave => componentes[chave] === maiorValor
+            );
+            const nomeComponente =
+                maiorComponente === "somaCpu" ? "CPU"
+                    : maiorComponente === "somaDisco" ? "DISCO"
+                        : maiorComponente === "somaGpu" ? "GPU"
+                            : maiorComponente === "somaRam" ? "RAM"
+                                : maiorComponente === "somaRede" ? "REDE"
+                                    : "Desconhecido";
+
+            ComponenteAlerta.innerHTML = `${nomeComponente}<span style="font-size: 25px;">/${maiorValor}</span>`;
+
+            numeroServidores.innerHTML = `${emAlerta}/${servidores}`;
+            if (servidores == null || emAlerta == null) {
+                alert(`Dados do Servidor não encontrado!
+                <br>Entre em contato com o suporte`)
+            } else if ((servidores * 0.01) > emAlerta) {
+                document.querySelector('.server-box-N-Servidores').style.background = '#2cbe00';
+                console.log("Entrei no if verde");
+
+            } else if (servidores * 0.70 >= emAlerta) {
+                document.querySelector('.server-box-N-Servidores').style.background = '#ff3333';
+            } else {
+                document.querySelector('.server-box-N-Servidores').style.background = '#ff3333';
+            }
+
+
+
+
+            var options = {
+                series: [
+                    {
+                        name: "CPU",
+                        data: cpuRs.reverse()
+                    },
+                    {
+                        name: "GPU",
+                        data: gpuRs.reverse()
+                    },
+                    {
+                        name: "RAM",
+                        data: ramRs.reverse()
+                    },
+                    {
+                        name: "DISCO",
+                        data: discoRs.reverse()
+                    },
+                    {
+                        name: "REDE",
+                        data: redeRs.reverse()
+                    }
+                ],
+                chart: {
+                    height: 250,
+                    type: 'line',
+                    background: 'transparent',
+                    dropShadow: {
+                        enabled: true,
+                        color: '#ffffff',
+                        top: 18,
+                        left: 7,
+                        blur: 10,
+                        opacity: 0.3
+                    },
+                    zoom: { enabled: false },
+                    toolbar: { show: false }
+                },
+                colors: ['#00D4AA', '#FF6B6B', '#FFD700', '#00BFFF', '#00B4BF'],
+                dataLabels: {
+                    enabled: true,
+                    style: {
+                        colors: ['#00000'],
+                        fontSize: '10px',
+                        fontWeight: 'bold'
+                    }
+                },
+                stroke: {
+                    curve: 'smooth',
+                    width: 3
+                },
+                grid: {
+                    borderColor: '#404040',
+                    strokeDashArray: 3,
+                    row: {
+                        colors: ['#1a1a1a', 'transparent'],
+                        opacity: 0.3
+                    }
+                },
+                markers: {
+                    size: 1,
+                    strokeColors: ['#00D4AA', '#FF6B6B', '#FFD700', '#00BFFF'],
+                    strokeWidth: 2,
+                    offsetX: 10
+                },
+                xaxis: {
+                    categories: data.reverse(),
+                    title: {
+                        text: 'Month',
+                        style: {
+                            color: '#cccccc'
+                        },
+
+                    },
+                    labels: {
+                        style: {
+                            colors: '#cccccc'
+                        }
+                    }
+                },
+                yaxis: {
+                    title: {
+                        text: 'Temperature',
+                        style: {
+                            color: '#cccccc'
+                        }
+                    },
+                    labels: {
+                        style: {
+                            colors: '#cccccc'
+                        },
+
+                    }
+                },
+
+                legend: {
+                    position: 'bottom',
+                    horizontalAlign: 'right',
+                    floating: true,
+                    offsetY: 10,
+                    offsetX: -5,
+                    fontSize: '9px',
+                    labels: {
+                        colors: '#ffffff'
+                    }
+                },
+                theme: {
+                    mode: 'dark'
+                }
+            };
+            var chart = new ApexCharts(document.querySelector("#linhaBrasil"), options);
+            chart.render();
+
 
             anychart.onDocumentReady(function () {
                 var map = anychart.map();
@@ -676,9 +1926,9 @@ anychart.onDocumentReady(function () {
                 function getDataSudeste() {
 
                     return [
-                        { "id": "BR.PR", "capital": "Curitiba", "value": 50 },
-                        { "id": "BR.SC", "capital": "Florianópolis", "value": 90 },
-                        { "id": "BR.RS", "capital": "Porto Alegre", "value": 75 }
+                        { "id": "BR.PR", "capital": "Curitiba", "value": "Servidor não cadastrado" },
+                        { "id": "BR.SC", "capital": "Florianópolis", "value": "Servidor não cadastrado" },
+                        { "id": "BR.RS", "capital": "Porto Alegre", "value": valorRs }
                     ];
                 }
 
@@ -716,7 +1966,7 @@ anychart.onDocumentReady(function () {
                 map.background(null);
 
                 var nivelZoom = 3.1;
-                var eixoX = 470;
+                var eixoX = 370;
                 var eixoY = 1000;
 
                 map.zoomTo(nivelZoom, eixoX, eixoY);
@@ -726,10 +1976,327 @@ anychart.onDocumentReady(function () {
                 map.draw();
             });
 
-        } else if (regioes == 6) {
+            loadGameImage(jogoI, "ftJogoI");
+            loadGameImage(jogoII, "ftJogoII");
+            loadGameImage(jogoIII, "ftJogoIII");
+
+            loadImageBackground(jogoI, "backJogoI")
+            loadImageBackground(jogoII, "backJogoII")
+
+        }
+        else if (regioes == 6) {
+
+            ///
+            /// SUDESTE
+            ///
 
             mapBrasil.innerHTML = "";
-            // Sudeste
+            linhaBrasil.innerHTML = "";
+            ftJogoI.innerHTML = ""
+            ftJogoII.innerHTML = ""
+            ftJogoIII.innerHTML = ""
+            jogoIdiv.innerHTML = ""
+            jogoIIdiv.innerHTML = ""
+            jogoIIIdiv.innerHTML = ""
+
+            servidores = 0;
+            emAlerta = 0;
+
+            respostaSp = await semana('SP', 'sp');
+            respostaRj = await semana('RJ', 'rj');
+            respostaMg = await semana('MG', 'mg');
+
+
+            console.log("TEste dentro do if vei", respostaSp)
+
+            console.log("CPU TESTE" + respostaSp[0].TotalCpu)
+
+            tamanhoSp = respostaSp.length
+            tamanhoRj = respostaRj.length
+            tamanhoMg = respostaMg.length
+
+            if (tamanhoSp > 0) {
+                servidores += 1;
+            }
+            if (tamanhoRj > 0) {
+                servidores += 1;
+            }
+            if (tamanhoMg > 0) {
+                servidores += 1;
+            }
+
+
+            cpuSp = []
+            gpuSp = []
+            ramSp = []
+            discoSp = []
+            redeSp = []
+            data = []
+            cpuRj = []
+            gpuRj = []
+            ramRj = []
+            discoRj = []
+            redeRj = []
+            cpuMg = []
+            gpuMg = []
+            ramMg = []
+            discoMg = []
+            redeMg = []
+
+            for (i = tamanhoSp - 1; i >= 0; i--) {
+                cpuSp.push(respostaSp[i].TotalCpu)
+                gpuSp.push(respostaSp[i].TotalGpu)
+                ramSp.push(respostaSp[i].TotalRam)
+                discoSp.push(respostaSp[i].TotalDisco)
+                redeSp.push(respostaSp[i].TotalRede)
+                data.push(respostaSp[i].Data)
+
+                cpuRj.push(respostaRj[i].TotalCpu)
+                gpuRj.push(respostaRj[i].TotalGpu)
+                ramRj.push(respostaRj[i].TotalRam)
+                discoRj.push(respostaRj[i].TotalDisco)
+                redeRj.push(respostaRj[i].TotalRede)
+
+                cpuMg.push(respostaMg[i].TotalCpu)
+                gpuMg.push(respostaMg[i].TotalGpu)
+                ramMg.push(respostaMg[i].TotalRam)
+                discoMg.push(respostaMg[i].TotalDisco)
+                redeMg.push(respostaMg[i].TotalRede)
+            }
+
+
+
+
+            cpu = []
+            gpu = []
+            ram = []
+            disco = []
+            rede = []
+            valorSp = 0;
+            valorRj = 0;
+            valorMg = 0;
+            for (i = 0; i < respostaSp.length; i++) {
+                valorRj += cpuRj[i] + gpuRj[i] + ramRj[i] + redeRj[i] + discoRj[i];
+                valorSp += cpuSp[i] + gpuSp[i] + ramSp[i] + redeSp[i] + discoSp[i];
+                valorMg += cpuMg[i] + gpuMg[i] + ramMg[i] + redeMg[i] + discoMg[i];
+
+            }
+
+            for (i = tamanhoRj - 1; i >= 0; i--) {
+                cpu.push(cpuRj[i] + cpuSp[i] + cpuMg[i])
+                gpu.push(gpuRj[i] + gpuSp[i] + gpuMg[i])
+                ram.push(ramRj[i] + ramSp[i] + ramMg[i])
+                rede.push(redeRj[i] + redeSp[i] + redeMg[i])
+                disco.push(discoRj[i] + discoSp[i] + discoMg[i])
+            }
+
+
+            jogoI = respostaRj[tamanhoSp - 1].PrimeiroJogo
+            jogoII = respostaRj[tamanhoSp - 1].SegundoJogo
+            jogoIII = respostaRj[tamanhoSp - 1].TerceiroJogo;
+
+            const nomeJogo = nomesJogos[jogoI] || "Jogo Desconhecido";
+            document.getElementById("jogoIdiv").innerText = nomeJogo;
+            const nomeJogoII = nomesJogos[jogoII] || "Jogo Desconhecido";
+            document.getElementById("jogoIIdiv").innerText = nomeJogoII;
+            const nomeJogoIII = nomesJogos[jogoIII] || "Jogo Desconhecido";
+            document.getElementById("jogoIIIdiv").innerText = nomeJogoIII;
+            console.log(respostaRj);
+
+            if (valorRj == null || valorSp == null || valorMg == null) {
+                estado.innerHTML = "Valores Não Encontrados"
+                mapBrasil.innerHTML = "";
+                linhaBrasil.innerHTML = "";
+                ftJogoI.innerHTML = ""
+                ftJogoII.innerHTML = ""
+                ftJogoIII.innerHTML = ""
+                jogoIdiv.innerHTML = ""
+                jogoIIdiv.innerHTML = ""
+                jogoIIIdiv.innerHTML = ""
+            } else if (valorRj > valorSp && valorRj > valorMg) {
+                estado.innerHTML = "Rio de Janeiro"
+            } else if (valorSp > valorRj && valorSp > valorMg) {
+                estado.innerHTML = "São Paulo"
+            } else {
+                estado.innerHTML = "Minas Gerais"
+            }
+
+            if (cpuSp != null || gpuSp != null || ramSp != null || discoSp != null || redeSp != null) {
+                emAlerta += 1;
+            } if (cpuRj != null || gpuRj != null || ramRj != null || discoRj != null || redeRj != null) {
+                emAlerta += 1;
+            }
+            if (cpuMg != null || gpuMg != null || ramMg != null || discoMg != null || redeMg != null) {
+                emAlerta += 1;
+            }
+
+            const somaCpu = cpuSp.reduce((total, num) => total + num, 0) + cpuRj.reduce((total, num) => total + num, 0) + cpuMg.reduce((total, num) => total + num, 0);
+            const somaGpu = gpuSp.reduce((total, num) => total + num, 0) + gpuRj.reduce((total, num) => total + num, 0) + gpuMg.reduce((total, num) => total + num, 0);
+            const somaRam = ramSp.reduce((total, num) => total + num, 0) + ramRj.reduce((total, num) => total + num, 0) + ramMg.reduce((total, num) => total + num, 0);
+            const somaDisco = discoSp.reduce((total, num) => total + num, 0) + discoRj.reduce((total, num) => total + num, 0) + discoMg.reduce((total, num) => total + num, 0);
+            const somaRede = redeSp.reduce((total, num) => total + num, 0) + redeRj.reduce((total, num) => total + num, 0) + redeMg.reduce((total, num) => total + num, 0);
+
+
+
+            const componentes = {
+                somaCpu,
+                somaDisco,
+                somaGpu,
+                somaRam,
+                somaRede
+            };
+
+            const maiorValor = Math.max(...Object.values(componentes));
+
+            const maiorComponente = Object.keys(componentes).find(
+                chave => componentes[chave] === maiorValor
+            );
+            const nomeComponente =
+                maiorComponente === "somaCpu" ? "CPU"
+                    : maiorComponente === "somaDisco" ? "DISCO"
+                        : maiorComponente === "somaGpu" ? "GPU"
+                            : maiorComponente === "somaRam" ? "RAM"
+                                : maiorComponente === "somaRede" ? "REDE"
+                                    : "Desconhecido";
+
+            ComponenteAlerta.innerHTML = `${nomeComponente}<span style="font-size: 25px;">/${maiorValor}</span>`;
+
+            numeroServidores.innerHTML = `${emAlerta}/${servidores}`;
+            if (servidores == null || emAlerta == null) {
+                alert(`Dados do Servidor não encontrado!
+                <br>Entre em contato com o suporte`)
+            } else if ((servidores * 0.01) > emAlerta) {
+                document.querySelector('.server-box-N-Servidores').style.background = '#2cbe00';
+                console.log("Entrei no if verde");
+
+            } else if (servidores * 0.70 >= emAlerta) {
+                document.querySelector('.server-box-N-Servidores').style.background = '#ff3333';
+            } else {
+                document.querySelector('.server-box-N-Servidores').style.background = '#ff3333';
+            }
+
+
+
+
+            var options = {
+                series: [
+                    {
+                        name: "CPU",
+                        data: cpu.reverse()
+                    },
+                    {
+                        name: "GPU",
+                        data: gpu.reverse()
+                    },
+                    {
+                        name: "RAM",
+                        data: ram.reverse()
+                    },
+                    {
+                        name: "DISCO",
+                        data: disco.reverse()
+                    },
+                    {
+                        name: "REDE",
+                        data: rede.reverse()
+                    }
+                ],
+                chart: {
+                    height: 250,
+                    type: 'line',
+                    background: 'transparent',
+                    dropShadow: {
+                        enabled: true,
+                        color: '#ffffff',
+                        top: 18,
+                        left: 7,
+                        blur: 10,
+                        opacity: 0.3
+                    },
+                    zoom: { enabled: false },
+                    toolbar: { show: false }
+                },
+                colors: ['#00D4AA', '#FF6B6B', '#FFD700', '#00BFFF', '#00B4BF'],
+                dataLabels: {
+                    enabled: true,
+                    style: {
+                        colors: ['#00000'],
+                        fontSize: '10px',
+                        fontWeight: 'bold'
+                    }
+                },
+                stroke: {
+                    curve: 'smooth',
+                    width: 3
+                },
+                grid: {
+                    borderColor: '#404040',
+                    strokeDashArray: 3,
+                    row: {
+                        colors: ['#1a1a1a', 'transparent'],
+                        opacity: 0.3
+                    }
+                },
+                markers: {
+                    size: 1,
+                    strokeColors: ['#00D4AA', '#FF6B6B', '#FFD700', '#00BFFF'],
+                    strokeWidth: 2,
+                    offsetX: 10
+                },
+                xaxis: {
+                    categories: data.reverse(),
+                    title: {
+                        text: 'Month',
+                        style: {
+                            color: '#cccccc'
+                        },
+
+                    },
+                    labels: {
+                        style: {
+                            colors: '#cccccc'
+                        }
+                    }
+                },
+                yaxis: {
+                    title: {
+                        text: 'Temperature',
+                        style: {
+                            color: '#cccccc'
+                        }
+                    },
+                    labels: {
+                        style: {
+                            colors: '#cccccc'
+                        },
+
+                    }
+                },
+
+                legend: {
+                    position: 'bottom',
+                    horizontalAlign: 'right',
+                    floating: true,
+                    offsetY: 10,
+                    offsetX: -5,
+                    fontSize: '9px',
+                    labels: {
+                        colors: '#ffffff'
+                    }
+                },
+                theme: {
+                    mode: 'dark'
+                }
+            };
+            var chart = new ApexCharts(document.querySelector("#linhaBrasil"), options);
+            chart.render();
+
+
+            //////
+            // GRAFICO MAPA 
+            //////
+
+
 
             anychart.onDocumentReady(function () {
                 var map = anychart.map();
@@ -737,10 +2304,10 @@ anychart.onDocumentReady(function () {
                 function getDataSudeste() {
 
                     return [
-                        { "id": "BR.SP", "capital": "São Paulo", "value": 50 },
-                        { "id": "BR.RJ", "capital": "Rio de Janeiro", "value": 90 },
-                        { "id": "BR.MG", "capital": "Belo Horizonte", "value": 75 },
-                        { "id": "BR.ES", "capital": "Vitória", "value": 60 }
+                        { "id": "BR.SP", "capital": "São Paulo", "value": valorSp },
+                        { "id": "BR.RJ", "capital": "Rio de Janeiro", "value": valorRj },
+                        { "id": "BR.MG", "capital": "Belo Horizonte", "value": valorMg },
+                        { "id": "BR.ES", "capital": "Vitória", "value": "Sem Servidor" }
                     ];
                 }
 
@@ -750,6 +2317,7 @@ anychart.onDocumentReady(function () {
 
                 series.geoIdField('id');
                 series.colorScale(anychart.scales.linearColor('#FFFFFF', '#FF670A'));
+
                 series.hovered().fill('#8c8c8c');
 
                 series.tooltip().format(function (e) {
@@ -778,8 +2346,8 @@ anychart.onDocumentReady(function () {
                 map.background(null);
 
                 var nivelZoom = 3.0;
-                var eixoX = 650;
-                var eixoY = 500;
+                var eixoX = 500;
+                var eixoY = 400;
 
                 map.zoomTo(nivelZoom, eixoX, eixoY);
 
@@ -787,6 +2355,18 @@ anychart.onDocumentReady(function () {
 
                 map.draw();
             });
+
+
+            loadGameImage(jogoI, "ftJogoI");
+            loadGameImage(jogoII, "ftJogoII");
+            loadGameImage(jogoIII, "ftJogoIII");
+            console.log(jogoIII)
+
+
+            loadImageBackground(jogoI, "backJogoI")
+            loadImageBackground(jogoII, "backJogoII")
+            loadImageBackground(jogoIII, "backJogoIII")
+
 
         }
     }

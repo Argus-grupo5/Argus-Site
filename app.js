@@ -21,9 +21,13 @@ var app = express();
 var indexRouter = require("./src/routes/index");
 var usuarioRouter = require("./src/routes/usuarios");
 var empresasRouter = require("./src/routes/empresas");
+<<<<<<< Updated upstream
 var servidoresRouter = require("./src/routes/servidores")
 var jiraRouter = require("./src/routes/jira") 
 var s3Router = require("./src/routes/s3Route");
+=======
+var servidoresRouter = require("./src/routes/servidores");
+>>>>>>> Stashed changes
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

@@ -2,10 +2,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Cairo:slnt,wght@-11..11,200..1000&display=swap');
 
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Cairo", sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Cairo", sans-serif;
 }
 
 body {
@@ -35,7 +35,7 @@ body {
     z-index: 999;
 }
 
-.desktopNav img{
+.desktopNav img {
     width: 70%;
     height: auto;
     transition: 0.3s ease;
@@ -43,10 +43,10 @@ body {
     padding: 0.3vw;
 }
 
-.desktopNav .navButtons img:hover{
+.desktopNav .navButtons img:hover {
     cursor: pointer;
     width: 90%;
-    background-color: #ffa794; 
+    background-color: #ffa794;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
@@ -70,7 +70,7 @@ body {
     justify-content: center;
 }
 
-.selected { 
+.selected {
     padding: 0.5vw;
     background: linear-gradient(to bottom, #FF0000, #FF670A);
     border-radius: 8px;
@@ -78,8 +78,8 @@ body {
 }
 
 .tooltipNav {
-  position: relative;
-  display: inline-block;
+    position: relative;
+    display: inline-block;
 }
 
 
@@ -90,7 +90,7 @@ body {
     top: +0.5vw;
     left: 125%;
     z-index: 999;
-    
+
 
     width: 0px;
     padding: 0px 1vw;
@@ -104,13 +104,13 @@ body {
 }
 
 .tooltipNav:hover .tooltiptextNav {
-  visibility: visible;
-  width: 12vw;
-  font-size: 1vw;
-  transition: .4s ease;
+    visibility: visible;
+    width: 12vw;
+    font-size: 1vw;
+    transition: .4s ease;
 }
 
-.headerTop{
+.headerTop {
     padding-left: 5vw;
     padding-right: 3vw;
     width: 100%;
@@ -122,12 +122,12 @@ body {
     justify-content: flex-start;
 }
 
-.headerTop img{
+.headerTop img {
     width: 100%;
 }
 
 /* Modal */
-.modal{
+.modal {
     height: fit-content;
     min-height: 70vh;
     width: 40vw;
@@ -162,7 +162,7 @@ body {
     margin-bottom: 10px;
 }
 
-.modal-label input{
+.modal-label input {
     border: none;
     height: 20%;
     border-radius: 5px;
@@ -177,7 +177,7 @@ body {
     justify-content: center;
 }
 
-.modal-label-comp input{
+.modal-label-comp input {
     border: none;
     height: 100%;
     width: 100%;
@@ -193,7 +193,7 @@ body {
     justify-content: center;
 }
 
-.modal-button div{
+.modal-button div {
     background-color: black;
     height: 50px;
     width: 50px;
@@ -204,7 +204,7 @@ body {
     transition: background-color 0.3s;
 }
 
-.modal-button div:hover{
+.modal-button div:hover {
     cursor: pointer;
     background-color: #313030;
 }
@@ -224,12 +224,13 @@ body {
 .user {
     display: flex;
 }
-.user:hover{
+
+.user:hover {
     cursor: pointer;
     display: flex;
 }
 
-.user img{
+.user img {
     width: 2.8vw;
     border-radius: 40px;
 }
@@ -238,7 +239,7 @@ body {
     display: flex;
 }
 
-.headerTop .info .bell{
+.headerTop .info .bell {
     width: 3.0vw;
     background-color: #313030;
     border-radius: 5px 0px 0px 5px;
@@ -246,7 +247,7 @@ body {
     display: flex;
 }
 
-.headerTop .info .risk{
+.headerTop .info .risk {
     width: 2.5vw;
     background-color: #ff3131;
     border-radius: 0px 0px 0px 0px;
@@ -257,7 +258,7 @@ body {
     font-size: 1vw;
 }
 
-.headerTop .info .atention{
+.headerTop .info .atention {
     width: 2.5vw;
     background-color: #ffba31;
     border-radius: 0px 5px 5px 0px;
@@ -268,7 +269,7 @@ body {
     font-size: 1vw;
 }
 
-.headerTop .info .server{
+.headerTop .info .server {
     width: 3.0vw;
     background-color: #313030;
     border-radius: 5px 0px 0px 5px;
@@ -276,7 +277,7 @@ body {
     display: flex;
 }
 
-.headerTop .info .serversMonitoring{
+.headerTop .info .serversMonitoring {
     width: 2.5vw;
     background-color: #4B4343;
     border-radius: 0px 5px 5px 0px;
@@ -289,8 +290,8 @@ body {
 
 
 .tooltipInfo {
-  position: relative;
-  display: inline-block;
+    position: relative;
+    display: inline-block;
 }
 
 
@@ -300,7 +301,7 @@ body {
     position: absolute;
     top: +3vw;
     z-index: 1;
-    
+
 
     width: 0px;
     padding: 0px 1vw;
@@ -314,10 +315,10 @@ body {
 }
 
 .tooltipInfo:hover .tooltiptextInfo {
-  visibility: visible;
-  min-width: 15vw;
-  font-size: 0.9vw;
-  transition: .3s ease;
+    visibility: visible;
+    min-width: 15vw;
+    font-size: 0.9vw;
+    transition: .3s ease;
 }
 
 
@@ -325,11 +326,11 @@ body {
     padding-left: 0.5vw;
 }
 
-#userNome{
+#userNome {
     font-size: 1vw;
 }
 
-#userCargo{
+#userCargo {
     font-size: 0.7vw;
     color: #201010;
 }
@@ -370,89 +371,93 @@ body {
 }
 
 
-.Select-location{
-	appearance: none;
-	-webkit-appearance: none;
-	-moz-appearance: none;
+.Select-location {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
     display: flex;
     flex-direction: row;
     align-items: center;
 }
 
 
-.Select-location select{
-	appearance: none;
-	-webkit-appearance: none;
-	-moz-appearance: none;
+.Select-location select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
 }
 
 
-.Select-location{
-	max-width: 250px;
-	position: relative;
+.Select-location {
+    max-width: 250px;
+    position: relative;
 }
- 
-.Select-location select{
-	display: inline-block;
-	width: 100%;
-	cursor: pointer;
-  	padding: 7px 10px;
-  	height: 42px;
-  	outline: 0; 
-  	border: 0;
-	border-radius: 0;
-	background: #313030;
-	color: #b43030;
-	font-size: 1em;
-	color: #FF670A;
-	font-family: 
-	'Quicksand', sans-serif;
-	border:2px solid rgba(0,0,0,0.2);
+
+.Select-location select {
+    display: inline-block;
+    width: 100%;
+    cursor: pointer;
+    padding: 7px 10px;
+    height: 42px;
+    outline: 0;
+    border: 0;
+    border-radius: 0;
+    background: #313030;
+    color: #b43030;
+    font-size: 1em;
+    color: #FF670A;
+    font-family:
+        'Quicksand', sans-serif;
+    border: 2px solid rgba(0, 0, 0, 0.2);
     border-radius: 12px;
     position: relative;
     transition: all 0.25s ease;
 }
- 
-.Select-location select:hover{
-	background: #4e4e4e;
+
+.Select-location select:hover {
+    background: #4e4e4e;
 }
- 
+
 /* 
 Creamos la fecha que aparece a la izquierda del select.
 Realmente este elemento es un cuadrado que sólo tienen
 dos bordes con color y que giramos con transform: rotate(-45deg);
 */
-.Select-locationt i{
-	position: absolute;
-	right: 20px;
-	top: calc(50% - 13px);
-	width: 16px;
-	height: 16px;
-	display: block;
-	border-left:4px solid #313030;
-	border-bottom:4px solid #313030;
-	transform: rotate(-45deg); /* Giramos el cuadrado */
-	transition: all 0.25s ease;
+.Select-locationt i {
+    position: absolute;
+    right: 20px;
+    top: calc(50% - 13px);
+    width: 16px;
+    height: 16px;
+    display: block;
+    border-left: 4px solid #313030;
+    border-bottom: 4px solid #313030;
+    transform: rotate(-45deg);
+    /* Giramos el cuadrado */
+    transition: all 0.25s ease;
 }
- 
-.Select-location:hover i{
-	margin-top: 3px;
+
+.Select-location:hover i {
+    margin-top: 3px;
 }
 
 
-.server-box, .component-box {
+.server-box,
+.component-box {
     background-color: #ff3333;
 }
-.server-box-N-Servidores{
+
+.server-box-N-Servidores {
     background-color: #2cbe00;
 }
 
-.server-box .value, .component-box .value {
+.server-box .value,
+.component-box .value {
     font-size: 40px;
     letter-spacing: 1px;
 }
 
-.search{
+.search {
     display: flex;
     padding-left: 5vw;
     padding-right: 1vw;
@@ -487,7 +492,9 @@ dos bordes con color y que giramos con transform: rotate(-45deg);
     outline: 0;
     transition: .3s ease;
 }
-textarea:focus, input:focus {
+
+textarea:focus,
+input:focus {
     border: 1px solid #b0b0b0 !important;
 }
 
@@ -505,13 +512,13 @@ textarea:focus, input:focus {
     cursor: pointer;
 }
 
-.search button:hover{
+.search button:hover {
     background-image: linear-gradient(to right, #c00101, #b04502);
 }
 
 .container {
     padding-left: 5vw;
-    padding-right: 1vw;   
+    padding-right: 1vw;
 }
 
 .container .serverInfo {
@@ -529,16 +536,17 @@ textarea:focus, input:focus {
     display: flex;
     justify-content: center;
     width: 5%;
-    
+
 }
 
 
 .serverName {
     width: 15%;
 }
+
 .serverName a {
     text-decoration: none;
-    
+
 }
 
 .serverStatus {
@@ -637,7 +645,7 @@ textarea:focus, input:focus {
     width: 10vw;
     height: 0.3vw;
     background-color: #000000;
-    
+
 }
 
 .server-icon-status {
@@ -645,7 +653,7 @@ textarea:focus, input:focus {
 }
 
 progress::-moz-progress-bar {
-  background-color:#FF670A;
+    background-color: #FF670A;
 }
 
 .container-boxes-down {
@@ -660,6 +668,7 @@ progress::-moz-progress-bar {
     margin-right: 1vw;
     border-radius: 10px;
 }
+
 .container-boxes-title {
     text-align: center;
     width: 100%;
@@ -669,12 +678,12 @@ progress::-moz-progress-bar {
     font-size: 20px;
 }
 
-.boxes-subtitle{
+.boxes-subtitle {
     font-size: 18px;
     color: rgb(186, 186, 186);
 }
 
-.container-boxes-comp{
+.container-boxes-comp {
     width: 100%;
     display: flex;
     flex-wrap: wrap;
@@ -682,7 +691,7 @@ progress::-moz-progress-bar {
     justify-content: center;
 }
 
-.container-boxes-comp div p{
+.container-boxes-comp div p {
     text-align: start;
 }
 
@@ -695,6 +704,7 @@ progress::-moz-progress-bar {
     border-radius: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
 }
+
 .box-card div {
     display: flex;
     flex-direction: column;
@@ -702,6 +712,7 @@ progress::-moz-progress-bar {
     text-align: center;
     align-items: center;
 }
+
 .label-box {
     font-size: 12px;
     margin-bottom: 10px;
@@ -709,7 +720,7 @@ progress::-moz-progress-bar {
     letter-spacing: 0.5px;
 }
 
-.value-box{
+.value-box {
     font-size: 24px;
     font-weight: 700;
     margin-top: 0;
@@ -730,10 +741,10 @@ progress::-moz-progress-bar {
     height: 100%;
     background-color: #000000e1;
     text-align: center;
-  
+
 }
 
-.popup_sair h1{
+.popup_sair h1 {
     font-size: 2vw;
     font-weight: 100;
 }
@@ -756,7 +767,7 @@ progress::-moz-progress-bar {
     color: white;
     width: 12vw;
     font-size: 1.4vw;
-    
+
 
 }
 
@@ -770,71 +781,166 @@ progress::-moz-progress-bar {
 }
 
 .mapaCalor {
-    flex: 1; 
-     width: 50%;
-     height: 240%; 
+    flex: 1;
+    width: 50%;
+    height: 240%;
 }
 
 .graficoLinha {
     display: flex;
-    flex-direction: column; 
+    flex-direction: column;
     width: 50%;
     height: 170%;
-    gap: 5%;
+    gap: 1%;
+    margin-right: 2%;
 }
 
-#linhaBrasil, #corelacao {
-    flex: 5; 
+ #linhaBrasil:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: scale(1.01);
+}
 
+.titulo-grafico {
+    font-size: 22px;
+    font-weight: 700;
+    background: linear-gradient(90deg, #ff8c00, #ffcb52);
+    -webkit-background-clip: text;
+    color: transparent;
+    margin-bottom: -15px; 
+    padding-left: 3%;
+}
+
+.graficoLinha #linhaBrasil {
+    background-color: #313030;
+    border: #5c5c5c solid 1px ;
+    border-radius: 30px;
+}
+
+#linhaBrasil {
+    flex: 5;
 
 }
 
 #mapBrasil {
-    height: 100%; 
+    height: 100%;
     width: 50%;
 }
 
 
-
 /* Mapa de calor css */
- 
-    html, body, #mapBrasil {
+
+html,
+body,
+#mapBrasil {
     width: 100%;
     height: 70%;
     margin: 0;
     padding: 0;
-    }
+}
 
-    html, body,  #mapSudeste{
+
+/* JOGOS */
+
+.lista-jogos {
     width: 100%;
-    height: 70%;
-    }
+    font-family: Arial, sans-serif;
+    color: white;
+    margin-bottom: 7%;
+}
 
-    html, body, #mapSul {
-    width: 100%;
-    height: 70%;
-    margin: 0;
-    padding: 0;
-    }
+.legenda {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 15px;
+    font-size: 14px;
+    color: #cccccc;
+}
 
-    html, body,  #mapNorte{
-    width: 100%;
-    height: 70%;
-    margin: 0;
-    padding: 0;
-    }
+.legenda-foto {
+    font-size: 20px;
+    font-weight: 700;
+    padding-left: 3%;
+    background: linear-gradient(90deg, #ff8c00, #ffcb52);
+    -webkit-background-clip: text;
+    color: transparent;
+    white-space: nowrap;
+}
 
-    html, body, #mapNordeste{
-    width: 100%;
-    height: 70%;
-    margin: 0;
-    padding: 0;
-    }
+.linha-jogo {
+    width: 750px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 12px;
+    margin-bottom: 12px;
+    backdrop-filter: blur(12px);
+    transition: 0.3s ease;
+}
 
-    html, body,  #mapCentro{
-    width: 100%;
-    height: 70%;
-    margin: 0;
-    padding: 0;
-    }
+.linha-jogo:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: scale(1.01);
+}
 
+.jogo-foto {
+    width: 120px;
+    height: 50px;
+    border-radius: 10px;
+    background-size: cover;
+    background-position: center;
+    object-fit: cover;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.jogo-nome {
+    font-size: 20px;
+    font-weight: 600;
+    padding: 6px 18px;
+    border-radius: 12px;
+    color: #FF6E1A;
+    background: rgba(0,0,0,0.45);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(35px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+}
+
+.metric-tooltip {
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #111;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    transition: 0.2s ease-in-out;
+    pointer-events: none;
+    z-index: 10;
+    border: 1px solid #333;
+}
+
+/* Triângulo */
+.metric-tooltip::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 6px;
+    border-style: solid;
+    border-color: #111 transparent transparent transparent;
+}
+
+/* Quando passar o mouse, mostra */
+.info-box:hover .metric-tooltip {
+    visibility: visible;
+    opacity: 1;
+}

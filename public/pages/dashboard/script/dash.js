@@ -39,7 +39,7 @@ function header(pag, cargo) {
           <div id="userCargo">${sessionStorage.CARGO_CARGO}</div>
         </span>
       </a>
-      <a href="./servers.html" class="navButton tooltipNav" id="navServers">
+      <a href="./dashCaio.html" class="navButton tooltipNav" id="navServers">
         <img id="imgServidores" src="../../assets/dashboard/desktop/box.svg" alt="Servidores">
         <span class="tooltiptextNav">Servidores</span>
       </a>
