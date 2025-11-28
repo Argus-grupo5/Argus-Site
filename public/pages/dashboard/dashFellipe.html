@@ -68,10 +68,17 @@
             <div class="overview-header">
                 <h2>Visão Geral - Servidor <br>
                     XBOX-CLOUD-BR</h2>
-                <!-- colocar a ultima atualização -->
+                <div>
+                    <div class="headerSub">
+                        <p>Última atualização: <span id="attAtual"></span> atrás</p>
+                    </div>
+                </div>
             </div>
 
             <div class="region-filter-bar">
+
+                
+
                 <select id="regionSelect">
                     <option value="">Selecione a região...</option>
                     <option value="sp">SP</option>
@@ -197,7 +204,14 @@
 
     <script src="../../js/server-overview.js"></script>
     <script>
-            header("dashboard", sessionStorage.CARGO_CARGO);
+        header("dashboard", sessionStorage.CARGO_CARGO);
+
+        function tempoAtt() {
+            let dataHora = new Date()
+            let attAtual = (dataHora.getHours() - 6 + 24) % 24
+            let attMin = dataHora.getMinutes()
+            document.getElementById("attAtual").innerHTML = `${attAtual}h ${attMin}min`
+        }
 
         let dadosOriginais = [];
 
@@ -583,5 +597,8 @@
             window.fmtTime = fmtTime;
         })
         .catch(err => console.error("Erro ao carregar JSON:", err));
+
+        tempoAtt();
+        setInterval(tempoAtt, 60000);
 
 </script>
