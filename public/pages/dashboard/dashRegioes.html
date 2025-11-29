@@ -20,7 +20,8 @@
     <script src="https://cdn.anychart.com/geodata/2.2.0/countries/brazil/brazil.js"></script>
     <script src="https://cdn.anychart.com/releases/8.13.0/js/anychart-ui.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-    <script src="./script/dash.js"></script>
+    <script src="script/dash.js"></script>
+
 
     <title>ARGUS | Visão Servidores</title>
 </head>
@@ -34,36 +35,7 @@
         <div class="modal-geral" id="div_modal_label"></div>
     </div>
 
-    <header class="desktopNav" id="navDesktop">
-        <div class="navButtons">
-            <a href="./perfil.html" class="navButton tooltipNav" id="navUser">
-                <img src="../../../assets/fotoPerfil/${sessionStorage.FOTO}" alt="" id="FotoNavBar">
-                <span class="tooltiptextNav">
-                    <div id="userNome"></div>
-                    <div id="userCargo"></div>
-                </span>
-            </a>
-            <a href="./dashCaio.html" class="navButton tooltipNav" id="navServers">
-                <img id="imgServidores" src="../../assets/dashboard/desktop/box.svg" alt="Servidores">
-                <span class="tooltiptextNav">Servidores</span>
-            </a>
-            <a href="./serversSup.html" class="navButton tooltipNav" id="navServers">
-                <img id="imgServidores" src="../../assets/dashboard/desktop/box.svg" alt="Servidores">
-                <span class="tooltiptextNav">Servidores</span>
-            </a>
-
-            <a href="./funcionarios.html" class="navButton tooltipNav" id="navServers">
-                <img id="imgFuncionarios" src="../../assets/dashboard/desktop/employes.svg" alt="Funcionários">
-                <span class="tooltiptextNav">Funcionários</span>
-            </a>
-
-            <div class="navButton tooltipNav" id="navServers" onclick="sair()">
-                <img src="../../assets/dashboard/desktop/logout.svg" alt="Sair">
-                <span class="tooltiptextNav">Sair</span>
-            </div>
-        </div>
-        <img class="logo" src="../../assets/icon/logoBlack.svg" alt="">
-    </header>
+    <header class="desktopNav" id="navDesktop"></header>
 
     <header class="headerTop">
         <div class="geralInfo">
@@ -158,6 +130,7 @@
 
 </html>
 <script type="text/javascript">
+        header("dashboard", sessionStorage.CARGO_CARGO);
 
 
     // Fetch do Imagem dos Jogos 

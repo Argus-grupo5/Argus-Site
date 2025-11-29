@@ -13,89 +13,113 @@ body {
     min-height: 100vh;
 }
 
+
 .desktopNav {
     position: fixed;
-    left: 0;
-    top: 0;
+    background-color: #FF670A;
     width: 4vw;
-    height: 100vh;
-    background: linear-gradient(180deg, #FF670A 0%, #E55A00 100%);
-    z-index: 1000;
+    height: 100%;
+
+    z-index: 10;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    padding: 1.2rem 0;
-    transition: width .25s ease;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+    transition: .4s;
+}
+
+.desktopNav:hover {
+    z-index: 999;
+}
+
+.desktopNav img {
+    width: 70%;
+    height: auto;
+    transition: 0.3s ease;
+    border-radius: 8px;
+    padding: 0.3vw;
+}
+
+.desktopNav .navButtons img:hover {
+    cursor: pointer;
+    width: 90%;
+    background-color: #ffa794;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
 .desktopNav .logo {
+    margin-bottom: 1.5vw;
     width: 90%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 0.6rem;
+    height: auto;
 }
 
-.desktopNav .logo img {
-    width: 70%;
-    height: auto;
-    object-fit: contain;
-    border-radius: 8px;
-    padding: 0.2rem;
-}
 
 .desktopNav .navButtons {
     display: flex;
     flex-direction: column;
-    gap: 1.6rem;
     align-items: center;
-    margin-top: 0.6rem;
+    gap: 2vw;
+    margin-top: 1vw;
 }
 
-.desktopNav .navButton {
-    width: 3.6rem;
-    height: 3.6rem;
-    border-radius: 10px;
-    border: none;
-    background: rgba(255, 255, 255, 0.12);
+.desktopNav .navButtons .navButton {
     display: flex;
-    align-items: center;
     justify-content: center;
-    cursor: pointer;
-    transition: transform .15s ease, background .15s ease;
-    position: relative;
 }
 
-.desktopNav .navButton img {
-    width: 60%;
-    height: 60%;
-    object-fit: contain;
-    filter: brightness(0) invert(1);
-}
-
-.desktopNav .navButton:hover {
-    transform: scale(1.05);
-    background: rgba(255, 255, 255, 0.18);
-}
-
-.desktopNav .navButton:active {
-    transform: scale(.98);
-}
-
-.desktopNav .selected {
+.selected {
     padding: 0.5vw;
     background: linear-gradient(to bottom, #FF0000, #FF670A);
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
-.desktopNav .footerButtons {
-    margin-bottom: 1rem;
+.tooltipNav {
+    position: relative;
+    display: inline-block;
+}
+
+
+.tooltipNav .tooltiptextNav {
+    visibility: hidden;
+
+    position: absolute;
+    top: +0.5vw;
+    left: 125%;
+    z-index: 999;
+
+
+    width: 0px;
+    padding: 0px 1vw;
+    border-radius: 5px;
+
+    background-color: #FF670A;
+
+    color: #ffffff;
+    text-align: center;
+    font-size: 0px;
+}
+
+.tooltipNav:hover .tooltiptextNav {
+    visibility: visible;
+    width: 12vw;
+    font-size: 1vw;
+    transition: .4s ease;
+}
+
+.headerTop {
+    padding-left: 5vw;
+    padding-right: 3vw;
+    width: 100%;
+    padding-top: 0.8vw;
+    flex-direction: row;
+    align-items: start;
+    gap: 20px;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
+}
+
+.headerTop img {
     width: 100%;
 }
 
