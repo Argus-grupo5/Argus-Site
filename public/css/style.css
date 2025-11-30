@@ -413,13 +413,13 @@ body {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  width: 320px;
-  height: 55px;
+  width: 60px;       /* círculo pequeno */
+  height: 60px;      /* círculo pequeno */
   background: #ffffff;
   border: 1px solid #dcdcdc;
-  border-radius: 14px;
+  border-radius: 50%; /* círculo */
   overflow: hidden;
-  transition: height 0.3s ease, box-shadow 0.25s ease;
+  transition: all 0.3s ease; /* anima largura, altura e border-radius */
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
   z-index: 999;
   font-family: "Inter", Arial, sans-serif;
@@ -427,7 +427,9 @@ body {
 
 /* Quando abrir */
 .chat-container.expanded {
+  width: 320px;
   height: 420px;
+  border-radius: 14px;
   box-shadow: 0 12px 26px rgba(0, 0, 0, 0.18);
 }
 
@@ -529,17 +531,16 @@ body {
 
 .chat-body p {
   z-index: 999;
-  color: black;
+  color: white;
 }
 
 #status {
-    color: #333; 
-    font-weight: 600;
-    padding: 6px 0;
+  color: #333; 
+  font-weight: 600;
+  padding: 6px 0;
 }
 
 #historico{
-  padding: 1rem;
   overflow: auto;
   display: flex;
   flex-direction: column;
@@ -552,7 +553,7 @@ body {
   justify-content: flex-end;
 }
 
-.caixa-resposta-chat{
+.caixa-reposta-chat{
   display: flex;
   justify-content: flex-start;
 }
@@ -566,8 +567,9 @@ body {
   background-color: rgb(134, 134, 134);
   border-radius: 10px;
   padding: 5px;
-  color: var(--white);
+  color: white;
   margin: 0;
+
 }
 .resposta-chat{
   text-align: left;
@@ -577,25 +579,16 @@ body {
 .mensagem-cliente, .resposta-chat {
   border-radius: 10px;
   padding: 1rem;
-  color: var(--white);
+  color: white;
   margin: 0;
+  margin-top: 5%;
+
 }
 
-
-
-/* Animação */
+/* Fade in */
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-
-
-
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
+
+
