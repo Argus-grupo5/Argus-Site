@@ -427,12 +427,12 @@
       qtdeAlertas.style.color = "green";
     }
 
-    tooltip_alertasTotal.innerHTML = `🔴 Crítico: Alertas maior que ${qtdAlertas.qtdAlertas}.<br>
-    🟢 Estável:Alertas menor ou igual à ${qtdAlertas.qtdAlertas}.`
+    tooltip_alertasTotal.innerHTML = `🔴 mais de ${(qtdAlertas.qtdAlertas)} alertas<br>
+    🟢 0 a ${qtdAlertas.qtdAlertas} alertas`
 
-    tooltip_componente.innerHTML = `🔴 Crítico: componente com mais de 50% do total de alertas.<br>
-    🟡 Atenção: componente com entre 30% e 50% dos alertas.<br>
-    🟢 Estável: componente com menos de 30% dos alertas.`
+    tooltip_componente.innerHTML = `🔴 Mais de 50% dos alertas<br>
+🟡 30% a 50% dos alertas<br>
+🟢 Menos de 30% dos alertas`
 
     return qtdeAlertasKPI;
   }
