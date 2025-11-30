@@ -459,7 +459,7 @@ function calcularTotalGeralPorServidor(dados) {
       const key = `${nomeServidor}-${hoje.getDate() - i}-${hoje.getMonth() + 1}-${hoje.getFullYear()}.json`;
 
       try {
-        const res = await fetch(`https://s3-bucket-client-1.s3.us-east-1.amazonaws.com/${key}`);
+        const res = await fetch(`https://argus-bucket-client-i.s3.us-east-1.amazonaws.com/suporte/alertas/${key}`);
 
         if (!res.ok) {
           console.log("Arquivo não encontrado:", key);

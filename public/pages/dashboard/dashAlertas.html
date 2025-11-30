@@ -166,10 +166,10 @@
 
 
     for (let i = 7; i >= 1; i--) {
-      const key = `${servidorSelecionado}-${26 - i}-${hoje.getMonth() + 1}-${hoje.getFullYear()}.json`;
+      const key = `${servidorSelecionado}-${hoje.getDate() - i}-${hoje.getMonth() + 1}-${hoje.getFullYear()}.json`;
 
       try {
-        const res = await fetch(`https://s3-bucket-client-1.s3.us-east-1.amazonaws.com/${key}`);
+        const res = await fetch(`https://argus-bucket-client-i.s3.us-east-1.amazonaws.com/suporte/alertas/${key}`);
 
         if (!res.ok) {
           console.log("Arquivo não encontrado:", key);
@@ -263,7 +263,7 @@
 
 
     for (let i = 7; i >= 1; i--) {
-      labels.push(`${26 - i}/${dataHoje.getMonth() + 1}/${dataHoje.getFullYear()}`);
+      labels.push(`${dataHoje.getDate() - i}/${dataHoje.getMonth() + 1}/${dataHoje.getFullYear()}`);
     }
 
 
@@ -498,10 +498,10 @@
     var alertasSemana2 = [];
     for (let i = 14; i >= 0; i--) {
       
-      const key = `${servidorSelecionado}-${25 - i}-${dataHoje.getMonth() + 1}-${dataHoje.getFullYear()}.json`;
+      const key = `${servidorSelecionado}-${dataHoje.getDate() - i}-${dataHoje.getMonth() + 1}-${dataHoje.getFullYear()}.json`;
 
       try {
-        const res = await fetch(`https://s3-bucket-client-1.s3.us-east-1.amazonaws.com/${key}`);
+        const res = await fetch(`https://argus-bucket-client-i.s3.us-east-1.amazonaws.com/suporte/alertas/${key}`);
 
         if (!res.ok) {
           console.log("Arquivo não encontrado:", key);
