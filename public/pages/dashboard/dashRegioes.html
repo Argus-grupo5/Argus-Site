@@ -69,20 +69,28 @@
 
         <div class="info-box">
             <div class="metric-tooltip">
-                0% - 80% 🟩<br>
-                81% - 85% 🟨<br>
-                86% - 100% 🟥
+                <p><b>Exibe o servidor que possui a maior quantidade de alertas</b></p>
             </div>
             <p class="label">Região com mais Alertas</p>
             <p id="estado" class="value"></p>
         </div>
 
+
         <div class="info-box server-box-N-Servidores">
+                <div class="metric-tooltip">
+                <b>1% - 50% 🟩</b><br>
+                <b>51% - 75% 🟨</b><br>
+                <b>76% - 100% 🟥</b>
+            </div>
             <p class="label">Servidores em Alertas (Ultima semana)</p>
             <p id="numeroServidores" class="value"></p>
         </div>
 
+
         <div class="info-box component-box">
+            <div class="metric-tooltip">
+               <p><b>Componente com maior número alertas / Quantidade de alertas</b></p>
+            </div>
             <p class="label">Componente c/ mais alertas</p>
             <p id="ComponenteAlerta" class="value"></p>
         </div>
@@ -149,7 +157,7 @@
 </html>
 <script type="text/javascript">
 
-    header("dashboard", sessionStorage.CARGO_CARGO);
+    header(sessionStorage.CARGO_CARGO);
 
 
 
@@ -215,7 +223,7 @@
 
                 const data = await res.json();
                 dados.push(data);
-                console.log("arquivo encontrado", key )
+                console.log("arquivo encontrado", key)
 
             } catch (err) {
                 console.error("Erro ao fazer fetch:", err);
@@ -226,26 +234,26 @@
 
 
     var nomesJogos = {
-    730: "Counter-Strike 2",
-    570: "Dota 2",
-    578080: "PUBG: BATTLEGROUNDS",
-    1808500: "ARC Raiders",
-    3564740: "Where Winds Meet",
-    1172470: "Apex Legends",
-    271590: "Grand Theft Auto V Legacy",
-    238960: "Path of Exile",
-    252490: "Rust",
-    3240220: "Grand Theft Auto V Enhanced",
-    1086940: "Baldur's Gate 3",
-    3167020: "Escape from Duckov",
-    3405690: "EA SPORTS FC 26",
-    2300320: "Farming Simulator 25",
-    394360: "Hearts of Iron IV",
-    2799860: "NAZUMA ELEVEN: Victory Road",
-    1174180: "Red Dead Redemption 2",
-    359550: "Tom Clancy's Rainbow Six Siege X",
-    3527290: "PEAK"
-};
+        730: "Counter-Strike 2",
+        570: "Dota 2",
+        578080: "PUBG: BATTLEGROUNDS",
+        1808500: "ARC Raiders",
+        3564740: "Where Winds Meet",
+        1172470: "Apex Legends",
+        271590: "Grand Theft Auto V Legacy",
+        238960: "Path of Exile",
+        252490: "Rust",
+        3240220: "Grand Theft Auto V Enhanced",
+        1086940: "Baldur's Gate 3",
+        3167020: "Escape from Duckov",
+        3405690: "EA SPORTS FC 26",
+        2300320: "Farming Simulator 25",
+        394360: "Hearts of Iron IV",
+        2799860: "NAZUMA ELEVEN: Victory Road",
+        1174180: "Red Dead Redemption 2",
+        359550: "Tom Clancy's Rainbow Six Siege X",
+        3527290: "PEAK"
+    };
 
     var fotoJogo = {
         730: "https://s2-ge.glbimg.com/9kR2h8-YaW-X8VClXrv07I7lHKU=/0x0:1920x1080/984x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_bc8228b6673f488aa253bbcb03c80ec5/internal_photos/bs/2023/D/Y/0rilB6T0ChOJROjiUHgg/cs2.jpg",
@@ -476,7 +484,7 @@
         const nomeJogoIII = nomesJogos[jogoIII] || "Jogo Desconhecido";
         document.getElementById("jogoIIIdiv").innerText = nomeJogoIII;
 
-        console.log("A DATA TA AQUI FILHA DA PUTA  ",data)
+        console.log("A DATA TA AQUI FILHA DA PUTA  ", data)
 
 
         const valores = {
@@ -1169,14 +1177,14 @@
             if (servidores == null || emAlerta == null) {
                 alert(`Dados do Servidor não encontrado!
                 <br>Entre em contato com o suporte`)
-            } else if ((servidores * 0.01) > emAlerta) {
+            } else if ((servidores * 0.50) > emAlerta) {
                 document.querySelector('.server-box-N-Servidores').style.background = '#2cbe00';
                 console.log("Entrei no if verde");
 
-            } else if (servidores * 0.70 >= emAlerta) {
+            } else if (servidores * 0.75 >= emAlerta) {
                 document.querySelector('.server-box-N-Servidores').style.background = '#ff3333';
             } else {
-                document.querySelector('.server-box-N-Servidores').style.background = '#ff3333';
+                document.querySelector('.server-box-N-Servidores').style.background = '#2cbe00';
             }
 
 

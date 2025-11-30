@@ -922,6 +922,16 @@ body,
     box-shadow: 0 4px 10px rgba(0,0,0,0.4);
 }
 
+.info-box {
+    position: relative;
+    display: inline-block;
+    font-family: Arial, sans-serif;
+}
+
+.info-box {
+    position: relative; /* necessário para o tooltip */
+}
+
 .metric-tooltip {
     visibility: hidden;
     opacity: 0;
@@ -941,7 +951,6 @@ body,
     border: 1px solid #333;
 }
 
-/* Triângulo */
 .metric-tooltip::after {
     content: "";
     position: absolute;
@@ -953,8 +962,12 @@ body,
     border-color: #111 transparent transparent transparent;
 }
 
-/* Quando passar o mouse, mostra */
 .info-box:hover .metric-tooltip {
     visibility: visible;
     opacity: 1;
+}
+
+#informacao{
+    display: flex;
+    justify-content: flex-end;
 }
