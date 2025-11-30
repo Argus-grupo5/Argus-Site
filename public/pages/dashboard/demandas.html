@@ -109,7 +109,7 @@
                             </svg>
                             <span class="caixaDemanda">
                                 <b>Legenda:</b><br>
-                                <span class="legenda azul"></span> Diferença > 10%<br>
+                                <span class="legenda vermelho"></span> Diferença > 10%<br>
                                 <span class="legenda verde"></span> Diferença < 10%<br>
                             </span>
                         </div>
@@ -260,7 +260,7 @@
                 document.getElementById("variacao").innerHTML = calcularVariacao(data)
 
                 if (calcularVariacao(data) > 0) {
-                    document.getElementById("variacao").classList.add("vermelho")
+                    document.getElementById("variacao").classList.add("verde")
                 } else if (calcularVariacao(data) == 0) {
                     document.getElementById("variacao").classList.add("cinza")
                 } else {
@@ -354,7 +354,7 @@
                 }
                 utilizacaoPerc.push(percCap.toFixed(2))
                 if (json[i].CCUReal == "null") {
-                    continue;
+                    dataReal.push(0)
                 } else {
                     dataReal.push(json[i].CCUReal)
                 }
@@ -508,15 +508,17 @@
 
 
     function plotarGrafico2() {
+        mediaGpu7 = mediaGpu.slice(-7)
+        utilizacaoPerc7 = utilizacaoPerc.slice(-7)
         var options = {
             series: [
                 {
                     name: "Média de GPU",
-                    data: mediaGpu,
+                    data: mediaGpu7,
                 },
                 {
                     name: "Ocupação da plataforma",
-                    data: utilizacaoPerc,
+                    data: utilizacaoPerc7,
                 }
             ],
             colors: ['#FF670A', '#FFD166'],
