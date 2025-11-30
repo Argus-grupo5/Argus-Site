@@ -36,23 +36,16 @@
         <div class="KPI">
           <p class="mensagem">Componente com mais alertas</p>
           <div id="componente"></div>
+           <div class="tooltip-container">
+            <span class="tooltip-icon">!</span>
+            <div class="tooltip-box" id="tooltip_componente">
+            </div>
+          </div>
         </div>
         <div id="anychart-embed-rk3FgKf8" class="linha">
-          <div id="anychart-embed-rk3FgKf8" class="anychart-embed anychart-embed-rk3FgKf8">
-
-            <div id="ac_style_rk3FgKf8" style="display:none;">
-              html, body, #container {
-              width: 100%;
-              height: 100%;
-              margin: 0;
-              padding: 0;
-              border-radius: 20px;
-              background-color:#414141;
-              }
+            <div id="graficoArea">
+              <p>Alertas por componente (última semana)</p>
             </div>
-            <div id="graficoArea"></div>
-
-          </div>
         </div>
         <p id="ultimoDado"></p>
       </div>
@@ -60,18 +53,18 @@
         <div class="KPI">
           <p class="mensagem">Quantidade de alertas</p>
           <p id="qtdeAlertas"></p>
+          <div class="tooltip-container">
+            <span class="tooltip-icon">!</span>
+            <div class="tooltip-box" id="tooltip_alertasTotal">
+            </div>
+          </div>
         </div>
-        <div class="barra" id="barra"></div>
+        <div class="barra" id="barra">
+          <p>Alertas por dia (última semana)  </p>
+        </div>
         <p id="porcentagemDado"></p>
       </div>
     </div>
-    <!-- <div class="filtro"> -->
-    <!-- <select id="selecionar_periodo" class="filtroPeriodo">
-        <option value="#">Selecionar período</option>
-        <option value=1>Semanal</option>
-        <option value=2>Mensal</option>
-      </select> -->
-    <!-- </div> -->
   </div>
 
 </html>
@@ -111,21 +104,6 @@
 <script>
   var dataHoje = new Date();
   var semanal = [];
-  var mensal =
-  {
-    "Janeiro": [],
-    "Fevereiro": [],
-    "Março": [],
-    "Abril": [],
-    "Maio": [],
-    "Junho": [],
-    "Julho": [],
-    "Agosto": [],
-    "Setembro": [],
-    "Outubro": [],
-    "Novembro": [],
-    "Dezembro": []
-  }
   const dadosCPU = []
   const dadosRam = []
   const dadosDisco = []
@@ -172,23 +150,23 @@
     const hoje = new Date();
     let dias = 7;
 
-      fetch(`/servidores/limiteAlerta/${servidorSelecionado}`)
-        .then(res => {
-          if(!res.ok){
-            throw new Error('Falha na requisição')
-          }
-          
-          return res.json();
-        })
-        .then(dados => {
-          console.log('Resposta da API:', dados);
-          qtdAlertas = dados[0]
-        })
-        .catch(err => console.error('Erro no fetch:', err));
+    fetch(`/servidores/limiteAlerta/${servidorSelecionado}`)
+      .then(res => {
+        if (!res.ok) {
+          throw new Error('Falha na requisição')
+        }
+
+        return res.json();
+      })
+      .then(dados => {
+        console.log('Resposta da API:', dados);
+        qtdAlertas = dados[0]
+      })
+      .catch(err => console.error('Erro no fetch:', err));
 
 
     for (let i = 7; i >= 1; i--) {
-      const key = `${servidorSelecionado}-${hoje.getDate() - i}-${hoje.getMonth() + 1}-${hoje.getFullYear()}.json`;
+      const key = `${servidorSelecionado}-${26 - i}-${hoje.getMonth() + 1}-${hoje.getFullYear()}.json`;
 
       try {
         const res = await fetch(`https://s3-bucket-client-1.s3.us-east-1.amazonaws.com/${key}`);
@@ -212,57 +190,9 @@
 
   }
 
-
-  // function filtrarMes(servidorSelecionado, ano) {
-
-  //   let validacao = true;
-  //   let datas = new Date();
-  //   let nomeMeses = [
-  //     "Janeiro",
-  //     "Fevereiro",
-  //     "Março",
-  //     "Abril",
-  //     "Maio",
-  //     "Junho",
-  //     "Julho",
-  //     "Agosto",
-  //     "Setembro",
-  //     "Outubro",
-  //     "Novembro",
-  //     "Dezembro"
-  //   ]
-
-
-  //   for (i = 1; i <= 12; i++) {
-  //     qtdDiasMes = new Date(ano, i, 0).getDate() + 1
-  //     for (j = 1; j < qtdDiasMes; j++) {
-
-  //       let nomeDoMes = nomeMeses[i - 1]
-  //       var key = `${servidorSelecionado}-${j}-${i}-${ano}.json`
-  //       fetch(`https://s3-bucket-client-1.s3.us-east-1.amazonaws.com/${key}`)
-  //         .then(response => {
-  //           if (!response.ok) {
-  //             throw new Error("Erro na rede: " + response.statusText)
-  //           }
-
-  //           return response.json();
-  //         })
-  //         .then(data => {
-  //           mensal[nomeDoMes].push(data)
-  //         })
-
-  //         .catch(error => {
-  //           console.error("Houve um problema com a operação fetch na função mes:", error)
-  //         })
-  //     }
-  //   }
-  // }
   let graficoData = [0, 0, 0, 0, 0, 0, 0];
 
   async function dadosGrafico(servidorSelecionado) {
-    // const periodo = selecionar_periodo.value;
-
-    // if (periodo == "1" || periodo == "#") {
 
     await semana(servidorSelecionado);
 
@@ -302,90 +232,15 @@
       dadosRede.push(totREDE)
     }
   }
-  //   else {
-
-  //     await filtrarMes(dataHoje.getFullYear());
-
-  //     dados.length = 0
-
-  //     const nomeMeses = [
-  //       "Janeiro", "Fevereiro", "Março", "Abril",
-  //       "Maio", "Junho", "Julho", "Agosto",
-  //       "Setembro", "Outubro", "Novembro", "Dezembro"
-  //     ];
-
-  //     for (let i = 0; i < nomeMeses.length; i++) {
-  //       let mesAtual = nomeMeses[i];
-
-
-  //       let totCPU = 0;
-  //       let totRam = 0;
-  //       let totDisco = 0;
-  //       let totREDE = 0;
-  //       let totGPU = 0;
-
-
-  //       if (!mensal[mesAtual] || Object.keys(mensal[mesAtual]).length === 0) {
-  //   dados.push([mesAtual, 0, 0, 0, 0, 0]);
-  //   continue;
-  // }
-
-  // const alertasDoMes = mensal[mesAtual]
-
-
-  //       for (const info of alertasDoMes) {
-
-  //         if (!info) continue;
-
-  //         totCPU += parseInt(info.CPU) || 0;
-  //         totRam += parseInt(info.Ram) || 0;
-  //         totDisco += parseInt(info.Disco) || 0;
-  //         totREDE += parseInt(info.Rede) || 0;
-  //         totGPU += parseInt(info.GPU) || 0;
-
-  //       }
-  //       console.log("Resultado:", mesAtual, totCPU, totRam, totDisco, totREDE, totGPU);
-
-
-  //       dados.push([mesAtual, totCPU, totRam, totDisco, totREDE, totGPU]);
-  //       dadosCPU.push(totCPU)
-  //       dadosRam.push(totRam)
-  //       dadosDisco.push(totDisco)
-  //       dadosGPU.push(totGPU)
-  //       dadosRede.push(totREDE)
-  //     }
-  //   }
-  // }
 
   async function renderizarGrafico() {
     await dadosGrafico();
-
-    // const periodoSemana = selecionar_periodo.value;
-
-    // if (periodoSemana == "1" || periodoSemana == "#") {
-    //   dataSet = 0
-    //   dataSet = anychart.data.set([
-    //     dados[0],dados[1],dados[2],dados[3],dados[4],dados[5],dados[6]
-    //   ]);
-    // } else { 
-    //   dataSet = 0
-    //   console.log(dados)
-    //   dataSet = anychart.data.set([
-    //     dados[0],dados[1],dados[2],dados[3],dados[4],dados[5],dados[6], 
-    //     dados[7], dados[8],dados[9], dados[10], dados[11]
-    //   ]);
-    // }
   }
 
   let dataSet;
 
   anychart.onDocumentReady(async function () {
 
-    // var periodoSemana = selecionar_periodo.value
-
-    //     selecionar_periodo.addEventListener('change', async function() {
-    //     await renderizarGrafico(); 
-    // });
 
     await nomeServidor();
     await renderizarGrafico();
@@ -402,14 +257,13 @@
 
 
   var labels = []
-  // var ctx = document.getElementById("barra").getContext('2d')
   async function graficoBarra() {
     var data = graficoData
 
 
 
     for (let i = 7; i >= 1; i--) {
-      labels.push(`${dataHoje.getDate() - i}/${dataHoje.getMonth() + 1}/${dataHoje.getFullYear()}`);
+      labels.push(`${26 - i}/${dataHoje.getMonth() + 1}/${dataHoje.getFullYear()}`);
     }
 
 
@@ -419,7 +273,7 @@
         type: 'bar',
         height: 350,
         toolbar: { show: false },
-        foreColor: '#ffffff' // cor padrão de textos
+        foreColor: '#ffffff'
       },
       series: [{ name: 'Alertas', data: data }],
       xaxis: {
@@ -492,8 +346,7 @@
         height: 350,
         type: 'area',
         toolbar: { show: false },
-        foreColor: '#ffffff',
-        background: '#333333'
+        foreColor: '#ffffff'
       },
       dataLabels: {
         enabled: true,
@@ -554,7 +407,7 @@
 
 <script>
 
-  
+
   function KPIalertas() {
     let qtdeAlertasKPI = 0;
 
@@ -566,14 +419,20 @@
 
     servidorSelecionado = localStorage.getItem('servidorSelecionado');
 
-    console.log(qtdAlertas.qtdAlertas)
-
-
     const qtdeAlertas = document.getElementById("qtdeAlertas");
-    if (qtdeAlertas) {
-      qtdeAlertas.innerHTML = qtdeAlertasKPI;
+    qtdeAlertas.innerHTML = qtdeAlertasKPI;
+    if (qtdeAlertasKPI > qtdAlertas.qtdAlertas) {
       qtdeAlertas.style.color = "red";
+    } else {
+      qtdeAlertas.style.color = "green";
     }
+
+    tooltip_alertasTotal.innerHTML = `🔴 Crítico: Alertas maior que ${qtdAlertas.qtdAlertas}.<br>
+    🟢 Estável:Alertas menor ou igual à ${qtdAlertas.qtdAlertas}.`
+
+    tooltip_componente.innerHTML = `🔴 Crítico: componente com mais de 50% do total de alertas.<br>
+    🟡 Atenção: componente com entre 30% e 50% dos alertas.<br>
+    🟢 Estável: componente com menos de 30% dos alertas.`
 
     return qtdeAlertasKPI;
   }
@@ -585,12 +444,13 @@
 
   var maior
 
+  var cpu = { nome: "cpu", valor: 0 };
+  var ram = { nome: "ram", valor: 0 };
+  var gpu = { nome: "gpu", valor: 0 };
+  var rede = { nome: "rede", valor: 0 };
+  var disco = { nome: "disco", valor: 0 };
+
   function KPIcomponente() {
-    var cpu = { nome: "cpu", valor: 0 };
-    var ram = { nome: "ram", valor: 0 };
-    var gpu = { nome: "gpu", valor: 0 };
-    var rede = { nome: "rede", valor: 0 };
-    var disco = { nome: "disco", valor: 0 };
 
     for (let i = 0; i < dados.length; i++) {
       cpu.valor += dados[i][1];
@@ -610,45 +470,59 @@
         maior = componentes[i];
       }
     }
+
+
+    const total = cpu.valor + ram.valor + disco.valor + rede.valor + gpu.valor
+
+    var calculoFinal = (maior.valor * 100) / total
+
     const componente = document.getElementById("componente");
+
+    if(calculoFinal > 50) {
+      componente.style.color = 'red'
+    } else if (calculoFinal <= 50 && calculoFinal > 30){
+      componente.style.color = 'yellow'
+    } else if (calculoFinal <= 30){
+      componente.style.color = 'green'
+    }
 
     componente.innerHTML = maior.nome
   }
 
+  var semana1 = [];
+  var semana2 = [];
   async function porcentagemAumento(servidorSelecionado) {
-    var semana1 = [];
-    var semana2 = [];
+    var semana3 = [];
 
     var alertasSemana1 = [];
     var alertasSemana2 = [];
     for (let i = 14; i >= 0; i--) {
-      const key = `${servidorSelecionado}-${dataHoje.getDate() - i}-${dataHoje.getMonth() + 1}-${dataHoje.getFullYear()}.json`;
+      
+      const key = `${servidorSelecionado}-${25 - i}-${dataHoje.getMonth() + 1}-${dataHoje.getFullYear()}.json`;
 
       try {
         const res = await fetch(`https://s3-bucket-client-1.s3.us-east-1.amazonaws.com/${key}`);
 
         if (!res.ok) {
           console.log("Arquivo não encontrado:", key);
-          continue; // pula para o próximo
+          continue;
         }
 
         const data = await res.json();
-        if (i < 7) semana1.push(data)
-        else if (i >= 7) semana2.push(data)
+        if (i <= 7) {
+          semana2.push(data);
+        } else if (i > 7) {
+          semana1.push(data);
+        }
         console.log("Semana um: " + semana1)
         console.log("Semana dois:" + semana2)
+
 
       } catch (err) {
         console.error("Erro ao fazer fetch:", err);
       }
     }
 
-    let totCPU1 = 0
-    let totRam1 = 0
-    let totDisco1 = 0
-    let totREDE1 = 0
-    let totGPU1 = 0
-    var data = ""
 
 
     for (let i = 0; i < semana1.length; i++) {
@@ -663,11 +537,6 @@
       alertasSemana1.push([data, totCPU, totRam, totDisco, totREDE, totGPU]);
     }
 
-    let totCPU2 = 0
-    let totRam2 = 0
-    let totDisco2 = 0
-    let totREDE2 = 0
-    let totGPU2 = 0
 
     for (let i = 0; i < semana2.length; i++) {
       totCPU = parseInt(semana2[i].CPU);
@@ -679,6 +548,7 @@
       alertasSemana2.push([data, totCPU, totRam, totDisco, totREDE, totGPU]);
     }
 
+
     var totalAlertas1 = 0
     var totalAlertas2 = 0
     for (let i = 0; i < alertasSemana1.length; i++) {
@@ -686,17 +556,14 @@
         totalAlertas1 += alertasSemana1[i][j];
       }
     }
-    for (let i = 0; i < alertasSemana2.length; i++) {
-      for (let j = 1; j < alertasSemana2[i].length; j++) {
-        totalAlertas2 += alertasSemana2[i][j];
+    for (let i = 0; i < dados.length; i++) {
+      for (let j = 1; j < dados[i].length; j++) {
+        totalAlertas2 += dados[i][j];
       }
     }
     console.log("Alertas semana 1: " + totalAlertas1)
     console.log("Alertas semana 2: " + totalAlertas2)
 
-    // formula
-    //  114 - 100
-    //  125 - x
 
     var mais = ""
 
