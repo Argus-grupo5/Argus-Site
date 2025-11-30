@@ -21,6 +21,7 @@
     <script src="https://cdn.anychart.com/releases/8.13.0/js/anychart-ui.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="script/dash.js"></script>
+    <script src="script/scrpitChat.js"></script>
 
 
     <title>ARGUS | Visão Servidores</title>
@@ -36,6 +37,20 @@
     </div>
 
     <header class="desktopNav" id="navDesktop"></header>
+
+    <div class="chat-container" id="chat-container">
+        <div class="chat-header" onclick="toggleChat()">
+            <span>Argus AI</span>
+            <button id="toggle-button">_</button>
+        </div>
+        <div class="chat-body" id="chat-body">
+            <p>Olá! Como posso ajudar?</p>
+            <div class="chat-input">
+                <input type="text" placeholder="Digite sua mensagem...">
+                <button>Enviar</button>
+            </div>
+        </div>
+    </div>
 
     <header class="headerTop">
         <div class="geralInfo">
@@ -130,7 +145,9 @@
 
 </html>
 <script type="text/javascript">
-        header("dashboard", sessionStorage.CARGO_CARGO);
+
+    header( sessionStorage.CARGO_CARGO);
+
 
 
     // Fetch do Imagem dos Jogos 
@@ -182,7 +199,7 @@
         dados = []
 
         for (let i = 7; i >= 1; i--) {
-            const key = `DashCalor/${estado}/xbox-cloud-br-${prefix}-Client-${hoje.getDate() - i}-${hoje.getMonth() + 1}-${hoje.getFullYear()}.json`;
+            const key = `DashCalor/${estado}/xbox-cloud-br-${prefix}-Client-${(hoje.getDate() - 2) - i}-${hoje.getMonth() + 1}-${hoje.getFullYear()}.json`;
 
             try {
                 const res = await fetch(`https://s3-client-argus-14h25m.s3.amazonaws.com/${key}`);
@@ -194,7 +211,7 @@
 
                 const data = await res.json();
                 dados.push(data);
-
+                console.log("arquivo encontrado", key )
 
             } catch (err) {
                 console.error("Erro ao fazer fetch:", err);
@@ -204,29 +221,29 @@
     }
 
 
-    const nomesJogos = {
-        730: "Counter-Strike 2",
-        570: "Dota 2",
-        578080: "PUBG: BATTLEGROUNDS",
-        1808500: "ARC Raiders",
-        3564740: "Where Winds Meet",
-        1172470: "Apex Legends",
-        271590: "Grand Theft Auto V Legacy",
-        238960: "Path of Exile",
-        252490: "Rust",
-        3240220: "Grand Theft Auto V Enhanced",
-        1086940: "Baldur's Gate 3",
-        3167020: "Escape from Duckov",
-        3405690: "EA SPORTS FC 26",
-        2300320: "Farming Simulator 25",
-        394360: "Hearts of Iron IV",
-        2799860: "NAZUMA ELEVEN: Victory Road",
-        1174180: "Red Dead Redemption 2",
-        359550: "Tom Clancy's Rainbow Six Siege X",
-        3527290: "PEAK"
-    };
+    var nomesJogos = {
+    730: "Counter-Strike 2",
+    570: "Dota 2",
+    578080: "PUBG: BATTLEGROUNDS",
+    1808500: "ARC Raiders",
+    3564740: "Where Winds Meet",
+    1172470: "Apex Legends",
+    271590: "Grand Theft Auto V Legacy",
+    238960: "Path of Exile",
+    252490: "Rust",
+    3240220: "Grand Theft Auto V Enhanced",
+    1086940: "Baldur's Gate 3",
+    3167020: "Escape from Duckov",
+    3405690: "EA SPORTS FC 26",
+    2300320: "Farming Simulator 25",
+    394360: "Hearts of Iron IV",
+    2799860: "NAZUMA ELEVEN: Victory Road",
+    1174180: "Red Dead Redemption 2",
+    359550: "Tom Clancy's Rainbow Six Siege X",
+    3527290: "PEAK"
+};
 
-    const fotoJogo = {
+    var fotoJogo = {
         730: "https://s2-ge.glbimg.com/9kR2h8-YaW-X8VClXrv07I7lHKU=/0x0:1920x1080/984x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_bc8228b6673f488aa253bbcb03c80ec5/internal_photos/bs/2023/D/Y/0rilB6T0ChOJROjiUHgg/cs2.jpg",
         570: "https://wallpapers.com/images/hd/best-dota-2-background-nhp25octk9bz29bt.jpg",
         578080: "data:image/jpeg;base64,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",
@@ -255,543 +272,548 @@
     }
 
     async function principal() {
-       servidores = 0;
-            emAlerta = 0;
 
-            respostaAm =  await semana('AM', 'am');
-            respostaPa =  await semana('PA', 'pa');
-            respostaSp =  await semana('SP', 'sp');
-            respostaRj =  await semana('RJ', 'rj');
-            respostaPe =  await semana('PE', 'pe');
-            respostaMg =  await semana('MG', 'mg');
-            respostaDf =  await semana('DF', 'df');
-            respostaRs =  await semana('RS', 'rs');
-            respostaBa =  await semana('BA', 'ba');
+        servidores = 0;
+        emAlerta = 0;
 
-            tamanhoAm = respostaAm.length;
-            tamanhoSp = respostaSp.length;
-            tamanhoPe = respostaPe.length;
-            tamanhoDf = respostaDf.length;
-            tamanhoBa = respostaBa.length;
-            tamanhoPa = respostaPa.length;
-            tamanhoRj = respostaRj.length;
-            tamanhoMg = respostaMg.length;
-            tamanhoRs = respostaRs.length;
+        respostaAm = await semana('AM', 'am');
+        respostaPa = await semana('PA', 'pa');
+        respostaSp = await semana('SP', 'sp');
+        respostaRj = await semana('RJ', 'rj');
+        respostaPe = await semana('PE', 'pe');
+        respostaMg = await semana('MG', 'mg');
+        respostaDf = await semana('DF', 'df');
+        respostaRs = await semana('RS', 'rs');
+        respostaBa = await semana('BA', 'ba');
 
-
-            tamanhoAm > 0 ? servidores += 1 : servidores += 0
-            tamanhoDf > 0 ? servidores += 1 : servidores += 0
-            tamanhoRj > 0 ? servidores += 1 : servidores += 0
-            tamanhoSp > 0 ? servidores += 1 : servidores += 0
-            tamanhoBa > 0 ? servidores += 1 : servidores += 0
-            tamanhoMg > 0 ? servidores += 1 : servidores += 0
-            tamanhoPe > 0 ? servidores += 1 : servidores += 0
-            tamanhoPa > 0 ? servidores += 1 : servidores += 0
-            tamanhoRs > 0 ? servidores += 1 : servidores += 0
+        tamanhoAm = respostaAm.length;
+        tamanhoSp = respostaSp.length;
+        tamanhoPe = respostaPe.length;
+        tamanhoDf = respostaDf.length;
+        tamanhoBa = respostaBa.length;
+        tamanhoPa = respostaPa.length;
+        tamanhoRj = respostaRj.length;
+        tamanhoMg = respostaMg.length;
+        tamanhoRs = respostaRs.length;
 
 
-            cpuAm = []
-            gpuAm = []
-            ramAm = []
-            discoAm = []
-            redeAm = []
-
-            data = []
-            cpuPa = []
-            gpuPa = []
-            ramPa = []
-            discoPa = []
-            redePa = []
-
-            cpuSp = []
-            gpuSp = []
-            ramSp = []
-            discoSp = []
-            redeSp = []
-
-            cpuRj = []
-            gpuRj = []
-            ramRj = []
-            discoRj = []
-            redeRj = []
-
-            cpuMg = []
-            gpuMg = []
-            ramMg = []
-            discoMg = []
-            redeMg = []
-
-            cpuPe = []
-            gpuPe = []
-            ramPe = []
-            discoPe = []
-            redePe = []
-
-            cpuBa = []
-            gpuBa = []
-            ramBa = []
-            discoBa = []
-            redeBa = []
-
-            cpuDf = []
-            gpuDf = []
-            ramDf = []
-            discoDf = []
-            redeDf = []
-
-            cpuRs = []
-            gpuRs = []
-            ramRs = []
-            discoRs = []
-            redeRs = []
-
-            for (i = tamanhoAm - 1; i >= 0; i--) {
-                cpuAm.push(respostaAm[i].TotalCpu ?? 0)
-                gpuAm.push(respostaAm[i].TotalGpu ?? 0)
-                ramAm.push(respostaAm[i].TotalRam ?? 0)
-                discoAm.push(respostaAm[i].TotalDisco ?? 0)
-                redeAm.push(respostaAm[i].TotalRede ?? 0)
-                data.push(respostaAm[i].Data)
-
-                cpuPa.push(respostaPa[i].TotalCpu ?? 0)
-                gpuPa.push(respostaPa[i].TotalGpu ?? 0)
-                ramPa.push(respostaPa[i].TotalRam ?? 0)
-                discoPa.push(respostaPa[i].TotalDisco ?? 0)
-                redePa.push(respostaPa[i].TotalRede ?? 0)
-
-                cpuSp.push(respostaSp[i].TotalCpu ?? 0)
-                gpuSp.push(respostaSp[i].TotalGpu ?? 0)
-                ramSp.push(respostaSp[i].TotalRam ?? 0)
-                discoSp.push(respostaSp[i].TotalDisco ?? 0)
-                redeSp.push(respostaSp[i].TotalRede ?? 0)
-
-                cpuRj.push(respostaRj[i].TotalCpu ?? 0)
-                gpuRj.push(respostaRj[i].TotalGpu ?? 0)
-                ramRj.push(respostaRj[i].TotalRam ?? 0)
-                discoRj.push(respostaRj[i].TotalDisco ?? 0)
-                redeRj.push(respostaRj[i].TotalRede ?? 0)
-
-                cpuMg.push(respostaMg[i].TotalCpu)
-                gpuMg.push(respostaMg[i].TotalGpu)
-                ramMg.push(respostaMg[i].TotalRam)
-                discoMg.push(respostaMg[i].TotalDisco)
-                redeMg.push(respostaMg[i].TotalRede)
-
-                cpuBa.push(respostaBa[i].TotalCpu ?? 0)
-                gpuBa.push(respostaBa[i].TotalGpu ?? 0)
-                ramBa.push(respostaBa[i].TotalRam ?? 0)
-                discoBa.push(respostaBa[i].TotalDisco ?? 0)
-                redeBa.push(respostaBa[i].TotalRede ?? 0)
-
-                cpuPe.push(respostaPe[i].TotalCpu ?? 0)
-                gpuPe.push(respostaPe[i].TotalGpu ?? 0)
-                ramPe.push(respostaPe[i].TotalRam ?? 0)
-                discoPe.push(respostaPe[i].TotalDisco ?? 0)
-                redePe.push(respostaPe[i].TotalRede ?? 0)
-
-                cpuDf.push(respostaDf[i].TotalCpu ?? 0)
-                gpuDf.push(respostaDf[i].TotalGpu ?? 0)
-                ramDf.push(respostaDf[i].TotalRam ?? 0)
-                discoDf.push(respostaDf[i].TotalDisco ?? 0)
-                redeDf.push(respostaDf[i].TotalRede ?? 0)
-
-                cpuRs.push(respostaRs[i].TotalCpu ?? 0)
-                gpuRs.push(respostaRs[i].TotalGpu ?? 0)
-                ramRs.push(respostaRs[i].TotalRam ?? 0)
-                discoRs.push(respostaRs[i].TotalDisco ?? 0)
-                redeRs.push(respostaRs[i].TotalRede ?? 0)
-            }
+        tamanhoAm > 0 ? servidores += 1 : servidores += 0
+        tamanhoDf > 0 ? servidores += 1 : servidores += 0
+        tamanhoRj > 0 ? servidores += 1 : servidores += 0
+        tamanhoSp > 0 ? servidores += 1 : servidores += 0
+        tamanhoBa > 0 ? servidores += 1 : servidores += 0
+        tamanhoMg > 0 ? servidores += 1 : servidores += 0
+        tamanhoPe > 0 ? servidores += 1 : servidores += 0
+        tamanhoPa > 0 ? servidores += 1 : servidores += 0
+        tamanhoRs > 0 ? servidores += 1 : servidores += 0
 
 
+        cpuAm = []
+        gpuAm = []
+        ramAm = []
+        discoAm = []
+        redeAm = []
 
-            cpu = []
-            gpu = []
-            ram = []
-            disco = []
-            rede = []
-            valorAm = 0;
-            valorPa = 0;
-            valorBa = 0;
-            valorSp = 0;
-            valorRj = 0;
-            valorDf = 0;
-            valorPe = 0;
-            valorRs = 0;
-            valorMg = 0;
+        data = []
+        cpuPa = []
+        gpuPa = []
+        ramPa = []
+        discoPa = []
+        redePa = []
 
-            for (i = 0; i < respostaSp.length; i++) {
-                valorPa += cpuPa[i]  + gpuPa[i]  + ramPa[i]  + redePa[i]  + discoPa[i] ;
-                valorAm += cpuAm[i]  + gpuAm[i]  + ramAm[i]  + redeAm[i]  + discoAm[i] ;
-                valorRj += cpuRj[i]  + gpuRj[i]  + ramRj[i]  + redeRj[i]  + discoRj[i] ;
-                valorSp += cpuSp[i]  + gpuSp[i]  + ramSp[i]  + redeSp[i]  + discoSp[i] ;
-                valorMg += cpuMg[i]  + gpuMg[i]  + ramMg[i]  + redeMg[i]  + discoMg[i] ;
-                valorRs += cpuRs[i]  + gpuRs[i]  + ramRs[i]  + redeRs[i]  + discoRs[i] ;
-                valorBa += cpuBa[i]  + gpuBa[i]  + ramBa[i]  + redeBa[i]  + discoBa[i] ;
-                valorDf += cpuDf[i]  + gpuDf[i]  + ramDf[i]  + redeDf[i]  + discoDf[i] ;
-                valorPe += cpuPe[i]  + gpuPe[i]  + ramPe[i]  + redePe[i]  + discoPe[i] ;
-            }
+        cpuSp = []
+        gpuSp = []
+        ramSp = []
+        discoSp = []
+        redeSp = []
 
-            for (i = tamanhoSp - 1; i >= 0; i--) {
-                cpu.push(cpuPa[i] + cpuAm[i] + cpuSp[i]+ cpuRj[i]+ cpuDf[i]+ cpuMg[i]+ cpuRs[i] + cpuPe[i]+ cpuBa[i])
-                gpu.push(gpuPa[i] + gpuAm[i]  + gpuSp[i] + gpuRj[i] + gpuDf[i] + gpuMg[i] + gpuRs[i] + gpuPe[i] + gpuBa[i])
-                ram.push(ramPa[i] + ramAm[i] + ramSp[i] + ramRj[i] + ramDf[i] + ramMg[i] + ramRs[i] + ramPe[i] + ramBa[i])
-                rede.push(redePa[i] + redeAm[i] + redeSp[i] + redeRj[i] + redeDf[i] + redeMg[i] + redeRs[i] + redePe[i] + redeBa[i])
-                disco.push(discoPa[i] + discoAm[i] + discoSp[i] + discoRj[i] + discoDf[i] + discoMg[i] + discoRs[i] + discoPe[i] + discoBa[i])
-            }
+        cpuRj = []
+        gpuRj = []
+        ramRj = []
+        discoRj = []
+        redeRj = []
 
-            jogoI = respostaSp[tamanhoSp - 1].PrimeiroJogo
-            jogoII = respostaSp[tamanhoSp - 1].SegundoJogo
-            jogoIII = respostaSp[tamanhoSp - 1].TerceiroJogo
+        cpuMg = []
+        gpuMg = []
+        ramMg = []
+        discoMg = []
+        redeMg = []
 
-            console.log("Jogo I" + jogoI)
+        cpuPe = []
+        gpuPe = []
+        ramPe = []
+        discoPe = []
+        redePe = []
 
-            const nomeJogo = nomesJogos[jogoI] || "Jogo Desconhecido";
-            document.getElementById("jogoIdiv").innerText = nomeJogo;
-            const nomeJogoII = nomesJogos[jogoII] || "Jogo Desconhecido";
-            document.getElementById("jogoIIdiv").innerText = nomeJogoII;
-            const nomeJogoIII = nomesJogos[jogoIII] || "Jogo Desconhecido";
-            document.getElementById("jogoIIIdiv").innerText = nomeJogoIII;
+        cpuBa = []
+        gpuBa = []
+        ramBa = []
+        discoBa = []
+        redeBa = []
 
+        cpuDf = []
+        gpuDf = []
+        ramDf = []
+        discoDf = []
+        redeDf = []
 
-            const valores = {
-                valorAm,
-                valorBa,
-                valorDf,
-                valorMg,
-                valorPa,
-                valorPe,
-                valorRj,
-                valorRs,
-                valorSp
-            };
+        cpuRs = []
+        gpuRs = []
+        ramRs = []
+        discoRs = []
+        redeRs = []
 
-            const maiorValorI = Math.max(...Object.values(valores));
+        for (i = tamanhoAm - 1; i >= 0; i--) {
+            cpuAm.push(respostaAm[i].TotalCpu ?? 0)
+            gpuAm.push(respostaAm[i].TotalGpu ?? 0)
+            ramAm.push(respostaAm[i].TotalRam ?? 0)
+            discoAm.push(respostaAm[i].TotalDisco ?? 0)
+            redeAm.push(respostaAm[i].TotalRede ?? 0)
+            data.push(respostaSp[i].Data)
 
-            const maiorEstado = Object.keys(valores).find(
-                chave => valores[chave] === maiorValorI
-            );
+            console.log("FIAAAAAA", data)
 
-            const nomeEstado =
-                maiorEstado === "valorAm" ? "Amazonas"
-                    : maiorEstado === "valorBa" ? "Salvador"
-                        : maiorEstado === "valorDf" ? "Brasília"
-                            : maiorEstado === "valorMg" ? "Belo Horizonte"
-                                : maiorEstado === "valorPa" ? "Belém"
-                                    : maiorEstado === "valorPe" ? "Recife"
-                                        : maiorEstado === "valorRj" ? "Rio de Janeiro"
-                                            : maiorEstado === "valorRs" ? "Porto Alegre"
-                                                : maiorEstado === "valorSp" ? "São Paulo"
-                                                    : "Desconhecido";
-            console.log()
-            estado.innerHTML = nomeEstado;
+            cpuPa.push(respostaPa[i].TotalCpu ?? 0)
+            gpuPa.push(respostaPa[i].TotalGpu ?? 0)
+            ramPa.push(respostaPa[i].TotalRam ?? 0)
+            discoPa.push(respostaPa[i].TotalDisco ?? 0)
+            redePa.push(respostaPa[i].TotalRede ?? 0)
 
-            cpuAm != null || gpuAm != null || ramAm != null || discoAm != null || redeAm != null ? emAlerta += 1 : emAlerta += 0;
-            cpuSp != null || gpuSp != null || rSpSp != null || discoSp != null || redeSp != null ? emAlerta += 1 : emAlerta += 0;
-            cpuRj != null || gpuRj != null || ramRj != null || discoRj != null || redeRj != null ? emAlerta += 1 : emAlerta += 0;
-            cpuDf != null || gpuDf != null || ramDf != null || discoDf != null || redeDf != null ? emAlerta += 1 : emAlerta += 0;
-            cpuPa != null || gpuPa != null || ramPa != null || discoPa != null || redePa != null ? emAlerta += 1 : emAlerta += 0;
-            cpuPe != null || gpuPe != null || ramPe != null || discoPe != null || redePe != null ? emAlerta += 1 : emAlerta += 0;
-            cpuBa != null || gpuBa != null || ramBa != null || discoBa != null || redeBa != null ? emAlerta += 1 : emAlerta += 0;
-            cpuMg != null || gpuMg != null || ramMg != null || discoMg != null || redeMg != null ? emAlerta += 1 : emAlerta += 0;
-            cpuMg != null || gpuMg != null || ramMg != null || discoMg != null || redeMg != null ? emAlerta += 1 : emAlerta += 0;
+            cpuSp.push(respostaSp[i].TotalCpu ?? 0)
+            gpuSp.push(respostaSp[i].TotalGpu ?? 0)
+            ramSp.push(respostaSp[i].TotalRam ?? 0)
+            discoSp.push(respostaSp[i].TotalDisco ?? 0)
+            redeSp.push(respostaSp[i].TotalRede ?? 0)
+
+            cpuRj.push(respostaRj[i].TotalCpu ?? 0)
+            gpuRj.push(respostaRj[i].TotalGpu ?? 0)
+            ramRj.push(respostaRj[i].TotalRam ?? 0)
+            discoRj.push(respostaRj[i].TotalDisco ?? 0)
+            redeRj.push(respostaRj[i].TotalRede ?? 0)
+
+            cpuMg.push(respostaMg[i].TotalCpu)
+            gpuMg.push(respostaMg[i].TotalGpu)
+            ramMg.push(respostaMg[i].TotalRam)
+            discoMg.push(respostaMg[i].TotalDisco)
+            redeMg.push(respostaMg[i].TotalRede)
+
+            cpuBa.push(respostaBa[i].TotalCpu ?? 0)
+            gpuBa.push(respostaBa[i].TotalGpu ?? 0)
+            ramBa.push(respostaBa[i].TotalRam ?? 0)
+            discoBa.push(respostaBa[i].TotalDisco ?? 0)
+            redeBa.push(respostaBa[i].TotalRede ?? 0)
+
+            cpuPe.push(respostaPe[i].TotalCpu ?? 0)
+            gpuPe.push(respostaPe[i].TotalGpu ?? 0)
+            ramPe.push(respostaPe[i].TotalRam ?? 0)
+            discoPe.push(respostaPe[i].TotalDisco ?? 0)
+            redePe.push(respostaPe[i].TotalRede ?? 0)
+
+            cpuDf.push(respostaDf[i].TotalCpu ?? 0)
+            gpuDf.push(respostaDf[i].TotalGpu ?? 0)
+            ramDf.push(respostaDf[i].TotalRam ?? 0)
+            discoDf.push(respostaDf[i].TotalDisco ?? 0)
+            redeDf.push(respostaDf[i].TotalRede ?? 0)
+
+            cpuRs.push(respostaRs[i].TotalCpu ?? 0)
+            gpuRs.push(respostaRs[i].TotalGpu ?? 0)
+            ramRs.push(respostaRs[i].TotalRam ?? 0)
+            discoRs.push(respostaRs[i].TotalDisco ?? 0)
+            redeRs.push(respostaRs[i].TotalRede ?? 0)
+        }
 
 
 
+        cpu = []
+        gpu = []
+        ram = []
+        disco = []
+        rede = []
+        valorAm = 0;
+        valorPa = 0;
+        valorBa = 0;
+        valorSp = 0;
+        valorRj = 0;
+        valorDf = 0;
+        valorPe = 0;
+        valorRs = 0;
+        valorMg = 0;
 
-            const somaCpu = cpuAm.reduce((total, num) => total + num, 0) +
-                cpuPa.reduce((total, num) => total + num, 0) +
-                cpuBa.reduce((total, num) => total + num, 0) +
-                cpuSp.reduce((total, num) => total + num, 0) +
-                cpuRj.reduce((total, num) => total + num, 0) +
-                cpuDf.reduce((total, num) => total + num, 0) +
-                cpuPe.reduce((total, num) => total + num, 0) +
-                cpuRs.reduce((total, num) => total + num, 0) +
-                cpuMg.reduce((total, num) => total + num, 0);
+        for (i = 0; i < respostaSp.length; i++) {
+            valorPa += cpuPa[i] + gpuPa[i] + ramPa[i] + redePa[i] + discoPa[i];
+            valorAm += cpuAm[i] + gpuAm[i] + ramAm[i] + redeAm[i] + discoAm[i];
+            valorRj += cpuRj[i] + gpuRj[i] + ramRj[i] + redeRj[i] + discoRj[i];
+            valorSp += cpuSp[i] + gpuSp[i] + ramSp[i] + redeSp[i] + discoSp[i];
+            valorMg += cpuMg[i] + gpuMg[i] + ramMg[i] + redeMg[i] + discoMg[i];
+            valorRs += cpuRs[i] + gpuRs[i] + ramRs[i] + redeRs[i] + discoRs[i];
+            valorBa += cpuBa[i] + gpuBa[i] + ramBa[i] + redeBa[i] + discoBa[i];
+            valorDf += cpuDf[i] + gpuDf[i] + ramDf[i] + redeDf[i] + discoDf[i];
+            valorPe += cpuPe[i] + gpuPe[i] + ramPe[i] + redePe[i] + discoPe[i];
+        }
 
-            const somaGpu = gpuAm.reduce((total, num) => total + num, 0) +
-                gpuPa.reduce((total, num) => total + num, 0) +
-                gpuBa.reduce((total, num) => total + num, 0) +
-                gpuSp.reduce((total, num) => total + num, 0) +
-                gpuRj.reduce((total, num) => total + num, 0) +
-                gpuDf.reduce((total, num) => total + num, 0) +
-                gpuPe.reduce((total, num) => total + num, 0) +
-                gpuRs.reduce((total, num) => total + num, 0) +
-                gpuMg.reduce((total, num) => total + num, 0);
+        for (i = tamanhoSp - 1; i >= 0; i--) {
+            cpu.push(cpuPa[i] + cpuAm[i] + cpuSp[i] + cpuRj[i] + cpuDf[i] + cpuMg[i] + cpuRs[i] + cpuPe[i] + cpuBa[i])
+            gpu.push(gpuPa[i] + gpuAm[i] + gpuSp[i] + gpuRj[i] + gpuDf[i] + gpuMg[i] + gpuRs[i] + gpuPe[i] + gpuBa[i])
+            ram.push(ramPa[i] + ramAm[i] + ramSp[i] + ramRj[i] + ramDf[i] + ramMg[i] + ramRs[i] + ramPe[i] + ramBa[i])
+            rede.push(redePa[i] + redeAm[i] + redeSp[i] + redeRj[i] + redeDf[i] + redeMg[i] + redeRs[i] + redePe[i] + redeBa[i])
+            disco.push(discoPa[i] + discoAm[i] + discoSp[i] + discoRj[i] + discoDf[i] + discoMg[i] + discoRs[i] + discoPe[i] + discoBa[i])
+        }
 
-            const somaRam = ramAm.reduce((total, num) => total + num, 0) +
-                ramPa.reduce((total, num) => total + num, 0) +
-                ramBa.reduce((total, num) => total + num, 0) +
-                ramSp.reduce((total, num) => total + num, 0) +
-                ramRj.reduce((total, num) => total + num, 0) +
-                ramDf.reduce((total, num) => total + num, 0) +
-                ramPe.reduce((total, num) => total + num, 0) +
-                ramRs.reduce((total, num) => total + num, 0) +
-                ramMg.reduce((total, num) => total + num, 0);
+        jogoI = respostaSp[tamanhoSp - 1].PrimeiroJogo
+        jogoII = respostaSp[tamanhoSp - 1].SegundoJogo
+        jogoIII = respostaSp[tamanhoSp - 1].TerceiroJogo
 
-            const somaDisco = discoAm.reduce((total, num) => total + num, 0) +
-                discoPa.reduce((total, num) => total + num, 0) +
-                discoBa.reduce((total, num) => total + num, 0) +
-                discoSp.reduce((total, num) => total + num, 0) +
-                discoRj.reduce((total, num) => total + num, 0) +
-                discoDf.reduce((total, num) => total + num, 0) +
-                discoPe.reduce((total, num) => total + num, 0) +
-                discoRs.reduce((total, num) => total + num, 0) +
-                discoMg.reduce((total, num) => total + num, 0);
+        console.log("Jogo I" + jogoI)
 
-            const somaRede = redeAm.reduce((total, num) => total + num, 0) +
-                redePa.reduce((total, num) => total + num, 0) +
-                redeBa.reduce((total, num) => total + num, 0) +
-                redeSp.reduce((total, num) => total + num, 0) +
-                redeRj.reduce((total, num) => total + num, 0) +
-                redeDf.reduce((total, num) => total + num, 0) +
-                redePe.reduce((total, num) => total + num, 0) +
-                redeRs.reduce((total, num) => total + num, 0) +
-                redeMg.reduce((total, num) => total + num, 0);
+        const nomeJogo = nomesJogos[jogoI] || "Jogo Desconhecido";
+        document.getElementById("jogoIdiv").innerText = nomeJogo;
+        const nomeJogoII = nomesJogos[jogoII] || "Jogo Desconhecido";
+        document.getElementById("jogoIIdiv").innerText = nomeJogoII;
+        const nomeJogoIII = nomesJogos[jogoIII] || "Jogo Desconhecido";
+        document.getElementById("jogoIIIdiv").innerText = nomeJogoIII;
 
+        console.log("A DATA TA AQUI FILHA DA PUTA  ",data)
 
 
-            const componentes = {
-                somaCpu,
-                somaDisco,
-                somaGpu,
-                somaRam,
-                somaRede
-            };
-            console.log(componentes)
+        const valores = {
+            valorAm,
+            valorBa,
+            valorDf,
+            valorMg,
+            valorPa,
+            valorPe,
+            valorRj,
+            valorRs,
+            valorSp
+        };
 
-            const maiorValor = Math.max(...Object.values(componentes));
+        const maiorValorI = Math.max(...Object.values(valores));
 
-            const maiorComponente = Object.keys(componentes).find(
-                chave => componentes[chave] === maiorValor
-            );
-            const nomeComponente =
-                maiorComponente === "somaCpu" ? "CPU"
-                    : maiorComponente === "somaDisco" ? "DISCO"
-                        : maiorComponente === "somaGpu" ? "GPU"
-                            : maiorComponente === "somaRam" ? "RAM"
-                                : maiorComponente === "somaRede" ? "REDE"
-                                    : "Desconhecido";
+        const maiorEstado = Object.keys(valores).find(
+            chave => valores[chave] === maiorValorI
+        );
 
-            ComponenteAlerta.innerHTML = `${nomeComponente}<span style="font-size: 25px;">/${maiorValor}</span>`;
+        const nomeEstado =
+            maiorEstado === "valorAm" ? "Amazonas"
+                : maiorEstado === "valorBa" ? "Salvador"
+                    : maiorEstado === "valorDf" ? "Brasília"
+                        : maiorEstado === "valorMg" ? "Belo Horizonte"
+                            : maiorEstado === "valorPa" ? "Belém"
+                                : maiorEstado === "valorPe" ? "Recife"
+                                    : maiorEstado === "valorRj" ? "Rio de Janeiro"
+                                        : maiorEstado === "valorRs" ? "Porto Alegre"
+                                            : maiorEstado === "valorSp" ? "São Paulo"
+                                                : "Desconhecido";
+        console.log()
+        estado.innerHTML = nomeEstado;
 
-            numeroServidores.innerHTML = `${emAlerta}/${servidores}`;
-            if (servidores == null || emAlerta == null) {
-                alert(`Dados do Servidor não encontrado!
+        cpuAm != null || gpuAm != null || ramAm != null || discoAm != null || redeAm != null ? emAlerta += 1 : emAlerta += 0;
+        cpuSp != null || gpuSp != null || rSpSp != null || discoSp != null || redeSp != null ? emAlerta += 1 : emAlerta += 0;
+        cpuRj != null || gpuRj != null || ramRj != null || discoRj != null || redeRj != null ? emAlerta += 1 : emAlerta += 0;
+        cpuDf != null || gpuDf != null || ramDf != null || discoDf != null || redeDf != null ? emAlerta += 1 : emAlerta += 0;
+        cpuPa != null || gpuPa != null || ramPa != null || discoPa != null || redePa != null ? emAlerta += 1 : emAlerta += 0;
+        cpuPe != null || gpuPe != null || ramPe != null || discoPe != null || redePe != null ? emAlerta += 1 : emAlerta += 0;
+        cpuBa != null || gpuBa != null || ramBa != null || discoBa != null || redeBa != null ? emAlerta += 1 : emAlerta += 0;
+        cpuMg != null || gpuMg != null || ramMg != null || discoMg != null || redeMg != null ? emAlerta += 1 : emAlerta += 0;
+        cpuMg != null || gpuMg != null || ramMg != null || discoMg != null || redeMg != null ? emAlerta += 1 : emAlerta += 0;
+
+
+
+
+        const somaCpu = cpuAm.reduce((total, num) => total + num, 0) +
+            cpuPa.reduce((total, num) => total + num, 0) +
+            cpuBa.reduce((total, num) => total + num, 0) +
+            cpuSp.reduce((total, num) => total + num, 0) +
+            cpuRj.reduce((total, num) => total + num, 0) +
+            cpuDf.reduce((total, num) => total + num, 0) +
+            cpuPe.reduce((total, num) => total + num, 0) +
+            cpuRs.reduce((total, num) => total + num, 0) +
+            cpuMg.reduce((total, num) => total + num, 0);
+
+        const somaGpu = gpuAm.reduce((total, num) => total + num, 0) +
+            gpuPa.reduce((total, num) => total + num, 0) +
+            gpuBa.reduce((total, num) => total + num, 0) +
+            gpuSp.reduce((total, num) => total + num, 0) +
+            gpuRj.reduce((total, num) => total + num, 0) +
+            gpuDf.reduce((total, num) => total + num, 0) +
+            gpuPe.reduce((total, num) => total + num, 0) +
+            gpuRs.reduce((total, num) => total + num, 0) +
+            gpuMg.reduce((total, num) => total + num, 0);
+
+        const somaRam = ramAm.reduce((total, num) => total + num, 0) +
+            ramPa.reduce((total, num) => total + num, 0) +
+            ramBa.reduce((total, num) => total + num, 0) +
+            ramSp.reduce((total, num) => total + num, 0) +
+            ramRj.reduce((total, num) => total + num, 0) +
+            ramDf.reduce((total, num) => total + num, 0) +
+            ramPe.reduce((total, num) => total + num, 0) +
+            ramRs.reduce((total, num) => total + num, 0) +
+            ramMg.reduce((total, num) => total + num, 0);
+
+        const somaDisco = discoAm.reduce((total, num) => total + num, 0) +
+            discoPa.reduce((total, num) => total + num, 0) +
+            discoBa.reduce((total, num) => total + num, 0) +
+            discoSp.reduce((total, num) => total + num, 0) +
+            discoRj.reduce((total, num) => total + num, 0) +
+            discoDf.reduce((total, num) => total + num, 0) +
+            discoPe.reduce((total, num) => total + num, 0) +
+            discoRs.reduce((total, num) => total + num, 0) +
+            discoMg.reduce((total, num) => total + num, 0);
+
+        const somaRede = redeAm.reduce((total, num) => total + num, 0) +
+            redePa.reduce((total, num) => total + num, 0) +
+            redeBa.reduce((total, num) => total + num, 0) +
+            redeSp.reduce((total, num) => total + num, 0) +
+            redeRj.reduce((total, num) => total + num, 0) +
+            redeDf.reduce((total, num) => total + num, 0) +
+            redePe.reduce((total, num) => total + num, 0) +
+            redeRs.reduce((total, num) => total + num, 0) +
+            redeMg.reduce((total, num) => total + num, 0);
+
+
+
+        const componentes = {
+            somaCpu,
+            somaDisco,
+            somaGpu,
+            somaRam,
+            somaRede
+        };
+        console.log(componentes)
+
+        const maiorValor = Math.max(...Object.values(componentes));
+
+        const maiorComponente = Object.keys(componentes).find(
+            chave => componentes[chave] === maiorValor
+        );
+        const nomeComponente =
+            maiorComponente === "somaCpu" ? "CPU"
+                : maiorComponente === "somaDisco" ? "DISCO"
+                    : maiorComponente === "somaGpu" ? "GPU"
+                        : maiorComponente === "somaRam" ? "RAM"
+                            : maiorComponente === "somaRede" ? "REDE"
+                                : "Desconhecido";
+
+        ComponenteAlerta.innerHTML = `${nomeComponente}<span style="font-size: 25px;">/${maiorValor}</span>`;
+
+        numeroServidores.innerHTML = `${emAlerta}/${servidores}`;
+        if (servidores == null || emAlerta == null) {
+            alert(`Dados do Servidor não encontrado!
                 <br>Entre em contato com o suporte`)
-            } else if ((servidores * 0.01) > emAlerta) {
-                document.querySelector('.server-box-N-Servidores').style.background = '#2cbe00';
-                console.log("Entrei no if verde");
+        } else if ((servidores * 0.01) > emAlerta) {
+            document.querySelector('.server-box-N-Servidores').style.background = '#2cbe00';
+            console.log("Entrei no if verde");
 
-            } else if (servidores * 0.70 >= emAlerta) {
-                document.querySelector('.server-box-N-Servidores').style.background = '#ff3333';
-            } else {
-                document.querySelector('.server-box-N-Servidores').style.background = '#ff3333';
-            }
-
-
+        } else if (servidores * 0.70 >= emAlerta) {
+            document.querySelector('.server-box-N-Servidores').style.background = '#ff3333';
+        } else {
+            document.querySelector('.server-box-N-Servidores').style.background = '#ff3333';
+        }
 
 
-            var options = {
-                series: [
-                    {
-                        name: "CPU",
-                        data: cpu.reverse()
-                    },
-                    {
-                        name: "GPU",
-                        data: gpu.reverse()
-                    },
-                    {
-                        name: "RAM",
-                        data: ram.reverse()
-                    },
-                    {
-                        name: "DISCO",
-                        data: disco.reverse()
-                    },
-                    {
-                        name: "REDE",
-                        data: rede.reverse()
-                    }
-                ],
-                chart: {
-                    height: 250,
-                    type: 'line',
-                    background: 'transparent',
-                    dropShadow: {
-                        enabled: true,
-                        color: '#ffffff',
-                        top: 18,
-                        left: 7,
-                        blur: 10,
-                        opacity: 0.3
-                    },
-                    zoom: { enabled: false },
-                    toolbar: { show: false }
-                },
-                colors: ['#00D4AA', '#FF6B6B', '#FFD700', '#00BFFF', '#00B4BF'],
-                dataLabels: {
-                    enabled: true,
-                    style: {
-                        colors: ['#00000'],
-                        fontSize: '10px',
-                        fontWeight: 'bold'
-                    }
-                },
-                stroke: {
-                    curve: 'smooth',
-                    width: 3
-                },
-                grid: {
-                    borderColor: '#404040',
-                    strokeDashArray: 3,
-                    row: {
-                        colors: ['#1a1a1a', 'transparent'],
-                        opacity: 0.3
-                    }
-                },
-                markers: {
-                    size: 1,
-                    strokeColors: ['#00D4AA', '#FF6B6B', '#FFD700', '#00BFFF'],
-                    strokeWidth: 2,
-                    offsetX: 10
-                },
-                xaxis: {
-                    categories: data.reverse(),
-                    title: {
-                        text: 'Month',
-                        style: {
-                            color: '#cccccc'
-                        },
 
-                    },
-                    labels: {
-                        style: {
-                            colors: '#cccccc'
-                        }
-                    }
-                },
-                yaxis: {
-                    title: {
-                        text: 'Temperature',
-                        style: {
-                            color: '#cccccc'
-                        }
-                    },
-                    labels: {
-                        style: {
-                            colors: '#cccccc'
-                        },
 
-                    }
+        var options = {
+            series: [
+                {
+                    name: "CPU",
+                    data: cpu.reverse()
                 },
-
-                legend: {
-                    position: 'bottom',
-                    horizontalAlign: 'right',
-                    floating: true,
-                    offsetY: 10,
-                    offsetX: -5,
-                    fontSize: '9px',
-                    labels: {
-                        colors: '#ffffff'
-                    }
+                {
+                    name: "GPU",
+                    data: gpu.reverse()
                 },
-                theme: {
-                    mode: 'dark'
+                {
+                    name: "RAM",
+                    data: ram.reverse()
+                },
+                {
+                    name: "DISCO",
+                    data: disco.reverse()
+                },
+                {
+                    name: "REDE",
+                    data: rede.reverse()
                 }
-            };
-            var chart = new ApexCharts(document.querySelector("#linhaBrasil"), options);
-            chart.render();
+            ],
+            chart: {
+                height: 250,
+                type: 'line',
+                background: 'transparent',
+                dropShadow: {
+                    enabled: true,
+                    color: '#ffffff',
+                    top: 18,
+                    left: 7,
+                    blur: 10,
+                    opacity: 0.3
+                },
+                zoom: { enabled: false },
+                toolbar: { show: false }
+            },
+            colors: ['#00D4AA', '#FF6B6B', '#FFD700', '#00BFFF', '#00B4BF'],
+            dataLabels: {
+                enabled: true,
+                style: {
+                    colors: ['#00000'],
+                    fontSize: '10px',
+                    fontWeight: 'bold'
+                }
+            },
+            stroke: {
+                curve: 'smooth',
+                width: 3
+            },
+            grid: {
+                borderColor: '#404040',
+                strokeDashArray: 3,
+                row: {
+                    colors: ['#1a1a1a', 'transparent'],
+                    opacity: 0.3
+                }
+            },
+            markers: {
+                size: 1,
+                strokeColors: ['#00D4AA', '#FF6B6B', '#FFD700', '#00BFFF'],
+                strokeWidth: 2,
+                offsetX: 10
+            },
+            xaxis: {
+                categories: data.reverse(),
+                title: {
+                    text: 'Month',
+                    style: {
+                        color: '#cccccc'
+                    },
+
+                },
+                labels: {
+                    style: {
+                        colors: '#cccccc'
+                    }
+                }
+            },
+            yaxis: {
+                title: {
+                    text: 'Temperature',
+                    style: {
+                        color: '#cccccc'
+                    }
+                },
+                labels: {
+                    style: {
+                        colors: '#cccccc'
+                    },
+
+                }
+            },
+
+            legend: {
+                position: 'bottom',
+                horizontalAlign: 'right',
+                floating: true,
+                offsetY: 10,
+                offsetX: -5,
+                fontSize: '9px',
+                labels: {
+                    colors: '#ffffff'
+                }
+            },
+            theme: {
+                mode: 'dark'
+            }
+        };
+        var chart = new ApexCharts(document.querySelector("#linhaBrasil"), options);
+        chart.render();
 
 
-            anychart.onDocumentReady(function () {
+        anychart.onDocumentReady(function () {
 
-                var map = anychart.map();
-
-
-                var dataSet = anychart.data.set(
-                    [{ "id": "BR.GO", "capital": "Goiania", "value": 0 },
-                    { "id": "BR.SP", "capital": "São Paulo", "value": valorSp },
-                    { "id": "BR.PE", "capital": "Recife", "value": valorPe },
-                    { "id": "BR.AC", "capital": "Rio Branco", "value": 3 },
-                    { "id": "BR.AM", "capital": "Manaus", "value": valorAm },
-                    { "id": "BR.MA", "capital": "São Luís", "value": 5 },
-                    { "id": "BR.PA", "capital": "Belém", "value": valorPa },
-                    { "id": "BR.RO", "capital": "Porto Velho", "value": 7 },
-                    { "id": "BR.TO", "capital": "Palmas", "value": 8 },
-                    { "id": "BR.DF", "capital": "Brasília", "value": valorDf },
-                    { "id": "BR.MS", "capital": "Campo Grande", "value": 10 },
-                    { "id": "BR.MG", "capital": "Belo Horizonte", "value": valorMg },
-                    { "id": "BR.MT", "capital": "Cuiabá", "value": 12 },
-                    { "id": "BR.RS", "capital": "Porto Alegre", "value": valorRs },
-                    { "id": "BR.PR", "capital": "Curitiba", "value": 14 },
-                    { "id": "BR.SC", "capital": "Florianópolis", "value": 15 },
-                    { "id": "BR.CE", "capital": "Fortaleza", "value": 16 },
-                    { "id": "BR.PI", "capital": "Teresina", "value": 17 },
-                    { "id": "BR.AL", "capital": "Maceió", "value": 18 },
-                    { "id": "BR.BA", "capital": "Salvador", "value": valorBa },
-                    { "id": "BR.ES", "capital": "Vitória", "value": 20 },
-                    { "id": "BR.PB", "capital": "João Pessoa", "value": 21 },
-                    { "id": "BR.RJ", "capital": "Rio de Janeiro", "value": valorRj },
-                    { "id": "BR.RN", "capital": "Natal", "value": 23 },
-                    { "id": "BR.SE", "capital": "Aracaju", "value": 24 },
-                    { "id": "BR.RR", "capital": "Boa Vista", "value": 25 },
-                    { "id": "BR.AP", "capital": "Macapá", "value": 26 }]
-                );
+            var map = anychart.map();
 
 
-                series = map.choropleth(dataSet);
+            var dataSet = anychart.data.set(
+                [{ "id": "BR.GO", "capital": "Goiania", "value": 0 },
+                { "id": "BR.SP", "capital": "São Paulo", "value": valorSp },
+                { "id": "BR.PE", "capital": "Recife", "value": valorPe },
+                { "id": "BR.AC", "capital": "Rio Branco", "value": 3 },
+                { "id": "BR.AM", "capital": "Manaus", "value": valorAm },
+                { "id": "BR.MA", "capital": "São Luís", "value": 5 },
+                { "id": "BR.PA", "capital": "Belém", "value": valorPa },
+                { "id": "BR.RO", "capital": "Porto Velho", "value": 7 },
+                { "id": "BR.TO", "capital": "Palmas", "value": 8 },
+                { "id": "BR.DF", "capital": "Brasília", "value": valorDf },
+                { "id": "BR.MS", "capital": "Campo Grande", "value": 10 },
+                { "id": "BR.MG", "capital": "Belo Horizonte", "value": valorMg },
+                { "id": "BR.MT", "capital": "Cuiabá", "value": 12 },
+                { "id": "BR.RS", "capital": "Porto Alegre", "value": valorRs },
+                { "id": "BR.PR", "capital": "Curitiba", "value": 14 },
+                { "id": "BR.SC", "capital": "Florianópolis", "value": 15 },
+                { "id": "BR.CE", "capital": "Fortaleza", "value": 16 },
+                { "id": "BR.PI", "capital": "Teresina", "value": 17 },
+                { "id": "BR.AL", "capital": "Maceió", "value": 18 },
+                { "id": "BR.BA", "capital": "Salvador", "value": valorBa },
+                { "id": "BR.ES", "capital": "Vitória", "value": 20 },
+                { "id": "BR.PB", "capital": "João Pessoa", "value": 21 },
+                { "id": "BR.RJ", "capital": "Rio de Janeiro", "value": valorRj },
+                { "id": "BR.RN", "capital": "Natal", "value": 23 },
+                { "id": "BR.SE", "capital": "Aracaju", "value": 24 },
+                { "id": "BR.RR", "capital": "Boa Vista", "value": 25 },
+                { "id": "BR.AP", "capital": "Macapá", "value": 26 }]
+            );
 
-                series.geoIdField('id');
 
-                series.tooltip().format(function (e) {
-                    return "Capital: " + e.getData("capital") + "\n" +
-                        "Alertas: " + e.getData("value")
-                });
+            series = map.choropleth(dataSet);
 
+            series.geoIdField('id');
 
-                series.colorScale(anychart.scales.linearColor('#FFFFFF', '#FF670A'));
-                series.hovered().fill('#8c8c8c');
-
-                map.listen('pointClick', function (e) {
-                    map.zoomToFeature(e.point.get('id'));
-                })
-
-
-                map.interactivity().zoomOnMouseWheel(false);
-
-                map.interactivity().keyboardZoomAndMove(false);
-
-                map.interactivity().zoomOnDoubleClick(false);
-
-
-                map.geoData(anychart.maps['brazil']);
-
-                map.colorRange().enabled(true);
-
-
-                map.container('mapBrasil');
-
-                map.background(null);
-
-                var nivelZoom = 1.0;
-                var eixoX = 900;
-                var eixoY = 100;
-
-                map.zoomTo(nivelZoom, eixoX, eixoY);
-
-                map.draw();
+            series.tooltip().format(function (e) {
+                return "Capital: " + e.getData("capital") + "\n" +
+                    "Alertas: " + e.getData("value")
             });
 
 
-            loadGameImage(jogoI, "ftJogoI");
-            loadGameImage(jogoII, "ftJogoII");
-            loadGameImage(jogoIII, "ftJogoIII");
+            series.colorScale(anychart.scales.linearColor('#FFFFFF', '#FF670A'));
+            series.hovered().fill('#8c8c8c');
 
-            loadImageBackground(jogoI, "backJogoI")
-            loadImageBackground(jogoII, "backJogoII")
-            loadImageBackground(jogoIII, "backJogoIII")
+            map.listen('pointClick', function (e) {
+                map.zoomToFeature(e.point.get('id'));
+            })
+
+
+            map.interactivity().zoomOnMouseWheel(false);
+
+            map.interactivity().keyboardZoomAndMove(false);
+
+            map.interactivity().zoomOnDoubleClick(false);
+
+
+            map.geoData(anychart.maps['brazil']);
+
+            map.colorRange().enabled(true);
+
+
+            map.container('mapBrasil');
+
+            map.background(null);
+
+            var nivelZoom = 1.0;
+            var eixoX = 900;
+            var eixoY = 100;
+
+            map.zoomTo(nivelZoom, eixoX, eixoY);
+
+            map.draw();
+        });
+
+
+        loadGameImage(jogoI, "ftJogoI");
+        loadGameImage(jogoII, "ftJogoII");
+        loadGameImage(jogoIII, "ftJogoIII");
+
+        loadImageBackground(jogoI, "backJogoI")
+        loadImageBackground(jogoII, "backJogoII")
+        loadImageBackground(jogoIII, "backJogoIII")
 
     }
 
@@ -981,20 +1003,20 @@
             valorMg = 0;
 
             for (i = 0; i < respostaSp.length; i++) {
-                valorPa += cpuPa[i]  + gpuPa[i]  + ramPa[i]  + redePa[i]  + discoPa[i] ;
-                valorAm += cpuAm[i]  + gpuAm[i]  + ramAm[i]  + redeAm[i]  + discoAm[i] ;
-                valorRj += cpuRj[i]  + gpuRj[i]  + ramRj[i]  + redeRj[i]  + discoRj[i] ;
-                valorSp += cpuSp[i]  + gpuSp[i]  + ramSp[i]  + redeSp[i]  + discoSp[i] ;
-                valorMg += cpuMg[i]  + gpuMg[i]  + ramMg[i]  + redeMg[i]  + discoMg[i] ;
-                valorRs += cpuRs[i]  + gpuRs[i]  + ramRs[i]  + redeRs[i]  + discoRs[i] ;
-                valorBa += cpuBa[i]  + gpuBa[i]  + ramBa[i]  + redeBa[i]  + discoBa[i] ;
-                valorDf += cpuDf[i]  + gpuDf[i]  + ramDf[i]  + redeDf[i]  + discoDf[i] ;
-                valorPe += cpuPe[i]  + gpuPe[i]  + ramPe[i]  + redePe[i]  + discoPe[i] ;
+                valorPa += cpuPa[i] + gpuPa[i] + ramPa[i] + redePa[i] + discoPa[i];
+                valorAm += cpuAm[i] + gpuAm[i] + ramAm[i] + redeAm[i] + discoAm[i];
+                valorRj += cpuRj[i] + gpuRj[i] + ramRj[i] + redeRj[i] + discoRj[i];
+                valorSp += cpuSp[i] + gpuSp[i] + ramSp[i] + redeSp[i] + discoSp[i];
+                valorMg += cpuMg[i] + gpuMg[i] + ramMg[i] + redeMg[i] + discoMg[i];
+                valorRs += cpuRs[i] + gpuRs[i] + ramRs[i] + redeRs[i] + discoRs[i];
+                valorBa += cpuBa[i] + gpuBa[i] + ramBa[i] + redeBa[i] + discoBa[i];
+                valorDf += cpuDf[i] + gpuDf[i] + ramDf[i] + redeDf[i] + discoDf[i];
+                valorPe += cpuPe[i] + gpuPe[i] + ramPe[i] + redePe[i] + discoPe[i];
             }
 
             for (i = tamanhoSp - 1; i >= 0; i--) {
-                cpu.push(cpuPa[i] + cpuAm[i] + cpuSp[i]+ cpuRj[i]+ cpuDf[i]+ cpuMg[i]+ cpuRs[i] + cpuPe[i]+ cpuBa[i])
-                gpu.push(gpuPa[i] + gpuAm[i]  + gpuSp[i] + gpuRj[i] + gpuDf[i] + gpuMg[i] + gpuRs[i] + gpuPe[i] + gpuBa[i])
+                cpu.push(cpuPa[i] + cpuAm[i] + cpuSp[i] + cpuRj[i] + cpuDf[i] + cpuMg[i] + cpuRs[i] + cpuPe[i] + cpuBa[i])
+                gpu.push(gpuPa[i] + gpuAm[i] + gpuSp[i] + gpuRj[i] + gpuDf[i] + gpuMg[i] + gpuRs[i] + gpuPe[i] + gpuBa[i])
                 ram.push(ramPa[i] + ramAm[i] + ramSp[i] + ramRj[i] + ramDf[i] + ramMg[i] + ramRs[i] + ramPe[i] + ramBa[i])
                 rede.push(redePa[i] + redeAm[i] + redeSp[i] + redeRj[i] + redeDf[i] + redeMg[i] + redeRs[i] + redePe[i] + redeBa[i])
                 disco.push(discoPa[i] + discoAm[i] + discoSp[i] + discoRj[i] + discoDf[i] + discoMg[i] + discoRs[i] + discoPe[i] + discoBa[i])
@@ -1005,6 +1027,10 @@
             jogoIII = respostaSp[tamanhoSp - 1].TerceiroJogo
 
             console.log("Jogo I" + jogoI)
+            console.log("nomesJogos:", nomesJogos);
+            console.log("Procurando chave:", jogoI);
+            console.log("Valor encontrado:", nomesJogos[jogoI]);
+            console.log(nomesJogos[1172470]);
 
             const nomeJogo = nomesJogos[jogoI] || "Jogo Desconhecido";
             document.getElementById("jogoIdiv").innerText = nomeJogo;
@@ -1034,13 +1060,13 @@
 
             const nomeEstado =
                 maiorEstado === "valorAm" ? "Amazonas"
-                    : maiorEstado === "valorBa" ? "Salvador"
-                        : maiorEstado === "valorDf" ? "Brasília"
-                            : maiorEstado === "valorMg" ? "Belo Horizonte"
-                                : maiorEstado === "valorPa" ? "Belém"
-                                    : maiorEstado === "valorPe" ? "Recife"
+                    : maiorEstado === "valorBa" ? "Bahia"
+                        : maiorEstado === "valorDf" ? "Distrito Federal"
+                            : maiorEstado === "valorMg" ? "Minas Gerais"
+                                : maiorEstado === "valorPa" ? "Pará"
+                                    : maiorEstado === "valorPe" ? "Pernambuco"
                                         : maiorEstado === "valorRj" ? "Rio de Janeiro"
-                                            : maiorEstado === "valorRs" ? "Porto Alegre"
+                                            : maiorEstado === "valorRs" ? "Rio Grande do Sul"
                                                 : maiorEstado === "valorSp" ? "São Paulo"
                                                     : "Desconhecido";
             console.log()
@@ -2710,6 +2736,8 @@
             jogoI = respostaRj[tamanhoSp - 1].PrimeiroJogo
             jogoII = respostaRj[tamanhoSp - 1].SegundoJogo
             jogoIII = respostaRj[tamanhoSp - 1].TerceiroJogo;
+
+
 
             const nomeJogo = nomesJogos[jogoI] || "Jogo Desconhecido";
             document.getElementById("jogoIdiv").innerText = nomeJogo;
