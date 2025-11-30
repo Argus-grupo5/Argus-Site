@@ -11,6 +11,8 @@ router.get("/listar/:idServer", function(req, res){
     servidoresController.listar(req, res)
 })
 
+router.get("/limiteAlerta/:nomeServidor", servidoresController.limiteAlertas)
+
 router.get("/listarServidores/:idServer/:siglaServer", function(req, res){
     servidoresController.listarServidores(req, res)
 })

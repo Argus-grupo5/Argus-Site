@@ -553,7 +553,7 @@ textarea:focus, input:focus {
 
 
 .server-list {
-    max-height: 31vw;
+    max-height: 40vw;
     overflow: auto;
 }
 

@@ -1,6 +1,6 @@
 var database = require("../database/config")
 
-function addServidor(nome, empresa, nome_estado, sigla_estado, maxCpu, minCpu, maxRam, minRam, maxDisco, minDisco, maxRede, minRede, maxGpu, minGpu) {
+function addServidor(nome, empresa, nome_estado, sigla_estado, maxCpu, minCpu, maxRam, minRam, maxDisco, minDisco, maxRede, minRede, maxGpu, minGpu, qtdAlerta) {
     var sqlInstruction = `INSERT INTO servidor (nome, nome_estado, sigla_estado, fkempresa)
                             VALUES ('${nome}','${nome_estado}','${sigla_estado}', '${empresa}')`;
 
@@ -12,12 +12,12 @@ function addServidor(nome, empresa, nome_estado, sigla_estado, maxCpu, minCpu, m
             { id: 2, max: maxRam, min: minRam },
             { id: 3, max: maxDisco, min: minDisco },
             { id: 4, max: maxRede, min: minRede },
-            { id: 5, max: maxGpu, min: minGpu}
+            { id: 5, max: maxGpu, min: minGpu }
         ];
 
         const promises = componentes.map(comp => {
             return database.executar(
-                `INSERT INTO parametros (fkservidor, fkcomponente, maximo, minimo) VALUES ('${servidorId}', '${comp.id}', '${comp.max}', '${comp.min}')`
+                `INSERT INTO parametros (fkservidor, fkcomponente, maximo, minimo, qtdAlertas) VALUES ('${servidorId}', '${comp.id}', '${comp.max}', '${comp.min}','${qtdAlerta}')`
             );
         });
 
@@ -34,11 +34,11 @@ function listar(id) {
     return database.executar(sqlInstruction);
 }
 
-function listarServidores(id, siglaEstado){
+function listarServidores(id, siglaEstado) {
     var sqlInstruction = `SELECT id, nome, nome_estado FROM servidor 
         WHERE fkempresa = ${id} AND sigla_estado = '${siglaEstado}'
         ORDER BY nome;`
-    
+
     return database.executar(sqlInstruction)
 }
 
@@ -48,7 +48,19 @@ function listarServidoresTotais(id) {
     return database.executar(sqlInstruction);
 }
 
-function contarServidores(id){
+function limiteAlertas(nomeServidor) {
+    var sqlInstruction = `
+        SELECT qtdAlertas
+        FROM servidor s
+        INNER JOIN parametros p ON p.fkservidor = s.id
+        WHERE s.nome LIKE '%${nomeServidor}%'
+        limit 1;
+        `;
+
+    return database.executar(sqlInstruction);
+}
+
+function contarServidores(id) {
     var sqlInstruction = `SELECT count(id) AS totalServers FROM servidor WHERE fkempresa = ${id};`
 
     return database.executar(sqlInstruction);
@@ -59,5 +71,6 @@ module.exports = {
     listar,
     listarServidores,
     listarServidoresTotais,
-    contarServidores
+    contarServidores,
+    limiteAlertas
 }
