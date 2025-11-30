@@ -145,7 +145,7 @@
                     resolved: chamado.fields.resolutiondate ? chamado.fields.resolutiondate : null,
                     assigned: chamado.fields.assignee ? chamado.fields.assignee : null,
                     tempo_atribuicao_resolucao: chamado.fields.assignee && chamado.fields.resolutiondate
-                    ? diferencaHoras(chamado.fields.updated, chamado.fields.resolutiondate) : null,
+                    ? diferencaHoras(chamado.fields.created, chamado.fields.resolutiondate) : null
                     })
             });
 
@@ -169,7 +169,8 @@
 
          gerarGraficoLinha(chamados);
         
-         gerarGraficoAtribuicaoResolucao(chamados);
+         gerarGraficoMediaAtribuicaoResolucao(chamados);
+
 
          
         }
@@ -190,12 +191,11 @@
                 const value = dataset.data[index];
                 
                 ctx.save();
-                ctx.fillStyle = "white"; // cor do texto dentro da barra
+                ctx.fillStyle = "white"; 
                 ctx.font = "bold 32px sans-serif";
                 ctx.textAlign = "center";
                 ctx.textBaseline = "middle";
 
-                // Posição do texto = centro da barra
                 const x = bar.x;
                 const y = bar.y + bar.height / 2;
 
@@ -283,45 +283,59 @@ function gerarGraficoTempo(chamados) {
         });
     }
 
-    function gerarGraficoAtribuicaoResolucao(chamados) {
+    function gerarGraficoMediaAtribuicaoResolucao(chamados) {
     const concluidos = chamados.filter(c => c.tempo_atribuicao_resolucao !== null);
 
     if (concluidos.length === 0) {
-        console.warn("Nenhum chamado com atribuição e resolução detectado.");
+        console.warn("Nenhum chamado concluído com atribuição e resolução.");
         return;
     }
 
-    // pegar os últimos 20
-    const ultimos = concluidos.slice(-20);
+    const porDia = {};
 
-    const labels = ultimos.map(c => c.titulo.substring(0, 20) + "...");
-    const tempos = ultimos.map(c => Number(c.tempo_atribuicao_resolucao.toFixed(2)));
+    concluidos.forEach(c => {
+        const dia = formatarData(c.resolved);
+        const horas = c.tempo_atribuicao_resolucao;
+
+        if (!porDia[dia]) porDia[dia] = [];
+        porDia[dia].push(horas);
+    });
+
+    const labels = Object.keys(porDia);
+    const medias = labels.map(dia => {
+        const arr = porDia[dia];
+        return arr.reduce((a, b) => a + b, 0) / arr.length;
+    });
 
     const ctx = document.getElementById("graficoAtribuicaoResolucao");
 
-    if (window.graficoAtribuicaoResolucao) {
-        window.graficoAtribuicaoResolucao.destroy();
-    }
+    if (window.graficoAtribResolucaoMedia)
+        window.graficoAtribResolucaoMedia.destroy();
 
-    window.graficoAtribuicaoResolucao = new Chart(ctx, {
-        type: "bar",
+    window.graficoAtribResolucaoMedia = new Chart(ctx, {
+        type: "line",
         data: {
             labels: labels,
             datasets: [{
-                label: "Horas",
-                data: tempos,
-                backgroundColor: "rgb(0, 180, 120)"
+                label: "Tempo médio (Horas)",
+                data: medias,
+                borderColor: "rgb(0, 150, 255)",
+                tension: 0.3,
+                fill: false,
+                pointRadius: 5
             }]
         },
         options: {
             responsive: true,
             scales: {
-                y: { beginAtZero: true }
+                y: {
+                    beginAtZero: true
+                }
             }
-        },
-        plugins: [exibirValores]   // ✔ números dentro da barra
+        }
     });
 }
+
 
 function preencherTabela(chamados) {
     const tabela = document.getElementById("tabelaChamados");
