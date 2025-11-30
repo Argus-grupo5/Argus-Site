@@ -40,14 +40,17 @@
 
     <div class="chat-container" id="chat-container">
         <div class="chat-header" onclick="toggleChat()">
-            <span>Argus AI</span>
+            <span>Gus AI</span>
             <button id="toggle-button">_</button>
         </div>
         <div class="chat-body" id="chat-body">
-            <p>Olá! Como posso ajudar?</p>
+            <p id="inicio-chat">Olá, Sou a Gus AI! Como posso ajudar?</p>
+            <div id="historico"> </div>
+            <p id="status"></p>
+
             <div class="chat-input">
-                <input type="text" placeholder="Digite sua mensagem...">
-                <button>Enviar</button>
+                <input type="text" id="input-mensagem" placeholder="Digite sua mensagem...">
+                <button onclick="enviarMensagem()" id="botao">Enviar</button>
             </div>
         </div>
     </div>

@@ -879,11 +879,21 @@ body,
     margin-bottom: 12px;
     backdrop-filter: blur(12px);
     transition: 0.3s ease;
+    background-size: cover;
+    background-position: center;
 }
 
 .linha-jogo:hover {
     background: rgba(255, 255, 255, 0.08);
     transform: scale(1.01);
+}
+
+.linha-jogo::before{
+     content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 1;
 }
 
 .jogo-foto {
@@ -894,6 +904,10 @@ body,
     background-position: center;
     object-fit: cover;
     border: 1px solid rgba(255, 255, 255, 0.15);
+}
+.jogo-foto, .jogo-nome {
+    position: relative;
+    z-index: 2;
 }
 
 .jogo-nome {
