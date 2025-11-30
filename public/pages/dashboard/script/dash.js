@@ -24,7 +24,7 @@ function header(pag, cargo) {
   console.log(cargo)
   let caminho;
   if (cargo == "Operador") {
-    caminho = "dashFellipe";
+    caminho = "dashDireta";
   } else {
     caminho = "servers"
   }
@@ -43,7 +43,7 @@ function header(pag, cargo) {
         <img id="imgServidores" src="../../assets/dashboard/desktop/box.svg" alt="Servidores">
         <span class="tooltiptextNav">Servidores</span>
       </a>
-      <a href="./dashFellipe.html" class="navButton tooltipNav" id="navServers">
+      <a href="./dashDireta.html" class="navButton tooltipNav" id="navServers">
         <img id="imgServidores" src="../../assets/dashboard/desktop/target.svg" alt="Servidores">
         <span class="tooltiptextNav">Servidores</span>
       </a>
@@ -51,7 +51,7 @@ function header(pag, cargo) {
         <img id="imgServidores" src="../../assets/dashboard/desktop/graph.svg" alt="Servidores">
         <span class="tooltiptextNav">Servidores</span>
       </a>
-      <a href="./demandas.html" class="navButton tooltipNav" id="navServers">
+      <a href="./servers.html" class="navButton tooltipNav" id="navServers">
         <img id="imgServidores" src="../../assets/dashboard/desktop/vision.svg" alt="Servidores">
         <span class="tooltiptextNav">Servidores</span>
       </a>
@@ -113,7 +113,7 @@ function header(pag, cargo) {
         <img id="imgServidores" src="../../assets/dashboard/desktop/box.svg" alt="Servidores">
         <span class="tooltiptextNav">Servidores</span>
       </a>
-      <a href="./dashFellipe.html" class="navButton tooltipNav" id="navServers">
+      <a href="./dashDireta.html" class="navButton tooltipNav" id="navServers">
         <img id="imgServidores" src="../../assets/dashboard/desktop/target.svg" alt="Servidores">
         <span class="tooltiptextNav">Servidores</span>
       </a>

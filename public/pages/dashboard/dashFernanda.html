@@ -11,6 +11,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-matrix@1.2.0/dist/chartjs-chart-matrix.min.js"></script>
+    <script src="script/dash.js"></script>
 
 </head>
 
@@ -83,6 +84,8 @@
 <div class="espaco-final"></div>
 
 <script>
+        header("dashboard", sessionStorage.CARGO_CARGO);
+
     let chart = null;
     let chartTempo = null;
 
