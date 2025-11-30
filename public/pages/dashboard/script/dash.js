@@ -39,7 +39,7 @@ function header(pag, cargo) {
           <div id="userCargo">${sessionStorage.CARGO_CARGO}</div>
         </span>
       </a>
-      <a href="./dashCaio.html" class="navButton tooltipNav" id="navServers">
+      <a href="./dashRegioes.html" class="navButton tooltipNav" id="navServers">
         <img id="imgServidores" src="../../assets/dashboard/desktop/box.svg" alt="Servidores">
         <span class="tooltiptextNav">Servidores</span>
       </a>
@@ -49,6 +49,14 @@ function header(pag, cargo) {
       </a>
       <a href="./demandas.html" class="navButton tooltipNav" id="navServers">
         <img id="imgServidores" src="../../assets/dashboard/desktop/graph.svg" alt="Servidores">
+        <span class="tooltiptextNav">Servidores</span>
+      </a>
+      <a href="./demandas.html" class="navButton tooltipNav" id="navServers">
+        <img id="imgServidores" src="../../assets/dashboard/desktop/vision.svg" alt="Servidores">
+        <span class="tooltiptextNav">Servidores</span>
+      </a>
+      <a href="./dashFernanda.html" class="navButton tooltipNav" id="navServers">
+        <img id="imgServidores" src="../../assets/dashboard/desktop/voice.svg" alt="Servidores">
         <span class="tooltiptextNav">Servidores</span>
       </a>
 
@@ -100,6 +108,14 @@ function header(pag, cargo) {
           <div id="userNome">${sessionStorage.USER_NAME}</div>
           <div id="userCargo">${sessionStorage.CARGO_CARGO}</div>
         </span>
+      </a>
+      <a href="./dashRegioes.html" class="navButton tooltipNav" id="navServers">
+        <img id="imgServidores" src="../../assets/dashboard/desktop/box.svg" alt="Servidores">
+        <span class="tooltiptextNav">Servidores</span>
+      </a>
+      <a href="./dashFellipe.html" class="navButton tooltipNav" id="navServers">
+        <img id="imgServidores" src="../../assets/dashboard/desktop/target.svg" alt="Servidores">
+        <span class="tooltiptextNav">Servidores</span>
       </a>
       <a href="./demandas.html" class="navButton tooltipNav" id="navServers">
         <img id="imgServidores" src="../../assets/dashboard/desktop/graph.svg" alt="Servidores">

@@ -66,12 +66,19 @@
 
         <div class="server-overview-container">
             <div class="overview-header">
-                <h2>Visão Geral - Servidor <br>
+                <h2>Visão Direta - Servidor <br>
                     XBOX-CLOUD-BR</h2>
-                <!-- colocar a ultima atualização -->
+                <div>
+                    <div class="headerSub">
+                        <p>Última atualização: <span id="attAtual"></span> atrás</p>
+                    </div>
+                </div>
             </div>
 
             <div class="region-filter-bar">
+
+                
+
                 <select id="regionSelect">
                     <option value="">Selecione a região...</option>
                     <option value="sp">SP</option>
@@ -91,52 +98,48 @@
                 <div class="metric-card cpu-card">
                     <span class="info-icon" title="Legenda">i</span>
                     <div class="metric-tooltip"> LEGENDA:<br>
-                        0% - 70% 🟩<br>
+                        1% - 70% 🟩<br>
                         71% - 80% 🟨<br>
                         81% - 100% 🟥</div>
 
                     <div class="metric-label">CPU em Uso</div>
                     <div class="metric-info">No último dia (24h)</div>
                     <div class="metric-value">43%</div>
-                    <div class="metric-info">4 de 12 cores em uso</div>
                 </div>
 
                 <div class="metric-card memory-card">
                     <span class="info-icon" title="Legenda">i</span>
                     <div class="metric-tooltip">LEGENDA:<br>
-                        0% - 65% 🟩<br>
+                        1% - 65% 🟩<br>
                         66% - 75% 🟨<br>
                         76% - 100% 🟥</div>
 
                     <div class="metric-label">MEMÓRIA em Uso</div>
                     <div class="metric-info">No último dia (24h)</div>
                     <div class="metric-value">78%</div>
-                    <div class="metric-info">81.3GB de 1.3GB em uso</div>
                 </div>
 
                 <div class="metric-card gpu-card">
                     <span class="info-icon" title="Legenda">i</span>
                     <div class="metric-tooltip">LEGENDA:<br>
-                        0% - 90% 🟩<br>
+                        1% - 90% 🟩<br>
                         91% - 95% 🟨<br>
                         96% - 100% 🟥</div>
 
                     <div class="metric-label">GPU em Uso</div>
                     <div class="metric-info">No último dia (24h)</div>
                     <div class="metric-value">78%</div>
-                    <div class="metric-info">81.3GB de 1.3GB em uso</div>
                 </div>
 
                 <div class="metric-card storage-card">
                     <span class="info-icon" title="Legenda">i</span>
                     <div class="metric-tooltip">LEGENDA:<br>
-                        0% - 80% 🟩<br>
+                        1% - 80% 🟩<br>
                         81% - 85% 🟨<br>
                         86% - 100% 🟥</div>
                     <div class="metric-label">DISCO em Uso</div>
                     <div class="metric-info">No último dia (24h)</div>
                     <div class="metric-value">78%</div>
-                    <div class="metric-info">81.3GB de 1.3GB em uso</div>
                 </div>
 
                 <div class="metric-card latency-card">
@@ -149,7 +152,6 @@
                     <div class="metric-label">LATÊNCIA em Uso</div>
                     <div class="metric-info">No último dia (24h)</div>
                     <div class="metric-value">78%</div>
-                    <div class="metric-info">81.3GB de 1.3GB em uso</div>
                 </div>
             </div>
 
@@ -197,70 +199,16 @@
 
     <script src="../../js/server-overview.js"></script>
     <script>
-            header("dashboard", sessionStorage.CARGO_CARGO);
 
-        let dadosOriginais = [];
-
-        function atualizarDashboard(dados) {
-            const n = (arr, key) => arr.map(i => parseFloat(i[key])).filter(x => !isNaN(x));
-            const set = (sel, val) => { const el = document.querySelector(sel); if (el) el.textContent = val; };
-
-            set(".cpu-card .metric-value", (n(dados, "cpu").reduce((a, b) => a + b) / dados.length).toFixed(1) + "%");
-            set(".memory-card .metric-value", (n(dados, "ram").reduce((a, b) => a + b) / dados.length).toFixed(1) + "%");
-            set(".gpu-card .metric-value", (n(dados, "uso % GPU").reduce((a, b) => a + b) / dados.length).toFixed(1) + "%");
-            set(".storage-card .metric-value", (n(dados, "disco").reduce((a, b) => a + b) / dados.length).toFixed(1) + "%");
-            set(".latency-card .metric-value", (n(dados, "rede (ms)").reduce((a, b) => a + b) / dados.length).toFixed(1) + " ms");
-
-            const faixas = agruparPorFaixaHoraria(dados);
-            const labels = Object.keys(faixas);
-
-            cpuRamChart.data.labels = labels;
-            cpuRamChart.data.datasets[0].data = labels.map(f => faixas[f].cpu);
-            cpuRamChart.data.datasets[1].data = labels.map(f => faixas[f].gpu);
-            cpuRamChart.update();
-
-            diskChart.data.labels = labels;
-            diskChart.data.datasets[0].data = labels.map(f => faixas[f].disco);
-            diskChart.data.datasets[1].data = labels.map(f => faixas[f].ram);
-            diskChart.update();
-        }
-
-        document.getElementById("applyRegionFilter").addEventListener("click", () => {
-            const regiao = document.getElementById("regionSelect").value;
-            if (!regiao) {
-                alert("Selecione uma região!");
-                return;
-            }
-
-            const filtrados = dadosOriginais.filter(item => {
-
-                const partes = item.usuario.split('-');
-                const valorRegiao = partes.length >= 4 ? partes[3].toLowerCase() : '';
-                return valorRegiao === regiao;
-
-            });
-
-            if (filtrados.length === 0) { alert("Nenhum dado encontrado."); return; }
-
-            atualizarDashboard(filtrados);
-
-            // Mini-cards de pico
-            if (typeof window.computePeaks === 'function' && typeof window.setPeak === 'function') {
-                const peaksFiltered = window.computePeaks(filtrados);
-                window.setPeak('peak-cpu', peaksFiltered.cpu.value, peaksFiltered.cpu.ts);
-                window.setPeak('peak-ram', peaksFiltered.ram.value, peaksFiltered.ram.ts);
-                window.setPeak('peak-disco', peaksFiltered.disco.value, peaksFiltered.disco.ts);
-                window.setPeak('peak-gpu', peaksFiltered.gpu.value, peaksFiltered.gpu.ts);
-                window.setPeak('peak-rede', peaksFiltered.rede.value, peaksFiltered.rede.ts, 'ms');
-            }
-        });
-    </script>
-</body>
-
-</html>
-
-<script>
-
+    function tempoAtt() {
+        let dataHora = new Date();
+        let attAtual = (dataHora.getHours() - 6 + 24) % 24;
+        let attMin = dataHora.getMinutes();
+        const el = document.getElementById("attAtual");
+        if (el) el.innerHTML = `${attAtual}h ${attMin}min`;
+    }
+    tempoAtt();
+    setInterval(tempoAtt, 60000);
 
     function agruparPorFaixaHoraria(data) {
         const faixas = {
@@ -295,7 +243,7 @@
             else faixa = "18:00";
 
             const cpuVal = parseFloat(item.cpu ?? item.CPU ?? item['Cpu']);
-            const gpuVal = parseFloat(item['uso % GPU'] ?? item.gpu ?? item['GPU']);
+            const gpuVal = parseFloat(item['uso % GPU'] ?? item['uso % gpu'] ?? item.gpu ?? item.GPU);
             const discoVal = parseFloat(item.disco ?? item.Disco ?? item['DISCO']);
             const ramVal = parseFloat(item.ram ?? item.RAM ?? item['Ram']);
 
@@ -314,6 +262,12 @@
                 faixas[faixa].gpu /= faixas[faixa].count;
                 faixas[faixa].disco /= faixas[faixa].count;
                 faixas[faixa].ram /= faixas[faixa].count;
+            } else {
+                // garantir número 0 (evita undefined)
+                faixas[faixa].cpu = 0;
+                faixas[faixa].gpu = 0;
+                faixas[faixa].disco = 0;
+                faixas[faixa].ram = 0;
             }
         });
 
@@ -321,6 +275,7 @@
     }
 
     function aplicarCor(elemento, valor, ranges) {
+        if (!elemento) return;
         elemento.classList.remove("green", "yellow", "red");
 
         if (valor >= ranges.red.min && valor <= ranges.red.max) {
@@ -332,256 +287,271 @@
         }
     }
 
+    function getField(item, keys) {
+        for (const k of keys) {
+            if (item[k] !== undefined) return item[k];
+        }
+        return undefined;
+    }
+
+    function computePeaks(arr) {
+        const pico = {
+            cpu: { value: -Infinity, ts: null },
+            ram: { value: -Infinity, ts: null },
+            disco: { value: -Infinity, ts: null },
+            gpu: { value: -Infinity, ts: null },
+            rede: { value: -Infinity, ts: null }
+        };
+
+        arr.forEach(item => {
+            if (!item) return;
+            const ts = item.timestamp || item.time || item.data || item.date || null;
+
+            const vCpu = parseFloat(getField(item, ['cpu', 'CPU', 'Cpu']));
+            const vRam = parseFloat(getField(item, ['ram', 'RAM', 'Ram']));
+            const vDisco = parseFloat(getField(item, ['disco', 'DISCO', 'Disco']));
+            const vGpu = parseFloat(getField(item, ['uso % GPU', 'uso % gpu', 'GPU', 'gpu']));
+            const vRede = parseFloat(getField(item, ['rede (ms)', 'rede', 'Rede', 'network', 'network_ms']));
+
+            if (!isNaN(vCpu) && vCpu > pico.cpu.value) { pico.cpu.value = vCpu; pico.cpu.ts = ts; }
+            if (!isNaN(vRam) && vRam > pico.ram.value) { pico.ram.value = vRam; pico.ram.ts = ts; }
+            if (!isNaN(vDisco) && vDisco > pico.disco.value) { pico.disco.value = vDisco; pico.disco.ts = ts; }
+            if (!isNaN(vGpu) && vGpu > pico.gpu.value) { pico.gpu.value = vGpu; pico.gpu.ts = ts; }
+            if (!isNaN(vRede) && vRede > pico.rede.value) { pico.rede.value = vRede; pico.rede.ts = ts; }
+        });
+
+        Object.keys(pico).forEach(k => {
+            if (pico[k].value === -Infinity) pico[k] = { value: null, ts: null };
+        });
+        return pico;
+    }
+
+    function fmtTime(ts) {
+        if (!ts) return '--:--';
+        const d = new Date(ts);
+        if (isNaN(d)) return '--:--';
+
+        let h = d.getHours();
+        const m = d.getMinutes();
+        if (m > 30) h = (h + 1) % 24;
+
+        const hh = String(h).padStart(2, '0');
+        return hh + ':00';
+    }
+
+    // variáveis globais do dashboard
+    let dadosOriginais = [];
+    let cpuRamChart = null;
+    let diskChart = null;
+
+    function atualizarDashboard(dados) {
+        if (!dados || !dados.length) {
+            console.warn("atualizarDashboard: dados vazios");
+            return;
+        }
+
+        const n = (arr, key) => arr.map(i => parseFloat(i[key])).filter(x => !isNaN(x));
+        const set = (sel, val) => { const el = document.querySelector(sel); if (el) el.textContent = val; };
+
+        // defensivo: garantir arrays não vazios
+        const cpuNums = n(dados, "cpu");
+        set(".cpu-card .metric-value", (cpuNums.length ? (cpuNums.reduce((a, b) => a + b) / cpuNums.length).toFixed(1) + "%" : "--"));
+
+        const ramNums = n(dados, "ram");
+        set(".memory-card .metric-value", (ramNums.length ? (ramNums.reduce((a, b) => a + b) / ramNums.length).toFixed(1) + "%" : "--"));
+
+        const gpuNums = n(dados, "uso % GPU");
+        set(".gpu-card .metric-value", (gpuNums.length ? (gpuNums.reduce((a, b) => a + b) / gpuNums.length).toFixed(1) + "%" : "--"));
+
+        const discoNums = n(dados, "disco");
+        set(".storage-card .metric-value", (discoNums.length ? (discoNums.reduce((a, b) => a + b) / discoNums.length).toFixed(1) + "%" : "--"));
+
+        const latNums = n(dados, "rede (ms)");
+        set(".latency-card .metric-value", (latNums.length ? (latNums.reduce((a, b) => a + b) / latNums.length).toFixed(1) + " ms" : "--"));
+
+        const faixas = agruparPorFaixaHoraria(dados);
+        const labels = Object.keys(faixas);
+
+        if (cpuRamChart) {
+            cpuRamChart.data.labels = labels;
+            cpuRamChart.data.datasets[0].data = labels.map(f => faixas[f].cpu);
+            cpuRamChart.data.datasets[1].data = labels.map(f => faixas[f].gpu);
+            cpuRamChart.update();
+        }
+
+        if (diskChart) {
+            diskChart.data.labels = labels;
+            diskChart.data.datasets[0].data = labels.map(f => faixas[f].disco);
+            diskChart.data.datasets[1].data = labels.map(f => faixas[f].ram);
+            diskChart.update();
+        }
+    }
+
+    // fetch no bucket S3
     fetch("https://argus-bucket-client.s3.us-east-1.amazonaws.com/infra/dados_diretos/dados-client.json")
         .then(response => response.json())
         .then(data => {
-            console.log(data)
+            console.log("dados carregados:", data);
 
             dadosOriginais = Array.isArray(data) ? data : (data && data.data) ? data.data : [];
             if (dadosOriginais.length > 0) {
                 console.log("sample item keys:", Object.keys(dadosOriginais[0]));
             }
 
+           // calcular médias + cores
             const valorNumerico = (array, key) =>
                 array
                     .map(item => parseFloat(item[key]))
                     .filter(v => !isNaN(v));
 
             const valorCpu = valorNumerico(dadosOriginais, "cpu");
-            const mediaCpu = valorCpu.reduce((a, b) => a + b, 0) / valorCpu.length;
-
+            const mediaCpu = valorCpu.length ? (valorCpu.reduce((a, b) => a + b, 0) / valorCpu.length) : 0;
             const cpuEl = document.querySelector(".cpu-card .metric-value");
-            cpuEl.textContent = mediaCpu.toFixed(1) + "%";
-
-            aplicarCor(cpuEl, mediaCpu, {
-                green: { min: 0, max: 70 },
-                yellow: { min: 71, max: 80 },
-                red: { min: 81, max: 100 }
-            });
+            if (cpuEl) {
+                cpuEl.textContent = mediaCpu.toFixed(1) + "%";
+                aplicarCor(cpuEl, mediaCpu, { green: { min: 0, max: 70 }, yellow: { min: 71, max: 80 }, red: { min: 81, max: 100 } });
+            }
 
             const valorRam = valorNumerico(dadosOriginais, "ram");
-            const mediaRam = valorRam.reduce((a, b) => a + b, 0) / valorRam.length;
-
+            const mediaRam = valorRam.length ? (valorRam.reduce((a, b) => a + b, 0) / valorRam.length) : 0;
             const ramEl = document.querySelector(".memory-card .metric-value");
-            ramEl.textContent = mediaRam.toFixed(1) + "%";
-
-            aplicarCor(ramEl, mediaRam, {
-                green: { min: 0, max: 65 },
-                yellow: { min: 66, max: 75 },
-                red: { min: 76, max: 100 }
-            });
+            if (ramEl) {
+                ramEl.textContent = mediaRam.toFixed(1) + "%";
+                aplicarCor(ramEl, mediaRam, { green: { min: 0, max: 65 }, yellow: { min: 66, max: 75 }, red: { min: 76, max: 100 } });
+            }
 
             const valorDisco = valorNumerico(dadosOriginais, "disco");
-            const mediaDisco = valorDisco.reduce((a, b) => a + b, 0) / valorDisco.length;
-
+            const mediaDisco = valorDisco.length ? (valorDisco.reduce((a, b) => a + b, 0) / valorDisco.length) : 0;
             const discoEl = document.querySelector(".storage-card .metric-value");
-            discoEl.textContent = mediaDisco.toFixed(1) + "%";
-
-            aplicarCor(discoEl, mediaDisco, {
-                green: { min: 0, max: 80 },
-                yellow: { min: 81, max: 85 },
-                red: { min: 86, max: 100 }
-            });
+            if (discoEl) {
+                discoEl.textContent = mediaDisco.toFixed(1) + "%";
+                aplicarCor(discoEl, mediaDisco, { green: { min: 0, max: 80 }, yellow: { min: 81, max: 85 }, red: { min: 86, max: 100 } });
+            }
 
             const valorGpu = valorNumerico(dadosOriginais, "uso % GPU");
-            const mediaGpu = valorGpu.reduce((a, b) => a + b, 0) / valorGpu.length;
-
+            const mediaGpu = valorGpu.length ? (valorGpu.reduce((a, b) => a + b, 0) / valorGpu.length) : 0;
             const gpuEl = document.querySelector(".gpu-card .metric-value");
-            gpuEl.textContent = mediaGpu.toFixed(1) + "%";
-
-            aplicarCor(gpuEl, mediaGpu, {
-                green: { min: 0, max: 90 },
-                yellow: { min: 91, max: 95 },
-                red: { min: 96, max: 100 }
-            });
+            if (gpuEl) {
+                gpuEl.textContent = mediaGpu.toFixed(1) + "%";
+                aplicarCor(gpuEl, mediaGpu, { green: { min: 0, max: 90 }, yellow: { min: 91, max: 95 }, red: { min: 96, max: 100 } });
+            }
 
             const valorLatencia = valorNumerico(dadosOriginais, "rede (ms)");
-            const latenciaMedia = valorLatencia.reduce((a, b) => a + b, 0) / valorLatencia.length;
-
+            const latenciaMedia = valorLatencia.length ? (valorLatencia.reduce((a, b) => a + b, 0) / valorLatencia.length) : 0;
             const redeEl = document.querySelector(".latency-card .metric-value");
-            redeEl.textContent = latenciaMedia.toFixed(1) + " ms";
+            if (redeEl) {
+                redeEl.textContent = latenciaMedia.toFixed(1) + " ms";
+                aplicarCor(redeEl, latenciaMedia, { green: { min: 0, max: 10 }, yellow: { min: 11, max: 19 }, red: { min: 20, max: 9999 } });
+            }
 
-            aplicarCor(redeEl, latenciaMedia, {
-                green: { min: 0, max: 10 },
-                yellow: { min: 11, max: 19 },
-                red: { min: 20, max: 9999 }
-            });
-
+            // preparar dados por faixas
             const faixas = agruparPorFaixaHoraria(dadosOriginais);
-
             const labels = Object.keys(faixas);
-
             const cpuFaixa = labels.map(f => faixas[f].cpu);
             const gpuFaixa = labels.map(f => faixas[f].gpu);
             const discoFaixa = labels.map(f => faixas[f].disco);
             const ramFaixa = labels.map(f => faixas[f].ram);
 
-            // grafico
             const ctxCpuRam = document.getElementById('cpuRamChart').getContext('2d');
-
             cpuRamChart = new Chart(ctxCpuRam, {
                 type: 'bar',
                 data: {
                     labels: labels,
                     datasets: [
-                        {
-                            label: 'CPU %',
-                            data: cpuFaixa,
-                            backgroundColor: '#ff670a',
-                            borderRadius: 4
-                        },
-                        {
-                            label: 'GPU %',
-                            data: gpuFaixa,
-                            backgroundColor: '#6b6b6b',
-                            borderRadius: 4
-                        }
+                        { label: 'CPU %', data: cpuFaixa, backgroundColor: '#ff670a', borderRadius: 4 },
+                        { label: 'GPU %', data: gpuFaixa, backgroundColor: '#6b6b6b', borderRadius: 4 }
                     ]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: true,
-                    plugins: {
-                        legend: { labels: { color: '#a8a8a8' } }
-                    },
+                    plugins: { legend: { labels: { color: '#a8a8a8' } } },
                     scales: {
-                        y: {
-                            beginAtZero: true,
-                            max: 100,
-                            ticks: { color: '#a8a8a8' },
-                            grid: { color: '#3a3a3a' }
-                        },
-                        x: {
-                            ticks: { color: '#a8a8a8' },
-                            grid: { display: false }
-                        }
+                        y: { beginAtZero: true, max: 100, ticks: { color: '#a8a8a8' }, grid: { color: '#3a3a3a' } },
+                        x: { ticks: { color: '#a8a8a8' }, grid: { display: false } }
                     }
                 }
             });
 
             const ctxDisk = document.getElementById('diskChart').getContext('2d');
-
             diskChart = new Chart(ctxDisk, {
                 type: 'line',
                 data: {
                     labels: labels,
                     datasets: [
-                        {
-                            label: 'Disco %',
-                            data: discoFaixa,
-                            borderColor: '#ff670a',
-                            backgroundColor: 'rgba(255, 103, 10, 0.12)',
-                            borderWidth: 2,
-                            fill: true,
-                            tension: 0.4
-                        },
-                        {
-                            label: 'RAM %',
-                            data: ramFaixa,
-                            borderColor: '#6b6b6b',
-                            backgroundColor: 'rgba(107, 107, 107, 0.14)',
-                            borderWidth: 2,
-                            fill: true,
-                            tension: 0.4
-                        }
+                        { label: 'Disco %', data: discoFaixa, borderColor: '#ff670a', backgroundColor: 'rgba(255, 103, 10, 0.12)', borderWidth: 2, fill: true, tension: 0.4 },
+                        { label: 'RAM %', data: ramFaixa, borderColor: '#6b6b6b', backgroundColor: 'rgba(107, 107, 107, 0.14)', borderWidth: 2, fill: true, tension: 0.4 }
                     ]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: true,
-                    plugins: {
-                        legend: { labels: { color: '#a8a8a8' } }
-                    },
+                    plugins: { legend: { labels: { color: '#a8a8a8' } } },
                     scales: {
-                        y: {
-                            beginAtZero: true,
-                            max: 100,
-                            ticks: { color: '#a8a8a8' },
-                            grid: { color: '#3a3a3a' }
-                        },
-                        x: {
-                            ticks: { color: '#a8a8a8' },
-                            grid: { display: false }
-                        }
+                        y: { beginAtZero: true, max: 100, ticks: { color: '#a8a8a8' }, grid: { color: '#3a3a3a' } },
+                        x: { ticks: { color: '#a8a8a8' }, grid: { display: false } }
                     }
                 }
             });
 
-            // calcular picos (valor máximo e horário) por componente
-            function getField(item, keys) {
-                for (const k of keys) {
-                    if (item[k] !== undefined) return item[k];
-                }
-                return undefined;
-            }
-
-            function computePeaks(arr) {
-                const pico = {
-                    cpu: { value: -Infinity, ts: null },
-                    ram: { value: -Infinity, ts: null },
-                    disco: { value: -Infinity, ts: null },
-                    gpu: { value: -Infinity, ts: null },
-                    rede: { value: -Infinity, ts: null }
-                };
-
-                arr.forEach(item => {
-                    if (!item) return;
-                    const ts = item.timestamp || item.time || item.data || item.date || null;
-
-                    const vCpu = parseFloat(getField(item, ['cpu', 'CPU', 'Cpu']));
-                    const vRam = parseFloat(getField(item, ['ram', 'RAM', 'Ram']));
-                    const vDisco = parseFloat(getField(item, ['disco', 'DISCO', 'Disco']));
-                    const vGpu = parseFloat(getField(item, ['uso % GPU', 'uso % gpu', 'GPU', 'gpu']));
-                    const vRede = parseFloat(getField(item, ['rede (ms)', 'rede', 'Rede', 'network', 'network_ms']));
-
-                    if (!isNaN(vCpu) && vCpu > pico.cpu.value) { pico.cpu.value = vCpu; pico.cpu.ts = ts; }
-                    if (!isNaN(vRam) && vRam > pico.ram.value) { pico.ram.value = vRam; pico.ram.ts = ts; }
-                    if (!isNaN(vDisco) && vDisco > pico.disco.value) { pico.disco.value = vDisco; pico.disco.ts = ts; }
-                    if (!isNaN(vGpu) && vGpu > pico.gpu.value) { pico.gpu.value = vGpu; pico.gpu.ts = ts; }
-                    if (!isNaN(vRede) && vRede > pico.rede.value) { pico.rede.value = vRede; pico.rede.ts = ts; }
-                });
-
-                Object.keys(pico).forEach(k => {
-                    if (pico[k].value === -Infinity) pico[k] = { value: null, ts: null };
-                });
-                return pico;
-            }
-
-            function fmtTime(ts) {
-                if (!ts) return '--:--';
-                const d = new Date(ts);
-                if (isNaN(d)) return '--:--';
-
-                // arredondamento
-                let h = d.getHours();
-                const m = d.getMinutes();
-                if (m > 30) {
-                    h = (h + 1) % 24;
-                }
-
-                const hh = String(h).padStart(2, '0');
-                return hh + ':00';
-            }
-
-            // popular mini-cards
-            const peaks = computePeaks(dadosOriginais.length ? dadosOriginais : data);
-            const setPeak = (id, value, ts, unit) => {
+            const peaks = computePeaks(dadosOriginais.length ? dadosOriginais : []);
+            const setPeakLocal = (id, value, ts, unit) => {
                 const el = document.getElementById(id);
                 if (!el) return;
-                el.querySelector('.mini-value').textContent = (value === null ? '--' : (unit === 'ms' ? value.toFixed(1) + ' ms' : value.toFixed(1) + '%'));
-                el.querySelector('.mini-time').textContent = fmtTime(ts);
-            }
+                const valueEl = el.querySelector('.mini-value');
+                const timeEl = el.querySelector('.mini-time');
+                if (valueEl) valueEl.textContent = (value === null ? '--' : (unit === 'ms' ? value.toFixed(1) + ' ms' : value.toFixed(1) + '%'));
+                if (timeEl) timeEl.textContent = fmtTime(ts);
+            };
 
-            setPeak('peak-cpu', peaks.cpu.value, peaks.cpu.ts);
-            setPeak('peak-ram', peaks.ram.value, peaks.ram.ts);
-            setPeak('peak-disco', peaks.disco.value, peaks.disco.ts);
-            setPeak('peak-gpu', peaks.gpu.value, peaks.gpu.ts);
-            setPeak('peak-rede', peaks.rede.value, peaks.rede.ts, 'ms');
+            setPeakLocal('peak-cpu', peaks.cpu.value, peaks.cpu.ts);
+            setPeakLocal('peak-ram', peaks.ram.value, peaks.ram.ts);
+            setPeakLocal('peak-disco', peaks.disco.value, peaks.disco.ts);
+            setPeakLocal('peak-gpu', peaks.gpu.value, peaks.gpu.ts);
+            setPeakLocal('peak-rede', peaks.rede.value, peaks.rede.ts, 'ms');
 
             window.computePeaks = computePeaks;
-            window.setPeak = setPeak;
+            window.setPeak = setPeakLocal;
             window.fmtTime = fmtTime;
-        })
-        .catch(err => console.error("Erro ao carregar JSON:", err));
 
+            document.getElementById("applyRegionFilter").addEventListener("click", () => {
+                const regiao = document.getElementById("regionSelect").value;
+                if (!regiao) {
+                    alert("Selecione uma região!");
+                    return;
+                }
+
+                const filtrados = dadosOriginais.filter(item => {
+                    if (!item || !item.usuario) return false;
+                    const partes = String(item.usuario).split('-');
+                    const valorRegiao = partes.length >= 4 ? partes[3].toLowerCase() : '';
+                    return valorRegiao === regiao.toLowerCase();
+                });
+
+                if (!filtrados.length) {
+                    alert("Nenhum dado encontrado para a região selecionada.");
+                    return;
+                }
+
+                // atualizar dashboard com filtrados
+                atualizarDashboard(filtrados);
+
+                // atualizar mini-cards de pico com os dados filtrados
+                if (typeof window.computePeaks === 'function' && typeof window.setPeak === 'function') {
+                    const peaksFiltered = window.computePeaks(filtrados);
+                    window.setPeak('peak-cpu', peaksFiltered.cpu.value, peaksFiltered.cpu.ts);
+                    window.setPeak('peak-ram', peaksFiltered.ram.value, peaksFiltered.ram.ts);
+                    window.setPeak('peak-disco', peaksFiltered.disco.value, peaksFiltered.disco.ts);
+                    window.setPeak('peak-gpu', peaksFiltered.gpu.value, peaksFiltered.gpu.ts);
+                    window.setPeak('peak-rede', peaksFiltered.rede.value, peaksFiltered.rede.ts, 'ms');
+                }
+            });
+
+        })
+        .catch(err => {
+            console.error("Erro ao carregar JSON:", err);
+            alert("Erro ao carregar dados do servidor. Veja o console para mais detalhes.");
+        });
 </script>
+</body>
+</html>

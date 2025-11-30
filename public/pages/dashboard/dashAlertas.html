@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../../css/dashboard/dashboard.css">
+  <link rel="stylesheet" href="../../css/dashboard/servers.css">
+  <link rel="stylesheet" href="../../css/dashboard/popup.css">
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../../css/dashboard/dashAlertas.css">
+  <script src="script/dash.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.anychart.com/releases/v8/js/anychart-base.min.js"></script>
+  <script src="https://cdn.anychart.com/releases/v8/js/anychart-exports.min.js"></script>
+  <script src="https://cdn.anychart.com/releases/v8/js/anychart-ui.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+  <title>ARGUS | Dashboard</title>
+</head>
+
+<body>
+  <div id="id_sair">
+  </div>
+
+  <header class="desktopNav" id="navDesktop"></header>
+  <div onclick="sair()" class="sair">
+    <div id="sair">❌</div>
+  </div>
+  <div class="nome">
+    <div id="nomedoServidor" class="nomeServer"></div>
+  </div>
+  <div class="grafic-conteiner">
+    <div class="grafics">
+      <div class="grafic1">
+        <div class="KPI">
+          <p class="mensagem">Componente com mais alertas</p>
+          <div id="componente"></div>
+           <div class="tooltip-container">
+            <span class="tooltip-icon">!</span>
+            <div class="tooltip-box" id="tooltip_componente">
+            </div>
+          </div>
+        </div>
+        <div id="anychart-embed-rk3FgKf8" class="linha">
+            <div id="graficoArea">
+              <p>Alertas por componente (última semana)</p>
+            </div>
+        </div>
+        <p id="ultimoDado"></p>
+      </div>
+      <div class="grafic2">
+        <div class="KPI">
+          <p class="mensagem">Quantidade de alertas</p>
+          <p id="qtdeAlertas"></p>
+          <div class="tooltip-container">
+            <span class="tooltip-icon">!</span>
+            <div class="tooltip-box" id="tooltip_alertasTotal">
+            </div>
+          </div>
+        </div>
+        <div class="barra" id="barra">
+          <p>Alertas por dia (última semana)  </p>
+        </div>
+        <p id="porcentagemDado"></p>
+      </div>
+    </div>
+  </div>
+
+</html>
+<!-- Grafico servidores -->
+
+<script>
+  header("dashboard", sessionStorage.CARGO_CARGO);
+
+  // const select = document.getElementById("servers");
+  // const serverSpecs = document.querySelector(".serverSpecs");
+
+
+  (function () {
+    function ac_add_to_head(el) {
+      var head = document.getElementsByTagName('head')[0];
+      head.insertBefore(el, head.firstChild);
+    }
+    function ac_add_link(url) {
+      var el = document.createElement('link');
+      el.rel = 'stylesheet'; el.type = 'text/css'; el.media = 'all'; el.href = url;
+      ac_add_to_head(el);
+    }
+    function ac_add_style(css) {
+      var ac_style = document.createElement('style');
+      if (ac_style.styleSheet) ac_style.styleSheet.cssText = css;
+      else ac_style.appendChild(document.createTextNode(css));
+      ac_add_to_head(ac_style);
+    }
+    ac_add_link('https://cdn.anychart.com/releases/v8/css/anychart-ui.min.css');
+    ac_add_link('https://cdn.anychart.com/releases/v8/fonts/css/anychart-font.min.css');
+    ac_add_style(document.getElementById("ac_style_rk3FgKf8").innerHTML);
+    ac_add_style(".anychart-embed-rk3FgKf8{width:600px;height:450px;}");
+  })();
+
+</script>
+
+<script>
+  var dataHoje = new Date();
+  var semanal = [];
+  const dadosCPU = []
+  const dadosRam = []
+  const dadosDisco = []
+  const dadosGPU = []
+  const dadosRede = []
+  const dados = []
+  var testes = [];
+  var empresa = sessionStorage.EMPRESA_NOME_FANTASIA;
+  var primeira = 0
+  var segunda = 0
+  var terceira = 0
+  var quarta = 0
+  var quinta = 0
+  var sexta = 0
+  var setima = 0
+  var qtdAlertas = 0
+
+  let servidorSelecionado = null;
+
+  async function nomeServidor() {
+
+    servidorSelecionado = localStorage.getItem('servidorSelecionado');
+
+    const elementoNome = document.getElementById('nomedoServidor');
+
+    if (!elementoNome) {
+      console.error('❌ Elemento #nome-servidor não encontrado no HTML!');
+      return;
+    }
+
+    if (servidorSelecionado) {
+      console.log('Carregando:', servidorSelecionado);
+      elementoNome.textContent = servidorSelecionado;
+      dadosGrafico(servidorSelecionado);
+    } else {
+      console.log('Nenhum servidor selecionado');
+      nomedoServidor.textContent = 'Selecione um servidor';
+    }
+  }
+
+
+
+  async function semana(servidorSelecionado) {
+    const hoje = new Date();
+    let dias = 7;
+
+    fetch(`/servidores/limiteAlerta/${servidorSelecionado}`)
+      .then(res => {
+        if (!res.ok) {
+          throw new Error('Falha na requisição')
+        }
+
+        return res.json();
+      })
+      .then(dados => {
+        console.log('Resposta da API:', dados);
+        qtdAlertas = dados[0]
+      })
+      .catch(err => console.error('Erro no fetch:', err));
+
+
+    for (let i = 7; i >= 1; i--) {
+      const key = `${servidorSelecionado}-${26 - i}-${hoje.getMonth() + 1}-${hoje.getFullYear()}.json`;
+
+      try {
+        const res = await fetch(`https://s3-bucket-client-1.s3.us-east-1.amazonaws.com/${key}`);
+
+        if (!res.ok) {
+          console.log("Arquivo não encontrado:", key);
+          continue;
+        }
+
+        const data = await res.json();
+        semanal.push(data);
+        console.log(semanal)
+
+      } catch (err) {
+        console.error("Erro ao fazer fetch:", err);
+      }
+    }
+
+    console.log("Todos os dados carregados:", semanal);
+    console.log("Primeiro JSON:", semanal[0]);
+
+  }
+
+  let graficoData = [0, 0, 0, 0, 0, 0, 0];
+
+  async function dadosGrafico(servidorSelecionado) {
+
+    await semana(servidorSelecionado);
+
+    dados.length = 0
+
+
+    let totCPU = 0
+    let totRam = 0
+    let totDisco = 0
+    let totREDE = 0
+    let totGPU = 0
+    let data = "";
+
+    dadosCPU.length = 0
+    dadosRam.length = 0
+    dadosDisco.length = 0
+    dadosGPU.length = 0
+    dadosRede.length = 0
+
+
+    for (let i = 0; i < semanal.length; i++) {
+      data = semanal[i].data
+      totCPU = parseInt(semanal[i].CPU);
+      totRam = parseInt(semanal[i].Ram);
+      totDisco = parseInt(semanal[i].Disco);
+      totREDE = parseInt(semanal[i].Rede);
+      totGPU = parseInt(semanal[i].GPU);
+      console.log(data);
+
+      let total = totCPU + totRam + totDisco + totREDE + totGPU;
+      graficoData[i] = total;
+      dados.push([data, totCPU, totRam, totDisco, totREDE, totGPU]);
+      dadosCPU.push(totCPU)
+      dadosRam.push(totRam)
+      dadosDisco.push(totDisco)
+      dadosGPU.push(totGPU)
+      dadosRede.push(totREDE)
+    }
+  }
+
+  async function renderizarGrafico() {
+    await dadosGrafico();
+  }
+
+  let dataSet;
+
+  anychart.onDocumentReady(async function () {
+
+
+    await nomeServidor();
+    await renderizarGrafico();
+    KPIcomponente()
+    KPIalertas()
+    porcentagemAumento(servidorSelecionado)
+    await graficoBarra()
+    graficoArea()
+    await ultimaCaptura()
+
+
+
+  });
+
+
+  var labels = []
+  async function graficoBarra() {
+    var data = graficoData
+
+
+
+    for (let i = 7; i >= 1; i--) {
+      labels.push(`${26 - i}/${dataHoje.getMonth() + 1}/${dataHoje.getFullYear()}`);
+    }
+
+
+    console.log('Labels seguros:', labels);
+    const options = {
+      chart: {
+        type: 'bar',
+        height: 350,
+        toolbar: { show: false },
+        foreColor: '#ffffff'
+      },
+      series: [{ name: 'Alertas', data: data }],
+      xaxis: {
+        categories: labels,
+        labels: {
+          style: { colors: '#ffffff', fontSize: '12px' }
+        },
+        axisBorder: { color: '#aaaaaa' },
+        axisTicks: { color: '#aaaaaa' }
+      },
+      yaxis: {
+        labels: {
+          style: { colors: '#ffffff', fontSize: '12px' }
+        }
+      },
+      grid: {
+        borderColor: '#555555'
+      },
+      plotOptions: {
+        bar: {
+          dataLabels: { position: 'top' }
+        }
+      },
+      dataLabels: {
+        enabled: true,
+        style: {
+          colors: ['#ffffff'],
+          fontSize: '12px'
+        }
+      },
+      tooltip: {
+        theme: 'dark'
+      },
+      colors: ['#FF670A']
+    };
+
+
+    const chart = new ApexCharts(document.querySelector("#barra"), options);
+    chart.render();
+
+  }
+
+  function graficoArea() {
+
+
+    var options = {
+      series: [
+        {
+          name: 'CPU',
+          data: dadosCPU
+        },
+        {
+          name: 'RAM',
+          data: dadosRam
+        },
+        {
+          name: 'Disco',
+          data: dadosDisco
+        },
+        {
+          name: 'GPU',
+          data: dadosGPU
+        },
+        {
+          name: 'Rede',
+          data: dadosRede
+        }
+      ],
+      chart: {
+        height: 350,
+        type: 'area',
+        toolbar: { show: false },
+        foreColor: '#ffffff'
+      },
+      dataLabels: {
+        enabled: true,
+        style: {
+          colors: ['#000000'],
+          fontSize: '11px'
+        }
+      },
+      stroke: {
+        curve: 'smooth',
+        width: 2
+      },
+      fill: {
+        type: 'solid',
+        opacity: 0.4
+      },
+      colors: ['#FF670A', '#00BFFF', '#00C853', '#E91E63', '#FFC107'],
+      xaxis: {
+        categories: labels,
+        labels: {
+          style: { colors: '#ffffff', fontSize: '11px' }
+        },
+        axisBorder: { color: '#aaaaaa' },
+        axisTicks: { color: '#aaaaaa' }
+      },
+      yaxis: {
+        labels: {
+          style: { colors: '#ffffff', fontSize: '11px' }
+        }
+      },
+      grid: {
+        borderColor: '#555555'
+      },
+      legend: {
+        labels: {
+          colors: '#ffffff'
+        }
+      },
+      tooltip: {
+        theme: 'dark',
+        x: {
+          show: true
+        }
+      }
+    };
+
+    var chart = new ApexCharts(document.querySelector("#graficoArea"), options);
+    chart.render();
+
+  }
+
+
+
+
+</script>
+
+<!-- KPIs -->
+
+<script>
+
+
+  function KPIalertas() {
+    let qtdeAlertasKPI = 0;
+
+    for (let i = 0; i < dados.length; i++) {
+      for (let j = 1; j < dados[i].length; j++) {
+        qtdeAlertasKPI += dados[i][j];
+      }
+    }
+
+    servidorSelecionado = localStorage.getItem('servidorSelecionado');
+
+    const qtdeAlertas = document.getElementById("qtdeAlertas");
+    qtdeAlertas.innerHTML = qtdeAlertasKPI;
+    if (qtdeAlertasKPI > qtdAlertas.qtdAlertas) {
+      qtdeAlertas.style.color = "red";
+    } else {
+      qtdeAlertas.style.color = "green";
+    }
+
+    tooltip_alertasTotal.innerHTML = `🔴 mais de ${(qtdAlertas.qtdAlertas)} alertas<br>
+    🟢 0 a ${qtdAlertas.qtdAlertas} alertas`
+
+    tooltip_componente.innerHTML = `🔴 Mais de 50% dos alertas<br>
+🟡 30% a 50% dos alertas<br>
+🟢 Menos de 30% dos alertas`
+
+    return qtdeAlertasKPI;
+  }
+
+  const totalAlertas = KPIalertas();
+
+  let porcentagemDeAlertas = (totalAlertas / 7).toFixed(2);
+  console.log("Porcentagem:", porcentagemDeAlertas);
+
+  var maior
+
+  var cpu = { nome: "cpu", valor: 0 };
+  var ram = { nome: "ram", valor: 0 };
+  var gpu = { nome: "gpu", valor: 0 };
+  var rede = { nome: "rede", valor: 0 };
+  var disco = { nome: "disco", valor: 0 };
+
+  function KPIcomponente() {
+
+    for (let i = 0; i < dados.length; i++) {
+      cpu.valor += dados[i][1];
+      ram.valor += dados[i][2];
+      disco.valor += dados[i][3];
+      rede.valor += dados[i][4];
+      gpu.valor += dados[i][5];
+    }
+
+
+    const componentes = [cpu, ram, disco, rede, gpu];
+
+    maior = componentes[0];
+
+    for (let i = 1; i < componentes.length; i++) {
+      if (componentes[i].valor > maior.valor) {
+        maior = componentes[i];
+      }
+    }
+
+
+    const total = cpu.valor + ram.valor + disco.valor + rede.valor + gpu.valor
+
+    var calculoFinal = (maior.valor * 100) / total
+
+    const componente = document.getElementById("componente");
+
+    if(calculoFinal > 50) {
+      componente.style.color = 'red'
+    } else if (calculoFinal <= 50 && calculoFinal > 30){
+      componente.style.color = 'yellow'
+    } else if (calculoFinal <= 30){
+      componente.style.color = 'green'
+    }
+
+    componente.innerHTML = maior.nome
+  }
+
+  var semana1 = [];
+  var semana2 = [];
+  async function porcentagemAumento(servidorSelecionado) {
+    var semana3 = [];
+
+    var alertasSemana1 = [];
+    var alertasSemana2 = [];
+    for (let i = 14; i >= 0; i--) {
+      
+      const key = `${servidorSelecionado}-${25 - i}-${dataHoje.getMonth() + 1}-${dataHoje.getFullYear()}.json`;
+
+      try {
+        const res = await fetch(`https://s3-bucket-client-1.s3.us-east-1.amazonaws.com/${key}`);
+
+        if (!res.ok) {
+          console.log("Arquivo não encontrado:", key);
+          continue;
+        }
+
+        const data = await res.json();
+        if (i <= 7) {
+          semana2.push(data);
+        } else if (i > 7) {
+          semana1.push(data);
+        }
+        console.log("Semana um: " + semana1)
+        console.log("Semana dois:" + semana2)
+
+
+      } catch (err) {
+        console.error("Erro ao fazer fetch:", err);
+      }
+    }
+
+
+
+    for (let i = 0; i < semana1.length; i++) {
+      data = semana1[i].data
+      totCPU = parseInt(semana1[i].CPU);
+      totRam = parseInt(semana1[i].Ram);
+      totDisco = parseInt(semana1[i].Disco);
+      totREDE = parseInt(semana1[i].Rede);
+      totGPU = parseInt(semana1[i].GPU);
+      console.log(data);
+
+      alertasSemana1.push([data, totCPU, totRam, totDisco, totREDE, totGPU]);
+    }
+
+
+    for (let i = 0; i < semana2.length; i++) {
+      totCPU = parseInt(semana2[i].CPU);
+      totRam = parseInt(semana2[i].Ram);
+      totDisco = parseInt(semana2[i].Disco);
+      totREDE = parseInt(semana2[i].Rede);
+      totGPU = parseInt(semana2[i].GPU);
+
+      alertasSemana2.push([data, totCPU, totRam, totDisco, totREDE, totGPU]);
+    }
+
+
+    var totalAlertas1 = 0
+    var totalAlertas2 = 0
+    for (let i = 0; i < alertasSemana1.length; i++) {
+      for (let j = 1; j < alertasSemana1[i].length; j++) {
+        totalAlertas1 += alertasSemana1[i][j];
+      }
+    }
+    for (let i = 0; i < dados.length; i++) {
+      for (let j = 1; j < dados[i].length; j++) {
+        totalAlertas2 += dados[i][j];
+      }
+    }
+    console.log("Alertas semana 1: " + totalAlertas1)
+    console.log("Alertas semana 2: " + totalAlertas2)
+
+
+    var mais = ""
+
+
+    var porcentagem = 100
+    var calculoFinal = (totalAlertas2 * porcentagem) / totalAlertas1
+
+    if ((calculoFinal - 100) > 0) {
+      mais = "+"
+    }
+
+    porcentagemDado.innerHTML = `${mais}${(calculoFinal - 100).toFixed(2)}% Alertas em relação a semana passada`
+
+    console.log((calculoFinal - 100).toFixed(2))
+
+  }
+
+  async function ultimaCaptura() {
+    const tamanho = semanal.length
+    const ultimoValor = semanal[tamanho - 1]
+
+    var dataCaptura = (ultimoValor.data).replace("-", "/")
+    var horaCaptura = ultimoValor.hora
+
+
+    ultimoDado.innerHTML = `Última captura: ${dataCaptura.replace("-", "/")} ${horaCaptura}`
+
+  }
+
+  function sair() {
+    window.location.href = "servers.html"
+  }
+
+
+</script>
