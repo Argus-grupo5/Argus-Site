@@ -391,7 +391,7 @@
     }
 
     // fetch no bucket S3
-    fetch("https://argus-s3-client.s3.us-east-1.amazonaws.com/infra/dadosDiretos/dados-client.json")
+    fetch('./../../dados-client.json')
         .then(response => {
             console.log("Status HTTP:", response.status);
             if (!response.ok) throw new Error(`Erro HTTP: ${response.status}`);
