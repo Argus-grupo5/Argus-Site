@@ -586,6 +586,9 @@
       mais = "+"
     }
 
+    if(semana1.length < 7){
+      calculoFinal = 0
+    }
     porcentagemDado.innerHTML = `${mais}${(calculoFinal - 100).toFixed(2)}% Alertas em relação a semana passada`
 
     console.log((calculoFinal - 100).toFixed(2))
