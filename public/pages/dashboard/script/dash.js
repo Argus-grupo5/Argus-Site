@@ -128,9 +128,11 @@ function header(pag, cargo) {
     </div>
     <img class="logo" src="../../assets/icon/logoBlack.svg" alt="">
     `
-    if (pag == "funcionario") imgFuncionarios.classList.add("selected");
-    else if (pag == "server") imgServidores.classList.add("selected");
-    else if (pag == "dashboard") imgServidores.classList.add("selected")
+    const imgFuncionarios = document.getElementById("imgFuncionarios");
+    const imgServidores = document.getElementById("imgServidores");
+    if (pag == "funcionario" && imgFuncionarios) imgFuncionarios.classList.add("selected");
+    else if (pag == "server" && imgServidores) imgServidores.classList.add("selected");
+    else if (pag == "dashboard" && imgServidores) imgServidores.classList.add("selected")
   }
 
 }
