@@ -1,4 +1,4 @@
-const chaveApi = "AIzaSyCnVNrDYgzffofFUJJMZ0Dvw-xBqq2Ib8o";
+const chaveApi = "";
 
 function toggleChat() {
     const chatContainer = document.getElementById('chat-container');
