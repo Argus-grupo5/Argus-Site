@@ -196,6 +196,15 @@
         var dataFormatada = `${ano}-${mes}-0${dia}`
         return dataFormatada;
     }
+    function formatarHoje2() {
+        var diaDeHoje = new Date();
+        var ano = diaDeHoje.getFullYear();
+        var mes = diaDeHoje.getMonth() + 1;
+        var dia = diaDeHoje.getDate();
+
+        var dataFormatada = `${ano}-${mes}-${dia}`
+        return dataFormatada;
+    }
     function formatarSemana() {
         var diaDeHoje = new Date();
         var ano = diaDeHoje.getFullYear();
@@ -214,6 +223,26 @@
         var dia = diaDeHoje.getDate() - diaSemana;
 
         var dataFormatada = `${ano}-${mes}-0${dia}`
+        return dataFormatada;
+    }
+    function formatarSemana2() {
+        var diaDeHoje = new Date();
+        var ano = diaDeHoje.getFullYear();
+        var mes = diaDeHoje.getMonth() + 1;
+        var dia = diaDeHoje.getDate() + 7;
+        var diaSemana = diaDeHoje.getDay()
+
+        var dataFormatada = `${ano}-${mes}-${dia}`
+        return dataFormatada;
+    }
+    function formatarInicioSemana2() {
+        var diaDeHoje = new Date();
+        var ano = diaDeHoje.getFullYear();
+        var mes = diaDeHoje.getMonth() + 1;
+        var diaSemana = diaDeHoje.getDay()
+        var dia = diaDeHoje.getDate() - diaSemana;
+
+        var dataFormatada = `${ano}-${mes}-${dia}`
         return dataFormatada;
     }
     var diaDeHoje = formatarHoje();
@@ -290,10 +319,10 @@
                 }
                 json.jogosLancados.forEach(jogos => {
                     dataJogo = `${jogos.released[0]}-${jogos.released[1]}-${jogos.released[2]}`
-                    if (dataJogo == formatarHoje()) {
+                    if (dataJogo == formatarHoje2()) {
                         lancamentosDiarios.push(jogos)
                     }
-                    if (dataJogo >= formatarInicioSemana() && dataJogo <= formatarSemana()) {
+                    if (dataJogo >= formatarInicioSemana2() && dataJogo <= formatarSemana2()) {
                         lancamentosSemanais.push(jogos)
                     }
                     lancamentosMensais.push(jogos)
@@ -395,11 +424,11 @@
             series: [
                 {
                     name: "CCU Previsto",
-                    data: data7
+                    data: [425021.0, 390049.0, 250218.0]
                 },
                 {
                     name: "CCU Real",
-                    data: dataReal7
+                    data: [415921.0, 392102.0, null]
                 }
             ],
             colors: ['#FF670A', '#FFD166'],
