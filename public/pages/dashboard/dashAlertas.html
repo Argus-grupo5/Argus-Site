@@ -169,7 +169,7 @@
       const key = `${servidorSelecionado}-${hoje.getDate() - i}-${hoje.getMonth() + 1}-${hoje.getFullYear()}.json`;
 
       try {
-        const res = await fetch(`https://argus-bucket-client-i.s3.us-east-1.amazonaws.com/suporte/alertas/${key}`);
+        const res = await fetch(`https://argus-bucket-client-ii.s3.us-east-1.amazonaws.com/suporte/alertas/${key}`);
 
         if (!res.ok) {
           console.log("Arquivo não encontrado:", key);
@@ -501,7 +501,7 @@
       const key = `${servidorSelecionado}-${dataHoje.getDate() - i}-${dataHoje.getMonth() + 1}-${dataHoje.getFullYear()}.json`;
 
       try {
-        const res = await fetch(`https://argus-bucket-client-i.s3.us-east-1.amazonaws.com/suporte/alertas/${key}`);
+        const res = await fetch(`https://argus-bucket-client-ii.s3.us-east-1.amazonaws.com/suporte/alertas/${key}`);
 
         if (!res.ok) {
           console.log("Arquivo não encontrado:", key);
