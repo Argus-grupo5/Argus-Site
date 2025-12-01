@@ -193,7 +193,7 @@
         var mes = diaDeHoje.getMonth() + 1;
         var dia = diaDeHoje.getDate();
 
-        var dataFormatada = `${ano}-${mes}-${dia}`
+        var dataFormatada = `${ano}-${mes}-0${dia}`
         return dataFormatada;
     }
     function formatarSemana() {
@@ -203,7 +203,7 @@
         var dia = diaDeHoje.getDate() + 7;
         var diaSemana = diaDeHoje.getDay()
 
-        var dataFormatada = `${ano}-${mes}-${dia}`
+        var dataFormatada = `${ano}-${mes}-0${dia}`
         return dataFormatada;
     }
     function formatarInicioSemana() {
@@ -213,7 +213,7 @@
         var diaSemana = diaDeHoje.getDay()
         var dia = diaDeHoje.getDate() - diaSemana;
 
-        var dataFormatada = `${ano}-${mes}-${dia}`
+        var dataFormatada = `${ano}-${mes}-0${dia}`
         return dataFormatada;
     }
     var diaDeHoje = formatarHoje();
