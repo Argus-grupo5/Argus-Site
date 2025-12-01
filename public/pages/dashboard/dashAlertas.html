@@ -36,16 +36,16 @@
         <div class="KPI">
           <p class="mensagem">Componente com mais alertas</p>
           <div id="componente"></div>
-           <div class="tooltip-container">
+          <div class="tooltip-container">
             <span class="tooltip-icon">!</span>
             <div class="tooltip-box" id="tooltip_componente">
             </div>
           </div>
         </div>
         <div id="anychart-embed-rk3FgKf8" class="linha">
-            <div id="graficoArea">
-              <p>Alertas por componente (última semana)</p>
-            </div>
+          <div id="graficoArea">
+            <p>Alertas por componente (última semana)</p>
+          </div>
         </div>
         <p id="ultimoDado"></p>
       </div>
@@ -60,7 +60,7 @@
           </div>
         </div>
         <div class="barra" id="barra">
-          <p>Alertas por dia (última semana)  </p>
+          <p>Alertas por dia (última semana) </p>
         </div>
         <p id="porcentagemDado"></p>
       </div>
@@ -149,6 +149,7 @@
   async function semana(servidorSelecionado) {
     const hoje = new Date();
     let dias = 7;
+    let dia = hoje.getDate();
 
     fetch(`/servidores/limiteAlerta/${servidorSelecionado}`)
       .then(res => {
@@ -166,7 +167,10 @@
 
 
     for (let i = 7; i >= 1; i--) {
-      const key = `${servidorSelecionado}-${hoje.getDate() - i}-${hoje.getMonth()}-${hoje.getFullYear()}.json`;
+      if ((hoje.getDate() - i) <= 0) {
+        dia = new Date(hoje.getFullYear(), hoje.getMonth(), 0).getDate();
+      }
+      const key = `${servidorSelecionado}-${dia - i}-${hoje.getMonth()}-${hoje.getFullYear()}.json`;
 
       try {
         const res = await fetch(`https://argus-bucket-client-ii.s3.us-east-1.amazonaws.com/suporte/alertas/${key}`);
@@ -259,11 +263,13 @@
   var labels = []
   async function graficoBarra() {
     var data = graficoData
-
-
-
+    let hoje = new Date()
+    let dia = hoje.getDate()
     for (let i = 7; i >= 1; i--) {
-      labels.push(`${dataHoje.getDate() - i}/${dataHoje.getMonth()}/${dataHoje.getFullYear()}`);
+      if ((hoje.getDate() - i) <= 0) {
+        dia = new Date(hoje.getFullYear(), hoje.getMonth(), 0);
+      }
+      labels.push(`${dia - i}/${dataHoje.getMonth()}/${dataHoje.getFullYear()}`);
     }
 
 
@@ -478,11 +484,11 @@
 
     const componente = document.getElementById("componente");
 
-    if(calculoFinal > 50) {
+    if (calculoFinal > 50) {
       componente.style.color = 'red'
-    } else if (calculoFinal <= 50 && calculoFinal > 30){
+    } else if (calculoFinal <= 50 && calculoFinal > 30) {
       componente.style.color = 'yellow'
-    } else if (calculoFinal <= 30){
+    } else if (calculoFinal <= 30) {
       componente.style.color = 'green'
     }
 
@@ -494,11 +500,16 @@
   async function porcentagemAumento(servidorSelecionado) {
     var semana3 = [];
 
+    let hoje = new Date();
+    let dia = hoje.getDate()
+
     var alertasSemana1 = [];
     var alertasSemana2 = [];
     for (let i = 14; i >= 0; i--) {
-      
-      const key = `${servidorSelecionado}-${dataHoje.getDate() - i}-${dataHoje.getMonth()}-${dataHoje.getFullYear()}.json`;
+      if ((hoje.getDate() - i) <= 0) {
+        dia = new Date(hoje.getFullYear(), hoje.getMonth(), 0).getDate();
+      }
+      const key = `${servidorSelecionado}-${dia - i}-${dataHoje.getMonth()}-${dataHoje.getFullYear()}.json`;
 
       try {
         const res = await fetch(`https://argus-bucket-client-ii.s3.us-east-1.amazonaws.com/suporte/alertas/${key}`);
