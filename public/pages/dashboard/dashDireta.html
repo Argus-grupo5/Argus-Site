@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="../../css/dashboard/server-overview.css">
     <link rel="stylesheet" href="../../css/dashboard/dashFellipe.css">
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="../../css/dashboard/servers.css">
@@ -90,6 +89,7 @@
                     <option value="mg">MG</option>
                     <option value="ba">BA</option>
                     <option value="am">AM</option>
+                    <option value="df">DF</option>
                 </select>
 
                 <button id="applyRegionFilter">Filtrar Região</button>
@@ -391,14 +391,36 @@
     }
 
     // fetch no bucket S3
-    fetch("https://argus-bucket-client.s3.us-east-1.amazonaws.com/infra/dados_diretos/dados-client.json")
-        .then(response => response.json())
+    fetch("https://bucket-client-f.s3.us-east-1.amazonaws.com/dados-client.json")
+        .then(response => {
+            console.log("Status HTTP:", response.status);
+            if (!response.ok) throw new Error(`Erro HTTP: ${response.status}`);
+            return response.json();
+        })
         .then(data => {
-            console.log("dados carregados:", data);
-
-            dadosOriginais = Array.isArray(data) ? data : (data && data.data) ? data.data : [];
+            console.log("=== DADOS DO FETCH ===");
+            console.log("Tipo:", typeof data);
+            console.log("É array?", Array.isArray(data));
+            console.log("Objeto completo:", data);
+            
+            if (Array.isArray(data)) {
+                dadosOriginais = data;
+            } else if (typeof data === 'object' && data !== null) {
+                
+                dadosOriginais = [];
+                Object.keys(data).forEach(key => {
+                    if (Array.isArray(data[key])) {
+                        dadosOriginais = dadosOriginais.concat(data[key]);
+                    }
+                });
+            } else {
+                dadosOriginais = [];
+            }
+            
+            console.log("dadosOriginais após processamento:", dadosOriginais.length, "itens");
             if (dadosOriginais.length > 0) {
-                console.log("sample item keys:", Object.keys(dadosOriginais[0]));
+                console.log("Primeiro item:", dadosOriginais[0]);
+                console.log("Chaves:", Object.keys(dadosOriginais[0]));
             }
 
            // calcular médias + cores
