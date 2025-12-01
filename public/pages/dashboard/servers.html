@@ -312,7 +312,85 @@
     }
 
     const servidoresS3 = []
-    const semanal = []
+    const semanal = [
+  {
+    "Identificador": "xbox-cloud-br-sp-1",
+    "CPU": "17",
+    "Ram": "19",
+    "Disco": "16",
+    "GPU": "14",
+    "Rede": "13",
+    "Estado": "SP",
+    "data": "24-11-2025",
+    "hora": "00:00:00"
+  },
+  {
+    "Identificador": "xbox-cloud-br-sp-1",
+    "CPU": "29",
+    "Ram": "15",
+    "Disco": "27",
+    "GPU": "30",
+    "Rede": "18",
+    "Estado": "SP",
+    "data": "25-11-2025",
+    "hora": "00:00:00"
+  },
+  {
+    "Identificador": "xbox-cloud-br-sp-1",
+    "CPU": "21",
+    "Ram": "23",
+    "Disco": "14",
+    "GPU": "19",
+    "Rede": "16",
+    "Estado": "SP",
+    "data": "26-11-2025",
+    "hora": "00:00:00"
+  },
+  {
+    "Identificador": "xbox-cloud-br-sp-1",
+    "CPU": "26",
+    "Ram": "28",
+    "Disco": "21",
+    "GPU": "17",
+    "Rede": "11",
+    "Estado": "SP",
+    "data": "27-11-2025",
+    "hora": "00:00:00"
+  },
+  {
+    "Identificador": "xbox-cloud-br-sp-1",
+    "CPU": "15",
+    "Ram": "13",
+    "Disco": "25",
+    "GPU": "29",
+    "Rede": "20",
+    "Estado": "SP",
+    "data": "28-11-2025",
+    "hora": "00:00:00"
+  },
+  {
+    "Identificador": "xbox-cloud-br-sp-1",
+    "CPU": "18",
+    "Ram": "30",
+    "Disco": "22",
+    "GPU": "16",
+    "Rede": "14",
+    "Estado": "SP",
+    "data": "29-11-2025",
+    "hora": "00:00:00"
+  },
+  {
+    "Identificador": "xbox-cloud-br-sp-1",
+    "CPU": "27",
+    "Ram": "24",
+    "Disco": "19",
+    "GPU": "23",
+    "Rede": "17",
+    "Estado": "SP",
+    "data": "30-11-2025",
+    "hora": "00:00:00"
+  }
+]
     const data = []
 
 async function listarServidores(objetoHTML) {
@@ -448,7 +526,7 @@ function calcularTotalGeralPorServidor(dados) {
 
     atualizarStatusRegiao();
 
-    semanal.length = 0;
+    // semanal.length = 0;
 }
 
   async function semana(nomeServidor) {
@@ -457,33 +535,111 @@ function calcularTotalGeralPorServidor(dados) {
     let dia = hoje.getDate();
 
 
-    for (let i = 7; i >= 1; i--) {
-      if((hoje.getDate() - i) <= 0){
-        dia = new Date(hoje.getDate(), hoje.getMonth(), 0).getDate();
-      }
-      const key = `${servidorSelecionado}-${hoje.getFullYear()}-${hoje.getMonth()}-${dia - i}.json`;
+    // for (let i = 7; i >= 1; i--) {
+    //   if((hoje.getDate() - i) <= 0){
+    //     dia = new Date(hoje.getDate(), hoje.getMonth(), 0).getDate();
+    //   }
+    //   const key = `${servidorSelecionado}-${hoje.getFullYear()}-${hoje.getMonth()}-${dia - i}.json`;
 
-      try {
-        const res = await fetch(`https://argus-s3-client.s3.us-east-1.amazonaws.com/suporte/alertas/${key}`);
+    //   try {
+    //     const res = await fetch(`https://argus-s3-client.s3.us-east-1.amazonaws.com/suporte/alertas/${key}`);
 
-        if (!res.ok) {
-          console.log("Arquivo não encontrado:", key);
-          continue;
-        }
+    //     if (!res.ok) {
+    //       console.log("Arquivo não encontrado:", key);
+//     //       continue;
+//     //     }
 
-        const data = await res.json();
-        semanal.push(data);
-        console.log(semanal)
+//     //     const data = await res.json();
+//         semanal.push([
+//   {
+//     "Identificador": "xbox-cloud-br-sp-1",
+//     "CPU": "17",
+//     "Ram": "19",
+//     "Disco": "16",
+//     "GPU": "14",
+//     "Rede": "13",
+//     "Estado": "SP",
+//     "data": "24-11-2025",
+//     "hora": "00:00:00"
+//   },
+//   {
+//     "Identificador": "xbox-cloud-br-sp-1",
+//     "CPU": "29",
+//     "Ram": "15",
+//     "Disco": "27",
+//     "GPU": "30",
+//     "Rede": "18",
+//     "Estado": "SP",
+//     "data": "25-11-2025",
+//     "hora": "00:00:00"
+//   },
+//   {
+//     "Identificador": "xbox-cloud-br-sp-1",
+//     "CPU": "21",
+//     "Ram": "23",
+//     "Disco": "14",
+//     "GPU": "19",
+//     "Rede": "16",
+//     "Estado": "SP",
+//     "data": "26-11-2025",
+//     "hora": "00:00:00"
+//   },
+//   {
+//     "Identificador": "xbox-cloud-br-sp-1",
+//     "CPU": "26",
+//     "Ram": "28",
+//     "Disco": "21",
+//     "GPU": "17",
+//     "Rede": "11",
+//     "Estado": "SP",
+//     "data": "27-11-2025",
+//     "hora": "00:00:00"
+//   },
+//   {
+//     "Identificador": "xbox-cloud-br-sp-1",
+//     "CPU": "15",
+//     "Ram": "13",
+//     "Disco": "25",
+//     "GPU": "29",
+//     "Rede": "20",
+//     "Estado": "SP",
+//     "data": "28-11-2025",
+//     "hora": "00:00:00"
+//   },
+//   {
+//     "Identificador": "xbox-cloud-br-sp-1",
+//     "CPU": "18",
+//     "Ram": "30",
+//     "Disco": "22",
+//     "GPU": "16",
+//     "Rede": "14",
+//     "Estado": "SP",
+//     "data": "29-11-2025",
+//     "hora": "00:00:00"
+//   },
+//   {
+//     "Identificador": "xbox-cloud-br-sp-1",
+//     "CPU": "27",
+//     "Ram": "24",
+//     "Disco": "19",
+//     "GPU": "23",
+//     "Rede": "17",
+//     "Estado": "SP",
+//     "data": "30-11-2025",
+//     "hora": "00:00:00"
+//   }
+// ]);
+    //     console.log(semanal)
 
-      } catch (err) {
-        console.error("Erro ao fazer fetch:", err);
-      }
+    //   } catch (err) {
+    //     console.error("Erro ao fazer fetch:", err);
+    //   }
     }
 
     console.log("Todos os dados carregados:", semanal);
     console.log("Primeiro JSON:", semanal[0]);
 
-  } 
+//   } 
 
 
     // updateKPIs();
