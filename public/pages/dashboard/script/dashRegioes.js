@@ -1022,7 +1022,7 @@
             } else if (servidores * 0.75 >= emAlerta) {
                 document.querySelector('.server-box-N-Servidores').style.background = '#ff3333';
             } else {
-                document.querySelector('.server-box-N-Servidores').style.background = '#2cbe00';
+                document.querySelector('.server-box-N-Servidores').style.background = '#ff3333';
             }
 
 

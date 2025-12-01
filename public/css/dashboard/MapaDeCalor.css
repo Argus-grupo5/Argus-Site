@@ -117,7 +117,7 @@ body {
     padding-top: 0.8vw;
     flex-direction: row;
     align-items: start;
-    gap: 20px;
+    gap: 50px;
     display: flex;
     justify-content: flex-start;
 }
@@ -219,6 +219,13 @@ body {
     display: flex;
     gap: 1vw;
     padding-top: 10px;
+    gap: 5%;
+}
+.geralInfo h2{
+font-size: 20px;
+    font-weight: 700;
+    padding-left: 3%;
+    white-space: nowrap;
 }
 
 .user {
@@ -416,6 +423,29 @@ body {
 
 .Select-location select:hover {
     background: #4e4e4e;
+}
+
+.botaoRegioes button{
+   display: flex;
+   margin-top: 50%;
+   text-align: center;
+    width: 100%;
+    cursor: pointer;
+    padding: 7px 10px;
+    height: 42px;
+    outline: 0;
+    border: 0;
+    border-radius: 0;
+    background: #313030;
+    color: #b43030;
+    font-size: 1em;
+    color: #FF670A;
+    font-family:
+        'Quicksand', sans-serif;
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    position: relative;
+    transition: all 0.25s ease;
 }
 
 /* 
@@ -970,4 +1000,209 @@ body,
 #informacao{
     display: flex;
     justify-content: flex-end;
+}
+
+/* ========================= */
+/* RESPONSIVIDADE - MEDIA QUERIES */
+/* ========================= */
+
+/* Tablets e telas médias (<= 1024px) */
+@media (max-width: 1024px) {
+    .desktopNav {
+        width: 6vw;
+    }
+
+    .desktopNav img {
+        width: 80%;
+    }
+
+    .desktopNav .navButtons {
+        gap: 1.5vw;
+    }
+
+    .headerTop {
+        padding-left: 3vw;
+        padding-right: 2vw;
+        gap: 10px;
+    }
+
+    .headerTop .info .bell,
+    .headerTop .info .server {
+        width: 3.5vw;
+    }
+
+    .headerTop .info .risk,
+    .headerTop .info .atention,
+    .headerTop .info .serversMonitoring {
+        width: 3vw;
+        font-size: 0.9vw;
+    }
+
+    .top-boxes-container {
+        flex-wrap: wrap;
+        padding-left: 5vw;
+        padding-right: 2vw;
+    }
+
+    .info-box {
+        min-width: 200px;
+        font-size: 0.9rem;
+    }
+
+    .container-boxes-comp .box-card {
+        width: 40vw;
+        height: 18vh;
+    }
+
+    .lista-jogos .linha-jogo {
+        width: 100%;
+    }
+
+    .jogo-nome {
+        font-size: 18px;
+    }
+
+    .containerGraficos {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .graficoLinha,
+    .mapaCalor {
+        width: 100%;
+        height: auto;
+    }
+}
+
+/* Tablets pequenos e smartphones grandes (<= 768px) */
+@media (max-width: 768px) {
+    .desktopNav {
+        width: 8vw;
+    }
+
+    .desktopNav img {
+        width: 70%;
+    }
+
+    .headerTop {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        padding-left: 2vw;
+        padding-right: 2vw;
+    }
+
+    .headerTop .info {
+        flex-wrap: wrap;
+        gap: 0.5vw;
+    }
+
+    .top-boxes-container {
+        flex-direction: column;
+        padding-left: 2vw;
+        padding-right: 2vw;
+    }
+
+    .container-boxes-comp .box-card {
+        width: 80vw;
+        height: 20vh;
+    }
+
+    .lista-jogos .linha-jogo {
+        width: 95%;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 10px;
+    }
+
+    .jogo-foto {
+        width: 100%;
+        height: auto;
+        border-radius: 8px;
+    }
+
+    .jogo-nome {
+        font-size: 16px;
+        padding: 4px 12px;
+    }
+
+    .info-box {
+        min-width: 150px;
+        font-size: 0.8rem;
+    }
+
+    .containerGraficos {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .graficoLinha,
+    .mapaCalor {
+        width: 100%;
+        height: auto;
+    }
+
+    .search select,
+    .search input,
+    .search button {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* Smartphones pequenos (<= 480px) */
+@media (max-width: 480px) {
+    .desktopNav {
+        width: 10vw;
+    }
+
+    .desktopNav img {
+        width: 60%;
+    }
+
+    .headerTop {
+        padding-left: 1vw;
+        padding-right: 1vw;
+        gap: 5px;
+    }
+
+    .headerTop .info .bell,
+    .headerTop .info .server {
+        width: 4vw;
+    }
+
+    .headerTop .info .risk,
+    .headerTop .info .atention,
+    .headerTop .info .serversMonitoring {
+        width: 3.5vw;
+        font-size: 0.7rem;
+    }
+
+    .container-boxes-comp .box-card {
+        width: 90vw;
+        height: 22vh;
+    }
+
+    .lista-jogos .linha-jogo {
+        width: 100%;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .jogo-nome {
+        font-size: 14px;
+        padding: 3px 8px;
+    }
+
+    .top-boxes-container,
+    .container-boxes-comp,
+    .containerGraficos {
+        padding-left: 1vw;
+        padding-right: 1vw;
+    }
+
+    .info-box {
+        min-width: 120px;
+        font-size: 0.7rem;
+    }
 }
