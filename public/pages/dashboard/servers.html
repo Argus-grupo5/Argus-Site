@@ -456,7 +456,7 @@ function calcularTotalGeralPorServidor(dados) {
     let dias = 7;
 
     for (let i = 7; i >= 1; i--) {
-      const key = `${nomeServidor}-${hoje.getDate() - i}-${hoje.getMonth() + 1}-${hoje.getFullYear()}.json`;
+      const key = `${nomeServidor}-${hoje.getDate() - i}-${hoje.getMonth()}-${hoje.getFullYear()}.json`;
 
       try {
         const res = await fetch(`https://argus-bucket-client-ii.s3.us-east-1.amazonaws.com/suporte/alertas/${key}`);
