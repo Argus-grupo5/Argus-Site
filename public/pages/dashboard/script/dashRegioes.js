@@ -48,11 +48,11 @@
         let dias = 7;
         dados = []
 
-        for (let i = 7; i >= 1; i--) {
-            const key = `DashCalor/${estado}/xbox-cloud-br-${prefix}-Client-${(hoje.getDate() - 2) - i}-${hoje.getMonth() + 1}-${hoje.getFullYear()}.json`;
+        for (let i = 2; i >= 1; i--) {
+            const key = `DashCalor/${estado}/xbox-cloud-br-${prefix}-Client-${(hoje.getDate()) - i}-${hoje.getMonth() + 1}-${hoje.getFullYear()}.json`;
 
             try {
-                const res = await fetch(`https://s3-client-argus-14h25m.s3.amazonaws.com/${key}`);
+                const res = await fetch(`https://argus-s3-client.s3.amazonaws.com/${key}`);
 
                 if (!res.ok) {
                     console.log("Arquivo não encontrado:", key);
