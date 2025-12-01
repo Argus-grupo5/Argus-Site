@@ -170,7 +170,7 @@
       if ((hoje.getDate() - i) <= 0) {
         dia = new Date(hoje.getFullYear(), hoje.getMonth(), 0).getDate();
       }
-      const key = `${servidorSelecionado}-${dia - i}-${hoje.getMonth()}-${hoje.getFullYear()}.json`;
+      const key = `${servidorSelecionado}-${hoje.getFullYear()}-${hoje.getMonth()}-${dia - i}.json`;
 
       try {
         const res = await fetch(`https://argus-s3-client.s3.us-east-1.amazonaws.com/suporte/alertas/${key}`);
@@ -509,7 +509,7 @@
       if ((hoje.getDate() - i) <= 0) {
         dia = new Date(hoje.getFullYear(), hoje.getMonth(), 0).getDate();
       }
-      const key = `${servidorSelecionado}-${dia - i}-${dataHoje.getMonth()}-${dataHoje.getFullYear()}.json`;
+      const key = `${servidorSelecionado}-${hoje.getFullYear()}-${hoje.getMonth()}-${dia - i}.json`;
 
       try {
         const res = await fetch(`https://argus-s3-client.s3.us-east-1.amazonaws.com/suporte/alertas/${key}`);
