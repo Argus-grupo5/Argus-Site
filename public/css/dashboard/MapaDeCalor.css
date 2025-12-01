@@ -221,10 +221,17 @@ body {
     padding-top: 10px;
     gap: 5%;
 }
-.geralInfo h2{
-font-size: 20px;
+
+.geralInfo h2 {
+    font-size: 20px;
     font-weight: 700;
     padding-left: 3%;
+    white-space: nowrap;
+}
+
+.geralInfo p {
+    margin-top: 7px;
+    font-size: 15px;
     white-space: nowrap;
 }
 
@@ -425,10 +432,10 @@ font-size: 20px;
     background: #4e4e4e;
 }
 
-.botaoRegioes button{
-   display: flex;
-   margin-top: 50%;
-   text-align: center;
+.botaoRegioes button {
+    display: flex;
+    margin-top: 50%;
+    text-align: center;
     width: 100%;
     cursor: pointer;
     padding: 7px 10px;
@@ -825,7 +832,7 @@ progress::-moz-progress-bar {
     margin-right: 2%;
 }
 
- #linhaBrasil:hover {
+#linhaBrasil:hover {
     background: rgba(255, 255, 255, 0.08);
     transform: scale(1.01);
 }
@@ -836,13 +843,13 @@ progress::-moz-progress-bar {
     background: linear-gradient(90deg, #ff8c00, #ffcb52);
     -webkit-background-clip: text;
     color: transparent;
-    margin-bottom: -15px; 
+    margin-bottom: -15px;
     padding-left: 3%;
 }
 
 .graficoLinha #linhaBrasil {
     background-color: #313030;
-    border: #5c5c5c solid 1px ;
+    border: #5c5c5c solid 1px;
     border-radius: 30px;
 }
 
@@ -918,8 +925,8 @@ body,
     transform: scale(1.01);
 }
 
-.linha-jogo::before{
-     content: "";
+.linha-jogo::before {
+    content: "";
     position: absolute;
     inset: 0;
     background: rgba(0, 0, 0, 0.4);
@@ -935,7 +942,9 @@ body,
     object-fit: cover;
     border: 1px solid rgba(255, 255, 255, 0.15);
 }
-.jogo-foto, .jogo-nome {
+
+.jogo-foto,
+.jogo-nome {
     position: relative;
     z-index: 2;
 }
@@ -946,10 +955,10 @@ body,
     padding: 6px 18px;
     border-radius: 12px;
     color: #FF6E1A;
-    background: rgba(0,0,0,0.45);
+    background: rgba(0, 0, 0, 0.45);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(35px);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
 }
 
 .info-box {
@@ -959,7 +968,8 @@ body,
 }
 
 .info-box {
-    position: relative; /* necessário para o tooltip */
+    position: relative;
+    /* necessário para o tooltip */
 }
 
 .metric-tooltip {
@@ -997,7 +1007,7 @@ body,
     opacity: 1;
 }
 
-#informacao{
+#informacao {
     display: flex;
     justify-content: flex-end;
 }
